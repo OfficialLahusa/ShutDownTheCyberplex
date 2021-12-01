@@ -82,7 +82,7 @@ public class Vector3
      */
     public void setX(double x)
     {
-        _x = _x;
+        _x = x;
     }
     
     /**

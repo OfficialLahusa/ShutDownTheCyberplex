@@ -56,7 +56,7 @@ public class Vector2
      */
     public void setX(double x)
     {
-        _x = _x;
+        _x = x;
     }
     
     /**
