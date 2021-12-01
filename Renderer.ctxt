@@ -1,0 +1,17 @@
+#BlueJ class context
+comment0.target=Renderer
+comment0.text=\r\n\ Render\ Engine,\ die\ auf\ Basis\ von\ Turtles\ zweidimensional\ und\ dreidimensional\ rendern\ kann\r\n\r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 30.\ November\ 2021\r\n
+comment1.params=
+comment1.target=Renderer()
+comment1.text=\r\n\ Der\ leere\ explizite\ Konstruktor\ von\ Renderer.\r\n
+comment2.params=a\ b
+comment2.target=void\ drawLine(Vector2,\ Vector2)
+comment2.text=\r\n\ Zeichnet\ eine\ rote\ Linie\ zwischen\ zwei\ Punkten\ im\ zweidimensionalen\ Screenspace\r\n\ @param\ a\ Startpunkt\r\n\ @param\ b\ Endpunkt\r\n
+comment3.params=a\ b\ farbe
+comment3.target=void\ drawLine(Vector2,\ Vector2,\ java.lang.String)
+comment3.text=\r\n\ Zeichnet\ eine\ beliebigfarbige\ Linie\ zwischen\ zwei\ Punkten\ im\ zweidimensionalen\ Screenspace\r\n\ @param\ a\ Startpunkt\r\n\ @param\ b\ Endpunkt\r\n\ @param\ farbe\ deutscher\ ausgeschriebener\ Name\ von\ einer\ der\ 13\ validen\ Farben\ (siehe\ Turtle)\r\n
+comment4.params=
+comment4.target=void\ clear()
+comment5.params=r\ g\ b
+comment5.target=void\ fill(int,\ int,\ int)
+numComments=6

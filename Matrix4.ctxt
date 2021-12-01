@@ -1,0 +1,16 @@
+#BlueJ class context
+comment0.target=Matrix4
+comment0.text=\r\n\ Vierdimensionale\ Matrix\ mit\ double-Pr\u00E4zision\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 01.12.2021\r\n
+comment1.params=
+comment1.target=Matrix4()
+comment2.params=copy
+comment2.target=Matrix4(Matrix4)
+comment3.params=x\ y
+comment3.target=boolean\ isInsideBounds(int,\ int)
+comment4.params=x\ y
+comment4.target=double\ get(int,\ int)
+comment5.params=x\ y\ v
+comment5.target=void\ set(int,\ int,\ double)
+comment6.params=
+comment6.target=void\ print()
+numComments=7
