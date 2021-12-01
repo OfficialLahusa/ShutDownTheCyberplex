@@ -9,6 +9,7 @@ public class Game
 {
     private Renderer _renderer;
     private TimeManager _timeManager;
+    private InputManager _inputManager;
 
     /**
      * Konstruktor für Objekte der Klasse Game
@@ -17,6 +18,7 @@ public class Game
     {
         _renderer = new Renderer();
         _timeManager = new TimeManager();
+        _inputManager = new InputManager();
     }
     
     /**
@@ -40,6 +42,11 @@ public class Game
 
         while(true)
         {
+            if (_inputManager.isKeyPressed(KeyCode.KEY_W))
+            {
+                System.out.println("W pressed");
+            }
+            
             runTime = _timeManager.getRunTime();
             deltaTime = _timeManager.getDeltaTime();
             
