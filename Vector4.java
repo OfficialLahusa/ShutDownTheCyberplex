@@ -111,7 +111,7 @@ public class Vector4
      */
     public void setX(double x)
     {
-        _x = _x;
+        _x = x;
     }
     
     /**
