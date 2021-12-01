@@ -36,13 +36,8 @@ public class Game
         double runTime = 0.0, deltaTime = 0.0;
         Vector2 start, end;
         start = new Vector2(250, 250);
-        while(true)
+        while(!_inputManager.isKeyPressed(KeyCode.KEY_ESCAPE))
         {
-            if (_inputManager.isKeyPressed(KeyCode.KEY_W))
-            {
-                System.out.println("W pressed");
-            }
-            
             runTime = _timeManager.getRunTime();
             deltaTime = _timeManager.getDeltaTime();
             //System.out.println("Runtime: " + runTime + " - Delta: " + deltaTime);
@@ -53,5 +48,7 @@ public class Game
             _renderer.clear();
             _renderer.drawLine(start, end);
         }
+        
+        System.exit(0);
     }
 }
