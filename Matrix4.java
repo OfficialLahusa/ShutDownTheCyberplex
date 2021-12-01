@@ -215,7 +215,6 @@ public class Matrix4
         Vector4 result = new Vector4();
         
         result.setX(get(0,0)*v.getX() + get(1,0)*v.getY() + get(2,0)*v.getZ() + get(3,0)*v.getW());
-        System.out.println((get(0,0)*v.getX()) +" + "+ (get(1,0)*v.getY()) +" + "+ (get(2,0)*v.getZ()) +" + "+ (get(3,0)*v.getW()));
         result.setY(get(0,1)*v.getX() + get(1,1)*v.getY() + get(2,1)*v.getZ() + get(3,1)*v.getW());
         result.setZ(get(0,2)*v.getX() + get(1,2)*v.getY() + get(2,2)*v.getZ() + get(3,2)*v.getW());
         result.setW(get(0,3)*v.getX() + get(1,3)*v.getY() + get(2,3)*v.getZ() + get(3,3)*v.getW());
