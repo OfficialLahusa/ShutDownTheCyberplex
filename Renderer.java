@@ -95,7 +95,6 @@ class Renderer
             Matrix4 transform = camera.getProjectionMatrix().multiply(camera.getViewMatrix());
             Vector4 pA = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(a, 1.0)));
             Vector4 pB = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(b, 1.0)));
-            
             drawLine(new Vector2(pA.getX(), pA.getY()), new Vector2(pB.getX(), pB.getY()), farbe);
         }
     }
@@ -110,8 +109,6 @@ class Renderer
      */
     public void drawLine3D(Vector3 a, Vector3 b, String farbe, Matrix4 model, Camera camera)
     {
-        
-        
         if (isLineInFrustum(a, b, camera))
         {
             Matrix4 transform = camera.getProjectionMatrix().multiply(camera.getViewMatrix().multiply(model));

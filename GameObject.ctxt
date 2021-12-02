@@ -24,6 +24,7 @@ comment3.target=GameObject(Mesh,\ Vector3,\ Vector3,\ Vector3)
 comment3.text=\r\n\ Konstruktor\ f\u00FCr\ GameObjects\ mit\ gegebenem\ Mesh\ (3D-Modell),\ Position,\ Rotation\ und\ Skalierung\r\n\ @param\ mesh\ Mesh\ (3D-Modell)\r\n\ @param\ position\ Position\r\n\ @param\ rotation\ Rotation\r\n\ @param\ scale\ Skalierung\r\n
 comment4.params=
 comment4.target=Matrix4\ getModelMatrix()
+comment4.text=\r\n\ Generiert\ die\ Modelmatrix\ aller\ Transformationen\ auf\ dem\ GameObject\r\n\ @return\ Modelmatrix\r\n
 comment5.params=
 comment5.target=Mesh\ getMesh()
 comment5.text=\r\n\ Gibt\ eine\ Kopie\ des\ Meshs\ (3D-Modell)\ zur\u00FCck\r\n\ @return\ Mesh\ (3D-Modell)\r\n

@@ -118,6 +118,15 @@ public class Vector4
     }
     
     /**
+     * Gibt die x-, y- und z-Komponenten als dreidimensionalen Vektor zurück
+     * @return dreidimensionaler Vektor (x, y, z)
+     */    
+    public Vector3 getXYZ()
+    {
+        return new Vector3(_x, _y, _z);
+    }
+    
+    /**
      * Setzt die x-Komponente des Vektors zu einem bestimmten Wert
      * @param x Wert, zu dem die x-Komponente des Vektors gesetzt wird
      */
