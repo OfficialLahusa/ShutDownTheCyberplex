@@ -10,7 +10,10 @@ public class Game
     private Renderer _renderer;
     private TimeManager _timeManager;
     private InputManager _inputManager;
+    private TextRenderer _textRenderer;
     private Camera _camera;
+    private double _fps;
+    private double fpsTimer = 0.0;
     
     public static final double FPS_CAP = 144.0;
 
@@ -22,6 +25,7 @@ public class Game
         _renderer = new Renderer();
         _timeManager = new TimeManager();
         _inputManager = new InputManager();
+        _textRenderer = new TextRenderer(_renderer);
         _camera = new Camera(new Vector3(0.0, 0.0, 3.0), 1.0, 90.0);
     }
     
@@ -49,9 +53,7 @@ public class Game
         {
             runTime = _timeManager.getRunTime();
             deltaTime = _timeManager.getDeltaTime();
-            
-            System.out.println(1.0/deltaTime);
-            
+                        
             if (_inputManager.isKeyPressed(KeyCode.KEY_W))
             {
                 //_camera.move(new Vector3(0.0, 0.0, -2.0 * deltaTime));
@@ -121,11 +123,22 @@ public class Game
             _renderer.drawLine(pC2, pA2);
             */
             
+            //render fps
+            fpsTimer += deltaTime;
+            if(fpsTimer > 1.0)
+            {
+                fpsTimer = 0;
+                _fps = 1.0 / deltaTime;
+                
+            }
+            
+            _textRenderer.write(new Vector2(10,10), 5, "fps: " + (int)Math.round(_fps));
+           
             // Bildrate auf maximal FPS_CAP (Konstante) begrenzen
             try
             {
                 double diff = (1.0 / FPS_CAP) - deltaTime;
-                if(diff > 0)
+                if(diff > 0.0)
                 {
                     Thread.sleep((long)(1000*diff));
                 }
@@ -134,7 +147,6 @@ public class Game
             {
                 throw new RuntimeException("unhandled interrupt");
             }
-            
         }
     }
 }
