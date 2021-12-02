@@ -37,13 +37,8 @@ public class WavefrontObjectLoader
                 }
                 else if(segments[0].equals("f"))
                 {
-                    // Edge
-                    if(segments.length == 3)
-                    {
-                        result.lineIndices.add(new Pair<Integer, Integer>(Integer.parseInt(segments[1]), Integer.parseInt(segments[2])));
-                    }
                     // Triangle
-                    else if(segments.length == 4)
+                    if(segments.length == 4)
                     {
                         result.lineIndices.add(new Pair<Integer, Integer>(Integer.parseInt(segments[1]), Integer.parseInt(segments[2])));
                         result.lineIndices.add(new Pair<Integer, Integer>(Integer.parseInt(segments[2]), Integer.parseInt(segments[3])));
@@ -56,6 +51,14 @@ public class WavefrontObjectLoader
                         result.lineIndices.add(new Pair<Integer, Integer>(Integer.parseInt(segments[2]), Integer.parseInt(segments[3])));
                         result.lineIndices.add(new Pair<Integer, Integer>(Integer.parseInt(segments[3]), Integer.parseInt(segments[4])));
                         result.lineIndices.add(new Pair<Integer, Integer>(Integer.parseInt(segments[4]), Integer.parseInt(segments[1])));
+                    }
+                }
+                else if(segments[0].equals("l"))
+                {
+                    // Edge
+                    if(segments.length == 3)
+                    {
+                        result.lineIndices.add(new Pair<Integer, Integer>(Integer.parseInt(segments[1]), Integer.parseInt(segments[2])));
                     }
                 }
             }
