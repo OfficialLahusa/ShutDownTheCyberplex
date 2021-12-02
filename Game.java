@@ -11,6 +11,7 @@ public class Game
     private TimeManager _timeManager;
     private InputManager _inputManager;
     private TextRenderer _textRenderer;
+    private double _fps;
 
     /**
      * Konstruktor für Objekte der Klasse Game
@@ -21,6 +22,7 @@ public class Game
         _timeManager = new TimeManager();
         _inputManager = new InputManager();
         _textRenderer = new TextRenderer(_renderer);
+        _fps = 1;
     }
     
     /**
@@ -36,6 +38,7 @@ public class Game
     public void runGameLoop()
     {
         double runTime = 0.0, deltaTime = 0.0;
+        double calcFps = 0.0;
         
         Vector4 mid = new Vector4(0.0, 0.0, 0.0, 0.0);
         Vector4 pointA = mid.add(new Vector4(100*Math.cos(Math.toRadians(0)), 100*Math.sin(Math.toRadians(0)), 0.0, 1.0));
@@ -67,7 +70,13 @@ public class Game
             _renderer.drawLine(pB2, pC2);
             _renderer.drawLine(pC2, pA2);
             
-            //_textRenderer.write(new Vector2(10,10), 10, "Und sogar die Skallierung\nfunktioniert voll gut oO\n0123456789\n?!/ß");
+            calcFps += deltaTime;
+            if(calcFps > 1.0)
+            {
+                _fps = 1.0 / deltaTime;
+                calcFps = 0;
+            }
+            _textRenderer.write(new Vector2(10,10), 5, "fps " + Integer.toString((int)Math.round(_fps)));
         }
         
         System.exit(0);
