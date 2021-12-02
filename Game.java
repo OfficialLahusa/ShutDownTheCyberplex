@@ -11,11 +11,13 @@ public class Game
     private TimeManager _timeManager;
     private InputManager _inputManager;
     private TextRenderer _textRenderer;
+    private WavefrontObjectLoader _objLoader;
     private Camera _camera;
     private double _fps;
     private double fpsTimer = 0.0;
+    private GameObject _monkey;
     
-    public static final double FPS_CAP = 144.0;
+    public static final double FPS_CAP = 60.0;
 
     /**
      * Konstruktor für Objekte der Klasse Game
@@ -26,7 +28,9 @@ public class Game
         _timeManager = new TimeManager();
         _inputManager = new InputManager();
         _textRenderer = new TextRenderer(_renderer);
+        _objLoader = new WavefrontObjectLoader();
         _camera = new Camera(new Vector3(0.0, 0.0, 3.0), 1.0, 90.0);
+        _monkey = new GameObject(_objLoader.loadFromFile("D:/Uni/WiSe 2021-2022/SE1/TurtleDoomLike/res/models/monkey.obj"));
     }
     
     /**
@@ -93,7 +97,7 @@ public class Game
             Vector2 pC2 = new Vector2(pC.getX(), pC.getY());
             */
             
-            Vector4 topLeft = new Vector4(-1.0, -1.0, 0.0, 1.0);
+            /*Vector4 topLeft = new Vector4(-1.0, -1.0, 0.0, 1.0);
             Vector4 bottomLeft = new Vector4(-1.0, 1.0, 0.0, 1.0);
             Vector4 topRight = new Vector4(1.0, -1.0, 0.0, 1.0);
             Vector4 bottomRight = new Vector4(1.0, 1.0, 0.0, 1.0);
@@ -106,11 +110,14 @@ public class Game
             Vector3 pA2 = new Vector3(pA.getX(), pA.getY(), pA.getZ());
             Vector3 pB2 = new Vector3(pB.getX(), pB.getY(), pB.getZ());
             Vector3 pC2 = new Vector3(pC.getX(), pC.getY(), pC.getZ());
-            Vector3 pD2 = new Vector3(pD.getX(), pD.getY(), pD.getZ());
+            Vector3 pD2 = new Vector3(pD.getX(), pD.getY(), pD.getZ());*/
             
             _renderer.clear();
             
-            _renderer.drawStripedQuad(pA2, pB2, pC2, pD2, "rot", _camera); 
+            //_renderer.drawStripedQuad(pA2, pB2, pC2, pD2, "rot", _camera);
+            
+            _renderer.drawGameObject(_monkey, "orange", _camera);
+            
             _renderer.drawAxis(_camera);            
 
                 /*
@@ -129,7 +136,7 @@ public class Game
             }
             
             _textRenderer.write(new Vector2(10,10), 5, "fps: " + (int)Math.round(_fps));
-           
+            
             // Bildrate auf maximal FPS_CAP (Konstante) begrenzen
             try
             {
