@@ -71,6 +71,13 @@ class Renderer
         drawLine(new Vector2(pA.getX(), pA.getY()), new Vector2(pB.getX(), pB.getY()), farbe);
     }
     
+    public void drawAxis(Camera camera)
+    {
+        drawLine3D(new Vector3(), new Vector3(1.0, 0.0, 0.0), "rot", camera);
+        drawLine3D(new Vector3(), new Vector3(0.0, 1.0, 0.0), "gruen", camera);
+        drawLine3D(new Vector3(), new Vector3(0.0, 0.0, 1.0), "blau", camera);
+    }
+    
     public void clear()
     {
         TurtleWelt.GLOBALEWELT.loescheAlleSpuren();

@@ -91,9 +91,7 @@ public class Game
             
             _renderer.clear();
             
-            _renderer.drawLine3D(new Vector3(), new Vector3(1.0, 0.0, 0.0), "rot", _camera);
-            _renderer.drawLine3D(new Vector3(), new Vector3(0.0, 1.0, 0.0), "gruen", _camera);
-            _renderer.drawLine3D(new Vector3(), new Vector3(0.0, 0.0, 1.0), "blau", _camera);
+            _renderer.drawAxis(_camera);
             
             _renderer.drawLine(pA2, pB2);
             _renderer.drawLine(pB2, pC2);
