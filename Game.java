@@ -2,7 +2,7 @@
 /**
  * Diese Klasse enthält die Kernlogik des Spiels und den Gameloop
  * 
- * @author Lasse Huber-Saffer
+ * @author Lasse Huber-Saffer, Sven Schreiber, Nico Hädicke
  * @version 01.12.2021
  */
 public class Game

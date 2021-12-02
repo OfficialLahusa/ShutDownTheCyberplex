@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=Game
-comment0.text=\r\n\ Diese\ Klasse\ enth\u00E4lt\ die\ Kernlogik\ des\ Spiels\ und\ den\ Gameloop\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 01.12.2021\r\n
+comment0.text=\r\n\ Diese\ Klasse\ enth\u00E4lt\ die\ Kernlogik\ des\ Spiels\ und\ den\ Gameloop\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer,\ Sven\ Schreiber,\ Nico\ H\u00E4dicke\r\n\ @version\ 01.12.2021\r\n
 comment1.params=
 comment1.target=Game()
 comment1.text=\r\n\ Konstruktor\ f\u00FCr\ Objekte\ der\ Klasse\ Game\r\n
