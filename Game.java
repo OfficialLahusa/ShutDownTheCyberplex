@@ -9,6 +9,7 @@ public class Game
 {
     private Renderer _renderer;
     private TimeManager _timeManager;
+    private TimeManager _frameCapTimeManager;
     private InputManager _inputManager;
     private TextRenderer _textRenderer;
     private WavefrontObjectLoader _objLoader;
@@ -17,7 +18,7 @@ public class Game
     private double fpsTimer = 0.0;
     private GameObject _monkey;
     
-    public static final double FPS_CAP = 60.0;
+    public static final double FPS_CAP = 144.0;
 
     /**
      * Konstruktor für Objekte der Klasse Game
@@ -26,6 +27,7 @@ public class Game
     {
         _renderer = new Renderer();
         _timeManager = new TimeManager();
+        _frameCapTimeManager = new TimeManager();
         _inputManager = new InputManager();
         _textRenderer = new TextRenderer(_renderer);
         _objLoader = new WavefrontObjectLoader();
@@ -55,6 +57,9 @@ public class Game
         {
             runTime = _timeManager.getRunTime();
             deltaTime = _timeManager.getDeltaTime();
+            
+            // reset frameCap Timer
+            _frameCapTimeManager.getDeltaTime();
                         
             if (_inputManager.isKeyPressed(KeyCode.KEY_W))
             {
@@ -138,9 +143,10 @@ public class Game
             _textRenderer.write(new Vector2(10,10), 5, "fps: " + (int)Math.round(_fps));
             
             // Bildrate auf maximal FPS_CAP (Konstante) begrenzen
+            double currentFrameTime = _frameCapTimeManager.getDeltaTime();
             try
             {
-                double diff = (1.0 / FPS_CAP) - deltaTime;
+                double diff = (1.0 / FPS_CAP) - currentFrameTime;
                 if(diff > 0.0)
                 {
                     Thread.sleep((long)(1000*diff));
