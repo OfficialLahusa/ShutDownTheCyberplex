@@ -29,7 +29,7 @@ public class Game
     public void start()
     {
         Matrix4 mat = new Matrix4();
-        mat.print();
+        //mat.print();
         runGameLoop();
     }
     
@@ -48,12 +48,16 @@ public class Game
             deltaTime = _timeManager.getDeltaTime();
             //System.out.println("Runtime: " + runTime + " - Delta: " + deltaTime);
             
+            
             Matrix4 translation = MatrixGenerator.generateTranslationMatrix(250.0, 250.0, 0.0);
             Matrix4 rotation = MatrixGenerator.generateAxialRotationMatrix(new Vector3(0, 0, 1), 25*runTime);
             Matrix4 scale = MatrixGenerator.generateScaleMatrix(1.0, 1.0+0.4*Math.sin(Math.toRadians(120*runTime)),1.0);
 
             Matrix4 transform = translation.multiply(scale.multiply(rotation));
 
+            _renderer.clear();
+            
+            /*
             Vector4 pA = transform.multiply(pointA);
             Vector4 pB = transform.multiply(pointB);
             Vector4 pC = transform.multiply(pointC);
@@ -62,11 +66,29 @@ public class Game
             Vector2 pB2 = new Vector2(pB.getX(), pB.getY());
             Vector2 pC2 = new Vector2(pC.getX(), pC.getY());
             
-            _renderer.clear();
+            
             _renderer.drawLine(pA2, pB2);
             _renderer.drawLine(pB2, pC2);
             _renderer.drawLine(pC2, pA2);
-            // _textRenderer.write(new Vector2(10,10), 20, "abcdefghij\nklmnopqr\nstuvwxz");
+            */
+            
+            Vector4 topLeft = new Vector4(-50.0, -50.0, 0.0, 1.0);
+            Vector4 bottomLeft = new Vector4(-50.0, 50.0, 0.0, 1.0);
+            Vector4 topRight = new Vector4(50.0, -50.0, 0.0, 1.0);
+            Vector4 bottomRight = new Vector4(50.0, 50.0, 0.0, 1.0);
+            
+            Vector4 pA = transform.multiply(topLeft);
+            Vector4 pB = transform.multiply(bottomLeft);
+            Vector4 pC = transform.multiply(topRight);
+            Vector4 pD = transform.multiply(bottomRight);
+            
+            Vector2 pA2 = new Vector2(pA.getX(), pA.getY());
+            Vector2 pB2 = new Vector2(pB.getX(), pB.getY());
+            Vector2 pC2 = new Vector2(pC.getX(), pC.getY());
+            Vector2 pD2 = new Vector2(pD.getX(), pD.getY());
+            
+            _renderer.drawStripedQuad(pA2, pB2, pC2, pD2, "rot");
+            _textRenderer.write(new Vector2(10,10), 20, "abcdefghij\nklmnopqr\nstuvwxz");
         }
         
         System.exit(0);

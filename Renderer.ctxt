@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=Renderer
-comment0.text=\r\n\ Render\ Engine,\ die\ auf\ Basis\ von\ Turtles\ zweidimensional\ und\ dreidimensional\ rendern\ kann\r\n\r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 30.\ November\ 2021\r\n
+comment0.text=\r\n\ Render\ Engine,\ die\ auf\ Basis\ von\ Turtles\ zweidimensional\ und\ dreidimensional\ rendern\ kann\r\n\r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @author\ Sven\ Schreiber\r\n\ @version\ 02.\ November\ 2021\r\n
 comment1.params=
 comment1.target=Renderer()
 comment1.text=\r\n\ Der\ leere\ explizite\ Konstruktor\ von\ Renderer.\r\n
@@ -10,8 +10,13 @@ comment2.text=\r\n\ Zeichnet\ eine\ rote\ Linie\ zwischen\ zwei\ Punkten\ im\ zw
 comment3.params=a\ b\ farbe
 comment3.target=void\ drawLine(Vector2,\ Vector2,\ java.lang.String)
 comment3.text=\r\n\ Zeichnet\ eine\ beliebigfarbige\ Linie\ zwischen\ zwei\ Punkten\ im\ zweidimensionalen\ Screenspace\r\n\ @param\ a\ Startpunkt\r\n\ @param\ b\ Endpunkt\r\n\ @param\ farbe\ deutscher\ ausgeschriebener\ Name\ von\ einer\ der\ 13\ validen\ Farben\ (siehe\ Turtle)\r\n
-comment4.params=
-comment4.target=void\ clear()
-comment5.params=r\ g\ b
-comment5.target=void\ fill(int,\ int,\ int)
-numComments=6
+comment4.params=cornerOrigin\ pointA\ pointB\ numStripes
+comment4.target=void\ drawStripesAroundCorner(Vector2,\ Vector2,\ Vector2,\ int)
+comment5.params=topLeft\ bottomLeft\ topRight\ bottomRight\ farbe
+comment5.target=void\ drawStripedQuad(Vector2,\ Vector2,\ Vector2,\ Vector2,\ java.lang.String)
+comment5.text=\r\n\ Zeichnet\ ein\ gestreiftes\ Rechteck\r\n\ \r\n\ @param\ topLeft\ Der\ Punkt\ Oben-links\r\n\ @param\ bottomLeft\ Der\ Punkt\ Unten-links\r\n\ @param\ topRight\ Der\ Punkt\ Oben-rechts\r\n\ @param\ bottomRight\ Der\ Punkt\ Unten-rechts\r\n\ @param\ farbe\ Die\ gew\u00FCnschte\ Farb\r\n
+comment6.params=
+comment6.target=void\ clear()
+comment7.params=r\ g\ b
+comment7.target=void\ fill(int,\ int,\ int)
+numComments=8
