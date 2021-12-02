@@ -10,6 +10,7 @@ public class Game
     private Renderer _renderer;
     private TimeManager _timeManager;
     private InputManager _inputManager;
+    private TextRenderer _textRenderer;
 
     /**
      * Konstruktor für Objekte der Klasse Game
@@ -19,6 +20,7 @@ public class Game
         _renderer = new Renderer();
         _timeManager = new TimeManager();
         _inputManager = new InputManager();
+        _textRenderer = new TextRenderer(_renderer);
     }
     
     /**
@@ -64,6 +66,7 @@ public class Game
             _renderer.drawLine(pA2, pB2);
             _renderer.drawLine(pB2, pC2);
             _renderer.drawLine(pC2, pA2);
+            // _textRenderer.write(new Vector2(10,10), 20, "abcdefghij\nklmnopqr\nstuvwxz");
         }
         
         System.exit(0);

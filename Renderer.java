@@ -15,7 +15,7 @@ class Renderer
     public Renderer()
     {
         _turtle = new Turtle(0, 0);
-        _turtle.setzeGeschwindigkeit(9);
+        _turtle.setzeGeschwindigkeit(10);
     }
     
     /**
