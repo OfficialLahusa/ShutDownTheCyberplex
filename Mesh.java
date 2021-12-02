@@ -1,3 +1,5 @@
+import java.util.*;
+import javafx.util.*;
 /**
  * Eine Speicherklasse für ein dreidimensionales Modell.
  * Das Mesh besteht aus einer Liste an Vertices, also Punkten im dreidimensionalen Raum,
@@ -8,16 +10,16 @@
  */
 public class Mesh
 {
-    public java.util.ArrayList<Vector3> vertices;
-    public java.util.ArrayList<javafx.util.Pair<Integer, Integer>> lineIndices;
+    public ArrayList<Vector3> vertices;
+    public ArrayList<Pair<Integer, Integer>> lineIndices;
 
     /**
      * Konstruktor für Objekte der Klasse Mesh
      */
     public Mesh()
     {
-        vertices = new java.util.ArrayList<Vector3>();
-        lineIndices = new java.util.ArrayList<javafx.util.Pair<Integer, Integer>>();
+        vertices = new ArrayList<Vector3>();
+        lineIndices = new ArrayList<Pair<Integer, Integer>>();
     }
     
     /**
@@ -26,8 +28,8 @@ public class Mesh
      */
     public Mesh(Mesh copy)
     {
-        vertices = new java.util.ArrayList<Vector3>();
-        lineIndices = new java.util.ArrayList<javafx.util.Pair<Integer, Integer>>();
+        vertices = new ArrayList<Vector3>();
+        lineIndices = new ArrayList<Pair<Integer, Integer>>();
         
         for(int i = 0; i < copy.vertices.size(); i++)
         {
@@ -36,8 +38,8 @@ public class Mesh
         
         for(int i = 0; i < copy.lineIndices.size(); i++)
         {
-            javafx.util.Pair<Integer, Integer> linePair = copy.lineIndices.get(i);
-            lineIndices.add(new javafx.util.Pair<Integer, Integer>(linePair.getKey(), linePair.getValue()));
+            Pair<Integer, Integer> linePair = copy.lineIndices.get(i);
+            lineIndices.add(new Pair<Integer, Integer>(linePair.getKey(), linePair.getValue()));
         }
         
     }
