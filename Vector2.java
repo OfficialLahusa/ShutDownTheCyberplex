@@ -22,6 +22,16 @@ public class Vector2
     }
     
     /**
+     * Kopie-Konstruktor
+     * @param copy zu kopierender Vektor
+     */
+    public Vector2(Vector2 copy)
+    {
+        _x = copy._x;
+        _y = copy._y;
+    }
+    
+    /**
      * Konstruktor mit zwei Parametern für jeweilige Komponenten
      * @param x x-Komponente des Vektors
      * @param y y-Komponente des Vektors

@@ -25,6 +25,17 @@ public class Vector3
     }
     
     /**
+     * Kopie-Konstruktor
+     * @param copy zu kopierender Vektor
+     */
+    public Vector3(Vector3 copy)
+    {
+        _x = copy._x;
+        _y = copy._y;
+        _z = copy._z;
+    }
+    
+    /**
      * Konstruktor mit zwei Parametern für jeweilige Komponenten
      * @param x x-Komponente des Vektors
      * @param y y-Komponente des Vektors

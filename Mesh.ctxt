@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.target=Mesh
+comment0.text=\r\n\ Eine\ Speicherklasse\ f\u00FCr\ ein\ dreidimensionales\ Modell.\r\n\ Das\ Mesh\ besteht\ aus\ einer\ Liste\ an\ Vertices,\ also\ Punkten\ im\ dreidimensionalen\ Raum,\r\n\ die\ \u00FCber\ eine\ Liste\ an\ Indexpaaren\ zu\ dreidimensionalen\ Linien\ verkn\u00FCpft\ werden.\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 02.12.2021\r\n
+comment1.params=
+comment1.target=Mesh()
+comment1.text=\r\n\ Konstruktor\ f\u00FCr\ Objekte\ der\ Klasse\ Mesh\r\n
+comment2.params=copy
+comment2.target=Mesh(Mesh)
+comment2.text=\r\n\ Kopie-Konstruktor\r\n\ @param\ copy\ zu\ kopierendes\ Mesh\r\n
+numComments=3

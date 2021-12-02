@@ -10,6 +10,7 @@ public class Game
     private Renderer _renderer;
     private TimeManager _timeManager;
     private InputManager _inputManager;
+    private Camera _camera;
 
     /**
      * Konstruktor für Objekte der Klasse Game
@@ -19,6 +20,7 @@ public class Game
         _renderer = new Renderer();
         _timeManager = new TimeManager();
         _inputManager = new InputManager();
+        _camera = new Camera(new Vector3(0.0, 0.0, 3.0), 1.0, 90.0);
     }
     
     /**
@@ -36,35 +38,62 @@ public class Game
         double runTime = 0.0, deltaTime = 0.0;
         
         Vector4 mid = new Vector4(0.0, 0.0, 0.0, 0.0);
-        Vector4 pointA = mid.add(new Vector4(100*Math.cos(Math.toRadians(0)), 100*Math.sin(Math.toRadians(0)), 0.0, 1.0));
-        Vector4 pointB = mid.add(new Vector4(100*Math.cos(Math.toRadians(120)), 100*Math.sin(Math.toRadians(120)), 0.0, 1.0));
-        Vector4 pointC = mid.add(new Vector4(100*Math.cos(Math.toRadians(240)), 100*Math.sin(Math.toRadians(240)), 0.0, 1.0));
+        double triangleScale = 2.0;
+        Vector4 pointA = mid.add(new Vector4(triangleScale*Math.cos(Math.toRadians(0)), triangleScale*Math.sin(Math.toRadians(0)), 0.0, 1.0));
+        Vector4 pointB = mid.add(new Vector4(triangleScale*Math.cos(Math.toRadians(120)), triangleScale*Math.sin(Math.toRadians(120)), 0.0, 1.0));
+        Vector4 pointC = mid.add(new Vector4(triangleScale*Math.cos(Math.toRadians(240)), triangleScale*Math.sin(Math.toRadians(240)), 0.0, 1.0));
 
         while(true)
         {
-            if (_inputManager.isKeyPressed(KeyCode.KEY_W))
-            {
-                System.out.println("W pressed");
-            }
-            
             runTime = _timeManager.getRunTime();
             deltaTime = _timeManager.getDeltaTime();
             
-            Matrix4 translation = MatrixGenerator.generateTranslationMatrix(250.0, 250.0, 0.0);
+            if (_inputManager.isKeyPressed(KeyCode.KEY_W))
+            {
+                //_camera.move(new Vector3(0.0, 0.0, -2.0 * deltaTime));
+                _camera.move(_camera.getDirection().multiply(-2.0 * deltaTime));
+            }
+            if (_inputManager.isKeyPressed(KeyCode.KEY_S))
+            {
+                //_camera.move(new Vector3(0.0, 0.0, 2.0 * deltaTime));
+                _camera.move(_camera.getDirection().multiply(2.0 * deltaTime));
+            }
+            if (_inputManager.isKeyPressed(KeyCode.KEY_A))
+            {
+                _camera.rotateYaw(-70.0 * deltaTime);
+            }
+            if (_inputManager.isKeyPressed(KeyCode.KEY_D))
+            {
+                _camera.rotateYaw(70.0 * deltaTime);
+            }
+            
+            Matrix4 translation = MatrixGenerator.generateTranslationMatrix(new Vector3(0.0, 0.0, 0.0));
             Matrix4 rotation = MatrixGenerator.generateAxialRotationMatrix(new Vector3(0, 0, 1), 25*runTime);
-            Matrix4 scale = MatrixGenerator.generateScaleMatrix(1.0, 1.0+0.4*Math.sin(Math.toRadians(120*runTime)),1.0);
+            Matrix4 scale = MatrixGenerator.generateScaleMatrix(new Vector3(1.0, 1.0 + 0.4*Math.sin(Math.toRadians(120*runTime)), 1.0));
             
             Matrix4 transform = translation.multiply(scale.multiply(rotation));
+            transform = _camera.getProjectionMatrix().multiply(_camera.getViewMatrix().multiply(transform));
             
             Vector4 pA = transform.multiply(pointA);
             Vector4 pB = transform.multiply(pointB);
             Vector4 pC = transform.multiply(pointC);
+            
+            System.out.println(_camera.getPosition().getZ());
+            
+            // Viewport transform
+            pA = MatrixGenerator.viewportTransform(pA);
+            pB = MatrixGenerator.viewportTransform(pB);
+            pC = MatrixGenerator.viewportTransform(pC);
             
             Vector2 pA2 = new Vector2(pA.getX(), pA.getY());
             Vector2 pB2 = new Vector2(pB.getX(), pB.getY());
             Vector2 pC2 = new Vector2(pC.getX(), pC.getY());
             
             _renderer.clear();
+            
+            _renderer.drawLine3D(new Vector3(), new Vector3(1.0, 0.0, 0.0), "rot", _camera);
+            _renderer.drawLine3D(new Vector3(), new Vector3(0.0, 1.0, 0.0), "gruen", _camera);
+            _renderer.drawLine3D(new Vector3(), new Vector3(0.0, 0.0, 1.0), "blau", _camera);
             
             _renderer.drawLine(pA2, pB2);
             _renderer.drawLine(pB2, pC2);

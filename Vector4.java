@@ -28,6 +28,18 @@ public class Vector4
     }
     
     /**
+     * Kopie-Konstruktor
+     * @param copy zu kopierender Vektor
+     */
+    public Vector4(Vector4 copy)
+    {
+        _x = copy._x;
+        _y = copy._y;
+        _z = copy._z;
+        _w = copy._w;
+    }
+    
+    /**
      * Konstruktor mit zwei Parametern für jeweilige Komponenten
      * @param x x-Komponente des Vektors
      * @param y y-Komponente des Vektors

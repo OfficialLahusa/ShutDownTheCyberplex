@@ -44,6 +44,33 @@ class Renderer
         _turtle.hinterlasseKeineSpur();
     }
     
+    /**
+     * Zeichnet eine rote Linie zwischen zwei Punkten im dreidimensionalen Raum
+     * @param a Startpunkt
+     * @param b Endpunkt
+     * @param camera Kamera für die dreidimensionale Projektion
+     */
+    public void drawLine3D(Vector3 a, Vector3 b, Camera camera)
+    {
+        drawLine3D(a, b, "rot", camera);
+    }
+    
+    /**
+     * Zeichnet eine beliebigfarbige Linie zwischen zwei Punkten im dreidimensionalen Raum
+     * @param a Startpunkt
+     * @param b Endpunkt
+     * @param farbe deutscher ausgeschriebener Name von einer der 13 validen Farben (siehe Turtle)#
+     * @param camera Kamera für die dreidimensionale Projektion
+     */
+    public void drawLine3D(Vector3 a, Vector3 b, String farbe, Camera camera)
+    {
+        Matrix4 transform = camera.getProjectionMatrix().multiply(camera.getViewMatrix());
+        Vector4 pA = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(a, 1.0)));
+        Vector4 pB = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(b, 1.0)));
+        
+        drawLine(new Vector2(pA.getX(), pA.getY()), new Vector2(pB.getX(), pB.getY()), farbe);
+    }
+    
     public void clear()
     {
         TurtleWelt.GLOBALEWELT.loescheAlleSpuren();
