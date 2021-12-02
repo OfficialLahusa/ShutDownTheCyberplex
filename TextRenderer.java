@@ -126,6 +126,8 @@ public class TextRenderer
                         break;
                     case '!':
                     case ':':
+                    case '.':
+                    case ',':
                         start.setX(start.getX()+0.6*size+buffer);
                         break;
                     case '/':
@@ -133,6 +135,9 @@ public class TextRenderer
                         break;
                     case 'ß':
                         start.setX(start.getX()+2.1*size+buffer);
+                        break;
+                    case '-':
+                        start.setX(start.getX()+1.2*size+buffer);
                         break;
                     default:
                         start.setX(start.getX()+1.9*size+buffer);
@@ -916,6 +921,21 @@ public class TextRenderer
                 drawLineCheck(start, 0.3, 0.8, 0.3, 1.0, size);
                 //bottom dot - top to bottom
                 drawLineCheck(start, 0.3, 2.2, 0.3, 2.4, size);
+                break;
+            case '.':
+                //bottom dot - top to bottom
+                drawLineCheck(start, 0.3, 2.2, 0.3, 2.4, size);
+                break;
+            case ',':
+                //bottom dot - top to bottom
+                drawLineCheck(start, 0.3, 2.2, 0.3, 2.5, size);
+                drawLineCheck(start, 0.0, 2.7, size);
+                break;
+            case '_':
+                drawLineCheck(start, 0.3, 2.4, 1.6, 2.4, size);
+                break;
+            case '-':
+                drawLineCheck(start, 0.3, 1.6, 0.9, 1.6, size);
                 break;
         }
     }
