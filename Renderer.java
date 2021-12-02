@@ -59,12 +59,29 @@ class Renderer
      * Zeichnet eine beliebigfarbige Linie zwischen zwei Punkten im dreidimensionalen Raum
      * @param a Startpunkt
      * @param b Endpunkt
-     * @param farbe deutscher ausgeschriebener Name von einer der 13 validen Farben (siehe Turtle)#
+     * @param farbe deutscher ausgeschriebener Name von einer der 13 validen Farben (siehe Turtle)
      * @param camera Kamera für die dreidimensionale Projektion
      */
     public void drawLine3D(Vector3 a, Vector3 b, String farbe, Camera camera)
     {
         Matrix4 transform = camera.getProjectionMatrix().multiply(camera.getViewMatrix());
+        Vector4 pA = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(a, 1.0)));
+        Vector4 pB = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(b, 1.0)));
+        
+        drawLine(new Vector2(pA.getX(), pA.getY()), new Vector2(pB.getX(), pB.getY()), farbe);
+    }
+    
+    /**
+     * Zeichnet eine beliebigfarbige Linie zwischen zwei Punkten im dreidimensionalen Raum
+     * @param a Startpunkt
+     * @param b Endpunkt
+     * @param farbe deutscher ausgeschriebener Name von einer der 13 validen Farben (siehe Turtle)
+     * @param model Modelmatrix für die Punkte der Linie
+     * @param camera Kamera für die dreidimensionale Projektion
+     */
+    public void drawLine3D(Vector3 a, Vector3 b, String farbe, Matrix4 model, Camera camera)
+    {
+        Matrix4 transform = camera.getProjectionMatrix().multiply(camera.getViewMatrix().multiply(model));
         Vector4 pA = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(a, 1.0)));
         Vector4 pB = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(b, 1.0)));
         

@@ -50,6 +50,10 @@ public class GameObject
         _scale = new Vector3(scale);
     }
     
+    /**
+     * Generiert die Modelmatrix aller Transformationen auf dem GameObject
+     * @return Modelmatrix
+     */
     public Matrix4 getModelMatrix()
     {
         Matrix4 translation = MatrixGenerator.generateTranslationMatrix(_position);
