@@ -11,6 +11,7 @@ public class Game
     private TimeManager _timeManager;
     private InputManager _inputManager;
     private TextRenderer _textRenderer;
+    private double _fps;
 
     /**
      * Konstruktor für Objekte der Klasse Game
@@ -21,6 +22,7 @@ public class Game
         _timeManager = new TimeManager();
         _inputManager = new InputManager();
         _textRenderer = new TextRenderer(_renderer);
+        _fps = 1;
     }
     
     /**
@@ -29,13 +31,14 @@ public class Game
     public void start()
     {
         Matrix4 mat = new Matrix4();
-        //mat.print();
+        mat.print();
         runGameLoop();
     }
     
     public void runGameLoop()
     {
         double runTime = 0.0, deltaTime = 0.0;
+        double calcFps = 0.0;
         
         Vector4 mid = new Vector4(0.0, 0.0, 0.0, 0.0);
         Vector4 pointA = mid.add(new Vector4(100*Math.cos(Math.toRadians(0)), 100*Math.sin(Math.toRadians(0)), 0.0, 1.0));
@@ -48,16 +51,12 @@ public class Game
             deltaTime = _timeManager.getDeltaTime();
             //System.out.println("Runtime: " + runTime + " - Delta: " + deltaTime);
             
-            
             Matrix4 translation = MatrixGenerator.generateTranslationMatrix(250.0, 250.0, 0.0);
             Matrix4 rotation = MatrixGenerator.generateAxialRotationMatrix(new Vector3(0, 0, 1), 25*runTime);
             Matrix4 scale = MatrixGenerator.generateScaleMatrix(1.0, 1.0+0.4*Math.sin(Math.toRadians(120*runTime)),1.0);
 
             Matrix4 transform = translation.multiply(scale.multiply(rotation));
 
-            _renderer.clear();
-            
-            /*
             Vector4 pA = transform.multiply(pointA);
             Vector4 pB = transform.multiply(pointB);
             Vector4 pC = transform.multiply(pointC);
@@ -66,29 +65,18 @@ public class Game
             Vector2 pB2 = new Vector2(pB.getX(), pB.getY());
             Vector2 pC2 = new Vector2(pC.getX(), pC.getY());
             
-            
+            _renderer.clear();
             _renderer.drawLine(pA2, pB2);
             _renderer.drawLine(pB2, pC2);
             _renderer.drawLine(pC2, pA2);
-            */
             
-            Vector4 topLeft = new Vector4(-50.0, -50.0, 0.0, 1.0);
-            Vector4 bottomLeft = new Vector4(-50.0, 50.0, 0.0, 1.0);
-            Vector4 topRight = new Vector4(50.0, -50.0, 0.0, 1.0);
-            Vector4 bottomRight = new Vector4(50.0, 50.0, 0.0, 1.0);
-            
-            Vector4 pA = transform.multiply(topLeft);
-            Vector4 pB = transform.multiply(bottomLeft);
-            Vector4 pC = transform.multiply(topRight);
-            Vector4 pD = transform.multiply(bottomRight);
-            
-            Vector2 pA2 = new Vector2(pA.getX(), pA.getY());
-            Vector2 pB2 = new Vector2(pB.getX(), pB.getY());
-            Vector2 pC2 = new Vector2(pC.getX(), pC.getY());
-            Vector2 pD2 = new Vector2(pD.getX(), pD.getY());
-            
-            _renderer.drawStripedQuad(pA2, pB2, pC2, pD2, "rot");
-            _textRenderer.write(new Vector2(10,10), 20, "abcdefghij\nklmnopqr\nstuvwxz");
+            calcFps += deltaTime;
+            if(calcFps > 1.0)
+            {
+                _fps = 1.0 / deltaTime;
+                calcFps = 0;
+            }
+            _textRenderer.write(new Vector2(10,10), 5, "fps " + Integer.toString((int)Math.round(_fps)));
         }
         
         System.exit(0);
