@@ -84,6 +84,9 @@ public class InputManager
                             case KeyEvent.VK_D:
                                 _keys[KeyCode.KEY_D.ordinal()] = false;
                                 break;
+                            case KeyEvent.VK_SPACE:
+                                _keys[KeyCode.KEY_SPACE.ordinal()] = true;
+                                break;
                             case KeyEvent.VK_ESCAPE:
                                 _keys[KeyCode.KEY_ESCAPE.ordinal()] = false;
                                 break;
