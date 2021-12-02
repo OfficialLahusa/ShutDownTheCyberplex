@@ -11,6 +11,8 @@ public class Game
     private TimeManager _timeManager;
     private InputManager _inputManager;
     private Camera _camera;
+    
+    public static final double FPS_CAP = 144.0;
 
     /**
      * Konstruktor für Objekte der Klasse Game
@@ -47,6 +49,8 @@ public class Game
         {
             runTime = _timeManager.getRunTime();
             deltaTime = _timeManager.getDeltaTime();
+            
+            System.out.println(1.0/deltaTime);
             
             if (_inputManager.isKeyPressed(KeyCode.KEY_W))
             {
@@ -91,15 +95,15 @@ public class Game
             Vector2 pC2 = new Vector2(pC.getX(), pC.getY());
             */
             
-           Vector4 topLeft = new Vector4(-1.0, -1.0, 0.0, 1.0);
+            Vector4 topLeft = new Vector4(-1.0, -1.0, 0.0, 1.0);
             Vector4 bottomLeft = new Vector4(-1.0, 1.0, 0.0, 1.0);
             Vector4 topRight = new Vector4(1.0, -1.0, 0.0, 1.0);
             Vector4 bottomRight = new Vector4(1.0, 1.0, 0.0, 1.0);
             
-            Vector4 pA = transform.multiply(topLeft);
-            Vector4 pB = transform.multiply(bottomLeft);
-            Vector4 pC = transform.multiply(topRight);
-            Vector4 pD = transform.multiply(bottomRight);
+            Vector4 pA = topLeft;
+            Vector4 pB = bottomLeft;
+            Vector4 pC = topRight;
+            Vector4 pD = bottomRight;
             
             Vector3 pA2 = new Vector3(pA.getX(), pA.getY(), pA.getZ());
             Vector3 pB2 = new Vector3(pB.getX(), pB.getY(), pB.getZ());
@@ -109,18 +113,27 @@ public class Game
             _renderer.clear();
             
             _renderer.drawStripedQuad(pA2, pB2, pC2, pD2, "rot", _camera); 
-           
-            
-            
-            /*
-            _renderer.drawLine3D(new Vector3(), new Vector3(1.0, 0.0, 0.0), "rot", _camera);
-            _renderer.drawLine3D(new Vector3(), new Vector3(0.0, 1.0, 0.0), "gruen", _camera);
-            _renderer.drawLine3D(new Vector3(), new Vector3(0.0, 0.0, 1.0), "blau", _camera);
-            
+            _renderer.drawAxis(_camera);            
+
+                /*
             _renderer.drawLine(pA2, pB2);
             _renderer.drawLine(pB2, pC2);
             _renderer.drawLine(pC2, pA2);
             */
+            
+            // Bildrate auf maximal FPS_CAP (Konstante) begrenzen
+            try
+            {
+                double diff = (1.0 / FPS_CAP) - deltaTime;
+                if(diff > 0)
+                {
+                    Thread.sleep((long)(1000*diff));
+                }
+            }
+            catch (InterruptedException ie)
+            {
+                throw new RuntimeException("unhandled interrupt");
+            }
             
         }
     }
