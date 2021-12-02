@@ -74,6 +74,7 @@ public class Game
             Matrix4 transform = translation.multiply(scale.multiply(rotation));
             transform = _camera.getProjectionMatrix().multiply(_camera.getViewMatrix().multiply(transform));
             
+            /* 
             Vector4 pA = transform.multiply(pointA);
             Vector4 pB = transform.multiply(pointB);
             Vector4 pC = transform.multiply(pointC);
@@ -88,9 +89,30 @@ public class Game
             Vector2 pA2 = new Vector2(pA.getX(), pA.getY());
             Vector2 pB2 = new Vector2(pB.getX(), pB.getY());
             Vector2 pC2 = new Vector2(pC.getX(), pC.getY());
+            */
+            
+           Vector4 topLeft = new Vector4(-1.0, -1.0, 0.0, 1.0);
+            Vector4 bottomLeft = new Vector4(-1.0, 1.0, 0.0, 1.0);
+            Vector4 topRight = new Vector4(1.0, -1.0, 0.0, 1.0);
+            Vector4 bottomRight = new Vector4(1.0, 1.0, 0.0, 1.0);
+            
+            Vector4 pA = transform.multiply(topLeft);
+            Vector4 pB = transform.multiply(bottomLeft);
+            Vector4 pC = transform.multiply(topRight);
+            Vector4 pD = transform.multiply(bottomRight);
+            
+            Vector3 pA2 = new Vector3(pA.getX(), pA.getY(), pA.getZ());
+            Vector3 pB2 = new Vector3(pB.getX(), pB.getY(), pB.getZ());
+            Vector3 pC2 = new Vector3(pC.getX(), pC.getY(), pC.getZ());
+            Vector3 pD2 = new Vector3(pD.getX(), pD.getY(), pD.getZ());
             
             _renderer.clear();
             
+            _renderer.drawStripedQuad(pA2, pB2, pC2, pD2, "rot", _camera); 
+           
+            
+            
+            /*
             _renderer.drawLine3D(new Vector3(), new Vector3(1.0, 0.0, 0.0), "rot", _camera);
             _renderer.drawLine3D(new Vector3(), new Vector3(0.0, 1.0, 0.0), "gruen", _camera);
             _renderer.drawLine3D(new Vector3(), new Vector3(0.0, 0.0, 1.0), "blau", _camera);
@@ -98,7 +120,7 @@ public class Game
             _renderer.drawLine(pA2, pB2);
             _renderer.drawLine(pB2, pC2);
             _renderer.drawLine(pC2, pA2);
-            
+            */
             
         }
     }
