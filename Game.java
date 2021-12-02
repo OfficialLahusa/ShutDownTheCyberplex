@@ -66,7 +66,8 @@ public class Game
             _renderer.drawLine(pA2, pB2);
             _renderer.drawLine(pB2, pC2);
             _renderer.drawLine(pC2, pA2);
-            // _textRenderer.write(new Vector2(10,10), 20, "abcdefghij\nklmnopqr\nstuvwxz");
+            
+            //_textRenderer.write(new Vector2(10,10), 10, "Und sogar die Skallierung\nfunktioniert voll gut oO\n0123456789\n?!/ß");
         }
         
         System.exit(0);

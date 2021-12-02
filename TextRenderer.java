@@ -22,51 +22,58 @@ public class TextRenderer
     {
         //24x26
         int l = text.length();
+        String letter = "";
         Vector2 origStart = new Vector2(start.getX(), start.getY());
-        
+        double buffer = 0.1*(size/2);
         for(int i = 0; i < l; i++)
         {
-            if(text.charAt(i) == '\n')
+            if(Character.toString(text.charAt(i)).matches("[0-9]"))
             {
-                start.setX(origStart.getX());
-                start.setY(origStart.getY()+26+1.4*size);
-                origStart.setY(start.getY());
+                letterNumber(start, size, text.charAt(i));
+                switch(text.charAt(i))
+                {
+                    case '1':
+                        start.setX(start.getX()+1.1*size+buffer);
+                        break;
+                    default:
+                        start.setX(start.getX()+2.1*size+buffer);
+                }
             }
-            else if(text.matches(text.toUpperCase()))
+            else if(Character.toString(text.charAt(i)).matches("[A-Z]"))
             {
                 letterUpperCase(start, size, text.charAt(i));
                 switch(text.charAt(i))
                 {
                     case 'F':
-                        start.setX(start.getX()+2.1*size+(0.1*size));
+                        start.setX(start.getX()+2.1*size+buffer);
                         break;
                     case 'I':
-                        start.setX(start.getX()+0.6*size+(0.1*size));
+                        start.setX(start.getX()+0.6*size+buffer);
                         break;
                     case 'J':
                     case 'L':
-                        start.setX(start.getX()+2.0*size+(0.1*size));
+                        start.setX(start.getX()+2.0*size+buffer);
                         break;
                     case 'M':
-                        start.setX(start.getX()+3.0*size+(0.1*size));
+                        start.setX(start.getX()+3.0*size+buffer);
                         break;
                     case 'P':
                     case 'R':
                     case 'S':
                     case 'Z':
-                        start.setX(start.getX()+2.3*size+(0.1*size));
+                        start.setX(start.getX()+2.3*size+buffer);
                         break;
                     case 'W':
-                        start.setX(start.getX()+3.4*size+(0.1*size));
+                        start.setX(start.getX()+3.4*size+buffer);
                         break;
                     case 'X':
-                        start.setX(start.getX()+2.2*size+(0.1*size));
+                        start.setX(start.getX()+2.2*size+buffer);
                         break;
                     default:
-                        start.setX(start.getX()+2.4*size+(0.1*size));
+                        start.setX(start.getX()+2.4*size+buffer);
                 }
             }
-            else if(text.matches(text.toLowerCase()))
+            else if(Character.toString(text.charAt(i)).matches("[a-z]"))
             {
                 letterLowerCase(start, size, text.charAt(i));
                 switch(text.charAt(i))
@@ -74,25 +81,50 @@ public class TextRenderer
                     case 'f':
                     case 't':
                     case 'v':
-                        start.setX(start.getX()+1.8*size+(0.1*size));
+                    case 'x':
+                    case 'y':
+                        start.setX(start.getX()+1.8*size+buffer);
                         break;
                     case 'i':
                     case 'l':
-                        start.setX(start.getX()+0.6*size+(0.1*size));
+                        start.setX(start.getX()+0.6*size+buffer);
                         break;
                     case 'j':
-                        start.setX(start.getX()+1.0*size+(0.1*size));
+                        start.setX(start.getX()+1.0*size+buffer);
                         break;
                     case 'k':
                     case 'r':
-                        start.setX(start.getX()+1.7*size+(0.1*size));
+                        start.setX(start.getX()+1.7*size+buffer);
                         break;
                     case 'm':
                     case 'w':
-                        start.setX(start.getX()+3.0*size+(0.1*size));
+                        start.setX(start.getX()+3.0*size+buffer);
                         break;
                     default:
-                        start.setX(start.getX()+1.9*size+(0.1*size));
+                        start.setX(start.getX()+1.9*size+buffer);
+                }
+            }
+            else
+            {
+                letterSymbols(start, size, text.charAt(i));
+                switch(text.charAt(i))
+                {
+                    case '\n':
+                        start.setX(origStart.getX());
+                        start.setY(origStart.getY()+3.2*size+0.3*size);
+                        origStart.setY(start.getY());
+                        break;
+                    case '!':
+                        start.setX(start.getX()+0.6*size+buffer);
+                        break;
+                    case '/':
+                        start.setX(start.getX()+1.4*size+buffer);
+                        break;
+                    case 'ß':
+                        start.setX(start.getX()+2.1*size+buffer);
+                        break;
+                    default:
+                        start.setX(start.getX()+1.9*size+buffer);
                 }
             }
         }
@@ -152,6 +184,73 @@ public class TextRenderer
         else if(wy1 == wy2)
         {
             if(wy1 > 1)
+            {
+                _renderer.drawLine(new Vector2(x+wx1*size, (y+wy1*size)+1), new Vector2(x+wx2*size, (y+wy2*size)+1));
+            }
+            else
+            {
+                _renderer.drawLine(new Vector2(x+wx1*size, (y+wy1*size)-1), new Vector2(x+wx2*size, (y+wy2*size)-1));
+            }
+        }
+        
+        _lastPos.setX(wx2);
+        _lastPos.setY(wy2);
+    }
+    
+    public void drawLineCheck(Vector2 start, double wx2, double wy2, int size, int direction)
+    {
+        double x = start.getX();
+        double y = start.getY();
+        double wx1 = _lastPos.getX();
+        double wy1 = _lastPos.getY();
+        
+        _renderer.drawLine(new Vector2(x+wx1*size, y+wy1*size), new Vector2(x+wx2*size, y+wy2*size));
+        if(wx1 == wx2)
+        {
+            if(direction == 1)
+            {
+                _renderer.drawLine(new Vector2((x+wx1*size)+1, y+wy1*size), new Vector2((x+wx2*size)+1, y+wy2*size));
+            }
+            else
+            {
+                _renderer.drawLine(new Vector2((x+wx1*size)-1, y+wy1*size), new Vector2((x+wx2*size)-1, y+wy2*size));
+            }
+        }
+        else if(wy1 == wy2)
+        {
+            if(direction == 1)
+            {
+                _renderer.drawLine(new Vector2(x+wx1*size, (y+wy1*size)+1), new Vector2(x+wx2*size, (y+wy2*size)+1));
+            }
+            else
+            {
+                _renderer.drawLine(new Vector2(x+wx1*size, (y+wy1*size)-1), new Vector2(x+wx2*size, (y+wy2*size)-1));
+            }
+        }
+        _lastPos.setX(wx2);
+        _lastPos.setY(wy2);
+    }
+    
+    public void drawLineCheck(Vector2 start, double wx1, double wy1, double wx2, double wy2, int size, int direction)
+    {
+        double x = start.getX();
+        double y = start.getY();
+        
+        _renderer.drawLine(new Vector2(x+wx1*size, y+wy1*size), new Vector2(x+wx2*size, y+wy2*size));
+        if(wx1 == wx2)
+        {
+            if(direction == 1)
+            {
+                _renderer.drawLine(new Vector2((x+wx1*size)+1, y+wy1*size), new Vector2((x+wx2*size)+1, y+wy2*size));
+            }
+            else
+            {
+                _renderer.drawLine(new Vector2((x+wx1*size)-1, y+wy1*size), new Vector2((x+wx2*size)-1, y+wy2*size));
+            }
+        }
+        else if(wy1 == wy2)
+        {
+            if(direction == 1)
             {
                 _renderer.drawLine(new Vector2(x+wx1*size, (y+wy1*size)+1), new Vector2(x+wx2*size, (y+wy2*size)+1));
             }
@@ -277,55 +376,162 @@ public class TextRenderer
                 drawLineCheck(start, 0.3, 0.8, 0.3, 2.4, size);
                 break;
             case 'j':
-                
+                //dot - top to bottom
+                drawLineCheck(start, 0.6, 0.2, 0.6, 0.3, size, 1);
+                //middle - top to bottom
+                drawLineCheck(start, 0.6, 0.8, 0.6, 3.0, size, 1);
+                //along
+                drawLineCheck(start, 0.4, 3.2, size);
+                drawLineCheck(start, 0.2, 3.2, size);
                 break;
             case 'k':
-                
+                //left - top to bottom
+                drawLineCheck(start, 0.3, 0.2, 0.3, 2.4, size);
+                //middle - left to right
+                drawLineCheck(start, 0.3, 1.6, 0.5, 1.6, size);
+                // / - top to bottom
+                drawLineCheck(start, 1.4, 0.8, 0.5, 1.6, size);
+                //along
+                drawLineCheck(start, 1.4, 2.4, size);
                 break;                
             case 'l':
-                
+                //middle - top to bottom
+                drawLineCheck(start, 0.3, 0.2, 0.3, 2.4, size);
                 break;                
             case 'm':
-                
+                //right - bottom to top
+                drawLineCheck(start, 2.7, 2.4, 2.7, 1.0, size);
+                //along
+                drawLineCheck(start, 2.5, 0.8, size);
+                drawLineCheck(start, 1.9, 0.8, size);
+                drawLineCheck(start, 1.5, 1.0, size);
+                drawLineCheck(start, 1.3, 0.8, size);
+                drawLineCheck(start, 0.7, 0.8, size);
+                drawLineCheck(start, 0.3, 1.0, size);
+                //left - bottom to top
+                drawLineCheck(start, 0.3, 2.4, 0.3, 0.8, size);
+                //middle - bottom to top
+                drawLineCheck(start, 1.5, 2.4, 1.5, 1.0, size);
                 break;                
             case 'n':
-                
+                //right - bottom to top
+                drawLineCheck(start, 1.6, 2.4, 1.6, 1.0, size);
+                //along
+                drawLineCheck(start, 1.4, 0.8, size);
+                drawLineCheck(start, 0.7, 0.8, size);
+                drawLineCheck(start, 0.3, 1.0, size);
+                //left - bottom to top
+                drawLineCheck(start, 0.3, 2.4, 0.3, 0.8, size);
                 break;
             case 'o':
-                
+                //start - bottom right
+                drawLineCheck(start, 1.6, 1.0, 1.6, 2.2, size);
+                //along
+                drawLineCheck(start, 1.4, 2.4, size);
+                drawLineCheck(start, 0.5, 2.4, size);
+                drawLineCheck(start, 0.3, 2.2, size);
+                drawLineCheck(start, 0.3, 1.0, size);
+                drawLineCheck(start, 0.5, 0.8, size);
+                drawLineCheck(start, 1.4, 0.8, size);
+                drawLineCheck(start, 1.6, 1.0, size);
                 break;                
             case 'p':
-                
+                //start - top left
+                drawLineCheck(start, 0.3, 1.0, 0.7, 0.8, size);
+                //along
+                drawLineCheck(start, 1.4, 0.8, size);
+                drawLineCheck(start, 1.6, 1.0, size);
+                drawLineCheck(start, 1.6, 2.2, size);
+                drawLineCheck(start, 1.4, 2.4, size);
+                drawLineCheck(start, 0.3, 2.4, size);
+                //left - bottom to top
+                drawLineCheck(start, 0.3, 3.2, 0.3, 0.8, size);
                 break;                
             case 'q':
-                
+                //start - middle right
+                drawLineCheck(start, 1.6, 2.2, 1.2, 2.4, size);
+                //along
+                drawLineCheck(start, 0.5, 2.4, size);
+                drawLineCheck(start, 0.3, 2.2, size);
+                drawLineCheck(start, 0.3, 1.0, size);
+                drawLineCheck(start, 0.5, 0.8, size);
+                drawLineCheck(start, 1.4, 0.8, size);
+                drawLineCheck(start, 1.6, 1.0, size);
+                drawLineCheck(start, 1.6, 3.2, size);
                 break;                
             case 'r':
-                
+                //start - right
+                drawLineCheck(start, 1.4, 1.2, 1.4, 1.0, size);
+                //along
+                drawLineCheck(start, 1.2, 0.8, size);
+                drawLineCheck(start, 0.7, 0.8, size);
+                drawLineCheck(start, 0.3, 1.0, size);
+                //left - bottom to top
+                drawLineCheck(start, 0.3, 2.4, 0.3, 0.8, size);
                 break;
             case 's':
-                
+                //start - bottom left
+                drawLineCheck(start, 0.3, 2.4, 1.4, 2.4, size);
+                //along
+                drawLineCheck(start, 1.6, 2.2, size);
+                drawLineCheck(start, 1.6, 1.8, size);
+                drawLineCheck(start, 1.4, 1.6, size);
+                drawLineCheck(start, 0.5, 1.6, size, 0);
+                drawLineCheck(start, 0.5, 1.5, 0.3, 1.3, size);
+                drawLineCheck(start, 0.3, 0.9, size);
+                drawLineCheck(start, 0.5, 0.7, size);
+                drawLineCheck(start, 1.6, 0.7, size);
                 break;                
             case 't':
-                
+                //middle - top to bottom
+                drawLineCheck(start, 0.8, 0.2, 0.8, 2.2, size);
+                //along
+                drawLineCheck(start, 1.0, 2.4, size);
+                drawLineCheck(start, 1.5, 2.4, size);
+                //middle - left to right
+                drawLineCheck(start, 0.3, 0.8, 1.5, 0.8, size);
                 break;                
             case 'u':
-                
+                drawLineCheck(start, 0.3, 0.8, 0.3, 2.2, size);
+                //along
+                drawLineCheck(start, 0.5, 2.4, size);
+                drawLineCheck(start, 1.2, 2.4, size);
+                drawLineCheck(start, 1.6, 2.2, size);
+                //right - bottom to top
+                drawLineCheck(start, 1.6, 2.4, 1.6, 0.8, size);
                 break;                
             case 'v':
-                
+                // \ - top to bottom
+                drawLineCheck(start, 0.3, 0.8, 0.9, 2.4, size);
+                //along
+                drawLineCheck(start, 1.5, 0.8, size);
                 break;
             case 'w':
-                
+                // left - top to bottom
+                drawLineCheck(start, 0.3, 0.8, 0.9, 2.4, size);
+                //along
+                drawLineCheck(start, 1.5, 0.8, size);
+                drawLineCheck(start, 2.1, 2.4, size);
+                drawLineCheck(start, 2.7, 0.8, size);
                 break;                
             case 'x':
-                
+                // \ - top to bottom
+                drawLineCheck(start, 0.3, 0.8, 1.5, 2.4, size);
+                // / - top to bottom
+                drawLineCheck(start, 1.5, 0.8, 0.3, 2.4, size);
                 break;                
             case 'y':
-                
+                // / - top to bottom
+                drawLineCheck(start, 1.5, 0.8, 0.5, 3.2, size);
+                // \ top to bottom
+                drawLineCheck(start, 0.3, 0.8, 0.85, 2.3, size);
                 break;                
             case 'z':
-                
+                //bottom - right to left
+                drawLineCheck(start, 1.6, 2.4, 0.3, 2.4, size);
+                //along
+                drawLineCheck(start, 1.6, 0.8, size);
+                drawLineCheck(start, 0.3, 0.8, size);
                 break;                
             case ' ':
                 break;
@@ -582,8 +788,193 @@ public class TextRenderer
                 //along
                 drawLineCheck(start, 0.3, 2.4, size);
                 drawLineCheck(start, 2.0, 2.4, size);
-                break;                
+                break;
+        }
+    }
+    
+    public void letterSymbols(Vector2 start, int size,char c)
+    {
+        double x = start.getX();
+        double y = start.getY();
+        switch(c)
+        {
+            // all must bound l/r at 0.3 and t/b at 0.2
             case ' ':
+                break;
+            case '?':
+                //start - top left
+                drawLineCheck(start, 0.3, 0.6, 0.3, 0.4, size);
+                //along
+                drawLineCheck(start, 0.5, 0.2, size);
+                drawLineCheck(start, 1.4, 0.2, size);
+                drawLineCheck(start, 1.6, 0.4, size);
+                drawLineCheck(start, 1.6, 0.8, size);
+                drawLineCheck(start, 0.8, 1.3, size);
+                drawLineCheck(start, 0.8, 1.5, size);
+                //dot - top to bottom
+                drawLineCheck(start, 0.8, 2.2, 0.8, 2.4, size);
+                break;
+            case '!':
+                //middle - top to bottom
+                drawLineCheck(start, 0.3, 0.2, 0.3, 1.5, size);
+                //dot - top to bottom
+                drawLineCheck(start, 0.3, 2.2, 0.3, 2.4, size);
+                break;  
+            case '/':
+                // / - top to bottom
+                drawLineCheck(start, 1.1, 0.2, 0.3, 2.4, size);
+                break;
+            case 'ß':
+                //left - bottom to top
+                drawLineCheck(start, 0.3, 2.4, 0.3, 0.4, size);
+                //along
+                drawLineCheck(start, 0.5, 0.2, size);
+                drawLineCheck(start, 1.5, 0.2, size);
+                drawLineCheck(start, 1.7, 0.4, size);
+                drawLineCheck(start, 1.7, 0.7, size);
+                drawLineCheck(start, 0.9, 1.0, size);
+                drawLineCheck(start, 0.9, 1.3, size);
+                drawLineCheck(start, 1.1, 1.5, size);
+                drawLineCheck(start, 1.6, 1.6, size);
+                drawLineCheck(start, 1.8, 1.8, size);
+                drawLineCheck(start, 1.8, 2.2, size);
+                drawLineCheck(start, 1.6, 2.4, size);
+                drawLineCheck(start, 0.9, 2.4, size);
+                break;                
+        }
+    }
+    
+    public void letterNumber(Vector2 start, int size,char c)
+    {
+        double x = start.getX();
+        double y = start.getY();
+        switch(c)
+        {
+            // all must bound l/r at 0.3 and t/b at 0.2
+            case '0':
+                //right - top to bottom
+                drawLineCheck(start, 1.8, 0.4, 1.8, 2.2, size);
+                //along
+                drawLineCheck(start, 1.6, 2.4, size);
+                drawLineCheck(start, 0.5, 2.4, size);
+                drawLineCheck(start, 0.3, 2.2, size);
+                drawLineCheck(start, 0.3, 0.4, size);
+                drawLineCheck(start, 0.5, 0.2, size);
+                drawLineCheck(start, 1.6, 0.2, size);
+                drawLineCheck(start, 1.8, 0.4, size);
+                break;
+            case '1':
+                //top - left to right
+                drawLineCheck(start, 0.3, 0.2, 0.8, 0.2, size);
+                //along
+                drawLineCheck(start, 0.8, 2.4, size);
+                break;
+            case '2':
+                //start - top left
+                drawLineCheck(start, 0.3, 0.6, 0.3, 0.4, size);
+                //along
+                drawLineCheck(start, 0.5, 0.2, size);
+                drawLineCheck(start, 1.6, 0.2, size);
+                drawLineCheck(start, 1.8, 0.4, size);
+                drawLineCheck(start, 1.8, 1.0, size);
+                drawLineCheck(start, 1.6, 1.2, size);
+                drawLineCheck(start, 0.5, 1.7, size);
+                drawLineCheck(start, 0.3, 1.9, size);
+                drawLineCheck(start, 0.3, 2.4, size);
+                drawLineCheck(start, 1.8, 2.4, size);
+                drawLineCheck(start, 1.8, 2.0, size);
+                break;
+            case '3':
+                //start - top left
+                drawLineCheck(start, 0.3, 0.6, 0.3, 0.4, size);
+                //along
+                drawLineCheck(start, 0.5, 0.2, size);
+                drawLineCheck(start, 1.6, 0.2, size);
+                drawLineCheck(start, 1.8, 0.4, size);
+                drawLineCheck(start, 1.8, 1.1, size);
+                drawLineCheck(start, 1.6, 1.3, size);
+                drawLineCheck(start, 1.8, 1.5, size);
+                drawLineCheck(start, 1.8, 2.2, size);
+                drawLineCheck(start, 1.6, 2.4, size);
+                drawLineCheck(start, 0.5, 2.4, size);
+                drawLineCheck(start, 0.3, 2.2, size);
+                drawLineCheck(start, 0.3, 2.0, size);
+                //middle - left to right
+                drawLineCheck(start, 0.8, 1.3, 1.6, 1.3, size);
+                break;
+            case '4':
+                //left - bottom to top
+                drawLineCheck(start, 1.5, 2.4, 1.5, 0.2, size);
+                //along
+                drawLineCheck(start, 0.3, 1.7, size);
+                drawLineCheck(start, 0.3, 1.9, size);
+                drawLineCheck(start, 1.8, 1.9, size);
+                break;
+            case '5':
+                //top - right to left
+                drawLineCheck(start, 1.8, 0.2, 0.3, 0.2, size);
+                //along
+                drawLineCheck(start, 0.3, 1.4, size);
+                drawLineCheck(start, 1.6, 1.4, size, 0);
+                drawLineCheck(start, 1.8, 1.5, size);
+                drawLineCheck(start, 1.8, 2.2, size);
+                drawLineCheck(start, 1.6, 2.4, size);
+                drawLineCheck(start, 0.5, 2.4, size);
+                drawLineCheck(start, 0.3, 2.2, size);
+                drawLineCheck(start, 0.3, 2.0, size);
+                break;
+            case '6':
+                //middle - left to right
+                drawLineCheck(start, 0.3, 1.3, 1.6, 1.3, size,0);
+                drawLineCheck(start, 1.8, 1.5, size);
+                drawLineCheck(start, 1.8, 2.2, size);
+                drawLineCheck(start, 1.6, 2.4, size);
+                drawLineCheck(start, 0.5, 2.4, size);
+                drawLineCheck(start, 0.3, 2.2, size);
+                drawLineCheck(start, 0.3, 0.4, size);
+                drawLineCheck(start, 0.5, 0.2, size);
+                drawLineCheck(start, 1.6, 0.2, size);
+                drawLineCheck(start, 1.8, 0.4, size);
+                drawLineCheck(start, 1.8, 0.6, size);
+                break;
+            case '7':
+                //top - left to right
+                drawLineCheck(start, 0.3, 0.2, 1.8, 0.2, size);
+                //along
+                drawLineCheck(start, 0.6, 2.4, size);
+                break;
+            case '8':
+                //middle - left to right
+                drawLineCheck(start, 0.5, 1.3, 1.6, 1.3, size,0);
+                drawLineCheck(start, 1.8, 1.5, size);
+                drawLineCheck(start, 1.8, 2.2, size);
+                drawLineCheck(start, 1.6, 2.4, size);
+                drawLineCheck(start, 0.5, 2.4, size);
+                drawLineCheck(start, 0.3, 2.2, size);
+                drawLineCheck(start, 0.3, 1.5, size);
+                drawLineCheck(start, 0.5, 1.3, size);
+                drawLineCheck(start, 0.3, 1.1, size);
+                drawLineCheck(start, 0.3, 0.4, size);
+                drawLineCheck(start, 0.5, 0.2, size);
+                drawLineCheck(start, 1.6, 0.2, size);
+                drawLineCheck(start, 1.8, 0.4, size);
+                drawLineCheck(start, 1.8, 1.1, size);
+                drawLineCheck(start, 1.6, 1.3, size);
+                break;
+            case '9':
+                //middle - right to left
+                drawLineCheck(start, 1.8, 1.3, 0.5, 1.3, size);
+                //along
+                drawLineCheck(start, 0.3, 1.1, size);
+                drawLineCheck(start, 0.3, 0.4, size);
+                drawLineCheck(start, 0.5, 0.2, size);
+                drawLineCheck(start, 1.6, 0.2, size);
+                drawLineCheck(start, 1.8, 0.4, size);
+                drawLineCheck(start, 1.8, 2.2, size);
+                drawLineCheck(start, 1.6, 2.4, size);
+                drawLineCheck(start, 0.5, 2.4, size);
+                drawLineCheck(start, 0.3, 2.2, size);
+                drawLineCheck(start, 0.3, 2.0, size);
                 break;
         }
     }
