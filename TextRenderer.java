@@ -1,9 +1,9 @@
 
 /**
- * Beschreiben Sie hier die Klasse TextRenderer.
+ * Rendert Strings an eine Gewünschte Position.
  * 
  * @author Nico Hädicke
- * @version 01.12.2021
+ * @version 02.12.2021
  */
 public class TextRenderer
 {
@@ -11,6 +11,9 @@ public class TextRenderer
     private Turtle _turtle;
     private Vector2 _lastPos;
     
+    /**
+     * Konstruktor für Objekte der Klasse TextRenderer
+     */
     public TextRenderer(Renderer renderer)
     {
         _renderer = renderer;
@@ -18,6 +21,13 @@ public class TextRenderer
         _lastPos = new Vector2(0, 0);
     }
 
+    /**
+     * Zeichnet String in angegebenere größe and start
+     * 
+     * @param start Startpunkt oben links vom String
+     * @param size Schriftgröße
+     * @param text Zu rendernder String
+     */
     public void write(Vector2 start, int size, String text)
     {
         //24x26
@@ -131,6 +141,14 @@ public class TextRenderer
         }
     }
     
+    /**
+     * Rendert doppelte Linie von vorherigem Endpunkt bis (wx2, wx2) rellativ zum startpunkt
+     * 
+     * @param start Startpunkt oben links vom String
+     * @param wx2 Rellativer Zielpunkt auf der X-Achse
+     * @param wy2 Rellativer Zielpunkt auf der Y-Achse
+     * @param size Schriftgröße
+     */
     public void drawLineCheck(Vector2 start, double wx2, double wy2, int size)
     {
         double x = start.getX();
@@ -165,6 +183,16 @@ public class TextRenderer
         _lastPos.setY(wy2);
     }
     
+    /**
+     * Rendert doppelte Linie von (wx1, wy1) bis (wx2, wx2) rellativ zum startpunkt
+     * 
+     * @param start Startpunkt oben links vom String
+     * @param wx1 Rellativer Startpunkt auf der X-Achse
+     * @param wy1 Rellativer Startpunkt auf der Y-Achse
+     * @param wx2 Rellativer Zielpunkt auf der X-Achse
+     * @param wy2 Rellativer Zielpunkt auf der Y-Achse
+     * @param size Schriftgröße
+     */
     public void drawLineCheck(Vector2 start, double wx1, double wy1, double wx2, double wy2, int size)
     {
         double x = start.getX();
@@ -198,6 +226,15 @@ public class TextRenderer
         _lastPos.setY(wy2);
     }
     
+    /**
+     * Rendert doppelte Linie von vorherigem Endpunkt bis (wx2, wx2) rellativ zum startpunkt
+     * 
+     * @param start Startpunkt oben links vom String
+     * @param wx2 Rellativer Zielpunkt auf der X-Achse
+     * @param wy2 Rellativer Zielpunkt auf der Y-Achse
+     * @param size Schriftgröße
+     * @param direction Position der doppelten Lilie | 0 = nach oben/links 1 = nach unten/rechts
+     */
     public void drawLineCheck(Vector2 start, double wx2, double wy2, int size, int direction)
     {
         double x = start.getX();
@@ -232,6 +269,17 @@ public class TextRenderer
         _lastPos.setY(wy2);
     }
     
+    /**
+     * Rendert doppelte Linie von vorherigem Endpunkt bis (wx2, wx2) rellativ zum startpunkt
+     * 
+     * @param start Startpunkt oben links vom String
+     * @param wx1 Rellativer Startpunkt auf der X-Achse
+     * @param wy1 Rellativer Startpunkt auf der Y-Achse
+     * @param wx2 Rellativer Zielpunkt auf der X-Achse
+     * @param wy2 Rellativer Zielpunkt auf der Y-Achse
+     * @param size Schriftgröße
+     * @param direction Position der doppelten Lilie | 0 = nach oben/links 1 = nach unten/rechts
+     */
     public void drawLineCheck(Vector2 start, double wx1, double wy1, double wx2, double wy2, int size, int direction)
     {
         double x = start.getX();
@@ -265,6 +313,13 @@ public class TextRenderer
         _lastPos.setY(wy2);
     }
     
+    /**
+     * Zeichnet einen Kleinbuchstaben
+     * 
+     * @param start Startpunkt oben links vom Char
+     * @param size Schriftgröße
+     * @param c Kleinbuchstabe der gezeichnet werden soll
+     */
     public void letterLowerCase(Vector2 start, int size,char c)
     {
         double x = start.getX();
@@ -539,6 +594,13 @@ public class TextRenderer
         }
     }
     
+    /**
+     * Zeichnet einen Großbuchstaben
+     * 
+     * @param start Startpunkt oben links vom Char
+     * @param size Schriftgröße
+     * @param c Großbuchstabe der gezeichnet werden soll
+     */
     public void letterUpperCase(Vector2 start, int size,char c)
     {
         double x = start.getX();
@@ -793,6 +855,13 @@ public class TextRenderer
         }
     }
     
+    /**
+     * Zeichnet eine Symbol
+     * 
+     * @param start Startpunkt oben links vom Char
+     * @param size Schriftgröße
+     * @param c Symbol das gezeichnet werden soll
+     */
     public void letterSymbols(Vector2 start, int size,char c)
     {
         double x = start.getX();
@@ -851,6 +920,13 @@ public class TextRenderer
         }
     }
     
+    /**
+     * Zeichnet eine Zahl
+     * 
+     * @param start Startpunkt oben links vom Char
+     * @param size Schriftgröße
+     * @param c Zahl die gezeichnet werden soll
+     */
     public void letterNumber(Vector2 start, int size,char c)
     {
         double x = start.getX();
