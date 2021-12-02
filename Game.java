@@ -31,8 +31,8 @@ public class Game
         _inputManager = new InputManager();
         _textRenderer = new TextRenderer(_renderer);
         _objLoader = new WavefrontObjectLoader();
-        _camera = new Camera(new Vector3(0.0, 0.0, 3.0), 1.0, 90.0);
-        _monkey = new GameObject(_objLoader.loadFromFile("D:/Uni/WiSe 2021-2022/SE1/TurtleDoomLike/res/models/monkey.obj"));
+        _camera = new Camera(new Vector3(0.0, 0.0, 10.0), 1.0, 90.0);
+        _monkey = new GameObject(_objLoader.loadFromFile("D:/Uni/WiSe 2021-2022/SE1/TurtleDoomLike/res/models/t34.obj"));
     }
     
     /**

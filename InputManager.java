@@ -66,6 +66,12 @@ public class InputManager
                             case KeyEvent.VK_ESCAPE:
                                 _keys[KeyCode.KEY_ESCAPE.ordinal()] = true;
                                 break;
+                            case KeyEvent.VK_PLUS:
+                                _keys[KeyCode.KEY_PLUS.ordinal()] = true;
+                                break;
+                            case KeyEvent.VK_MINUS:
+                                _keys[KeyCode.KEY_MINUS.ordinal()] = true;
+                                break;
                         }
                     }
                     else if (evt.getID() == KeyEvent.KEY_RELEASED)
@@ -89,6 +95,12 @@ public class InputManager
                                 break;
                             case KeyEvent.VK_ESCAPE:
                                 _keys[KeyCode.KEY_ESCAPE.ordinal()] = false;
+                                break;
+                            case KeyEvent.VK_PLUS:
+                                _keys[KeyCode.KEY_PLUS.ordinal()] = false;
+                                break;
+                            case KeyEvent.VK_MINUS:
+                                _keys[KeyCode.KEY_MINUS.ordinal()] = false;
                                 break;
                         }
                     }

@@ -12,5 +12,7 @@ public enum KeyCode
     KEY_S,
     KEY_D,
     KEY_SPACE,
-    KEY_ESCAPE
+    KEY_ESCAPE,
+    KEY_PLUS,
+    KEY_MINUS
 }
