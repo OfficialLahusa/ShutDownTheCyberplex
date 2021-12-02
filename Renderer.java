@@ -71,48 +71,11 @@ class Renderer
         drawLine(new Vector2(pA.getX(), pA.getY()), new Vector2(pB.getX(), pB.getY()), farbe);
     }
     
-    private void drawStripesAroundCorner(Vector3 cornerOrigin, Vector3 pointA, Vector3 pointB, int numStripes, Camera camera)
+    public void drawAxis(Camera camera)
     {
-        for (int i = 1; i <= numStripes; i++)
-        {
-            Vector3 temp = pointA.subtract(cornerOrigin);
-            temp = temp.multiply((double)i / (numStripes + 1));
-            Vector3 pointLeft = cornerOrigin.add(temp);
-            
-            temp = pointB.subtract(cornerOrigin);
-            temp = temp.multiply((double)i / (numStripes + 1));
-            Vector3 pointRight = cornerOrigin.add(temp);
-            
-            drawLine3D(pointLeft, pointRight, camera);
-        }
-    }
-    
-    /**
-     * Zeichnet ein gestreiftes Rechteck
-     * 
-     * @param topLeft Der Punkt Oben-links
-     * @param bottomLeft Der Punkt Unten-links
-     * @param topRight Der Punkt Oben-rechts
-     * @param bottomRight Der Punkt Unten-rechts
-     * @param farbe Die gewünschte Farb
-     */
-    public void drawStripedQuad(Vector3 topLeft, Vector3 bottomLeft, Vector3 topRight, Vector3 bottomRight, String farbe, Camera camera)
-    {
-        // 
-        drawLine3D(topLeft, topRight, farbe, camera);
-        drawLine3D(topRight, bottomRight, farbe, camera);
-        drawLine3D(bottomRight, bottomLeft, farbe, camera);
-        drawLine3D(bottomLeft, topLeft, farbe, camera);
-        
-        // Zeichne diagonalen
-        drawLine3D(topLeft, bottomRight, camera);
-        
-        final int numStripesForOneHalf = 10;
-        // Untere Hälfte des Rechtsecks
-        drawStripesAroundCorner(bottomLeft, topLeft, bottomRight, numStripesForOneHalf, camera);
-        
-        // Obere Hälfte des Rechtecks
-        drawStripesAroundCorner(topRight, topLeft, bottomRight, numStripesForOneHalf, camera);
+        drawLine3D(new Vector3(), new Vector3(1.0, 0.0, 0.0), "rot", camera);
+        drawLine3D(new Vector3(), new Vector3(0.0, 1.0, 0.0), "gruen", camera);
+        drawLine3D(new Vector3(), new Vector3(0.0, 0.0, 1.0), "blau", camera);
     }
     
     public void clear()
