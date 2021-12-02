@@ -18,7 +18,7 @@ public class Game
     private double fpsTimer = 0.0;
     private GameObject _monkey;
     
-    public static final double FPS_CAP = 144.0;
+    public static final double FPS_CAP = 60.0;
 
     /**
      * Konstruktor für Objekte der Klasse Game
@@ -73,11 +73,11 @@ public class Game
             }
             if (_inputManager.isKeyPressed(KeyCode.KEY_A))
             {
-                _camera.rotateYaw(-70.0 * deltaTime);
+                _camera.rotateYaw(70.0 * deltaTime);
             }
             if (_inputManager.isKeyPressed(KeyCode.KEY_D))
             {
-                _camera.rotateYaw(70.0 * deltaTime);
+                _camera.rotateYaw(-70.0 * deltaTime);
             }
             
             Matrix4 translation = MatrixGenerator.generateTranslationMatrix(new Vector3(0.0, 0.0, 0.0));
