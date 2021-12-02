@@ -116,7 +116,7 @@ public class Camera
     {
         if(recalculateViewMatrix)
         {
-            _view = MatrixGenerator.generateAxialRotationMatrix(new Vector3(0.0, 1.0, 0.0), _yaw).multiply(MatrixGenerator.generateTranslationMatrix(_position.invert()));
+            _view = MatrixGenerator.generateAxialRotationMatrix(new Vector3(0.0, 1.0, 0.0), -_yaw).multiply(MatrixGenerator.generateTranslationMatrix(_position.invert()));
             //_view = MatrixGenerator.generateTranslationMatrix(_position.invert());
             //_view = MatrixGenerator.generateLookAtMatrix(_position.add(getDirection()), _position, new Vector3(0.0, 1.0, 0.0));
             recalculateViewMatrix = false;

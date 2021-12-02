@@ -73,11 +73,11 @@ public class Game
             }
             if (_inputManager.isKeyPressed(KeyCode.KEY_A))
             {
-                _camera.rotateYaw(70.0 * deltaTime);
+                _camera.rotateYaw(-70.0 * deltaTime);
             }
             if (_inputManager.isKeyPressed(KeyCode.KEY_D))
             {
-                _camera.rotateYaw(-70.0 * deltaTime);
+                _camera.rotateYaw(70.0 * deltaTime);
             }
             
             Matrix4 translation = MatrixGenerator.generateTranslationMatrix(new Vector3(0.0, 0.0, 0.0));
