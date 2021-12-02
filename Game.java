@@ -34,8 +34,6 @@ public class Game
      */
     public void start()
     {
-        Matrix4 mat = new Matrix4();
-        mat.print();
         runGameLoop();
     }
     
@@ -84,8 +82,6 @@ public class Game
             Vector4 pA = transform.multiply(pointA);
             Vector4 pB = transform.multiply(pointB);
             Vector4 pC = transform.multiply(pointC);
-            
-            System.out.println(_camera.getPosition().getZ());
             
             // Viewport transform
             pA = MatrixGenerator.viewportTransform(pA);
