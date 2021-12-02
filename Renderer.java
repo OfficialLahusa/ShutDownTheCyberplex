@@ -66,6 +66,21 @@ class Renderer
         drawLine3D(a, b, "rot", camera);
     }
     
+    private boolean isLineInFrustum(Vector3 a, Vector3 b, Camera camera)
+    {   
+        Vector3 aDir = a.subtract(camera.getPosition());
+        Vector3 bDir = b.subtract(camera.getPosition());
+        
+        double aDot = aDir.dot(camera.getDirection());
+        double bDot = bDir.dot(camera.getDirection());
+        if (aDot < 0.0 && bDot < 0.0)
+        {
+            return true;
+        }
+        
+        return false;
+    }
+    
     /**
      * Zeichnet eine beliebigfarbige Linie zwischen zwei Punkten im dreidimensionalen Raum
      * @param a Startpunkt
@@ -75,11 +90,14 @@ class Renderer
      */
     public void drawLine3D(Vector3 a, Vector3 b, String farbe, Camera camera)
     {
-        Matrix4 transform = camera.getProjectionMatrix().multiply(camera.getViewMatrix());
-        Vector4 pA = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(a, 1.0)));
-        Vector4 pB = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(b, 1.0)));
-        
-        drawLine(new Vector2(pA.getX(), pA.getY()), new Vector2(pB.getX(), pB.getY()), farbe);
+        if (isLineInFrustum(a, b, camera))
+        {
+            Matrix4 transform = camera.getProjectionMatrix().multiply(camera.getViewMatrix());
+            Vector4 pA = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(a, 1.0)));
+            Vector4 pB = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(b, 1.0)));
+            
+            drawLine(new Vector2(pA.getX(), pA.getY()), new Vector2(pB.getX(), pB.getY()), farbe);
+        }
     }
     
     /**
@@ -92,11 +110,17 @@ class Renderer
      */
     public void drawLine3D(Vector3 a, Vector3 b, String farbe, Matrix4 model, Camera camera)
     {
-        Matrix4 transform = camera.getProjectionMatrix().multiply(camera.getViewMatrix().multiply(model));
-        Vector4 pA = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(a, 1.0)));
-        Vector4 pB = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(b, 1.0)));
         
-        drawLine(new Vector2(pA.getX(), pA.getY()), new Vector2(pB.getX(), pB.getY()), farbe);
+        
+        if (isLineInFrustum(a, b, camera))
+        {
+            Matrix4 transform = camera.getProjectionMatrix().multiply(camera.getViewMatrix().multiply(model));
+        
+            Vector4 pA = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(a, 1.0)));
+            Vector4 pB = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(b, 1.0)));
+        
+            drawLine(new Vector2(pA.getX(), pA.getY()), new Vector2(pB.getX(), pB.getY()), farbe);
+        }
     }
     
     private void drawStripesAroundCorner(Vector3 cornerOrigin, Vector3 pointA, Vector3 pointB, int numStripes, Camera camera)

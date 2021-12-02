@@ -80,56 +80,13 @@ public class Game
                 _camera.rotateYaw(70.0 * deltaTime);
             }
             
-            Matrix4 translation = MatrixGenerator.generateTranslationMatrix(new Vector3(0.0, 0.0, 0.0));
-            Matrix4 rotation = MatrixGenerator.generateAxialRotationMatrix(new Vector3(0, 0, 1), 25*runTime);
-            Matrix4 scale = MatrixGenerator.generateScaleMatrix(new Vector3(1.0, 1.0 + 0.4*Math.sin(Math.toRadians(120*runTime)), 1.0));
-            
-            Matrix4 transform = translation.multiply(scale.multiply(rotation));
-            transform = _camera.getProjectionMatrix().multiply(_camera.getViewMatrix().multiply(transform));
-            
-            /* 
-            Vector4 pA = transform.multiply(pointA);
-            Vector4 pB = transform.multiply(pointB);
-            Vector4 pC = transform.multiply(pointC);
-            
-            // Viewport transform
-            pA = MatrixGenerator.viewportTransform(pA);
-            pB = MatrixGenerator.viewportTransform(pB);
-            pC = MatrixGenerator.viewportTransform(pC);
-            
-            Vector2 pA2 = new Vector2(pA.getX(), pA.getY());
-            Vector2 pB2 = new Vector2(pB.getX(), pB.getY());
-            Vector2 pC2 = new Vector2(pC.getX(), pC.getY());
-            */
-            
-            /*Vector4 topLeft = new Vector4(-1.0, -1.0, 0.0, 1.0);
-            Vector4 bottomLeft = new Vector4(-1.0, 1.0, 0.0, 1.0);
-            Vector4 topRight = new Vector4(1.0, -1.0, 0.0, 1.0);
-            Vector4 bottomRight = new Vector4(1.0, 1.0, 0.0, 1.0);
-            
-            Vector4 pA = topLeft;
-            Vector4 pB = bottomLeft;
-            Vector4 pC = topRight;
-            Vector4 pD = bottomRight;
-            
-            Vector3 pA2 = new Vector3(pA.getX(), pA.getY(), pA.getZ());
-            Vector3 pB2 = new Vector3(pB.getX(), pB.getY(), pB.getZ());
-            Vector3 pC2 = new Vector3(pC.getX(), pC.getY(), pC.getZ());
-            Vector3 pD2 = new Vector3(pD.getX(), pD.getY(), pD.getZ());*/
-            
             _renderer.clear();
             
             //_renderer.drawStripedQuad(pA2, pB2, pC2, pD2, "rot", _camera);
             
             _renderer.drawGameObject(_monkey, "orange", _camera);
             
-            _renderer.drawAxis(_camera);            
-
-                /*
-            _renderer.drawLine(pA2, pB2);
-            _renderer.drawLine(pB2, pC2);
-            _renderer.drawLine(pC2, pA2);
-            */
+            _renderer.drawAxis(_camera);
             
             //render fps
             fpsTimer += deltaTime;
