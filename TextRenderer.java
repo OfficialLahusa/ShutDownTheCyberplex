@@ -115,6 +115,7 @@ public class TextRenderer
                         origStart.setY(start.getY());
                         break;
                     case '!':
+                    case ':':
                         start.setX(start.getX()+0.6*size+buffer);
                         break;
                     case '/':
@@ -840,7 +841,13 @@ public class TextRenderer
                 drawLineCheck(start, 1.8, 2.2, size);
                 drawLineCheck(start, 1.6, 2.4, size);
                 drawLineCheck(start, 0.9, 2.4, size);
-                break;                
+                break;
+            case ':':
+                //top dot - top to bottom
+                drawLineCheck(start, 0.3, 0.8, 0.3, 1.0, size);
+                //bottom dot - top to bottom
+                drawLineCheck(start, 0.3, 2.2, 0.3, 2.4, size);
+                break;
         }
     }
     
