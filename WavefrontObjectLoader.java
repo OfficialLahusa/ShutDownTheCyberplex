@@ -9,17 +9,17 @@ import javafx.util.*;
  */
 public class WavefrontObjectLoader
 {
-    public WavefrontObjectLoader()
-    {
-        
-    }
-
+    /**
+     * Lädt ein Mesh (3D-Modell) aus einer Wavefront Object (.obj)-Datei an einem gegebenen Pfad
+     * @param filePath Pfad der zu ladenden Datei
+     * @return Aus der Datei geladenes Mesh
+     */
     public Mesh loadFromFile(String filePath)
     {
-        // "D:/Uni/WiSe 2021-2022/SE1/TurtleDoomLike/res/models/monkey.obj"
-        
+        // Leeres Mesh erstellen
         Mesh result = new Mesh();
         
+        // Versucht die Datei beim gegebenen Pfad zu finden und ein Mesh daraus auszulesen
         try
         {
             FileInputStream fstream = new FileInputStream(filePath);
