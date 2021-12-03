@@ -12,6 +12,7 @@ public class Game
     private TimeManager _frameCapTimeManager;
     private InputManager _inputManager;
     private TextRenderer _textRenderer;
+    private SoundRegistry _soundRegistry;
     private WavefrontObjectLoader _objLoader;
     private Camera _camera;
     private double _fps;
@@ -31,10 +32,11 @@ public class Game
         _frameCapTimeManager = new TimeManager();
         _inputManager = new InputManager();
         _textRenderer = new TextRenderer(_renderer);
+        _soundRegistry = new SoundRegistry();
         _objLoader = new WavefrontObjectLoader();
-        _camera = new Camera(new Vector3(0.0, 0.0, 10.0), 1.0, 90.0);
-        _monkey = new GameObject(_objLoader.loadFromFile("D:/Uni/WiSe 2021-2022/SE1/TurtleDoomLike/res/models/dirt_floor.obj"), new Vector3(0.0, -2.0, 0.0), new Vector3(), new Vector3(1.0, 1.0, 1.0));
-        _monkey2 = new GameObject(_objLoader.loadFromFile("D:/Uni/WiSe 2021-2022/SE1/TurtleDoomLike/res/models/dirt_floor.obj"), new Vector3(0.0, -2.0, 8.0), new Vector3(), new Vector3(1.0, 1.0, 1.0));
+        _camera = new Camera(new Vector3(0.0, 2.0, 10.0), 1.0, 90.0);
+        _monkey = new GameObject(_objLoader.loadFromFile("./res/models/dirt_floor.obj"), new Vector3(0.0, 0.0, 0.0), new Vector3(), new Vector3(1.0, 1.0, 1.0));
+        _monkey2 = new GameObject(_objLoader.loadFromFile("./res/models/dirt_floor.obj"), new Vector3(0.0, 0.0, 8.0), new Vector3(), new Vector3(1.0, 1.0, 1.0));
     }
     
     /**
@@ -42,6 +44,11 @@ public class Game
      */
     public void start()
     {
+        //_soundRegistry.loadSound("test", "D:/Uni/WiSe 2021-2022/SE1/TurtleDoomLike/res/sounds/to_the_front.mp3");
+        _soundRegistry.loadSound("test", "./res/sounds/to_the_front.mp3");
+        _soundRegistry.sounds.get("test").setVolume(0.2);
+        _soundRegistry.sounds.get("test").play();
+        
         runGameLoop();
     }
     
@@ -63,21 +70,21 @@ public class Game
             // reset frameCap Timer
             _frameCapTimeManager.getDeltaTime();
                         
-            if (_inputManager.isKeyPressed(KeyCode.KEY_W))
+            if(_inputManager.isKeyPressed(KeyCode.KEY_W))
             {
                 //_camera.move(new Vector3(0.0, 0.0, -2.0 * deltaTime));
                 _camera.move(_camera.getDirection().multiply(-2.0 * deltaTime));
             }
-            if (_inputManager.isKeyPressed(KeyCode.KEY_S))
+            if(_inputManager.isKeyPressed(KeyCode.KEY_S))
             {
                 //_camera.move(new Vector3(0.0, 0.0, 2.0 * deltaTime));
                 _camera.move(_camera.getDirection().multiply(2.0 * deltaTime));
             }
-            if (_inputManager.isKeyPressed(KeyCode.KEY_A))
+            if(_inputManager.isKeyPressed(KeyCode.KEY_A))
             {
                 _camera.rotateYaw(-70.0 * deltaTime);
             }
-            if (_inputManager.isKeyPressed(KeyCode.KEY_D))
+            if(_inputManager.isKeyPressed(KeyCode.KEY_D))
             {
                 _camera.rotateYaw(70.0 * deltaTime);
             }
