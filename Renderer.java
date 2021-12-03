@@ -203,7 +203,7 @@ class Renderer
         }
     }
     
-    private void drawStripesAroundCorner(Vector3 cornerOrigin, Vector3 pointA, Vector3 pointB, int numStripes, Camera camera)
+    private void drawStripesAroundCorner(Vector3 cornerOrigin, Vector3 pointA, Vector3 pointB, int numStripes, String farbe, Camera camera)
     {
         for (int i = 1; i <= numStripes; i++)
         {
@@ -215,7 +215,7 @@ class Renderer
             temp = temp.multiply((double)i / (numStripes + 1));
             Vector3 pointRight = cornerOrigin.add(temp);
             
-            drawLine3D(pointLeft, pointRight, camera);
+            drawLine3D(pointLeft, pointRight, farbe, camera);
         }
     }
     
@@ -237,14 +237,14 @@ class Renderer
         drawLine3D(bottomLeft, topLeft, farbe, camera);
         
         // Zeichne diagonalen
-        drawLine3D(topLeft, bottomRight, camera);
+        drawLine3D(topLeft, bottomRight, farbe, camera);
         
         final int numStripesForOneHalf = 10;
         // Untere Hälfte des Rechtsecks
-        drawStripesAroundCorner(bottomLeft, topLeft, bottomRight, numStripesForOneHalf, camera);
+        drawStripesAroundCorner(bottomLeft, topLeft, bottomRight, numStripesForOneHalf, farbe, camera);
         
         // Obere Hälfte des Rechtecks
-        drawStripesAroundCorner(topRight, topLeft, bottomRight, numStripesForOneHalf, camera);
+        drawStripesAroundCorner(topRight, topLeft, bottomRight, numStripesForOneHalf, farbe, camera);
     }
     
     public void drawAxis(Camera camera)
