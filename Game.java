@@ -17,8 +17,8 @@ public class Game
     private Camera _camera;
     private double _fps;
     private double fpsTimer = 0.0;
-    private GameObject _monkey;
-    private GameObject _monkey2;
+    private StaticGameObject _monkey;
+    private StaticGameObject _monkey2;
     
     public static final double FPS_CAP = 60.0;
 
@@ -35,8 +35,8 @@ public class Game
         _soundRegistry = new SoundRegistry();
         _objLoader = new WavefrontObjectLoader();
         _camera = new Camera(new Vector3(0.0, 2.0, 10.0), 1.0, 90.0);
-        _monkey = new GameObject(_objLoader.loadFromFile("./res/models/dirt_floor.obj"), new Vector3(0.0, 0.0, 0.0), new Vector3(), new Vector3(1.0, 1.0, 1.0));
-        _monkey2 = new GameObject(_objLoader.loadFromFile("./res/models/dirt_floor.obj"), new Vector3(0.0, 0.0, 8.0), new Vector3(), new Vector3(1.0, 1.0, 1.0));
+        _monkey = new StaticGameObject(_objLoader.loadFromFile("./res/models/dirt_floor.obj"), "orange", new Vector3(0.0, 0.0, 0.0), new Vector3(), new Vector3(1.0, 1.0, 1.0));
+        _monkey2 = new StaticGameObject(_objLoader.loadFromFile("./res/models/dirt_floor.obj"), "orange", new Vector3(0.0, 0.0, 8.0), new Vector3(), new Vector3(1.0, 1.0, 1.0));
     }
     
     /**
@@ -93,8 +93,8 @@ public class Game
             
             //_renderer.drawStripedQuad(pA2, pB2, pC2, pD2, "rot", _camera);
             
-            _renderer.drawGameObject(_monkey, "orange", _camera);
-            _renderer.drawGameObject(_monkey2, "orange", _camera);
+            _monkey.draw(_renderer, _camera);
+            _monkey2.draw(_renderer, _camera);
             
             _renderer.drawAxis(_camera);
             

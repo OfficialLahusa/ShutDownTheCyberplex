@@ -18,11 +18,8 @@ class Renderer
         _turtle.setzeGeschwindigkeit(10);
     }
     
-    public void drawGameObject(GameObject object, String farbe, Camera camera)
+    public void drawMesh(Mesh meshRef, Matrix4 modelMatrix, String farbe, Camera camera)
     {
-        Mesh meshRef = object.getMeshRef();
-        Matrix4 modelMatrix = object.getModelMatrix();
-        
         for(int i = 0; i < meshRef.lineIndices.size(); i++)
         {
             drawLine3D(meshRef.vertices.get(meshRef.lineIndices.get(i).getKey() - 1), meshRef.vertices.get(meshRef.lineIndices.get(i).getValue() - 1), farbe, modelMatrix, camera);
