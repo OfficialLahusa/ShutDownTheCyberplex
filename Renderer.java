@@ -66,14 +66,37 @@ class Renderer
         drawLine3D(a, b, "rot", camera);
     }
     
+    private Vector3 getLinePlaneIntersection(Vector3 lineP1, Vector3 lineP2, Vector3 planeP1, Vector3 planeNormal)
+    {
+        Vector3 u = lineP2.subtract(lineP1);
+        double dot = planeNormal.dot(u);
+        final double eps = 1e-6;
+        if (Math.abs(dot) > eps)
+        {
+            Vector3 w = lineP1.subtract(planeP1);
+            double fac = -planeNormal.dot(w) / dot;
+            u = u.multiply(fac);
+            return lineP1.add(u);
+        }
+        
+        return null;
+    }
+    
+    private boolean isPointInFrustum(Vector3 p, Camera camera)
+    {
+        Vector3 pDir = p.subtract(camera.getPosition());
+        double pDot = pDir.dot(camera.getDirection());
+        if (pDot < 0.0)
+        {
+            return true;
+        }
+        
+        return false;
+    }
+    
     private boolean isLineInFrustum(Vector3 a, Vector3 b, Camera camera)
     {   
-        Vector3 aDir = a.subtract(camera.getPosition());
-        Vector3 bDir = b.subtract(camera.getPosition());
-        
-        double aDot = aDir.dot(camera.getDirection());
-        double bDot = bDir.dot(camera.getDirection());
-        if (aDot < 0.0 && bDot < 0.0)
+        if (isPointInFrustum(a, camera) && isPointInFrustum(b, camera))
         {
             return true;
         }
@@ -97,6 +120,34 @@ class Renderer
             Vector4 pB = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(b, 1.0)));
             drawLine(new Vector2(pA.getX(), pA.getY()), new Vector2(pB.getX(), pB.getY()), farbe);
         }
+        else
+        {
+            Vector3 frustumIntersection = getLinePlaneIntersection(a, b, camera.getPosition(), camera.getDirection());
+            if (frustumIntersection != null)
+            {
+                Vector3 pInside;
+                if (isPointInFrustum(a, camera))
+                {
+                    pInside = a;
+                }
+                else if (isPointInFrustum(b, camera))
+                {
+                    pInside = b;
+                }
+                else // Wenn beide Punkte hinter der Camera liegen, soll die Linie gar nicht gerendert werden.
+                {
+                    return;
+                }
+                Matrix4 transform = camera.getProjectionMatrix().multiply(camera.getViewMatrix());
+                
+                Vector3 precisionError = pInside.subtract(frustumIntersection).multiply(1e-6);
+                
+                Vector4 pA = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(frustumIntersection.add(precisionError), 1.0)));
+                Vector4 pB = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(pInside, 1.0)));
+            
+                drawLine(new Vector2(pA.getX(), pA.getY()), new Vector2(pB.getX(), pB.getY()), farbe);
+            }
+        }
     }
     
     /**
@@ -111,15 +162,44 @@ class Renderer
     {
         Vector3 transformedA = model.multiply(new Vector4(a, 1.0)).getXYZ();
         Vector3 transformedB = model.multiply(new Vector4(b, 1.0)).getXYZ();
-        
         if (isLineInFrustum(transformedA, transformedB, camera))
         {
-            Matrix4 transform = camera.getProjectionMatrix().multiply(camera.getViewMatrix().multiply(model));
+            Matrix4 transform = camera.getProjectionMatrix().multiply(camera.getViewMatrix());
         
-            Vector4 pA = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(a, 1.0)));
-            Vector4 pB = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(b, 1.0)));
+            Vector4 pA = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(transformedA, 1.0)));
+            Vector4 pB = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(transformedB, 1.0)));
         
             drawLine(new Vector2(pA.getX(), pA.getY()), new Vector2(pB.getX(), pB.getY()), farbe);
+        }
+        else
+        {
+            Vector3 frustumIntersection = getLinePlaneIntersection(transformedA, transformedB, camera.getPosition(), camera.getDirection());
+            if (frustumIntersection != null)
+            {
+                Vector3 pInside;
+                if (isPointInFrustum(transformedA, camera))
+                {
+                    pInside = transformedA;
+                }
+                else if (isPointInFrustum(transformedB, camera))
+                {
+                    pInside = transformedB;
+                }
+                else // Wenn beide Punkte hinter der Camera liegen, soll die Linie gar nicht gerendert werden.
+                {
+                    return;
+                }
+                Matrix4 transform = camera.getProjectionMatrix().multiply(camera.getViewMatrix());
+        
+                // NOTE(sven): Wir müssen den Schnittpunkt um den Wert epsilon (aus getLinePlaneIntersection) verschieben, 
+                // weil durch Gleitkommarundungsfehler teilweise die Punkte trotzdem noch hinter der Kamera liegen.
+                Vector3 precisionError = pInside.subtract(frustumIntersection).multiply(1e-6);
+                
+                Vector4 pA = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(frustumIntersection.add(precisionError), 1.0)));
+                Vector4 pB = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(pInside, 1.0)));
+            
+                drawLine(new Vector2(pA.getX(), pA.getY()), new Vector2(pB.getX(), pB.getY()), farbe);
+            }
         }
     }
     
