@@ -12,7 +12,7 @@ public class TimeManager
     private long _currentDeltaMeasure;
 
     /**
-     * Bei der Erstellung fängt die Zeitmessung an
+     * Parameterloser Konstruktor, der die Zeitmessung startet
      */
     public TimeManager()
     {
@@ -29,6 +29,10 @@ public class TimeManager
         return (_currentRuntimeMeasure - _startingMeasure) / 1e9;
     }
     
+    /**
+     * Gibt die vergangene Zeit seit der letzten Ausführung dieser Methode in Sekunden zurück
+     * @return vergangene Zeit in Sekunden seit letztem Aufruf
+     */
     public double getDeltaTime()
     {
         long newDeltaMeasure = System.nanoTime();
