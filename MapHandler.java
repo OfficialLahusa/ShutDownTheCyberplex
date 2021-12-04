@@ -28,7 +28,7 @@ public class MapHandler
         
         _tileProviders = new ArrayList<ITileProvider>();
         _tileProviders.add(new SimpleTileProvider(_objLoader.loadFromFile("./res/models/dirt_floor.obj"), "orange"));
-        _tileProviders.add(new SimpleTileProvider(_objLoader.loadFromFile("./res/models/brick_wall.obj"), "grau"));
+        _tileProviders.add(new WallTileProvider(_objLoader.loadFromFile("./res/models/brick_wall.obj"), "grau"));
     }
     
     public void load(String mapName)
@@ -55,5 +55,10 @@ public class MapHandler
     public static boolean isTileSolidOrNone(int tileType)
     {
         return isTileSolid(tileType) || isTileNone(tileType);
+    }
+    
+    public static boolean isTilePassableOrNone(int tileType)
+    {
+        return !isTileSolid(tileType) || isTileNone(tileType);
     }
 }

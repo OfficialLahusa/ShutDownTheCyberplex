@@ -17,14 +17,13 @@ public class Game
     
     // FPS-Berechnung
     private double _fps;
-    private double fpsTimer = 0.0;
-    public static final double STATIC_FPS_CAP = 60.0;
-    public static final boolean CAP_FRAMERATE = true;
-    public static final boolean DYNAMIC_FPS_CAPPING = true;
+    private double fpsTimer = 0.0; 
     private TimeManager _frameCapTimeManager;
-    
-    // GameObjects & Map
-    
+    public static final double STATIC_FPS_CAP = 60.0;
+    // Wenn aktiv: FPS werden auf den Wert von STATIC_FPS_CAP begrenzt.
+    public static final boolean CAP_FRAMERATE = true;
+    // Wenn aktiv: FPS werden halbiert, damit die Hälfte der Zeit fertige Frames angezeigt werden
+    public static final boolean DYNAMIC_FPS_CAPPING = false;
 
     /**
      * Konstruktor für Objekte der Klasse Game
