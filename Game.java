@@ -1,3 +1,4 @@
+import java.util.*;
 
 /**
  * Diese Klasse enthält die Kernlogik des Spiels und den Gameloop
@@ -9,18 +10,22 @@ public class Game
 {
     private Renderer _renderer;
     private TimeManager _timeManager;
-    private TimeManager _frameCapTimeManager;
     private InputManager _inputManager;
     private TextRenderer _textRenderer;
     private SoundRegistry _soundRegistry;
     private WavefrontObjectLoader _objLoader;
+    private CSVMapLoader _csvLoader;
     private Camera _camera;
+    
+    // FPS-Berechnung
     private double _fps;
     private double fpsTimer = 0.0;
-    private StaticGameObject _monkey;
-    private StaticGameObject _monkey2;
-    
     public static final double FPS_CAP = 60.0;
+    private TimeManager _frameCapTimeManager;
+    
+    // GameObjects & Map
+    private ArrayList<TileTemplate> _tileTemplates;
+    private GridMap _map;
 
     /**
      * Konstruktor für Objekte der Klasse Game
@@ -29,14 +34,21 @@ public class Game
     {
         _renderer = new Renderer();
         _timeManager = new TimeManager();
-        _frameCapTimeManager = new TimeManager();
         _inputManager = new InputManager();
         _textRenderer = new TextRenderer(_renderer);
         _soundRegistry = new SoundRegistry();
         _objLoader = new WavefrontObjectLoader();
+        _csvLoader = new CSVMapLoader();
         _camera = new Camera(new Vector3(0.0, 2.0, 10.0), 1.0, 90.0);
-        _monkey = new StaticGameObject(_objLoader.loadFromFile("./res/models/dirt_floor.obj"), "orange", new Vector3(0.0, 0.0, 0.0), new Vector3(), new Vector3(1.0, 1.0, 1.0));
-        _monkey2 = new StaticGameObject(_objLoader.loadFromFile("./res/models/dirt_floor.obj"), "orange", new Vector3(0.0, 0.0, 8.0), new Vector3(), new Vector3(1.0, 1.0, 1.0));
+        
+        _frameCapTimeManager = new TimeManager();
+        
+        _tileTemplates = new ArrayList<TileTemplate>();
+        _tileTemplates.add(new TileTemplate(_objLoader.loadFromFile("./res/models/dirt_floor.obj"), "orange"));
+        _tileTemplates.add(new TileTemplate(_objLoader.loadFromFile("./res/models/brick_wall.obj"), "grau"));
+        _map = _csvLoader.loadFromFile("./res/maps/TestMap_tile.csv", "./res/maps/TestMap_function.csv");
+        _map.populate(_tileTemplates);
+        _camera.setPosition(_map.getPlayerSpawn());
     }
     
     /**
@@ -44,7 +56,6 @@ public class Game
      */
     public void start()
     {
-        //_soundRegistry.loadSound("test", "D:/Uni/WiSe 2021-2022/SE1/TurtleDoomLike/res/sounds/to_the_front.mp3");
         _soundRegistry.loadSound("test", "./res/sounds/to_the_front.mp3");
         _soundRegistry.sounds.get("test").setVolume(0.2);
         _soundRegistry.sounds.get("test").play();
@@ -73,28 +84,26 @@ public class Game
             if(_inputManager.isKeyPressed(KeyCode.KEY_W))
             {
                 //_camera.move(new Vector3(0.0, 0.0, -2.0 * deltaTime));
-                _camera.move(_camera.getDirection().multiply(-2.0 * deltaTime));
+                _camera.move(_camera.getDirection().multiply(-5.0 * deltaTime));
             }
             if(_inputManager.isKeyPressed(KeyCode.KEY_S))
             {
                 //_camera.move(new Vector3(0.0, 0.0, 2.0 * deltaTime));
-                _camera.move(_camera.getDirection().multiply(2.0 * deltaTime));
+                _camera.move(_camera.getDirection().multiply(5.0 * deltaTime));
             }
             if(_inputManager.isKeyPressed(KeyCode.KEY_A))
             {
-                _camera.rotateYaw(-70.0 * deltaTime);
+                _camera.rotateYaw(-120.0 * deltaTime);
             }
             if(_inputManager.isKeyPressed(KeyCode.KEY_D))
             {
-                _camera.rotateYaw(70.0 * deltaTime);
+                _camera.rotateYaw(120.0 * deltaTime);
             }
             
             _renderer.clear();
             
             //_renderer.drawStripedQuad(pA2, pB2, pC2, pD2, "rot", _camera);
-            
-            _monkey.draw(_renderer, _camera);
-            _monkey2.draw(_renderer, _camera);
+            _map.draw(_renderer, _camera);
             
             _renderer.drawAxis(_camera);
             

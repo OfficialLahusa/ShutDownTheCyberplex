@@ -1,6 +1,6 @@
 
 /**
- * Tragen Sie hier eine Beschreibung des Interface GameObject ein.
+ * Interface für jegliche GameObjects, die gezeichnet und gefärbt werden können, sowie Getter für ihre Position, Rotation, Skalierung und Farbe bereitstellen 
  * 
  * @author Lasse Huber-Saffer
  * @version 03.12.2021
