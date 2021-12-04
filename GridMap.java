@@ -35,36 +35,42 @@ public class GridMap
         _playerSpawn = new Vector3(0.0, 2.0, 0.0);
     }
     
-    public void populate(ArrayList<TileTemplate> tileTemplates)
+    public void populate(ArrayList<ITileProvider> tileProviders)
     {
-        for(int y = 0; y < _tileLayer.size(); y++)
+        for(int z = 0; z < _tileLayer.size(); z++)
         {
-            for(int x = 0; x < _tileLayer.get(y).size(); x++)
+            for(int x = 0; x < _tileLayer.get(z).size(); x++)
             {
-                int value = _tileLayer.get(y).get(x);
+                int value = _tileLayer.get(z).get(x);
                 if(value > -1)
                 {
-                    if(value >= tileTemplates.size())
+                    if(value >= tileProviders.size())
                     {
                         System.out.println("[Error] Tile mesh not provided: " + value);
                     }
                     else
                     {
-                        TileTemplate template = tileTemplates.get(value);
-                        _mapGeometry.add(new StaticGameObject(template.getMesh(), template.getColor(), new Vector3((x + 0.5) * TILE_WIDTH, 0.0, (y + 0.5) * TILE_WIDTH)));
+                        ITileProvider provider = tileProviders.get(value);
+                        TileEnvironment env = null;
+                        if(provider.requiresEnvironment())
+                        {
+                            env = new TileEnvironment(_tileLayer, x, z);
+                        }
+                        
+                        _mapGeometry.addAll(provider.getStaticTileObjects(env, x, z, TILE_WIDTH));
                     }
                 }
             }
         }
         
-        for(int y = 0; y < _functionLayer.size(); y++)
+        for(int z = 0; z < _functionLayer.size(); z++)
         {
-            for(int x = 0; x < _functionLayer.get(y).size(); x++)
+            for(int x = 0; x < _functionLayer.get(z).size(); x++)
             {
-                int value = _functionLayer.get(y).get(x);
+                int value = _functionLayer.get(z).get(x);
                 if(value == 20)
                 {
-                    _playerSpawn = new Vector3((x + 0.5) * TILE_WIDTH, 2.0, (y + 0.5) * TILE_WIDTH);
+                    _playerSpawn = new Vector3((x + 0.5) * TILE_WIDTH, 2.0, (z + 0.5) * TILE_WIDTH);
                 }
             }
         }

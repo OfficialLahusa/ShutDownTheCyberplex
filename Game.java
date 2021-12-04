@@ -1,5 +1,3 @@
-import java.util.*;
-
 /**
  * Diese Klasse enthält die Kernlogik des Spiels und den Gameloop
  * 
@@ -14,18 +12,19 @@ public class Game
     private TextRenderer _textRenderer;
     private SoundRegistry _soundRegistry;
     private WavefrontObjectLoader _objLoader;
-    private CSVMapLoader _csvLoader;
+    private MapHandler _mapHandler;
     private Camera _camera;
     
     // FPS-Berechnung
     private double _fps;
     private double fpsTimer = 0.0;
-    public static final double FPS_CAP = 60.0;
+    public static final double STATIC_FPS_CAP = 60.0;
+    public static final boolean CAP_FRAMERATE = true;
+    public static final boolean DYNAMIC_FPS_CAPPING = true;
     private TimeManager _frameCapTimeManager;
     
     // GameObjects & Map
-    private ArrayList<TileTemplate> _tileTemplates;
-    private GridMap _map;
+    
 
     /**
      * Konstruktor für Objekte der Klasse Game
@@ -38,17 +37,13 @@ public class Game
         _textRenderer = new TextRenderer(_renderer);
         _soundRegistry = new SoundRegistry();
         _objLoader = new WavefrontObjectLoader();
-        _csvLoader = new CSVMapLoader();
+        _mapHandler = new MapHandler(_objLoader);
         _camera = new Camera(new Vector3(0.0, 2.0, 10.0), 1.0, 90.0);
         
         _frameCapTimeManager = new TimeManager();
-        
-        _tileTemplates = new ArrayList<TileTemplate>();
-        _tileTemplates.add(new TileTemplate(_objLoader.loadFromFile("./res/models/dirt_floor.obj"), "orange"));
-        _tileTemplates.add(new TileTemplate(_objLoader.loadFromFile("./res/models/brick_wall.obj"), "grau"));
-        _map = _csvLoader.loadFromFile("./res/maps/TestMap_tile.csv", "./res/maps/TestMap_function.csv");
-        _map.populate(_tileTemplates);
-        _camera.setPosition(_map.getPlayerSpawn());
+
+        _mapHandler.load("TestMap");
+        _camera.setPosition(_mapHandler.getMap().getPlayerSpawn());
     }
     
     /**
@@ -102,8 +97,7 @@ public class Game
             
             _renderer.clear();
             
-            //_renderer.drawStripedQuad(pA2, pB2, pC2, pD2, "rot", _camera);
-            _map.draw(_renderer, _camera);
+            _mapHandler.getMap().draw(_renderer, _camera);
             
             _renderer.drawAxis(_camera);
             
@@ -120,17 +114,28 @@ public class Game
             
             // Bildrate auf maximal FPS_CAP (Konstante) begrenzen
             double currentFrameTime = _frameCapTimeManager.getDeltaTime();
-            try
+            if(CAP_FRAMERATE)
             {
-                double diff = (1.0 / FPS_CAP) - currentFrameTime;
-                if(diff > 0.0)
+                try
                 {
-                    Thread.sleep((long)(1000*diff));
+                    if(DYNAMIC_FPS_CAPPING)
+                    {
+                        Thread.sleep((long)(1000*currentFrameTime));
+                    }
+                    else
+                    {
+                        double diff = (1.0 / STATIC_FPS_CAP) - currentFrameTime;
+                        if(diff > 0.0)
+                        {
+                            Thread.sleep((long)(1000*diff));
+                        }
+                    }
+
                 }
-            }
-            catch (InterruptedException ie)
-            {
-                throw new RuntimeException("unhandled interrupt");
+                catch (InterruptedException ie)
+                {
+                    throw new RuntimeException("unhandled interrupt");
+                }
             }
         }
     }

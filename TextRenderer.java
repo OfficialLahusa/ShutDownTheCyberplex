@@ -8,7 +8,6 @@
 public class TextRenderer
 {
     private Renderer _renderer;
-    private Turtle _turtle;
     private Vector2 _lastPos;
     
     /**
@@ -17,7 +16,6 @@ public class TextRenderer
     public TextRenderer(Renderer renderer)
     {
         _renderer = renderer;
-        _turtle = new Turtle();
         _lastPos = new Vector2(0, 0);
     }
 
