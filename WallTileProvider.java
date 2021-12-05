@@ -37,16 +37,16 @@ public class WallTileProvider implements ITileProvider
         _pillarMesh = pillarMesh;
         _pillarColor = pillarColor;
     }
-    
         
     /**
      * Gibt die GameObjects zurück, die der TileProvider in der gegebenen Umgebung generiert
      * @param env Umgebung der Tile
      * @param x x-Position der Tile
      * @param y y-Position der Tile
+     * @param mirrorZAxis gibt an, ob z-Achse der generierten Objekte gespiegelt sein soll
      * @return Liste an GameObjects, die von der Tile platziert werden
      */
-    public ArrayList<IGameObject> getTileObjects(TileEnvironment env, int x, int z, double tileWidth)
+    public ArrayList<IGameObject> getTileObjects(TileEnvironment env, int x, int z, double tileWidth, boolean mirrorZAxis)
     {
         // Environment muss bei diesem Typ != null sein (siehe ITileProvider.requiresEnvironment())
         if(env == null)
@@ -56,49 +56,50 @@ public class WallTileProvider implements ITileProvider
         
         // Rückgabe-ArrayList
         ArrayList<IGameObject> result = new ArrayList<IGameObject>();
+        double mirrorFactor = mirrorZAxis ? -1 : 1;
         
         // Wände
         // Wand auf +X-Seite
         if(!MapHandler.isTileSolidOrNone(env.px))
         {
-            result.add(new StaticGameObject(getWallMesh(), getWallColor(), new Vector3((x + 1.0) * tileWidth, 0.0, (z + 0.5) * tileWidth), new Vector3(0.0, 90.0, 0.0), new Vector3(1.0, 1.0, 1.0)));
+            result.add(new StaticGameObject(getWallMesh(), getWallColor(), new Vector3((x + 1.0) * tileWidth, 0.0, mirrorFactor * (z + 0.5) * tileWidth), new Vector3(0.0, 90.0, 0.0), new Vector3(1.0, 1.0, 1.0)));
         }
         // Wand auf +Z-Seite
         if(!MapHandler.isTileSolidOrNone(env.pz))
         {
-            result.add(new StaticGameObject(getWallMesh(), getWallColor(), new Vector3((x + 0.5) * tileWidth, 0.0, (z + 1.0) * tileWidth)));
+            result.add(new StaticGameObject(getWallMesh(), getWallColor(), new Vector3((x + 0.5) * tileWidth, 0.0, mirrorFactor * (z + 1.0) * tileWidth)));
         }
         // Wand auf -X-Seite
         if(!MapHandler.isTileSolidOrNone(env.nx))
         {
-            result.add(new StaticGameObject(getWallMesh(), getWallColor(), new Vector3((x      ) * tileWidth, 0.0, (z + 0.5) * tileWidth), new Vector3(0.0, 90.0, 0.0), new Vector3(1.0, 1.0, 1.0)));
+            result.add(new StaticGameObject(getWallMesh(), getWallColor(), new Vector3((x      ) * tileWidth, 0.0, mirrorFactor * (z + 0.5) * tileWidth), new Vector3(0.0, 90.0, 0.0), new Vector3(1.0, 1.0, 1.0)));
         }
         // Wand auf -Z-Seite
         if(!MapHandler.isTileSolidOrNone(env.nz))
         {
-            result.add(new StaticGameObject(getWallMesh(), getWallColor(), new Vector3((x + 0.5) * tileWidth, 0.0, (z      ) * tileWidth)));
+            result.add(new StaticGameObject(getWallMesh(), getWallColor(), new Vector3((x + 0.5) * tileWidth, 0.0, mirrorFactor * (z      ) * tileWidth)));
         }
         
         // Säulen
         // Säule an Ecke -X-Z
         if(!MapHandler.isTileSolidOrNone(env.nxnz) && !MapHandler.isTileSolidOrNone(env.nx) && !MapHandler.isTileSolidOrNone(env.nz))
         {
-            result.add(new StaticGameObject(getPillarMesh(), getPillarColor(), new Vector3(x * tileWidth, 0.0, z * tileWidth)));
+            result.add(new StaticGameObject(getPillarMesh(), getPillarColor(), new Vector3(x * tileWidth, 0.0, mirrorFactor * z * tileWidth)));
         }
         // Säule an Ecke +X-Z
         if(!MapHandler.isTileSolidOrNone(env.pxnz) && !MapHandler.isTileSolidOrNone(env.px) && !MapHandler.isTileSolidOrNone(env.nz))
         {
-            result.add(new StaticGameObject(getPillarMesh(), getPillarColor(), new Vector3((x + 1.0) * tileWidth, 0.0, z * tileWidth)));
+            result.add(new StaticGameObject(getPillarMesh(), getPillarColor(), new Vector3((x + 1.0) * tileWidth, 0.0, mirrorFactor * z * tileWidth)));
         }
         // Säule an Ecke +X+Z
         if(!MapHandler.isTileSolidOrNone(env.pxpz) && !MapHandler.isTileSolidOrNone(env.px) && !MapHandler.isTileSolidOrNone(env.pz))
         {
-            result.add(new StaticGameObject(getPillarMesh(), getPillarColor(), new Vector3((x + 1.0) * tileWidth, 0.0, (z + 1.0) * tileWidth)));
+            result.add(new StaticGameObject(getPillarMesh(), getPillarColor(), new Vector3((x + 1.0) * tileWidth, 0.0, mirrorFactor * (z + 1.0) * tileWidth)));
         }
         // Säule an Ecke -X+Z
         if(!MapHandler.isTileSolidOrNone(env.nxpz) && !MapHandler.isTileSolidOrNone(env.nx) && !MapHandler.isTileSolidOrNone(env.pz))
         {
-            result.add(new StaticGameObject(getPillarMesh(), getPillarColor(), new Vector3(x * tileWidth, 0.0, (z + 1.0) * tileWidth)));
+            result.add(new StaticGameObject(getPillarMesh(), getPillarColor(), new Vector3(x * tileWidth, 0.0, mirrorFactor * (z + 1.0) * tileWidth)));
         }
         
         return result;

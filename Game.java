@@ -26,10 +26,8 @@ public class Game
     // Wenn aktiv: FPS werden auf den Wert von STATIC_FPS_CAP begrenzt.
     public static final boolean CAP_FRAMERATE = true;
     // Wenn aktiv: Framezeit wird um DYNAMIC_FPS_FACTOR * frametime erhöht, um den fertigen Frame länger anzuzeigen
-    public static final boolean DYNAMIC_FPS_CAPPING = false;
+    public static final boolean DYNAMIC_FPS_CAPPING = true;
     public static final double DYNAMIC_FPS_FACTOR = 1.0;
-    
-    private StaticLODGameObject _testObj;
 
     /**
      * Konstruktor für Objekte der Klasse Game
@@ -42,21 +40,13 @@ public class Game
         _textRenderer = new TextRenderer(_renderer);
         _soundRegistry = new SoundRegistry();
         _objLoader = new WavefrontObjectLoader();
-        _mapHandler = new MapHandler(_objLoader);
+        _mapHandler = new MapHandler();
         _camera = new Camera(new Vector3(0.0, 2.0, 10.0), 1.0, 90.0);
         
         _frameCapTimeManager = new TimeManager();
 
         _mapHandler.load("TestMap");
         _camera.setPosition(_mapHandler.getMap().getPlayerSpawn());
-        
-        ArrayList<Pair<Double, Mesh>> testLODs = new ArrayList<Pair<Double, Mesh>>();
-        testLODs.add(new Pair<Double, Mesh>(0.0, _objLoader.loadFromFile("./res/models/lod0.obj")));
-        testLODs.add(new Pair<Double, Mesh>(10.0, _objLoader.loadFromFile("./res/models/lod1.obj")));
-        testLODs.add(new Pair<Double, Mesh>(20.0, _objLoader.loadFromFile("./res/models/lod2.obj")));
-        testLODs.add(new Pair<Double, Mesh>(30.0, _objLoader.loadFromFile("./res/models/lod3.obj")));
-        
-        _testObj = new StaticLODGameObject(testLODs);
     }
     
     /**
@@ -75,28 +65,23 @@ public class Game
     {
         double runTime = 0.0, deltaTime = 0.0;
         
-        Vector4 mid = new Vector4(0.0, 0.0, 0.0, 0.0);
-        double triangleScale = 2.0;
-        Vector4 pointA = mid.add(new Vector4(triangleScale*Math.cos(Math.toRadians(0)), triangleScale*Math.sin(Math.toRadians(0)), 0.0, 1.0));
-        Vector4 pointB = mid.add(new Vector4(triangleScale*Math.cos(Math.toRadians(120)), triangleScale*Math.sin(Math.toRadians(120)), 0.0, 1.0));
-        Vector4 pointC = mid.add(new Vector4(triangleScale*Math.cos(Math.toRadians(240)), triangleScale*Math.sin(Math.toRadians(240)), 0.0, 1.0));
-
+        // Gameloop
         while(true)
         {
+            // Zeiten berechnen
             runTime = _timeManager.getRunTime();
             deltaTime = _timeManager.getDeltaTime();
             
             // reset frameCap Timer
             _frameCapTimeManager.getDeltaTime();
-                        
+            
+            // Input-Handling
             if(_inputManager.isKeyPressed(KeyCode.KEY_W))
             {
-                //_camera.move(new Vector3(0.0, 0.0, -2.0 * deltaTime));
                 _camera.move(_camera.getDirection().multiply(-5.0 * deltaTime));
             }
             if(_inputManager.isKeyPressed(KeyCode.KEY_S))
             {
-                //_camera.move(new Vector3(0.0, 0.0, 2.0 * deltaTime));
                 _camera.move(_camera.getDirection().multiply(5.0 * deltaTime));
             }
             if(_inputManager.isKeyPressed(KeyCode.KEY_A))
@@ -108,16 +93,19 @@ public class Game
                 _camera.rotateYaw(120.0 * deltaTime);
             }
             
-            _testObj.updateLOD(_camera.getPosition());
+            // Updated Map-LODs
+            _mapHandler.getMap().updateLOD(_camera.getPosition());
             
+            // Cleart das Bild
             _renderer.clear();
             
+            // Rendering
             _mapHandler.getMap().draw(_renderer, _camera);
-            _testObj.draw(_renderer, _camera);
             
+            // X-, Y- und Z-Achse zeichnen
             _renderer.drawAxis(_camera);
             
-            //render fps
+            // Zeichnet den FPS-Zähler
             fpsTimer += deltaTime;
             if(fpsTimer > 1.0)
             {
@@ -125,7 +113,6 @@ public class Game
                 _fps = 1.0 / deltaTime;
                 
             }
-            
             _textRenderer.write(new Vector2(10,10), 5, "fps: " + (int)Math.round(_fps));
             
             // Bildrate auf maximal FPS_CAP (Konstante) begrenzen

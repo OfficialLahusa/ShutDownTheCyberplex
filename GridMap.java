@@ -18,15 +18,9 @@ public class GridMap
 
     /**
      * Konstruktor für Objekte der Klasse GridMap
+     * @param tileLayer zweidimensionale Liste der Tile-Werte
+     * @param functionLayer zweidimensionale Liste der funktionalen Tiles
      */
-    public GridMap()
-    {
-        _tileLayer = new ArrayList<ArrayList<Integer>>();
-        _functionLayer = new ArrayList<ArrayList<Integer>>();
-        _mapGeometry = new ArrayList<IGameObject>();
-        _playerSpawn = new Vector3(0.0, 2.0, 0.0);
-    }
-    
     public GridMap(ArrayList<ArrayList<Integer>> tileLayer, ArrayList<ArrayList<Integer>> functionLayer)
     {
         _tileLayer = tileLayer;
@@ -35,7 +29,12 @@ public class GridMap
         _playerSpawn = new Vector3(0.0, 2.0, 0.0);
     }
     
-    public void populate(ArrayList<ITileProvider> tileProviders)
+    /**
+     * Verarbeitet die Tile-Werte und erstellt die spielbare Map
+     * @param tileProviders Liste der TileProvider. Der Index in der Liste entspricht der Tile-ID
+     * @param mirrorZAxis
+     */
+    public void populate(ArrayList<ITileProvider> tileProviders, boolean mirrorZAxis)
     {
         for(int z = 0; z < _tileLayer.size(); z++)
         {
@@ -57,7 +56,7 @@ public class GridMap
                             env = new TileEnvironment(_tileLayer, x, z);
                         }
                         
-                        _mapGeometry.addAll(provider.getTileObjects(env, x, z, TILE_WIDTH));
+                        _mapGeometry.addAll(provider.getTileObjects(env, x, z, TILE_WIDTH, mirrorZAxis));
                     }
                 }
             }
@@ -70,22 +69,46 @@ public class GridMap
                 int value = _functionLayer.get(z).get(x);
                 if(value == 20)
                 {
-                    _playerSpawn = new Vector3((x + 0.5) * TILE_WIDTH, 2.0, (z + 0.5) * TILE_WIDTH);
+                    _playerSpawn = new Vector3((x + 0.5) * TILE_WIDTH, 2.0, (mirrorZAxis ? -1 : 1) * (z + 0.5) * TILE_WIDTH);
                 }
             }
         }
     }
     
+    /**
+     * Gibt den Spawnpunkt des Spielers zurück
+     * @return Spawnpunkt des Spielers in der Map
+     */
     public Vector3 getPlayerSpawn()
     {
         return _playerSpawn;
     }
-
+    
+    /**
+     * Zeichnet die Mapgeometrie mit einem gegebenen Renderer in das Sichtfeld einer gegebenen Kamera
+     * @param renderer zu nutzender Renderer
+     * @param camera zu benutzende Kamera
+     */
     public void draw(Renderer renderer, Camera camera)
     {
         for(int i = 0; i < _mapGeometry.size(); i++)
         {
             _mapGeometry.get(i).draw(renderer, camera);
+        }
+    }
+    
+    /**
+     * Updated den Levels-of-Detail des GameObjects im Verhältnis zu einem Bezugspunkt
+     * @param cameraPosition Position der Kamera, die als Bezugspunkt der LOD-Berechnung genutzt wird
+     */
+    public void updateLOD(Vector3 cameraPosition)
+    {
+        for(int i = 0; i < _mapGeometry.size(); i++)
+        {
+            if(_mapGeometry.get(i) instanceof ILODGameObject)
+            {
+                ((ILODGameObject)_mapGeometry.get(i)).updateLOD(cameraPosition);
+            }
         }
     }
 }

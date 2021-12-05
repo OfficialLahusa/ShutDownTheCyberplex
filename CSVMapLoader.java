@@ -22,7 +22,11 @@ public class CSVMapLoader
         return new GridMap(tileMap, functionMap);
     }
     
-    
+    /**
+     * Liest eine einzelne Kachelebene aus einem gegebenen Dateipfad
+     * @param filePath Dateipfad der .csv-Datei der Kachelebene
+     * @return Zweidimensionale Integerliste, die die Werte der Kachelebene enthält
+     */
     private ArrayList<ArrayList<Integer>> readOneLayerFromFile(String filePath)
     {
         ArrayList<ArrayList<Integer>> mapLayer = new ArrayList<ArrayList<Integer>>();

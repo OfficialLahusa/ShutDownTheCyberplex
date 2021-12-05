@@ -1,4 +1,5 @@
 import java.util.*;
+import javafx.util.*;
 
 /**
  * Einfacher TileProvider, der für die Tile immer das selbe Mesh platziert
@@ -6,19 +7,19 @@ import java.util.*;
  * @author Lasse Huber-Saffer
  * @version 04.12.2021
  */
-public class SimpleTileProvider implements ITileProvider
+public class SimpleLODTileProvider implements ITileProvider
 {
-    private Mesh _mesh;
+    private ArrayList<Pair<Double, Mesh>> _lodLevels;
     private String _color;
 
     /**
-     * Konstruktor für Objekte der Klasse SimpleTileProvider
+     * Konstruktor für Objekte der Klasse SimpleLODTileProvider
      * @param mesh Mesh, das für die Vorlage verwendet werden soll
      * @param color Farbe, die die Vorlage haben soll
      */
-    public SimpleTileProvider(Mesh mesh, String color)
+    public SimpleLODTileProvider(ArrayList<Pair<Double, Mesh>> lodLevels, String color)
     {
-        _mesh = mesh;
+        _lodLevels = lodLevels;
         _color = color;
     }
     
@@ -34,7 +35,7 @@ public class SimpleTileProvider implements ITileProvider
     public ArrayList<IGameObject> getTileObjects(TileEnvironment env, int x, int z, double tileWidth, boolean mirrorZAxis)
     {
         ArrayList<IGameObject> result = new ArrayList<IGameObject>();
-        result.add(new StaticGameObject(getMesh(), getColor(), new Vector3((x + 0.5) * tileWidth, 0.0, (mirrorZAxis ? -1 : 1) * (z + 0.5) * tileWidth)));
+        result.add(new StaticLODGameObject(getLODLevels(), getColor(), new Vector3((x + 0.5) * tileWidth, 0.0, (mirrorZAxis ? -1 : 1) * (z + 0.5) * tileWidth)));
         return result;
     }
     
@@ -51,9 +52,9 @@ public class SimpleTileProvider implements ITileProvider
      * Gibt eine neue Instanz des Meshs der Vorlage zurück
      * @return neue Instanz des Meshs der Vorlage
      */
-    public Mesh getMesh()
+    public ArrayList<Pair<Double, Mesh>> getLODLevels()
     {
-        return new Mesh(_mesh);
+        return _lodLevels;
     }
     
     /**
