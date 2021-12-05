@@ -1,3 +1,6 @@
+import java.util.*;
+import javafx.util.*;
+
 /**
  * Diese Klasse enthält die Kernlogik des Spiels und den Gameloop
  * 
@@ -23,8 +26,10 @@ public class Game
     // Wenn aktiv: FPS werden auf den Wert von STATIC_FPS_CAP begrenzt.
     public static final boolean CAP_FRAMERATE = true;
     // Wenn aktiv: Framezeit wird um DYNAMIC_FPS_FACTOR * frametime erhöht, um den fertigen Frame länger anzuzeigen
-    public static final boolean DYNAMIC_FPS_CAPPING = true;
-    public static final double DYNAMIC_FPS_FACTOR = 0.5;
+    public static final boolean DYNAMIC_FPS_CAPPING = false;
+    public static final double DYNAMIC_FPS_FACTOR = 1.0;
+    
+    private StaticLODGameObject _testObj;
 
     /**
      * Konstruktor für Objekte der Klasse Game
@@ -44,6 +49,14 @@ public class Game
 
         _mapHandler.load("TestMap");
         _camera.setPosition(_mapHandler.getMap().getPlayerSpawn());
+        
+        ArrayList<Pair<Double, Mesh>> testLODs = new ArrayList<Pair<Double, Mesh>>();
+        testLODs.add(new Pair<Double, Mesh>(0.0, _objLoader.loadFromFile("./res/models/lod0.obj")));
+        testLODs.add(new Pair<Double, Mesh>(10.0, _objLoader.loadFromFile("./res/models/lod1.obj")));
+        testLODs.add(new Pair<Double, Mesh>(20.0, _objLoader.loadFromFile("./res/models/lod2.obj")));
+        testLODs.add(new Pair<Double, Mesh>(30.0, _objLoader.loadFromFile("./res/models/lod3.obj")));
+        
+        _testObj = new StaticLODGameObject(testLODs);
     }
     
     /**
@@ -95,9 +108,12 @@ public class Game
                 _camera.rotateYaw(120.0 * deltaTime);
             }
             
+            _testObj.updateLOD(_camera.getPosition());
+            
             _renderer.clear();
             
             _mapHandler.getMap().draw(_renderer, _camera);
+            _testObj.draw(_renderer, _camera);
             
             _renderer.drawAxis(_camera);
             
