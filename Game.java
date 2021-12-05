@@ -22,8 +22,9 @@ public class Game
     public static final double STATIC_FPS_CAP = 60.0;
     // Wenn aktiv: FPS werden auf den Wert von STATIC_FPS_CAP begrenzt.
     public static final boolean CAP_FRAMERATE = true;
-    // Wenn aktiv: FPS werden halbiert, damit die Hälfte der Zeit fertige Frames angezeigt werden
-    public static final boolean DYNAMIC_FPS_CAPPING = false;
+    // Wenn aktiv: Framezeit wird um DYNAMIC_FPS_FACTOR * frametime erhöht, um den fertigen Frame länger anzuzeigen
+    public static final boolean DYNAMIC_FPS_CAPPING = true;
+    public static final double DYNAMIC_FPS_FACTOR = 0.5;
 
     /**
      * Konstruktor für Objekte der Klasse Game
@@ -119,14 +120,14 @@ public class Game
                 {
                     if(DYNAMIC_FPS_CAPPING)
                     {
-                        Thread.sleep((long)(1000*currentFrameTime));
+                        Thread.sleep((long)(1000.0 * DYNAMIC_FPS_FACTOR * currentFrameTime));
                     }
                     else
                     {
                         double diff = (1.0 / STATIC_FPS_CAP) - currentFrameTime;
                         if(diff > 0.0)
                         {
-                            Thread.sleep((long)(1000*diff));
+                            Thread.sleep((long)(1000.0 * diff));
                         }
                     }
 
