@@ -10,7 +10,7 @@ public class GridMap
 {
     private ArrayList<ArrayList<Integer>> _tileLayer;
     private ArrayList<ArrayList<Integer>> _functionLayer;
-    private ArrayList<StaticGameObject> _mapGeometry;
+    private ArrayList<IGameObject> _mapGeometry;
     
     public static final double TILE_WIDTH = 8.0;
     
@@ -23,7 +23,7 @@ public class GridMap
     {
         _tileLayer = new ArrayList<ArrayList<Integer>>();
         _functionLayer = new ArrayList<ArrayList<Integer>>();
-        _mapGeometry = new ArrayList<StaticGameObject>();
+        _mapGeometry = new ArrayList<IGameObject>();
         _playerSpawn = new Vector3(0.0, 2.0, 0.0);
     }
     
@@ -31,7 +31,7 @@ public class GridMap
     {
         _tileLayer = tileLayer;
         _functionLayer = functionLayer;
-        _mapGeometry = new ArrayList<StaticGameObject>();
+        _mapGeometry = new ArrayList<IGameObject>();
         _playerSpawn = new Vector3(0.0, 2.0, 0.0);
     }
     
@@ -57,7 +57,7 @@ public class GridMap
                             env = new TileEnvironment(_tileLayer, x, z);
                         }
                         
-                        _mapGeometry.addAll(provider.getStaticTileObjects(env, x, z, TILE_WIDTH));
+                        _mapGeometry.addAll(provider.getTileObjects(env, x, z, TILE_WIDTH));
                     }
                 }
             }

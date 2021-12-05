@@ -28,7 +28,7 @@ public class MapHandler
         
         _tileProviders = new ArrayList<ITileProvider>();
         _tileProviders.add(new SimpleTileProvider(_objLoader.loadFromFile("./res/models/dirt_floor.obj"), "orange"));
-        _tileProviders.add(new WallTileProvider(_objLoader.loadFromFile("./res/models/brick_wall.obj"), "grau"));
+        _tileProviders.add(new WallTileProvider(_objLoader.loadFromFile("./res/models/brick_wall.obj"), "grau", _objLoader.loadFromFile("./res/models/simple_wall_pillar.obj"), "gruen"));
     }
     
     public void load(String mapName)
