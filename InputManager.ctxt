@@ -1,14 +1,15 @@
 #BlueJ class context
 comment0.target=InputManager
-comment0.text=\r\n\ Die\ Klasse\ InputManger\ verwaltet\ den\ Tastatureingaben\ zur\ steuerung\ des\ Spiels.\r\n\ \r\n\ @author\ Sven\ Schreiber\r\n\ @version\ 01.12.2021\r\n
+comment0.text=\r\n\ Die\ Klasse\ InputManger\ verwaltet\ den\ Tastatureingaben\ zur\ Steuerung\ des\ Spiels.\r\n\ @author\ Sven\ Schreiber\r\n\ @version\ 01.12.2021\r\n
 comment1.params=
 comment1.target=InputManager()
 comment1.text=\r\n\ Konstruktor\ f\u00FCr\ Objekte\ der\ Klasse\ InputManager\r\n
 comment2.params=key
 comment2.target=boolean\ isKeyPressed(KeyCode)
-comment2.text=\r\n\ Gibt\ zu\u00FCckt\ ob\ eine\ bestimmte\ Taste\ gedr\u00FCckt\ ist.\r\n\ \r\n\ @param\ key\ Eine\ bestimmte\ Taste\r\n\ @return\ Liefert\ true,\ falls\ die\ Taste\ gedr\u00FCckt\ ist.\r\n
+comment2.text=\r\n\ Gibt\ zur\u00FCck\ ob\ eine\ bestimmte\ Taste\ gedr\u00FCckt\ ist.\r\n\ @param\ key\ Eine\ bestimmte\ Taste\r\n\ @return\ Liefert\ true,\ falls\ die\ Taste\ gedr\u00FCckt\ ist.\r\n
 comment3.params=
 comment3.target=void\ initKeyListener()
+comment3.text=\r\n\ Initialisiert\ den\ KeyListener\r\n
 comment4.params=event
 comment4.target=void\ eventDispatched(java.awt.AWTEvent)
 numComments=5

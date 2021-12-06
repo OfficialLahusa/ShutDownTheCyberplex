@@ -4,14 +4,13 @@ import java.awt.event.AWTEventListener;
 import java.awt.event.KeyEvent;
 
 /**
- * Die Klasse InputManger verwaltet den Tastatureingaben zur steuerung des Spiels.
- * 
+ * Die Klasse InputManger verwaltet den Tastatureingaben zur Steuerung des Spiels.
  * @author Sven Schreiber
  * @version 01.12.2021
  */
 public class InputManager
 {
-    // Ein Array das die Zustände der Tasten speichert (Gedrückt = true, Nicht-Gedrückt = false)
+    // Ein Array das die Zustände der Tasten speichert (Gedrückt = true, nicht gedrückt = false)
     private static boolean[] _keys;
     
     /**
@@ -24,8 +23,7 @@ public class InputManager
     }
     
     /**
-     * Gibt zuückt ob eine bestimmte Taste gedrückt ist.
-     * 
+     * Gibt zurück ob eine bestimmte Taste gedrückt ist.
      * @param key Eine bestimmte Taste
      * @return Liefert true, falls die Taste gedrückt ist.
      */
@@ -34,6 +32,9 @@ public class InputManager
         return _keys[key.ordinal()];
     }
     
+    /**
+     * Initialisiert den KeyListener
+     */
     private void initKeyListener()
     {
         AWTEventListener listener = new AWTEventListener() 
