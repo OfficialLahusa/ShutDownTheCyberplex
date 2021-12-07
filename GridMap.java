@@ -31,10 +31,10 @@ public class GridMap
     
     /**
      * Verarbeitet die Tile-Werte und erstellt die spielbare Map
-     * @param tileProviders Liste der TileProvider. Der Index in der Liste entspricht der Tile-ID
-     * @param mirrorZAxis
+     * @param tileProviders Hashmap der TileProvider. Der Key entspricht der Tile-ID
+     * @param mirrorZAxis soll eine Spiegelung entlang der z-Achse stattfinden, sodass die Map im Spiel wie im Editor angezeigt wird?
      */
-    public void populate(ArrayList<ITileProvider> tileProviders, boolean mirrorZAxis)
+    public void populate(HashMap<Integer, ITileProvider> tileProviders, boolean mirrorZAxis)
     {
         // Geometrieebene
         for(int z = 0; z < _tileLayer.size(); z++)
@@ -42,9 +42,9 @@ public class GridMap
             for(int x = 0; x < _tileLayer.get(z).size(); x++)
             {
                 int value = _tileLayer.get(z).get(x);
-                if(value > -1)
+                if(value != -1)
                 {
-                    if(value >= tileProviders.size())
+                    if(!tileProviders.containsKey(value))
                     {
                         System.out.println("[Error] Tile mesh not provided: " + value);
                     }

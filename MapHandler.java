@@ -12,7 +12,7 @@ public class MapHandler
     private CSVMapLoader _csvLoader;
     private WavefrontObjectLoader _objLoader;
     private LODGenerator _lodGenerator;
-    private ArrayList<ITileProvider> _tileProviders;
+    private HashMap<Integer, ITileProvider> _tileProviders;
     
     private static final String MAP_DIRECTORY = "./res/maps/";
     private static final String TILE_LAYER_SUFFIX = "_tile.csv";
@@ -29,9 +29,9 @@ public class MapHandler
         _objLoader = new WavefrontObjectLoader();
         _lodGenerator = new LODGenerator();
         
-        _tileProviders = new ArrayList<ITileProvider>();
-        _tileProviders.add(new SimpleLODTileProvider(_lodGenerator.createBasicFloorTileLOD(_objLoader.loadFromFile("./res/models/dirt_floor.obj"), 40.0), "orange"));
-        _tileProviders.add(new WallTileProvider(_objLoader.loadFromFile("./res/models/brick_wall.obj"), "grau", _objLoader.loadFromFile("./res/models/simple_wall_pillar.obj"), "grau"));
+        _tileProviders = new HashMap<Integer, ITileProvider>();
+        _tileProviders.put(0, new SimpleLODTileProvider(_lodGenerator.createBasicFloorTileLOD(_objLoader.loadFromFile("./res/models/dirt_floor.obj"), 40.0), "orange"));
+        _tileProviders.put(1, new WallTileProvider(_objLoader.loadFromFile("./res/models/brick_wall.obj"), "grau", _objLoader.loadFromFile("./res/models/simple_wall_pillar.obj"), "grau"));
     }
     
     public void load(String mapName)

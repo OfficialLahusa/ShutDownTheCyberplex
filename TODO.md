@@ -1,47 +1,46 @@
 # TODO:
 - Title Screen:
-	- Titel: "Shut down the Cyberplex"
+    - Titel: "Shut down the Cyberplex"
 - Game in Szenen abstrahieren
 - Mouse Input
 - Physics Engine:
-	- 2D Top Down
-	- Line-Circle Intersection
-	- Line-Tile DDA Raycast
-	- Line-Circle Collision Resolution
-	- IPhysicsTileProvider
-	- Enum Set für Kollisionsmaskierung
+    - 2D Top Down
+    - Line-Circle Intersection
+    - Line-Tile DDA Raycast
+    - Line-Circle Collision Resolution
+    - IPhysicsTileProvider
+    - Enum Set für Kollisionsmaskierung
 - Partikeleffekte:
-	- Feuer (Rote, gelbe Flammen die Skaliert werden und Rauch/Funkenpartikel, die sich bewegen, skalieren und vielleicht rotieren)
-	- Gegner zersplittert beim Tod in Schussrichtung
+    - Feuer (Rote, gelbe Flammen die Skaliert werden und Rauch/Funkenpartikel, die sich bewegen, skalieren und vielleicht rotieren)
+    - Gegner zersplittert beim Tod in Schussrichtung
 - Tiles erstellen für:
-	. Wände mit verschiedenen Höhen
-	- Moderne Labortiles mit Dach & maybe Glühbirnen an der Decke
-	- Moderne Tür (sliding) (auch Deko-only-Variante)
-	- Funktionstile Room-Floodfill
-	- Health Recharger
-	- Level exit
-	- Tür-Trigger
-	- Geschütztürme
-	- Stromgeneratoren
-	- Texttafeln in Level (z.B. "3D Printing Unit"), LOD lässt Text unklar erscheinen
+    . Wände mit verschiedenen Höhen
+    - Moderne Labortiles mit Dach & maybe Glühbirnen an der Decke
+    - Moderne Tür (sliding) (auch Deko-only-Variante)
+    - Funktionstile Room-Floodfill
+    - Health Recharger
+    - Level exit
+    - Tür-Trigger
+    - Geschütztürme
+    - Stromgeneratoren
+    - Texttafeln in Level (z.B. "3D Printing Unit"), LOD lässt Text unklar erscheinen
 - Wall-Mounting-Tileprovider
-- Tile Providers als Map<Int, ITileProvider> statt Liste speichern
 - Room-Floodfills und Partitionierung des Levels
 - Nur aktive Räume drawen
 - Gegnertypen:
-	- Drohne die Routen abfliegen und rot blinkenden Sensor haben, wenn sie den Spieler detecten
-	- Geschützturm mit bestimmtem Schussfeld
-	- Irgendwas humanoides Grünes, das cool zersplittern kann
+    - Drohne die Routen abfliegen und rot blinkenden Sensor haben, wenn sie den Spieler detecten
+    - Geschützturm mit bestimmtem Schussfeld
+    - Irgendwas humanoides Grünes, das cool zersplittern kann
 - Viewmodel
 - AI-Behaviour, Patrouillensystem
 - Voiceline-System
-	- Bsp.: Commander gibt ein Tutorial 
-	- Bossgegner sagt Sachen an
-	- Kommunikation zum Commander schneidet irgendwann ab.
-	- Aktuell redende Person wird angezeigt
+    - Bsp.: Commander gibt ein Tutorial 
+    - Bossgegner sagt Sachen an
+    - Kommunikation zum Commander schneidet irgendwann ab.
+    - Aktuell redende Person wird angezeigt
 - Endboss: 
-	- Irgendeine big bad evil AI, die den Cyberplex kontrolliert.
-	- Gegnerwellen
-	- Jede Stage schaltet einen neuen Teil des Levels frei.
-	- Man muss Computerkonsolen anschießen und am Screen ablesen, um die richtige zu finden.
+    - Irgendeine big bad evil AI, die den Cyberplex kontrolliert.
+    - Gegnerwellen
+    - Jede Stage schaltet einen neuen Teil des Levels frei.
+    - Man muss Computerkonsolen anschießen und am Screen ablesen, um die richtige zu finden.
 
