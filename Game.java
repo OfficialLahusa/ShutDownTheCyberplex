@@ -26,7 +26,7 @@ public class Game
     // Wenn aktiv: FPS werden auf den Wert von STATIC_FPS_CAP begrenzt.
     public static final boolean CAP_FRAMERATE = true;
     // Wenn aktiv: Framezeit wird um DYNAMIC_FPS_FACTOR * frametime erhöht, um den fertigen Frame länger anzuzeigen
-    public static final boolean DYNAMIC_FPS_CAPPING = true;
+    public static final boolean DYNAMIC_FPS_CAPPING = false;
     public static final double DYNAMIC_FPS_FACTOR = 1.0;
 
     /**
@@ -56,12 +56,19 @@ public class Game
     {
         _soundRegistry.loadSound("test", "./res/sounds/to_the_front.mp3");
         _soundRegistry.sounds.get("test").setVolume(0.2);
+        _soundRegistry.sounds.get("test").setOnEndOfMedia(new Runnable() {
+            @Override
+            public void run() {
+                _soundRegistry.sounds.get("test").seek(Duration.ZERO);
+                _soundRegistry.sounds.get("test").play();
+            }
+        }); 
         _soundRegistry.sounds.get("test").play();
         
         runGameLoop();
     }
     
-    public void runGameLoop()
+    private void runGameLoop()
     {
         double runTime = 0.0, deltaTime = 0.0;
         
@@ -93,8 +100,10 @@ public class Game
                 _camera.rotateYaw(120.0 * deltaTime);
             }
             
-            // Updated Map-LODs
+            // Berechnet Map-LOD-Stufen in Abhängigkeit von der Kameraposition neu
             _mapHandler.getMap().updateLOD(_camera.getPosition());
+            // Sortiert Mapgeometrie so, dass die Objekte in der Reihenfolge ihrer Distanz zur Kamera sortiert sind.
+            _mapHandler.getMap().reorderAroundCamera(_camera.getPosition());
             
             // Cleart das Bild
             _renderer.clear();

@@ -1,7 +1,7 @@
 import java.util.*;
 
 /**
- * Verwaltet verschiedene GridMaps und stellt zusätzliche Funktionalität bereit
+ * Verwaltet verschiedene GridMaps und stellt zusätzliche Funktionalität bereit, insbesondere zur Performance-Optimierung
  * 
  * @author Lasse Huber-Saffer
  * @version 04.12.2021

@@ -36,6 +36,7 @@ public class GridMap
      */
     public void populate(ArrayList<ITileProvider> tileProviders, boolean mirrorZAxis)
     {
+        // Geometrieebene
         for(int z = 0; z < _tileLayer.size(); z++)
         {
             for(int x = 0; x < _tileLayer.get(z).size(); x++)
@@ -62,6 +63,7 @@ public class GridMap
             }
         }
         
+        // Funktionsebene
         for(int z = 0; z < _functionLayer.size(); z++)
         {
             for(int x = 0; x < _functionLayer.get(z).size(); x++)
@@ -110,5 +112,39 @@ public class GridMap
                 ((ILODGameObject)_mapGeometry.get(i)).updateLOD(cameraPosition);
             }
         }
+    }
+    
+    /**
+     * Sortiert die GameObjects, die Teil der Mapgeometrie sind neu, sodass sie mit aufsteigender Distanz zur Kamera sortiert sind.
+     * Dies sorgt dafür, dass das Flackern, das durch das Fehlen des Back Buffers entsteht, möglichst entfernt von der Kamera stattfindet und somit weniger bemerkbar ist.
+     * @param cameraPosition Position der Kamera, im Bezug zu der die GameObjects sortiert werden sollen
+     */
+    public void reorderAroundCamera(Vector3 cameraPosition)
+    {
+        // Sortiert die Collection
+        Collections.sort(_mapGeometry,
+            // Distanz-Komparator
+            new Comparator<IGameObject>() {
+                @Override
+                public int compare(IGameObject obj1, IGameObject obj2)
+                {
+                    double dist1 = obj1.getPosition().subtract(cameraPosition).getLength();
+                    double dist2 = obj2.getPosition().subtract(cameraPosition).getLength();
+                    
+                    if(dist1 > dist2)
+                    {
+                        return 1;
+                    }
+                    else if(dist1 < dist2)
+                    {
+                        return -1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                }
+            }
+        );
     }
 }
