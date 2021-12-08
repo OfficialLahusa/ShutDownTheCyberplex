@@ -11,7 +11,7 @@ public class Game
 {
     private Renderer _renderer;
     private TimeManager _timeManager;
-    private InputManager _inputManager;
+    private InputHandler _inputHandler;
     private TextRenderer _textRenderer;
     private SoundRegistry _soundRegistry;
     private WavefrontObjectLoader _objLoader;
@@ -36,7 +36,7 @@ public class Game
     {
         _renderer = new Renderer();
         _timeManager = new TimeManager();
-        _inputManager = new InputManager();
+        _inputHandler = new InputHandler();
         _textRenderer = new TextRenderer(_renderer);
         _soundRegistry = new SoundRegistry();
         _objLoader = new WavefrontObjectLoader();
@@ -82,23 +82,41 @@ public class Game
             // reset frameCap Timer
             _frameCapTimeManager.getDeltaTime();
             
+            
             // Input-Handling
-            if(_inputManager.isKeyPressed(KeyCode.KEY_W))
+            double deltaX = _inputHandler.getAndResetMouseDelta().getX();
+            if(_inputHandler.getKeepMouseInPlace())
             {
-                _camera.move(_camera.getDirection().multiply(-5.0 * deltaTime));
+                _camera.rotateYaw(0.20 * deltaX);
             }
-            if(_inputManager.isKeyPressed(KeyCode.KEY_S))
+            
+
+            if(_inputHandler.isKeyPressed(KeyCode.KEY_W))
             {
-                _camera.move(_camera.getDirection().multiply(5.0 * deltaTime));
+                _camera.move(_camera.getDirection().multiply(-6.5 * deltaTime));
             }
-            if(_inputManager.isKeyPressed(KeyCode.KEY_A))
+            if(_inputHandler.isKeyPressed(KeyCode.KEY_S))
+            {
+                _camera.move(_camera.getDirection().multiply(6.5 * deltaTime));
+            }
+            if(_inputHandler.isKeyPressed(KeyCode.KEY_A))
             {
                 _camera.rotateYaw(-120.0 * deltaTime);
             }
-            if(_inputManager.isKeyPressed(KeyCode.KEY_D))
+            if(_inputHandler.isKeyPressed(KeyCode.KEY_D))
             {
                 _camera.rotateYaw(120.0 * deltaTime);
             }
+            if(_inputHandler.isKeyPressed(KeyCode.KEY_ESCAPE))
+            {
+                _inputHandler.setKeepMouseInPlace(false);
+            }
+            if(_inputHandler.isKeyPressed(KeyCode.KEY_SPACE))
+            {
+                _inputHandler.setKeepMouseInPlace(true);
+            }
+
+
             
             // Berechnet Map-LOD-Stufen in Abhängigkeit von der Kameraposition neu
             _mapHandler.getMap().updateLOD(_camera.getPosition());

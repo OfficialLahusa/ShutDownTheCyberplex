@@ -3,6 +3,7 @@
     - Titel: "Shut down the Cyberplex"
 - Game in Szenen abstrahieren
 - Mouse Input
+- Sound-Dateien und Mediaplayer trennen
 - Physics Engine:
     - 2D Top Down
     - Line-Circle Intersection
@@ -43,4 +44,3 @@
     - Gegnerwellen
     - Jede Stage schaltet einen neuen Teil des Levels frei.
     - Man muss Computerkonsolen anschießen und am Screen ablesen, um die richtige zu finden.
-
