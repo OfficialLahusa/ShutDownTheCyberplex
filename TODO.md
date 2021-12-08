@@ -2,7 +2,8 @@
 - Title Screen:
     - Titel: "Shut down the Cyberplex"
 - Game in Szenen abstrahieren
-- Mouse Input
+- Mouse Input verbessern (und A/D zu Strafe ändern)
+- Crosshair hinzufügen
 - Sound-Dateien und Mediaplayer trennen
 - Physics Engine:
     - 2D Top Down
