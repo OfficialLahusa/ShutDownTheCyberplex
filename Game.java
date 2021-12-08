@@ -54,16 +54,10 @@ public class Game
      */
     public void start()
     {
-        _soundRegistry.loadSound("test", "./res/sounds/to_the_front.mp3");
-        _soundRegistry.sounds.get("test").setVolume(0.2);
-        _soundRegistry.sounds.get("test").setOnEndOfMedia(new Runnable() {
-            @Override
-            public void run() {
-                _soundRegistry.sounds.get("test").seek(Duration.ZERO);
-                _soundRegistry.sounds.get("test").play();
-            }
-        }); 
-        _soundRegistry.sounds.get("test").play();
+        _soundRegistry.loadSource("music1", "./res/sounds/to_the_front.mp3");
+        _soundRegistry.loadSource("powerup3", "./res/sounds/Powerup3.wav");
+        
+        _soundRegistry.playSound("music1", 0.2, true);
         
         runGameLoop();
     }
@@ -117,6 +111,11 @@ public class Game
             {
                 _inputHandler.setKeepMouseInPlace(true);
             }
+            if(_inputHandler.isKeyPressed(KeyCode.KEY_PLUS))
+            {
+                _soundRegistry.playSound("powerup3", 0.2, false);
+                System.out.println("Added sound powerup3"); 
+            }
 
 
             
@@ -124,6 +123,9 @@ public class Game
             _mapHandler.getMap().updateLOD(_camera.getPosition());
             // Sortiert Mapgeometrie so, dass die Objekte in der Reihenfolge ihrer Distanz zur Kamera sortiert sind.
             _mapHandler.getMap().reorderAroundCamera(_camera.getPosition());
+            
+            // Entfernt bereits durchgelaufene Sounds
+            _soundRegistry.removeStoppedSounds();
             
             // Cleart das Bild
             _renderer.clear();
