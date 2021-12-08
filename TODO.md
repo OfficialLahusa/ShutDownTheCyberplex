@@ -2,7 +2,7 @@
 - Title Screen:
     - Titel: "Shut down the Cyberplex"
 - Game in Szenen abstrahieren
-- Mouse Input verbessern (und A/D zu Strafe ändern)
+- JFrame hijacken und Cursor unsichtbar machen, Mouse-Anchor in die Mitte setzen und Controls ändern
 - Crosshair hinzufügen
 - Sound-Dateien und Mediaplayer trennen
 - Physics Engine:
