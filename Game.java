@@ -101,11 +101,13 @@ public class Game
             }
             if(_inputHandler.isKeyPressed(KeyCode.KEY_A))
             {
-                _camera.rotateYaw(-120.0 * deltaTime);
+                //_camera.rotateYaw(-120.0 * deltaTime);
+                _camera.move(_camera.getRight().multiply(-6.0 * deltaTime));
             }
             if(_inputHandler.isKeyPressed(KeyCode.KEY_D))
             {
-                _camera.rotateYaw(120.0 * deltaTime);
+                //_camera.rotateYaw(120.0 * deltaTime);
+                _camera.move(_camera.getRight().multiply(6.0 * deltaTime));
             }
             if(_inputHandler.isKeyPressed(KeyCode.KEY_ESCAPE))
             {

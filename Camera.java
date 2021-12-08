@@ -9,6 +9,8 @@ public class Camera
 {
     // Position und Orientation der Kamera
     private Vector3 _position;
+    private Vector3 _up;
+    private Vector3 _right;
     private double _pitch = 0.0;
     private double _yaw = 0.0;
     
@@ -25,16 +27,17 @@ public class Camera
     private Matrix4 _view;
     private Matrix4 _projection;
     
-    // Interne Zustandsflags für die Nötigkeit der Neuberechnung der View- und Projectionmatrix
-    private boolean recalculateViewMatrix = true;
-    private boolean recalculateProjectionMatrix = true;
+    // Interne Zustandsflags für die Nötigkeit der Neuberechnung der View- und Projectionmatrix sowie den nach rechts zeigenden Richtungsvektors
+    private boolean _recalculateViewMatrix = true;
+    private boolean _recalculateProjectionMatrix = true;
+    private boolean _recalculateRightVector = true;
 
     /**
      * Parameterloser Konstruktor
      */
     public Camera()
     {
-        _position = new Vector3();
+        this(1.0, 45.0);
     }
     
     /**
@@ -69,6 +72,7 @@ public class Camera
     public Camera(Vector3 position, double aspectRatio, double fov, double near, double far)
     {
         _position = new Vector3(position);
+        _up = new Vector3(0.0, 1.0, 0.0);
         _aspectRatio = aspectRatio;
         _fov = fov;
         _near = near;
@@ -83,7 +87,7 @@ public class Camera
     {
         _position = _position.add(delta);
         
-        recalculateViewMatrix = true;
+        _recalculateViewMatrix = true;
     }
     
     /**
@@ -94,7 +98,8 @@ public class Camera
     {
         _yaw += theta;
         
-        recalculateViewMatrix = true;
+        _recalculateViewMatrix = true;
+        _recalculateRightVector = true;
     }
     
     /**
@@ -105,7 +110,8 @@ public class Camera
     {
         _pitch += theta;
         
-        recalculateViewMatrix = true;
+        _recalculateViewMatrix = true;
+        _recalculateRightVector = true;
     }
     
     /**
@@ -114,12 +120,13 @@ public class Camera
      */
     public Matrix4 getViewMatrix()
     {
-        if(recalculateViewMatrix)
+        if(_recalculateViewMatrix)
         {
+            // Recalculate View Matrix
             _view = MatrixGenerator.generateAxialRotationMatrix(new Vector3(0.0, 1.0, 0.0), -_yaw).multiply(MatrixGenerator.generateTranslationMatrix(_position.invert()));
             //_view = MatrixGenerator.generateTranslationMatrix(_position.invert());
-            //_view = MatrixGenerator.generateLookAtMatrix(_position.add(getDirection()), _position, new Vector3(0.0, 1.0, 0.0));
-            recalculateViewMatrix = false;
+            //_view = MatrixGenerator.generateLookAtMatrix(_position.add(getDirection()), _position, new Vector3(0.0, 1.0, 0.0));            
+            _recalculateViewMatrix = false;
         }
         
         return _view;
@@ -131,10 +138,10 @@ public class Camera
      */
     public Matrix4 getProjectionMatrix()
     {
-        if(recalculateProjectionMatrix)
+        if(_recalculateProjectionMatrix)
         {
             _projection = MatrixGenerator.generatePerspectiveProjectionMatrix(_near, _far, _aspectRatio, _fov);
-            recalculateProjectionMatrix = false;
+            _recalculateProjectionMatrix = false;
         }
         
         return _projection;
@@ -160,6 +167,31 @@ public class Camera
         double z = Math.cos(Math.toRadians(_pitch))*Math.cos(Math.toRadians(_yaw));
         return new Vector3(x, y, z);
     }
+    
+    /**
+     * Gibt den von der Kamera aus nach oben zeigenden Richtungsvektor zurück
+     * @return Richtungsvektor nach oben
+     */
+    public Vector3 getUp()
+    {
+        return _up;
+    }
+    
+    /**
+     * Gibt den von der Kamera aus nach rechts zeigenden Richtungsvektor zurück
+     * @return Richtungsvektor nach rechts
+     */
+    public Vector3 getRight()
+    {
+        if(_recalculateRightVector)
+        {
+            // Recalculate right vector
+            _right = getDirection().cross(_up).normalize();
+            _recalculateRightVector = false;
+        }
+        return _right;
+    }
+    
     /**
      * Gibt den Nickwinkel der Kamera zurück
      * @return Nickwinkel
@@ -222,7 +254,7 @@ public class Camera
     {
         _position = new Vector3(pos);
         
-        recalculateViewMatrix = true;
+        _recalculateViewMatrix = true;
     }
     
     /**
@@ -233,7 +265,8 @@ public class Camera
     {
         _pitch = pitch;
         
-        recalculateViewMatrix = true;
+        _recalculateViewMatrix = true;
+        _recalculateRightVector = true;
     }
     
     /**
@@ -244,7 +277,8 @@ public class Camera
     {
         _yaw = yaw;
         
-        recalculateViewMatrix = true;
+        _recalculateViewMatrix = true;
+        _recalculateRightVector = true;
     }
     
     /**
@@ -255,7 +289,7 @@ public class Camera
     {
         _aspectRatio = aspectRatio;
         
-        recalculateProjectionMatrix = true;
+        _recalculateProjectionMatrix = true;
     }
     
     /**
@@ -266,7 +300,7 @@ public class Camera
     {
         _fov = fov;
         
-        recalculateProjectionMatrix = true;
+        _recalculateProjectionMatrix = true;
     }
     
     /**
@@ -277,7 +311,7 @@ public class Camera
     {
         _near = near;
         
-        recalculateProjectionMatrix = true;
+        _recalculateProjectionMatrix = true;
     }
     
     /**
@@ -288,6 +322,6 @@ public class Camera
     {
         _far = far;
         
-        recalculateProjectionMatrix = true;
+        _recalculateProjectionMatrix = true;
     }
 }
