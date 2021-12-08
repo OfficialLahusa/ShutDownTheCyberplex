@@ -59,6 +59,8 @@ public class Game
         
         _soundRegistry.playSound("music1", 0.2, true);
         
+        _inputHandler.loadJFrame();
+        
         runGameLoop();
     }
     

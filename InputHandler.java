@@ -4,6 +4,8 @@ import java.awt.event.AWTEventListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.*;
 import java.awt.*;
+import javax.swing.JFrame;
+import java.awt.image.BufferedImage;
 
 /**
  * Die Klasse InputHandler verwaltet den Tastatureingaben zur Steuerung des Spiels.
@@ -20,6 +22,7 @@ public class InputHandler
     private Vector2 _lastLocalMousePos;
     private Vector2 _mouseResetAnchorPos;
     private Vector2 _mouseDelta;
+    private JFrame _jFrame;
     
     /**
      * Konstruktor für Objekte der Klasse InputHandler
@@ -35,6 +38,25 @@ public class InputHandler
         // Initialize Event Listeners
         initKeyListener();
         initMouseListener();
+    }
+    
+    /**
+     * Lädt das JFrame, welches von der globalen TurtleWelt benutzt wird.
+     */
+    public void loadJFrame()
+    {
+        if (_jFrame == null)
+        {
+            TurtleWelt welt = TurtleWelt.GLOBALEWELT;
+
+            for (Frame frame : Frame.getFrames())
+            {
+                if (frame instanceof JFrame && frame.getTitle().equals("Turtle Graphics - the canvas can be cleared by right-clicking on it"))
+                {
+                    _jFrame = (JFrame) frame;
+                }
+            }
+        }
     }
     
     /**
@@ -103,6 +125,12 @@ public class InputHandler
         if(!keepMouseInPlace)
         {
             _mouseResetAnchorPos = null;
+            
+            _jFrame.setCursor(0);
+        }
+        else
+        {
+             _jFrame.setCursor(_jFrame.getToolkit().createCustomCursor(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB), new Point(), null ));
         }
         
         _keepMouseInPlace = keepMouseInPlace;
@@ -223,7 +251,10 @@ public class InputHandler
                         {
                             if(_mouseResetAnchorPos == null)
                             {
-                                _mouseResetAnchorPos = new Vector2(mousePos.getX(), mousePos.getY());
+                                Rectangle windowBounds = _jFrame.getBounds();
+                                double anchorPosX = (windowBounds.x + windowBounds.width) / 2;
+                                double anchorPosY = (windowBounds.y + windowBounds.height) / 2;
+                                _mouseResetAnchorPos = new Vector2(anchorPosX, anchorPosY);
                             }
                             else
                             {
