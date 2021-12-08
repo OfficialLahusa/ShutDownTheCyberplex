@@ -65,6 +65,8 @@ public class Game
         }); 
         _soundRegistry.sounds.get("test").play();
         
+        _inputHandler.loadJFrame();
+        
         runGameLoop();
     }
     
