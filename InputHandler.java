@@ -126,11 +126,13 @@ public class InputHandler
         {
             _mouseResetAnchorPos = null;
             
+            // Setzt Cursor auf Standard
             _jFrame.setCursor(0);
         }
         else
         {
-             _jFrame.setCursor(_jFrame.getToolkit().createCustomCursor(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB), new Point(), null ));
+            // Macht Cursor unsichtbar
+            _jFrame.setCursor(_jFrame.getToolkit().createCustomCursor(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB), new Point(), null ));
         }
         
         _keepMouseInPlace = keepMouseInPlace;
@@ -242,22 +244,26 @@ public class InputHandler
                         _lastGlobalMousePos = new Vector2(mousePos.getX(), mousePos.getY());
                         _lastLocalMousePos = new Vector2(localMousePos.getX(), localMousePos.getY());
                         
+                        // Berechnet Maus-Delta
                         if(_mouseResetAnchorPos != null)
                         {
                             _mouseDelta = _mouseDelta.add(new Vector2(mousePos.getX() - _mouseResetAnchorPos.getX(), mousePos.getY() - _mouseResetAnchorPos.getY()));
                         }
                         
+                        // Soll die Maus an der selben Stelle gehalten werden?
                         if(_keepMouseInPlace)
                         {
+                            // Setzt Mausankerpunkt in die Mitte des Fensters, wenn er nicht gesetzt ist
                             if(_mouseResetAnchorPos == null)
                             {
                                 Rectangle windowBounds = _jFrame.getBounds();
-                                double anchorPosX = (windowBounds.x + windowBounds.width) / 2;
-                                double anchorPosY = (windowBounds.y + windowBounds.height) / 2;
+                                double anchorPosX = windowBounds.x + (windowBounds.width) / 2;
+                                double anchorPosY = windowBounds.y + (windowBounds.height) / 2;
                                 _mouseResetAnchorPos = new Vector2(anchorPosX, anchorPosY);
                             }
                             else
                             {
+                                // Setzt Mausposition auf den Ankerpunkt zurück
                                 try
                                 {
                                     Robot bot = new Robot();
