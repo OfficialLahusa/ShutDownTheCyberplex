@@ -17,6 +17,7 @@ public class Game
     private WavefrontObjectLoader _objLoader;
     private MapHandler _mapHandler;
     private Camera _camera;
+    private DynamicViewModelGameObject _weapon;
     
     // FPS-Berechnung
     private double _fps;
@@ -42,6 +43,7 @@ public class Game
         _objLoader = new WavefrontObjectLoader();
         _mapHandler = new MapHandler();
         _camera = new Camera(new Vector3(0.0, 2.0, 10.0), 1.0, 90.0);
+        _weapon = new DynamicViewModelGameObject(_objLoader.loadFromFile("./res/models/M4LowPoly.obj"), "rot", new Vector3 (-1.5,-1,-2));
         
         _frameCapTimeManager = new TimeManager();
 
@@ -132,6 +134,7 @@ public class Game
             _renderer.clear();
             
             // Rendering
+            _weapon.draw(_renderer, _camera);
             _mapHandler.getMap().draw(_renderer, _camera);
             
             // X-, Y- und Z-Achse zeichnen
@@ -143,7 +146,6 @@ public class Game
             {
                 fpsTimer = 0;
                 _fps = 1.0 / deltaTime;
-                
             }
             _textRenderer.write(new Vector2(10,10), 5, "fps: " + (int)Math.round(_fps));
             
