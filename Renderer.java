@@ -149,7 +149,7 @@ class Renderer
         b = (model == null)? b : model.multiply(new Vector4(b, 1.0)).getXYZ();
         if (isLineInFrustum(a, b, camera))
         {
-            Matrix4 transform = camera.getProjectionMatrix().multiply(camera.getViewMatrix());
+            Matrix4 transform = camera.getProjectionMatrix().multiply((ignoreViewMatrix)? new Matrix4() : camera.getViewMatrix());
         
             Vector4 pA = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(a, 1.0)));
             Vector4 pB = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(b, 1.0)));
@@ -174,7 +174,7 @@ class Renderer
                 {
                     return;
                 }
-                Matrix4 transform = camera.getProjectionMatrix().multiply(camera.getViewMatrix());
+                Matrix4 transform = camera.getProjectionMatrix().multiply((ignoreViewMatrix)? new Matrix4() : camera.getViewMatrix());
         
                 // NOTE(sven): Wir müssen den Schnittpunkt um den Wert epsilon (aus getLinePlaneIntersection) verschieben, 
                 // weil durch Gleitkommarundungsfehler teilweise die Punkte trotzdem noch hinter der Kamera liegen.

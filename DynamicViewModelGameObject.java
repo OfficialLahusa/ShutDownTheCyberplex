@@ -1,6 +1,6 @@
 
 /**
- * Ein dreidimensionales dynamisch bewegbares Objekt in der Spielwelt
+ * Ein dreidimensionales dynamisch bewegbares Objekt in der Spielwelt, das als ViewModel für die Kamera gerendert wird, also nicht mit der ViewMatrix verschoben wird
  * 
  * @author Lasse Huber-Saffer
  * @version 02.12.2021
