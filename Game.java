@@ -9,15 +9,8 @@ import javafx.util.*;
  */
 public class Game
 {
-    private Renderer _renderer;
-    private TimeManager _timeManager;
-    private InputHandler _inputHandler;
-    private TextRenderer _textRenderer;
-    private SoundRegistry _soundRegistry;
-    private WavefrontObjectLoader _objLoader;
-    private MapHandler _mapHandler;
-    private Camera _camera;
-    private DynamicViewModelGameObject _weapon;
+    private GameState _state;
+    private Scene _scene;
     
     // FPS-Berechnung
     private double _fps;
@@ -35,20 +28,8 @@ public class Game
      */
     public Game()
     {
-        _renderer = new Renderer();
-        _timeManager = new TimeManager();
-        _inputHandler = new InputHandler();
-        _textRenderer = new TextRenderer(_renderer);
-        _soundRegistry = new SoundRegistry();
-        _objLoader = new WavefrontObjectLoader();
-        _mapHandler = new MapHandler();
-        _camera = new Camera(new Vector3(0.0, 2.0, 10.0), 1.0, 90.0);
-        _weapon = new DynamicViewModelGameObject(_objLoader.loadFromFile("./res/models/M4LowPoly.obj"), "rot", new Vector3 (-1.5,-1,-2));
-        
+        _state = new GameState();
         _frameCapTimeManager = new TimeManager();
-
-        _mapHandler.load("TestMap");
-        _camera.setPosition(_mapHandler.getMap().getPlayerSpawn());
     }
     
     /**
@@ -56,13 +37,9 @@ public class Game
      */
     public void start()
     {
-        _soundRegistry.loadSource("music1", "./res/sounds/to_the_front.mp3");
-        _soundRegistry.loadSource("powerup3", "./res/sounds/Powerup3.wav");
+        _scene = new GameScene(_state);
         
-        _soundRegistry.playSound("music1", 0.2, true);
-        
-        _inputHandler.loadJFrame();
-        
+        _state.inputHandler.loadJFrame();
         runGameLoop();
     }
     
@@ -74,72 +51,22 @@ public class Game
         while(true)
         {
             // Zeiten berechnen
-            runTime = _timeManager.getRunTime();
-            deltaTime = _timeManager.getDeltaTime();
+            runTime = _state.timeManager.getRunTime();
+            deltaTime = _state.timeManager.getDeltaTime();
             
             // reset frameCap Timer
             _frameCapTimeManager.getDeltaTime();
             
             
             // Input-Handling
-            double deltaX = _inputHandler.getAndResetMouseDelta().getX();
-            if(_inputHandler.getKeepMouseInPlace())
-            {
-                _camera.rotateYaw(0.20 * deltaX);
-            }
+            _scene.handleInput(deltaTime, runTime);
             
-
-            if(_inputHandler.isKeyPressed(KeyCode.KEY_W))
-            {
-                _camera.move(_camera.getDirection().multiply(-6.5 * deltaTime));
-            }
-            if(_inputHandler.isKeyPressed(KeyCode.KEY_S))
-            {
-                _camera.move(_camera.getDirection().multiply(6.5 * deltaTime));
-            }
-            if(_inputHandler.isKeyPressed(KeyCode.KEY_A))
-            {
-                //_camera.rotateYaw(-120.0 * deltaTime);
-                _camera.move(_camera.getRight().multiply(-6.0 * deltaTime));
-            }
-            if(_inputHandler.isKeyPressed(KeyCode.KEY_D))
-            {
-                //_camera.rotateYaw(120.0 * deltaTime);
-                _camera.move(_camera.getRight().multiply(6.0 * deltaTime));
-            }
-            if(_inputHandler.isKeyPressed(KeyCode.KEY_ESCAPE))
-            {
-                _inputHandler.setKeepMouseInPlace(false);
-            }
-            if(_inputHandler.isKeyPressed(KeyCode.KEY_SPACE))
-            {
-                _inputHandler.setKeepMouseInPlace(true);
-            }
-            if(_inputHandler.isKeyPressed(KeyCode.KEY_PLUS))
-            {
-                _soundRegistry.playSound("powerup3", 0.2, false);
-            }
-
-
+            // Update
+            _scene.update(deltaTime, runTime);
             
-            // Berechnet Map-LOD-Stufen in Abhängigkeit von der Kameraposition neu
-            _mapHandler.getMap().updateLOD(_camera.getPosition());
-            // Sortiert Mapgeometrie so, dass die Objekte in der Reihenfolge ihrer Distanz zur Kamera sortiert sind.
-            _mapHandler.getMap().reorderAroundCamera(_camera.getPosition());
-            
-            // Entfernt bereits durchgelaufene Sounds
-            _soundRegistry.removeStoppedSounds();
-            
-            // Cleart das Bild
-            _renderer.clear();
-            
-            // Rendering
-            _weapon.draw(_renderer, _camera);
-            _mapHandler.getMap().draw(_renderer, _camera);
-            
-            // X-, Y- und Z-Achse zeichnen
-            _renderer.drawAxis(_camera);
-            
+            // Render
+            _scene.draw(deltaTime, runTime);
+                               
             // Zeichnet den FPS-Zähler
             fpsTimer += deltaTime;
             if(fpsTimer > 1.0)
@@ -147,7 +74,7 @@ public class Game
                 fpsTimer = 0;
                 _fps = 1.0 / deltaTime;
             }
-            _textRenderer.write(new Vector2(10,10), 5, "fps: " + (int)Math.round(_fps));
+            _state.textRenderer.write(new Vector2(10,10), 5, "fps: " + (int)Math.round(_fps));
             
             // Bildrate auf maximal FPS_CAP (Konstante) begrenzen
             double currentFrameTime = _frameCapTimeManager.getDeltaTime();
