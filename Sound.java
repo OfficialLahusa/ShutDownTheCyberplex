@@ -34,8 +34,15 @@ public class Sound
         _player = new MediaPlayer(media);
         _sourceKey = sourceKey;
         _player.setVolume(volume);
+        
         setLoop(loop);
-        if(autoplay) _player.play();
+        
+        _player.setOnError(() -> System.out.println("Error : " + _player.getError().toString()));
+        
+        if(autoplay)
+        {
+            _player.setAutoPlay(true);
+        }
     }
     
     /**
@@ -71,11 +78,9 @@ public class Sound
                 @Override
                 public void run() {
                     _player.stop();
-                    System.out.println("Reached end of sound " + _sourceKey);
                 }
             });
         }
-
     }
     
     /**

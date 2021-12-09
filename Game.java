@@ -116,7 +116,6 @@ public class Game
             if(_inputHandler.isKeyPressed(KeyCode.KEY_PLUS))
             {
                 _soundRegistry.playSound("powerup3", 0.2, false);
-                System.out.println("Added sound powerup3"); 
             }
 
 

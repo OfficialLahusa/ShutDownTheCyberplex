@@ -39,9 +39,6 @@ public class SoundRegistry
     
     public void removeStoppedSounds()
     {
-        int c = 0;
-        int cw = 0;
-        
         // Entfernt iterativ die gestoppten Sounds
         for(Iterator<Sound> iter = _currentSounds.iterator(); iter.hasNext(); )
         {
@@ -49,23 +46,7 @@ public class SoundRegistry
             if(elem == null || elem.getStatus() == MediaPlayer.Status.STOPPED || elem.getStatus() == null)
             {
                 iter.remove();
-                c++;
             }
-        }
-        
-        // Entfernt Null-Referenzen
-        for(int i = _currentSounds.size() - 1; i > 0; i--)
-        {
-            if(_currentSounds.get(i) == null)
-            {
-                _currentSounds.remove(i);
-                cw++;
-            }
-        }
-        
-        if(c>0)
-        {
-            System.out.println("Removed " + c + " + " + cw + " stopped sounds");
         }
     }
     

@@ -234,7 +234,7 @@ public class InputHandler
                 {
                     MouseEvent evt = (MouseEvent)event;
                     
-                    if(evt.getID() == MouseEvent.MOUSE_MOVED)// || evt.getID() == MouseEvent.MOUSE_DRAGGED)
+                    if(evt.getID() == MouseEvent.MOUSE_MOVED || evt.getID() == MouseEvent.MOUSE_DRAGGED)
                     {
                         Point mousePos = evt.getLocationOnScreen();
                         Point localMousePos = evt.getPoint();
