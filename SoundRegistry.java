@@ -45,6 +45,7 @@ public class SoundRegistry
             Sound elem = iter.next();
             if(elem == null || elem.getStatus() == MediaPlayer.Status.STOPPED || elem.getStatus() == null)
             {
+                elem.dispose();
                 iter.remove();
             }
         }

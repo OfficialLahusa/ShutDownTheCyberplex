@@ -143,5 +143,14 @@ public class Sound
         return _player.getStatus();
     }
     
+    /**
+     * Macht die Ressourcen des Sounds frei. Danach darf der Sound nicht mehr benutzt werden.
+     * Diese Methode soll nach der abschließenden Verwendung eines Sounds ausgeführt werden.
+     */
+    public void dispose()
+    {
+        _player.dispose();
+    }
+    
     
 }
