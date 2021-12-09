@@ -2,9 +2,7 @@
 - Title Screen:
     - Titel: "Shut down the Cyberplex"
 - Game in Szenen abstrahieren
-- JFrame hijacken und Cursor unsichtbar machen, Mouse-Anchor in die Mitte setzen und Controls ändern
 - Crosshair hinzufügen
-- Sound-Dateien und Mediaplayer trennen
 - Physics Engine:
     - 2D Top Down
     - Line-Circle Intersection
@@ -33,7 +31,6 @@
     - Drohne die Routen abfliegen und rot blinkenden Sensor haben, wenn sie den Spieler detecten
     - Geschützturm mit bestimmtem Schussfeld
     - Irgendwas humanoides Grünes, das cool zersplittern kann
-- Viewmodel
 - AI-Behaviour, Patrouillensystem
 - Voiceline-System
     - Bsp.: Commander gibt ein Tutorial 
