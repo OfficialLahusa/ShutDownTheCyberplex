@@ -18,11 +18,32 @@ class Renderer
         _turtle.setzeGeschwindigkeit(10);
     }
     
+    /**
+     * Zeichnet ein dreidimensionales Mesh aus Linien in einer gegebenen Farbe in das Sichtfeld einer Kamera.
+     * @param meshRef Referenz auf ein Mesh
+     * @param modelMatrix Model-Transformationsmatrix des Meshs
+     * @param farbe Farbe, in der das Mesh gezeichnet werden soll
+     * @param camera Kamera, in dessen Sichtfeld das Mesh gerendert werden soll
+     */
     public void drawMesh(Mesh meshRef, Matrix4 modelMatrix, String farbe, Camera camera)
+    {
+        drawMesh(meshRef, modelMatrix, farbe, camera, false);
+    }
+    
+    /**
+     * Zeichnet ein dreidimensionales Mesh aus Linien in einer gegebenen Farbe in das Sichtfeld einer Kamera.
+     * Optional kann die ViewMatrix der Kamera ignoriert werden, um ein Mesh als 1st Person ViewModel zu rendern.
+     * @param meshRef Referenz auf ein Mesh
+     * @param modelMatrix Model-Transformationsmatrix des Meshs
+     * @param farbe Farbe, in der das Mesh gezeichnet werden soll
+     * @param camera Kamera, in dessen Sichtfeld das Mesh gerendert werden soll
+     * @param ignoreViewMatrix wenn true, wird die ViewMatrix der Kamera nicht angewandt, was für ViewModels nützlich ist
+     */
+    public void drawMesh(Mesh meshRef, Matrix4 modelMatrix, String farbe, Camera camera, boolean ignoreViewMatrix)
     {
         for(int i = 0; i < meshRef.lineIndices.size(); i++)
         {
-            drawLine3D(meshRef.vertices.get(meshRef.lineIndices.get(i).getKey() - 1), meshRef.vertices.get(meshRef.lineIndices.get(i).getValue() - 1), farbe, modelMatrix, camera);
+            drawLine3D(meshRef.vertices.get(meshRef.lineIndices.get(i).getKey() - 1), meshRef.vertices.get(meshRef.lineIndices.get(i).getValue() - 1), farbe, modelMatrix, camera, ignoreViewMatrix);
         }
     }
     
@@ -60,7 +81,19 @@ class Renderer
      */
     public void drawLine3D(Vector3 a, Vector3 b, Camera camera)
     {
-        drawLine3D(a, b, "rot", camera);
+        drawLine3D(a, b, "rot", null, camera, false);
+    }
+    
+    /**
+     * Zeichnet eine beliebigfarbige Linie zwischen zwei Punkten im dreidimensionalen Raum
+     * @param a Startpunkt
+     * @param b Endpunkt
+     * @param farbe deutscher ausgeschriebener Name von einer der 13 validen Farben (siehe Turtle)
+     * @param camera Kamera für die dreidimensionale Projektion
+     */
+    public void drawLine3D(Vector3 a, Vector3 b, String farbe, Camera camera)
+    {
+        drawLine3D(a, b, farbe, null, camera, false);
     }
     
     private Vector3 getLinePlaneIntersection(Vector3 lineP1, Vector3 lineP2, Vector3 planeP1, Vector3 planeNormal)
@@ -106,15 +139,21 @@ class Renderer
      * @param a Startpunkt
      * @param b Endpunkt
      * @param farbe deutscher ausgeschriebener Name von einer der 13 validen Farben (siehe Turtle)
+     * @param model Modelmatrix für die Punkte der Linie. Wenn null, wird nichts angewandt
      * @param camera Kamera für die dreidimensionale Projektion
+     * @param ignoreViewMatrix wenn true, wird die ViewMatrix der Kamera nicht angewandt, was für ViewModels nützlich ist
      */
-    public void drawLine3D(Vector3 a, Vector3 b, String farbe, Camera camera)
+    public void drawLine3D(Vector3 a, Vector3 b, String farbe, Matrix4 model, Camera camera, boolean ignoreViewMatrix)
     {
+        a = (model == null)? a : model.multiply(new Vector4(a, 1.0)).getXYZ();
+        b = (model == null)? b : model.multiply(new Vector4(b, 1.0)).getXYZ();
         if (isLineInFrustum(a, b, camera))
         {
             Matrix4 transform = camera.getProjectionMatrix().multiply(camera.getViewMatrix());
+        
             Vector4 pA = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(a, 1.0)));
             Vector4 pB = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(b, 1.0)));
+        
             drawLine(new Vector2(pA.getX(), pA.getY()), new Vector2(pB.getX(), pB.getY()), farbe);
         }
         else
@@ -130,57 +169,6 @@ class Renderer
                 else if (isPointInFrustum(b, camera))
                 {
                     pInside = b;
-                }
-                else // Wenn beide Punkte hinter der Camera liegen, soll die Linie gar nicht gerendert werden.
-                {
-                    return;
-                }
-                Matrix4 transform = camera.getProjectionMatrix().multiply(camera.getViewMatrix());
-                
-                Vector3 precisionError = pInside.subtract(frustumIntersection).multiply(1e-6);
-                
-                Vector4 pA = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(frustumIntersection.add(precisionError), 1.0)));
-                Vector4 pB = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(pInside, 1.0)));
-            
-                drawLine(new Vector2(pA.getX(), pA.getY()), new Vector2(pB.getX(), pB.getY()), farbe);
-            }
-        }
-    }
-    
-    /**
-     * Zeichnet eine beliebigfarbige Linie zwischen zwei Punkten im dreidimensionalen Raum
-     * @param a Startpunkt
-     * @param b Endpunkt
-     * @param farbe deutscher ausgeschriebener Name von einer der 13 validen Farben (siehe Turtle)
-     * @param model Modelmatrix für die Punkte der Linie
-     * @param camera Kamera für die dreidimensionale Projektion
-     */
-    public void drawLine3D(Vector3 a, Vector3 b, String farbe, Matrix4 model, Camera camera)
-    {
-        Vector3 transformedA = model.multiply(new Vector4(a, 1.0)).getXYZ();
-        Vector3 transformedB = model.multiply(new Vector4(b, 1.0)).getXYZ();
-        if (isLineInFrustum(transformedA, transformedB, camera))
-        {
-            Matrix4 transform = camera.getProjectionMatrix().multiply(camera.getViewMatrix());
-        
-            Vector4 pA = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(transformedA, 1.0)));
-            Vector4 pB = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(transformedB, 1.0)));
-        
-            drawLine(new Vector2(pA.getX(), pA.getY()), new Vector2(pB.getX(), pB.getY()), farbe);
-        }
-        else
-        {
-            Vector3 frustumIntersection = getLinePlaneIntersection(transformedA, transformedB, camera.getPosition(), camera.getDirection());
-            if (frustumIntersection != null)
-            {
-                Vector3 pInside;
-                if (isPointInFrustum(transformedA, camera))
-                {
-                    pInside = transformedA;
-                }
-                else if (isPointInFrustum(transformedB, camera))
-                {
-                    pInside = transformedB;
                 }
                 else // Wenn beide Punkte hinter der Camera liegen, soll die Linie gar nicht gerendert werden.
                 {
