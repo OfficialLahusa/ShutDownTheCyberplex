@@ -9,6 +9,7 @@ public class TextRenderer
 {
     private Renderer _renderer;
     private Vector2 _lastPos;
+    private String _colour;
     
     /**
      * Konstruktor für Objekte der Klasse TextRenderer
@@ -17,6 +18,7 @@ public class TextRenderer
     {
         _renderer = renderer;
         _lastPos = new Vector2(0, 0);
+        _colour = "";
     }
 
     /**
@@ -25,9 +27,11 @@ public class TextRenderer
      * @param start Startpunkt oben links vom String
      * @param size Schriftgröße
      * @param text Zu rendernder String
+     * @param farbe Textfarbe
      */
-    public void write(Vector2 start, int size, String text)
+    public void write(Vector2 start, int size, String text, String farbe)
     {
+        _colour = farbe;
         //24x26
         int l = text.length();
         String letter = "";
@@ -159,27 +163,27 @@ public class TextRenderer
         double wx1 = _lastPos.getX();
         double wy1 = _lastPos.getY();
         
-        _renderer.drawLine(new Vector2(x+wx1*size, y+wy1*size), new Vector2(x+wx2*size, y+wy2*size));
+        _renderer.drawLine(new Vector2(x+wx1*size, y+wy1*size), new Vector2(x+wx2*size, y+wy2*size), _colour);
         if(wx1 == wx2)
         {
             if(wx1 > 1)
             {
-                _renderer.drawLine(new Vector2((x+wx1*size)+1, y+wy1*size), new Vector2((x+wx2*size)+1, y+wy2*size));
+                _renderer.drawLine(new Vector2((x+wx1*size)+1, y+wy1*size), new Vector2((x+wx2*size)+1, y+wy2*size), _colour);
             }
             else
             {
-                _renderer.drawLine(new Vector2((x+wx1*size)-1, y+wy1*size), new Vector2((x+wx2*size)-1, y+wy2*size));
+                _renderer.drawLine(new Vector2((x+wx1*size)-1, y+wy1*size), new Vector2((x+wx2*size)-1, y+wy2*size), _colour);
             }
         }
         else if(wy1 == wy2)
         {
             if(wy1 > 1)
             {
-                _renderer.drawLine(new Vector2(x+wx1*size, (y+wy1*size)+1), new Vector2(x+wx2*size, (y+wy2*size)+1));
+                _renderer.drawLine(new Vector2(x+wx1*size, (y+wy1*size)+1), new Vector2(x+wx2*size, (y+wy2*size)+1), _colour);
             }
             else
             {
-                _renderer.drawLine(new Vector2(x+wx1*size, (y+wy1*size)-1), new Vector2(x+wx2*size, (y+wy2*size)-1));
+                _renderer.drawLine(new Vector2(x+wx1*size, (y+wy1*size)-1), new Vector2(x+wx2*size, (y+wy2*size)-1), _colour);
             }
         }
         _lastPos.setX(wx2);
@@ -201,27 +205,27 @@ public class TextRenderer
         double x = start.getX();
         double y = start.getY();
         
-        _renderer.drawLine(new Vector2(x+wx1*size, y+wy1*size), new Vector2(x+wx2*size, y+wy2*size));
+        _renderer.drawLine(new Vector2(x+wx1*size, y+wy1*size), new Vector2(x+wx2*size, y+wy2*size), _colour);
         if(wx1 == wx2)
         {
             if(wx1 > 1)
             {
-                _renderer.drawLine(new Vector2((x+wx1*size)+1, y+wy1*size), new Vector2((x+wx2*size)+1, y+wy2*size));
+                _renderer.drawLine(new Vector2((x+wx1*size)+1, y+wy1*size), new Vector2((x+wx2*size)+1, y+wy2*size), _colour);
             }
             else
             {
-                _renderer.drawLine(new Vector2((x+wx1*size)-1, y+wy1*size), new Vector2((x+wx2*size)-1, y+wy2*size));
+                _renderer.drawLine(new Vector2((x+wx1*size)-1, y+wy1*size), new Vector2((x+wx2*size)-1, y+wy2*size), _colour);
             }
         }
         else if(wy1 == wy2)
         {
             if(wy1 > 1)
             {
-                _renderer.drawLine(new Vector2(x+wx1*size, (y+wy1*size)+1), new Vector2(x+wx2*size, (y+wy2*size)+1));
+                _renderer.drawLine(new Vector2(x+wx1*size, (y+wy1*size)+1), new Vector2(x+wx2*size, (y+wy2*size)+1), _colour);
             }
             else
             {
-                _renderer.drawLine(new Vector2(x+wx1*size, (y+wy1*size)-1), new Vector2(x+wx2*size, (y+wy2*size)-1));
+                _renderer.drawLine(new Vector2(x+wx1*size, (y+wy1*size)-1), new Vector2(x+wx2*size, (y+wy2*size)-1), _colour);
             }
         }
         
@@ -245,27 +249,27 @@ public class TextRenderer
         double wx1 = _lastPos.getX();
         double wy1 = _lastPos.getY();
         
-        _renderer.drawLine(new Vector2(x+wx1*size, y+wy1*size), new Vector2(x+wx2*size, y+wy2*size));
+        _renderer.drawLine(new Vector2(x+wx1*size, y+wy1*size), new Vector2(x+wx2*size, y+wy2*size), _colour);
         if(wx1 == wx2)
         {
             if(direction == 1)
             {
-                _renderer.drawLine(new Vector2((x+wx1*size)+1, y+wy1*size), new Vector2((x+wx2*size)+1, y+wy2*size));
+                _renderer.drawLine(new Vector2((x+wx1*size)+1, y+wy1*size), new Vector2((x+wx2*size)+1, y+wy2*size), _colour);
             }
             else
             {
-                _renderer.drawLine(new Vector2((x+wx1*size)-1, y+wy1*size), new Vector2((x+wx2*size)-1, y+wy2*size));
+                _renderer.drawLine(new Vector2((x+wx1*size)-1, y+wy1*size), new Vector2((x+wx2*size)-1, y+wy2*size), _colour);
             }
         }
         else if(wy1 == wy2)
         {
             if(direction == 1)
             {
-                _renderer.drawLine(new Vector2(x+wx1*size, (y+wy1*size)+1), new Vector2(x+wx2*size, (y+wy2*size)+1));
+                _renderer.drawLine(new Vector2(x+wx1*size, (y+wy1*size)+1), new Vector2(x+wx2*size, (y+wy2*size)+1), _colour);
             }
             else
             {
-                _renderer.drawLine(new Vector2(x+wx1*size, (y+wy1*size)-1), new Vector2(x+wx2*size, (y+wy2*size)-1));
+                _renderer.drawLine(new Vector2(x+wx1*size, (y+wy1*size)-1), new Vector2(x+wx2*size, (y+wy2*size)-1), _colour);
             }
         }
         _lastPos.setX(wx2);
@@ -288,27 +292,27 @@ public class TextRenderer
         double x = start.getX();
         double y = start.getY();
         
-        _renderer.drawLine(new Vector2(x+wx1*size, y+wy1*size), new Vector2(x+wx2*size, y+wy2*size));
+        _renderer.drawLine(new Vector2(x+wx1*size, y+wy1*size), new Vector2(x+wx2*size, y+wy2*size), _colour);
         if(wx1 == wx2)
         {
             if(direction == 1)
             {
-                _renderer.drawLine(new Vector2((x+wx1*size)+1, y+wy1*size), new Vector2((x+wx2*size)+1, y+wy2*size));
+                _renderer.drawLine(new Vector2((x+wx1*size)+1, y+wy1*size), new Vector2((x+wx2*size)+1, y+wy2*size), _colour);
             }
             else
             {
-                _renderer.drawLine(new Vector2((x+wx1*size)-1, y+wy1*size), new Vector2((x+wx2*size)-1, y+wy2*size));
+                _renderer.drawLine(new Vector2((x+wx1*size)-1, y+wy1*size), new Vector2((x+wx2*size)-1, y+wy2*size), _colour);
             }
         }
         else if(wy1 == wy2)
         {
             if(direction == 1)
             {
-                _renderer.drawLine(new Vector2(x+wx1*size, (y+wy1*size)+1), new Vector2(x+wx2*size, (y+wy2*size)+1));
+                _renderer.drawLine(new Vector2(x+wx1*size, (y+wy1*size)+1), new Vector2(x+wx2*size, (y+wy2*size)+1), _colour);
             }
             else
             {
-                _renderer.drawLine(new Vector2(x+wx1*size, (y+wy1*size)-1), new Vector2(x+wx2*size, (y+wy2*size)-1));
+                _renderer.drawLine(new Vector2(x+wx1*size, (y+wy1*size)-1), new Vector2(x+wx2*size, (y+wy2*size)-1), _colour);
             }
         }
         

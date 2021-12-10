@@ -46,7 +46,7 @@ public class Game
     private void runGameLoop()
     {
         double runTime = 0.0, deltaTime = 0.0;
-        
+
         // Gameloop
         while(true)
         {
@@ -73,7 +73,7 @@ public class Game
                 fpsTimer = 0;
                 _fps = 1.0 / deltaTime;
             }
-            _state.textRenderer.write(new Vector2(10,10), 5, "fps: " + (int)Math.round(_fps));
+            _state.textRenderer.write(new Vector2(10,10), 5, "fps: " + (int)Math.round(_fps), "rot");
             
             // Bildrate auf maximal FPS_CAP (Konstante) begrenzen
             double currentFrameTime = _frameCapTimeManager.getDeltaTime();
