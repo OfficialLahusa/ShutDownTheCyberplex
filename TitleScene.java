@@ -70,29 +70,39 @@ public class TitleScene extends Scene
         _mauern.draw(_renderer, _camera);
         
         //draw Start Button
-        _textRenderer.write(new Vector2(250-29.1,414-42), 6,"Start", "weiss");
-        //box
-        _renderer.drawLine(new Vector2(231, 406-42), new Vector2(269, 406-42), "magenta");
-        _renderer.drawLine(new Vector2(269, 406-42), new Vector2(307-3, 412-42), "magenta");
-        _renderer.drawLine(new Vector2(307-3, 412-42), new Vector2(307-3, 432-42), "magenta");
-        _renderer.drawLine(new Vector2(307-3, 432-42), new Vector2(269, 438-42), "magenta");
-        _renderer.drawLine(new Vector2(269, 438-42), new Vector2(231, 438-42), "magenta");
-        _renderer.drawLine(new Vector2(231, 438-42), new Vector2(193+3, 432-42), "magenta");
-        _renderer.drawLine(new Vector2(193+3, 432-42), new Vector2(193+3, 412-42), "magenta");
-        _renderer.drawLine(new Vector2(193+3, 412-42), new Vector2(231, 406-42), "magenta");
+        drawButton("Start");
         
         //draw Credits Button
-        _textRenderer.write(new Vector2(250-37.65,414), 6,"Credits", "weiss");
-        //box
-        _renderer.drawLine(new Vector2(231, 406), new Vector2(269, 406), "magenta");
-        _renderer.drawLine(new Vector2(269, 406), new Vector2(307-3, 412), "magenta");
-        _renderer.drawLine(new Vector2(307-3, 412), new Vector2(307-3, 432), "magenta");
-        _renderer.drawLine(new Vector2(307-3, 432), new Vector2(269, 438), "magenta");
-        _renderer.drawLine(new Vector2(269, 438), new Vector2(231, 438), "magenta");
-        _renderer.drawLine(new Vector2(231, 438), new Vector2(193+3, 432), "magenta");
-        _renderer.drawLine(new Vector2(193+3, 432), new Vector2(193+3, 412), "magenta");
-        _renderer.drawLine(new Vector2(193+3, 412), new Vector2(231, 406), "magenta");
+        drawButton("Credits");
+    }
+    
+    public void drawButton(String text)
+    {
+        Vector2 mousePos = _state.inputHandler.getLocalMousePos();
+        int p = 0;
         
-        //_textRenderer.write(new Vector2(20, 400), 12, "Start");
+        //draw button text
+        if(text == "Start")
+        {
+            _textRenderer.write(new Vector2(220.9,372), 6, text, "weiss");
+        }
+        else
+        {
+            p = 42;
+            _textRenderer.write(new Vector2(250-37.65,414), 6,text, "weiss");
+        }
+        
+        //draw button box
+        if(mousePos.getX() > 196 && mousePos.getX() < 304 && mousePos.getY() > 364+p && mousePos.getY() < 396+p)
+        {
+            _renderer.drawLine(new Vector2(231, 364+p), new Vector2(269, 364+p), "magenta");
+            _renderer.drawLine(new Vector2(269, 364+p), new Vector2(304, 370+p), "magenta");
+            _renderer.drawLine(new Vector2(304, 370+p), new Vector2(304, 390+p), "magenta");
+            _renderer.drawLine(new Vector2(304, 390+p), new Vector2(269, 396+p), "magenta");
+            _renderer.drawLine(new Vector2(269, 396+p), new Vector2(231, 396+p), "magenta");
+            _renderer.drawLine(new Vector2(231, 396+p), new Vector2(196, 390+p), "magenta");
+            _renderer.drawLine(new Vector2(196, 390+p), new Vector2(196, 370+p), "magenta");
+            _renderer.drawLine(new Vector2(196, 370+p), new Vector2(231, 364+p), "magenta");
+        }
     }
 }

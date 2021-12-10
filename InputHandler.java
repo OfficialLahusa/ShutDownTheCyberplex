@@ -31,7 +31,7 @@ public class InputHandler
     {       
         _keys = new boolean[KeyCode.values().length];
         _lastGlobalMousePos = null;
-        _lastLocalMousePos = null;
+        _lastLocalMousePos = new Vector2();
         _mouseResetAnchorPos = null;
         _mouseDelta = new Vector2();
         
