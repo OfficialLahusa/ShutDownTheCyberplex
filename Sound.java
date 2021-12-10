@@ -152,5 +152,67 @@ public class Sound
         _player.dispose();
     }
     
+    /**
+     * Setzt den AudioSpectrumListener des Sounds
+     * @param listener zu verwendender AudioSpectrumListener
+     */
+    public void setAudioSpectrumListener(AudioSpectrumListener listener)
+    {
+        _player.setAudioSpectrumListener(listener);
+    }
+    
+    /**
+     * Gibt den Schwellwert des Audiospektrums zurück
+     * @return Schwellwert des Audiospektrums
+     */
+    public int getAudioSpectrumThreshold()
+    {
+        return _player.getAudioSpectrumThreshold();
+    }
+    
+    /**
+     * Setzt den Schwellwert des Audiospektrums
+     * @param threshold Schwellwert des Audiospektrums
+     */
+    public void setAudioSpectrumThreshold(int threshold)
+    {
+        _player.setAudioSpectrumThreshold(threshold);
+    }
+    
+    /**
+     * Gibt die Bandzahl des Audiospektrums zurück
+     * @return Bandzahl des Audiospektrums
+     */
+    public int getAudioSpectrumNumBands()
+    {
+        return _player.getAudioSpectrumNumBands();
+    }
+    
+    /**
+     * Setzt die Bandzahl des Audiospektrums
+     * @param numBands Bandzahl des Audiospektrums
+     */
+    public void setAudioSpectrumNumBands(int numBands)
+    {
+        _player.setAudioSpectrumNumBands(numBands);
+    }
+    
+    /**
+     * Gibt das Zeitintervall des Audiospektrums zurück
+     * @return Zeitintervall des Audiospektrums
+     */
+    public double getAudioSpectrumInterval()
+    {
+        return _player.getAudioSpectrumInterval();
+    }
+    
+    /**
+     * Setzt das Zeitintervall des Audiospektrums
+     * @param interval Zeitintervall des Audiospektrums
+     */
+    public void setAudioSpectrumInterval(double interval)
+    {
+        _player.setAudioSpectrumInterval(interval);
+    }
     
 }

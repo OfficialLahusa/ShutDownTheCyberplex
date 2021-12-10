@@ -37,7 +37,7 @@ public class Game
      */
     public void start()
     {
-        _scene = new GameScene(_state);
+        _scene = new TitleScene(_state);
         
         _state.inputHandler.loadJFrame();
         runGameLoop();
@@ -56,7 +56,6 @@ public class Game
             
             // reset frameCap Timer
             _frameCapTimeManager.getDeltaTime();
-            
             
             // Input-Handling
             _scene.handleInput(deltaTime, runTime);

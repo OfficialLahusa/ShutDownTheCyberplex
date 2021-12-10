@@ -244,7 +244,7 @@ class Renderer
         TurtleWelt.GLOBALEWELT.loescheAlleSpuren();
     }
     
-    public void fill(int r, int g, int b)
+    public void clear(int r, int g, int b)
     {
         TurtleWelt.GLOBALEWELT.bildschirmEinfaerben(r, g, b);
     }

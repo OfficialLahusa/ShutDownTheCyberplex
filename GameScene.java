@@ -17,7 +17,7 @@ public class GameScene extends Scene
         
         _mapHandler = new MapHandler();
         _camera = new Camera(new Vector3(0.0, 2.0, 10.0), 1.0, 90.0);
-        _weapon = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/M4LowPoly.obj"), "rot", new Vector3 (-1.5,-1,-2));
+        _weapon = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/M4LowPoly.obj"), "rot", new Vector3 (-1.5,-1,-3.5));
         
         _mapHandler.load("TestMap");
         _camera.setPosition(_mapHandler.getMap().getPlayerSpawn());

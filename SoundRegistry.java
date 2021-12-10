@@ -27,14 +27,18 @@ public class SoundRegistry
         new JFXPanel();
     }
     
-    public void playSound(String sourceKey, double volume, boolean loop)
+    public Sound playSound(String sourceKey, double volume, boolean loop)
     {
         if(!_soundSources.containsKey(sourceKey))
         {
-            System.out.println("[Error]: Tried to play a sound with nonexistant source key \"" + sourceKey + "\"");
-            return;
+            throw new IllegalArgumentException("Tried to play a sound with nonexistant source key \"" + sourceKey + "\"");
         }
-        _currentSounds.add(new Sound(_soundSources.get(sourceKey), sourceKey, volume, true, loop));
+        
+        Sound sound = new Sound(_soundSources.get(sourceKey), sourceKey, volume, true, loop);
+        
+        _currentSounds.add(sound);
+        
+        return sound;
     }
     
     public void removeStoppedSounds()
@@ -48,6 +52,17 @@ public class SoundRegistry
                 elem.dispose();
                 iter.remove();
             }
+        }
+    }
+    
+    public void removeAllSounds()
+    {
+        // Entfernt iterativ die gestoppten Sounds
+        for(Iterator<Sound> iter = _currentSounds.iterator(); iter.hasNext(); )
+        {
+            Sound elem = iter.next();
+            elem.dispose();
+            iter.remove();
         }
     }
     
