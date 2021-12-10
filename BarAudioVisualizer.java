@@ -67,7 +67,7 @@ public class BarAudioVisualizer implements AudioSpectrumListener
             
             for(SimpleDynamicGameObject obj : _internalObjects)
             {
-                obj.move(new Vector3(0.0, 0.0, -3.0));
+                obj.move(new Vector3(0.0, 2.0, -3.0));
             }
         }
     }
