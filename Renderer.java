@@ -150,7 +150,7 @@ class Renderer
         {
             viewMatrix = new Matrix4();
             camPos = new Vector3(0.0, 0.0, 0.0);
-            camDir = new Vector3(1.0, 0.0, 0.0);
+            camDir = new Vector3(0.0, 0.0, 1.0);
         }
 
         Matrix4 transform = camera.getProjectionMatrix().multiply(viewMatrix);
