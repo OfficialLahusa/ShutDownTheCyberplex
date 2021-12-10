@@ -112,26 +112,17 @@ class Renderer
         return null;
     }
     
-    private boolean isPointInFrustum(Vector3 p, Camera camera)
+    private boolean isPointInFrustum(Vector3 p, Vector3 camPos, Vector3 camDir)
     {
-        Vector3 pDir = p.subtract(camera.getPosition());
-        double pDot = pDir.dot(camera.getDirection());
-        if (pDot < 0.0)
-        {
-            return true;
-        }
-        
-        return false;
+        Vector3 pDir = p.subtract(camPos);
+        double pDot = pDir.dot(camDir);
+
+        return pDot < 0.0;
     }
     
-    private boolean isLineInFrustum(Vector3 a, Vector3 b, Camera camera)
+    private boolean isLineInFrustum(Vector3 a, Vector3 b, Vector3 camPos, Vector3 camDir)
     {   
-        if (isPointInFrustum(a, camera) && isPointInFrustum(b, camera))
-        {
-            return true;
-        }
-        
-        return false;
+        return isPointInFrustum(a, camPos, camDir) && isPointInFrustum(b, camPos, camDir);
     }
     
     /**
@@ -145,12 +136,27 @@ class Renderer
      */
     public void drawLine3D(Vector3 a, Vector3 b, String farbe, Matrix4 model, Camera camera, boolean ignoreViewMatrix)
     {
-        a = (model == null)? a : model.multiply(new Vector4(a, 1.0)).getXYZ();
-        b = (model == null)? b : model.multiply(new Vector4(b, 1.0)).getXYZ();
-        if (isLineInFrustum(a, b, camera))
+        Vector3 camPos = camera.getPosition();
+        Vector3 camDir = camera.getDirection();
+        Matrix4 viewMatrix = camera.getViewMatrix();
+
+        if (model != null)
         {
-            Matrix4 transform = camera.getProjectionMatrix().multiply((ignoreViewMatrix)? new Matrix4() : camera.getViewMatrix());
-        
+            a = model.multiply(new Vector4(a, 1.0)).getXYZ();
+            b = model.multiply(new Vector4(b, 1.0)).getXYZ();
+        }
+
+        if (ignoreViewMatrix)
+        {
+            viewMatrix = new Matrix4();
+            camPos = new Vector3(0.0, 0.0, 0.0);
+            camDir = new Vector3(1.0, 0.0, 0.0);
+        }
+
+        Matrix4 transform = camera.getProjectionMatrix().multiply(viewMatrix);
+
+        if (isLineInFrustum(a, b, camPos, camDir))
+        {
             Vector4 pA = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(a, 1.0)));
             Vector4 pB = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(b, 1.0)));
         
@@ -158,15 +164,15 @@ class Renderer
         }
         else
         {
-            Vector3 frustumIntersection = getLinePlaneIntersection(a, b, camera.getPosition(), camera.getDirection());
+            Vector3 frustumIntersection = getLinePlaneIntersection(a, b, camPos, camDir);
             if (frustumIntersection != null)
             {
                 Vector3 pInside;
-                if (isPointInFrustum(a, camera))
+                if (isPointInFrustum(a, camPos, camDir))
                 {
                     pInside = a;
                 }
-                else if (isPointInFrustum(b, camera))
+                else if (isPointInFrustum(b, camPos, camDir))
                 {
                     pInside = b;
                 }
@@ -174,7 +180,6 @@ class Renderer
                 {
                     return;
                 }
-                Matrix4 transform = camera.getProjectionMatrix().multiply((ignoreViewMatrix)? new Matrix4() : camera.getViewMatrix());
         
                 // NOTE(sven): Wir müssen den Schnittpunkt um den Wert epsilon (aus getLinePlaneIntersection) verschieben, 
                 // weil durch Gleitkommarundungsfehler teilweise die Punkte trotzdem noch hinter der Kamera liegen.
