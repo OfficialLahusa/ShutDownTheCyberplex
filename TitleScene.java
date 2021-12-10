@@ -20,7 +20,6 @@ public class TitleScene extends Scene
         _camera.setFov(30.0);
         
         _state.soundRegistry.loadSource("music2", "./res/sounds/midnight_drive.mp3");
-
     }
     
     public void handleInput(double deltaTime, double runTime)
@@ -39,6 +38,12 @@ public class TitleScene extends Scene
             
             _audioVisualizer = new BarAudioVisualizer(backgroundMusic);
             backgroundMusic.setAudioSpectrumListener(_audioVisualizer);
+        }
+        
+        if(_state.inputHandler.isKeyPressed(KeyCode.KEY_PLUS))
+        {
+            _state.soundRegistry.removeAllSounds();
+            _state.scene = new GameScene(_state);
         }
     }
     

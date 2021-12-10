@@ -10,7 +10,7 @@ import javafx.util.*;
 public class Game
 {
     private GameState _state;
-    private Scene _scene;
+
     
     // FPS-Berechnung
     private double _fps;
@@ -37,7 +37,7 @@ public class Game
      */
     public void start()
     {
-        _scene = new TitleScene(_state);
+        _state.scene = new TitleScene(_state);
         
         _state.inputHandler.loadJFrame();
         runGameLoop();
@@ -58,13 +58,13 @@ public class Game
             _frameCapTimeManager.getDeltaTime();
             
             // Input-Handling
-            _scene.handleInput(deltaTime, runTime);
+            _state.scene.handleInput(deltaTime, runTime);
             
             // Update
-            _scene.update(deltaTime, runTime);
+            _state.scene.update(deltaTime, runTime);
             
             // Render
-            _scene.draw(deltaTime, runTime);
+            _state.scene.draw(deltaTime, runTime);
                                
             // Zeichnet den FPS-Zähler
             fpsTimer += deltaTime;

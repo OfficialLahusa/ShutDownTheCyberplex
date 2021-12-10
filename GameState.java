@@ -13,7 +13,12 @@ public class GameState
     public TextRenderer textRenderer;
     public SoundRegistry soundRegistry;
     public WavefrontObjectLoader objLoader;
+    public Scene scene;
     
+    /**
+     * Konstruiert einen neuen GameState.
+     * Die Szenenkomponente muss anschlieﬂend extern gesetzt werden.
+     */
     public GameState()
     {
         renderer = new Renderer();
@@ -22,15 +27,6 @@ public class GameState
         textRenderer = new TextRenderer(renderer);
         soundRegistry = new SoundRegistry();
         objLoader = new WavefrontObjectLoader();
-    }
-    
-    public GameState(Renderer renderer, TimeManager timeManager, InputHandler inputHandler, TextRenderer textRenderer, SoundRegistry soundRegistry, WavefrontObjectLoader objLoader)
-    {
-        this.renderer = renderer;
-        this.timeManager = timeManager;
-        this.inputHandler = inputHandler;
-        this.textRenderer = textRenderer;
-        this.soundRegistry = soundRegistry;
-        this.objLoader = objLoader;
+        scene = null;
     }
 }
