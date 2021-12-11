@@ -14,5 +14,7 @@ public enum KeyCode
     KEY_SPACE,
     KEY_ESCAPE,
     KEY_PLUS,
-    KEY_MINUS
+    KEY_MINUS,
+    MOUSE_BUTTON_LEFT,
+    MOUSE_BUTTON_RIGHT
 }

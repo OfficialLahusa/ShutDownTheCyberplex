@@ -31,6 +31,8 @@ public class GameScene extends Scene
         _state.soundRegistry.loadSource("powerup3", "./res/sounds/Powerup3.wav");
         
         _state.soundRegistry.playSound("music1", 0.2, true);
+        
+        _state.inputHandler.setKeepMouseInPlace(true);
     }
     
     public void handleInput(double deltaTime, double runTime)

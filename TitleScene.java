@@ -103,6 +103,13 @@ public class TitleScene extends Scene
             _renderer.drawLine(new Vector2(231, 396+p), new Vector2(196, 390+p), "magenta");
             _renderer.drawLine(new Vector2(196, 390+p), new Vector2(196, 370+p), "magenta");
             _renderer.drawLine(new Vector2(196, 370+p), new Vector2(231, 364+p), "magenta");
+            
+            // NOTE(sven): Das könnte man noch besser machen, indem wir fragen ob die Taste auch wieder auf dem Button losgelassen wurde, 
+            // damit man wirklich einen ganzen Klick auf dem Button bleiben muss.
+            if (_state.inputHandler.isKeyPressed(KeyCode.MOUSE_BUTTON_LEFT))
+            {
+                _state.scene = new GameScene(_state);
+            }
         }
     }
 }

@@ -236,6 +236,10 @@ public class InputHandler
                 {
                     MouseEvent evt = (MouseEvent)event;
                     
+                    // Prüft ob die linke oder rechte Maustaste gedrückt ist (BUTTON1: links, BUTTON2: mausrad, BUTTON3: rechts)
+                    _keys[KeyCode.MOUSE_BUTTON_LEFT.ordinal()] = ((evt.getModifiersEx() & MouseEvent.BUTTON1_DOWN_MASK) != 0);
+                    _keys[KeyCode.MOUSE_BUTTON_RIGHT.ordinal()] = ((evt.getModifiersEx() & MouseEvent.BUTTON3_DOWN_MASK) != 0);
+                    
                     if(evt.getID() == MouseEvent.MOUSE_MOVED || evt.getID() == MouseEvent.MOUSE_DRAGGED)
                     {
                         Point mousePos = evt.getLocationOnScreen();
