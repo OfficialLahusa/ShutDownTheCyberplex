@@ -9,7 +9,7 @@ public class GameScene extends Scene
 {
     private MapHandler _mapHandler;
     private Camera _camera;
-    private DynamicViewModelGameObject _pistolMain, _primaryMain, _sniperMain, _pistolDetails, _primaryDetails, _sniperDetails, _pistolHands, _primaryHands;
+    private DynamicViewModelGameObject _pistolMain, _primaryMain, _sniperMain, _pistolDetails, _primaryDetails, _sniperDetails, _pistolHandsIdle, _pistolHandsShot, _primaryHandsIdle, _primaryHandsShot;
     
     public GameScene(GameState state)
     {
@@ -19,10 +19,12 @@ public class GameScene extends Scene
         _camera = new Camera(new Vector3(0.0, 2.0, 10.0), 1.0, 90.0);
         _pistolMain = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/pistolMain.obj"), "grau", new Vector3 (-1.5, -0.5,-10));
         _pistolDetails = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/pistolDetails.obj"), "orange", new Vector3 (-1.5, -0.5,-10));
-        _pistolHands = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/pistolHands.obj"), "weiss", new Vector3 (-1.5, -0.5,-10));
+        _pistolHandsIdle = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/pistolHandsIdle.obj"), "weiss", new Vector3 (-1.5, -0.5,-10));
+        _pistolHandsShot = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/pistolHandsShot.obj"), "weiss", new Vector3 (-1.5, -0.5,-10));
         _primaryMain = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/primaryMain.obj"), "grau", new Vector3 (-1.5, 0.5,-11));
         _primaryDetails = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/primaryDetails.obj"), "gelb", new Vector3 (-1.5, 0.5,-11));
-        _primaryHands = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/primaryHands.obj"), "weiss", new Vector3 (-1.5, -0.5,-13));
+        _primaryHandsIdle = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/primaryHandsIdle.obj"), "weiss", new Vector3 (-1.5, -0.5,-13));
+        _primaryHandsShot = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/primaryHandsShot.obj"), "weiss", new Vector3 (-1.5, -0.5,-13));
         _sniperMain = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/sniperMain.obj"), "grau", new Vector3 (-1.5, 1,-12));
         _sniperDetails = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/sniperDetails.obj"), "gruen", new Vector3 (-1.5, 1,-12));
         
@@ -95,10 +97,18 @@ public class GameScene extends Scene
             
         // Rendering
         _mapHandler.getMap().draw(_state.renderer, _camera);
-        _primaryHands.draw(_state.renderer, _camera);
-        _primaryMain.draw(_state.renderer, _camera);
-        _primaryDetails.draw(_state.renderer, _camera);
-            
+        if(_state.inputHandler.isKeyPressed(KeyCode.MOUSE_BUTTON_LEFT))
+        {
+            _pistolHandsShot.draw(_state.renderer, _camera);
+        }
+        else
+        {
+            _pistolHandsIdle.draw(_state.renderer, _camera);
+        }
+        
+        _pistolMain.draw(_state.renderer, _camera);
+        _pistolDetails.draw(_state.renderer, _camera);
+        
         // X-, Y- und Z-Achse zeichnen
         _state.renderer.drawAxis(_camera);
     }
