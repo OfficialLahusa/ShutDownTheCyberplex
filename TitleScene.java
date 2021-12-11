@@ -28,7 +28,7 @@ public class TitleScene extends Scene
         
         _renderer = new Renderer();
         _textRenderer = new TextRenderer(_renderer);
-        _title = new StaticGameObject(_state.objLoader.loadFromFile("./res/models/titleFlat.obj"), "cyan", new Vector3 (0.0, 5, -14));
+        _title = new StaticGameObject(_state.objLoader.loadFromFile("./res/models/title.obj"), "cyan", new Vector3 (0.0, 5, -14));
         _mauern = new StaticGameObject(_state.objLoader.loadFromFile("./res/models/mauern.obj"), "cyan", new Vector3 (-1.48, 0.34, -2.5));
     }
     

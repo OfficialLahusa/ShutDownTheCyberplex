@@ -9,7 +9,7 @@ public class GameScene extends Scene
 {
     private MapHandler _mapHandler;
     private Camera _camera;
-    private DynamicViewModelGameObject _weapon;
+    private DynamicViewModelGameObject _pistolMain, _pistolDetails, _primaryMain, _primaryDetails, _sniperMain, _sniperDetails;
     
     public GameScene(GameState state)
     {
@@ -17,7 +17,12 @@ public class GameScene extends Scene
         
         _mapHandler = new MapHandler();
         _camera = new Camera(new Vector3(0.0, 2.0, 10.0), 1.0, 90.0);
-        _weapon = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/M4LowPoly.obj"), "rot", new Vector3 (-1.5,-1,-2.5));
+        _pistolMain = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/pistolMain.obj"), "grau", new Vector3 (-1.5, -0.5,-9));
+        _pistolDetails = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/pistolDetails.obj"), "orange", new Vector3 (-1.5, -0.5,-9));
+        _primaryMain = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/primaryMain.obj"), "grau", new Vector3 (-1.5, 0.5,-11));
+        _primaryDetails = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/primaryDetails.obj"), "gelb", new Vector3 (-1.5, 0.5,-11));
+        _sniperMain = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/sniperMain.obj"), "grau", new Vector3 (-1.5, 1,-12));
+        _sniperDetails = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/sniperDetails.obj"), "gruen", new Vector3 (-1.5, 1,-12));
         
         _mapHandler.load("TestMap");
         _camera.setPosition(_mapHandler.getMap().getPlayerSpawn());
@@ -85,8 +90,9 @@ public class GameScene extends Scene
         _state.renderer.clear();
             
         // Rendering
-        _weapon.draw(_state.renderer, _camera);
         _mapHandler.getMap().draw(_state.renderer, _camera);
+        _primaryMain.draw(_state.renderer, _camera);
+        _primaryDetails.draw(_state.renderer, _camera);
             
         // X-, Y- und Z-Achse zeichnen
         _state.renderer.drawAxis(_camera);
