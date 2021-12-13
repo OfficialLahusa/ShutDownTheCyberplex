@@ -94,6 +94,9 @@ public class GameScene extends Scene
     {
         // Cleart das Bild
         _state.renderer.clear(0, 0, 0);
+        
+        Vector2i tilePos = MapHandler.worldPosToTilePos(_camera.getPosition());
+        _state.textRenderer.write(new Vector2(10,30), 5, "Pos: X:" + tilePos.getX() + ", Z:" + tilePos.getY(), "rot");
             
         // Rendering
         if(_state.inputHandler.isKeyPressed(KeyCode.MOUSE_BUTTON_LEFT))

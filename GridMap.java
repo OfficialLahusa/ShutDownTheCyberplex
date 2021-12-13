@@ -12,8 +12,6 @@ public class GridMap
     private ArrayList<ArrayList<Integer>> _functionLayer;
     private ArrayList<IGameObject> _mapGeometry;
     
-    public static final double TILE_WIDTH = 8.0;
-    
     private Vector3 _playerSpawn;
 
     /**
@@ -57,7 +55,7 @@ public class GridMap
                             env = new TileEnvironment(_tileLayer, x, z);
                         }
                         
-                        _mapGeometry.addAll(provider.getTileObjects(env, x, z, TILE_WIDTH, mirrorZAxis));
+                        _mapGeometry.addAll(provider.getTileObjects(env, x, z, MapHandler.TILE_WIDTH, mirrorZAxis));
                     }
                 }
             }
@@ -71,7 +69,7 @@ public class GridMap
                 int value = _functionLayer.get(z).get(x);
                 if(value == 60 || value == 61 || value == 62 || value == 63)
                 {
-                    _playerSpawn = new Vector3((x + 0.5) * TILE_WIDTH, 2.0, (mirrorZAxis ? -1 : 1) * (z + 0.5) * TILE_WIDTH);
+                    _playerSpawn = new Vector3((x + 0.5) * MapHandler.TILE_WIDTH, 2.0, (mirrorZAxis ? -1 : 1) * (z + 0.5) * MapHandler.TILE_WIDTH);
                 }
             }
         }

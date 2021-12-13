@@ -19,6 +19,7 @@ public class MapHandler
     private static final String TILE_LAYER_SUFFIX = "_tile.csv";
     private static final String FUNCTION_LAYER_SUFFIX = "_function.csv";    
     private static final boolean MIRROR_Z_AXIS = true;
+    public static final double TILE_WIDTH = 8.0;
     
     /**
      * Konstruktor für Objekte der Klasse MapHandler
@@ -71,6 +72,12 @@ public class MapHandler
     public GridMap getMap()
     {
         return _map;
+    }
+    
+    public static Vector2i worldPosToTilePos(Vector3 worldPos)
+    {
+        //new Vector3((x + 0.5) * tileWidth, 0.0, (mirrorZAxis ? -1 : 1) * (z + 0.5) * tileWidth)
+        return new Vector2i((int)Math.round(worldPos.getX() / TILE_WIDTH - 0.5), (int)Math.round((MIRROR_Z_AXIS ? -1 : 1) * worldPos.getZ() / TILE_WIDTH - 0.5));
     }
 
     public static boolean isTileSolid(int tileType)
