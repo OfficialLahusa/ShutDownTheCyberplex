@@ -93,10 +93,9 @@ public class GameScene extends Scene
     public void draw(double deltaTime, double runTime)
     {
         // Cleart das Bild
-        _state.renderer.clear();
+        _state.renderer.clear(0, 0, 0);
             
         // Rendering
-        _mapHandler.getMap().draw(_state.renderer, _camera);
         if(_state.inputHandler.isKeyPressed(KeyCode.MOUSE_BUTTON_LEFT))
         {
             _pistolHandsShot.draw(_state.renderer, _camera);
@@ -108,6 +107,8 @@ public class GameScene extends Scene
         
         _pistolMain.draw(_state.renderer, _camera);
         _pistolDetails.draw(_state.renderer, _camera);
+        
+        _mapHandler.getMap().draw(_state.renderer, _camera);
         
         // X-, Y- und Z-Achse zeichnen
         _state.renderer.drawAxis(_camera);

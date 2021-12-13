@@ -69,7 +69,7 @@ public class GridMap
             for(int x = 0; x < _functionLayer.get(z).size(); x++)
             {
                 int value = _functionLayer.get(z).get(x);
-                if(value == 20)
+                if(value == 60 || value == 61 || value == 62 || value == 63)
                 {
                     _playerSpawn = new Vector3((x + 0.5) * TILE_WIDTH, 2.0, (mirrorZAxis ? -1 : 1) * (z + 0.5) * TILE_WIDTH);
                 }

@@ -1,25 +1,24 @@
 import java.util.*;
+import javafx.util.*;
 
 /**
- * Einfacher TileProvider, der für die Tile immer das selbe Mesh platziert
+ * TileProvider, der für die Tile immer die selben LOD-Meshes platziert
  * 
  * @author Lasse Huber-Saffer
  * @version 04.12.2021
  */
-public class SimpleTileProvider implements ITileProvider
+public class MultiMeshLODTileProvider implements ITileProvider
 {
-    private Mesh _mesh;
-    private String _color;
+    private ArrayList<Pair<ArrayList<Pair<Double, Mesh>>, String>> _coloredLODMeshes;
 
     /**
-     * Konstruktor für Objekte der Klasse SimpleTileProvider
-     * @param mesh Mesh, das für die Vorlage verwendet werden soll
+     * Konstruktor für Objekte der Klasse MultiMeshLODTileProvider
+     * @param coloredLODMeshes Liste an Paaren von jeweils Mesh-LOD-Stufen und Farben
      * @param color Farbe, die die Vorlage haben soll
      */
-    public SimpleTileProvider(Mesh mesh, String color)
+    public MultiMeshLODTileProvider(ArrayList<Pair<ArrayList<Pair<Double, Mesh>>, String>> coloredLODMeshes)
     {
-        _mesh = mesh;
-        _color = color;
+        _coloredLODMeshes = coloredLODMeshes;
     }
     
         
@@ -34,7 +33,10 @@ public class SimpleTileProvider implements ITileProvider
     public ArrayList<IGameObject> getTileObjects(TileEnvironment env, int x, int z, double tileWidth, boolean mirrorZAxis)
     {
         ArrayList<IGameObject> result = new ArrayList<IGameObject>();
-        result.add(new StaticGameObject(getMesh(), getColor(), new Vector3((x + 0.5) * tileWidth, 0.0, (mirrorZAxis ? -1 : 1) * (z + 0.5) * tileWidth)));
+        for(Pair<ArrayList<Pair<Double, Mesh>>, String> coloredLODMesh : _coloredLODMeshes)
+        {
+            result.add(new StaticLODGameObject(coloredLODMesh.getKey(), coloredLODMesh.getValue(), new Vector3((x + 0.5) * tileWidth, 0.0, (mirrorZAxis ? -1 : 1) * (z + 0.5) * tileWidth)));
+        }
         return result;
     }
     
@@ -48,20 +50,11 @@ public class SimpleTileProvider implements ITileProvider
     }
     
     /**
-     * Gibt eine neue Instanz des Meshs des Providers zurück
-     * @return neue Instanz des Meshs des Providers
+     * Gibt eine Referenz zur Liste an Paaren von jeweils Mesh-LOD-Stufen und Farben des Providers zurück
+     * @return Referenz zur Liste an Paaren von jeweils Mesh-LOD-Stufen und Farben
      */
-    public Mesh getMesh()
+    public ArrayList<Pair<ArrayList<Pair<Double, Mesh>>, String>> getColoredLODMeshes()
     {
-        return new Mesh(_mesh);
-    }
-    
-    /**
-     * Gibt die Farbe des Providers zurück
-     * @return Farbe des Providers
-     */
-    public String getColor()
-    {
-        return _color;
+        return _coloredLODMeshes;
     }
 }

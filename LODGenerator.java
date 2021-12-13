@@ -27,4 +27,14 @@ public class LODGenerator
         
         return result;
     }
+    
+    public ArrayList<Pair<Double, Mesh>> createFadeOutLOD(Mesh fullResDetail, double distance)
+    {
+        ArrayList<Pair<Double, Mesh>> result = new ArrayList<Pair<Double, Mesh>>();
+        
+        result.add(new Pair<Double, Mesh>(0.0, fullResDetail));
+        result.add(new Pair<Double, Mesh>(distance, null));
+        
+        return result;
+    }
 }

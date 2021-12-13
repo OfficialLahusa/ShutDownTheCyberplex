@@ -1,25 +1,24 @@
 import java.util.*;
+import javafx.util.*;
 
 /**
- * Einfacher TileProvider, der für die Tile immer das selbe Mesh platziert
+ * TileProvider für Türen, die in Abhängigkeit von der Umgebung entlang der X- oder Z-Achse ausgerichtet sein können
  * 
  * @author Lasse Huber-Saffer
  * @version 04.12.2021
  */
-public class SimpleTileProvider implements ITileProvider
+public class DoorTileProvider implements ITileProvider
 {
-    private Mesh _mesh;
-    private String _color;
+    private ArrayList<Pair<Mesh, String>> _coloredMeshes;
 
     /**
-     * Konstruktor für Objekte der Klasse SimpleTileProvider
+     * Konstruktor für Objekte der Klasse DoorTileProvider
      * @param mesh Mesh, das für die Vorlage verwendet werden soll
      * @param color Farbe, die die Vorlage haben soll
      */
-    public SimpleTileProvider(Mesh mesh, String color)
+    public DoorTileProvider(ArrayList<Pair<Mesh, String>> coloredMeshes)
     {
-        _mesh = mesh;
-        _color = color;
+        _coloredMeshes = coloredMeshes;
     }
     
         
@@ -34,7 +33,13 @@ public class SimpleTileProvider implements ITileProvider
     public ArrayList<IGameObject> getTileObjects(TileEnvironment env, int x, int z, double tileWidth, boolean mirrorZAxis)
     {
         ArrayList<IGameObject> result = new ArrayList<IGameObject>();
-        result.add(new StaticGameObject(getMesh(), getColor(), new Vector3((x + 0.5) * tileWidth, 0.0, (mirrorZAxis ? -1 : 1) * (z + 0.5) * tileWidth)));
+        
+        boolean facingZ = (MapHandler.isTileSolidOrNone(env.px) && MapHandler.isTileSolidOrNone(env.nx));
+        
+        for(Pair<Mesh, String> coloredMesh : _coloredMeshes)
+        {
+            result.add(new StaticGameObject(coloredMesh.getKey(), coloredMesh.getValue(), new Vector3((x + 0.5) * tileWidth, 0.0, (mirrorZAxis ? -1 : 1) * (z + 0.5) * tileWidth), new Vector3(0.0, (facingZ)? 90.0 : 0.0, 0.0), new Vector3(1.0, 1.0, 1.0)));
+        }
         return result;
     }
     
@@ -44,24 +49,15 @@ public class SimpleTileProvider implements ITileProvider
      */
     public boolean requiresEnvironment()
     {
-        return false;
+        return true;
     }
     
     /**
-     * Gibt eine neue Instanz des Meshs des Providers zurück
-     * @return neue Instanz des Meshs des Providers
+     * Gibt eine Referenz zur Liste der Mesh-Farb-Paare des Providers zurück
+     * @return Referenz zur Liste der Mesh-Farb-Paare
      */
-    public Mesh getMesh()
+    public ArrayList<Pair<Mesh, String>> getColoredMeshes()
     {
-        return new Mesh(_mesh);
-    }
-    
-    /**
-     * Gibt die Farbe des Providers zurück
-     * @return Farbe des Providers
-     */
-    public String getColor()
-    {
-        return _color;
+        return _coloredMeshes;
     }
 }
