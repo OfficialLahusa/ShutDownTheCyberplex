@@ -9,16 +9,21 @@ import javafx.util.*;
  */
 public class DoorTileProvider implements ITileProvider
 {
-    private ArrayList<Pair<Mesh, String>> _coloredMeshes;
+    private ArrayList<Pair<Mesh, String>> _coloredMeshesClosed;
+    private ArrayList<Pair<Mesh, String>> _coloredMeshesOpen;
+    private boolean _isOpen;
 
     /**
      * Konstruktor für Objekte der Klasse DoorTileProvider
-     * @param mesh Mesh, das für die Vorlage verwendet werden soll
-     * @param color Farbe, die die Vorlage haben soll
+     * @param coloredMeshesClosed Liste von Mesh-Farb-Paaren, die im geschlossenen Zustand gerendert werden
+     * @param coloredMeshesOpen Liste von Mesh-Farb-Paaren, die im offenen Zustand gerendert werden
+     * @param isOpen Offenheit der Tür
      */
-    public DoorTileProvider(ArrayList<Pair<Mesh, String>> coloredMeshes)
+    public DoorTileProvider(ArrayList<Pair<Mesh, String>> coloredMeshesClosed, ArrayList<Pair<Mesh, String>> coloredMeshesOpen, boolean isOpen)
     {
-        _coloredMeshes = coloredMeshes;
+        _coloredMeshesClosed = coloredMeshesClosed;
+        _coloredMeshesOpen = coloredMeshesOpen;
+        _isOpen = isOpen;
     }
     
         
@@ -36,10 +41,8 @@ public class DoorTileProvider implements ITileProvider
         
         boolean facingZ = (MapHandler.isTileSolidOrNone(env.px) && MapHandler.isTileSolidOrNone(env.nx));
         
-        for(Pair<Mesh, String> coloredMesh : _coloredMeshes)
-        {
-            result.add(new StaticGameObject(coloredMesh.getKey(), coloredMesh.getValue(), new Vector3((x + 0.5) * tileWidth, 0.0, (mirrorZAxis ? -1 : 1) * (z + 0.5) * tileWidth), new Vector3(0.0, (facingZ)? 90.0 : 0.0, 0.0), new Vector3(1.0, 1.0, 1.0)));
-        }
+        result.add(new DoorGameObject(_coloredMeshesClosed, _coloredMeshesOpen, _isOpen, new Vector3((x + 0.5) * tileWidth, 0.0, (mirrorZAxis ? -1 : 1) * (z + 0.5) * tileWidth), new Vector3(0.0, (facingZ)? 90.0 : 0.0, 0.0), new Vector3(1.0, 1.0, 1.0)));
+        
         return result;
     }
     
@@ -53,11 +56,20 @@ public class DoorTileProvider implements ITileProvider
     }
     
     /**
-     * Gibt eine Referenz zur Liste der Mesh-Farb-Paare des Providers zurück
-     * @return Referenz zur Liste der Mesh-Farb-Paare
+     * Gibt eine Referenz zur Liste der Mesh-Farb-Paare des Providers zurück, die im geschlossenen Zustand verwendet werden
+     * @return Referenz zur Liste der Mesh-Farb-Paare, die im geschlossenen Zustand verwendet werden
      */
-    public ArrayList<Pair<Mesh, String>> getColoredMeshes()
+    public ArrayList<Pair<Mesh, String>> getColoredMeshesClosed()
     {
-        return _coloredMeshes;
+        return _coloredMeshesClosed;
+    }
+    
+    /**
+     * Gibt eine Referenz zur Liste der Mesh-Farb-Paare des Providers zurück, die im offenen Zustand verwendet werden
+     * @return Referenz zur Liste der Mesh-Farb-Paare, die im offenen Zustand verwendet werden
+     */
+    public ArrayList<Pair<Mesh, String>> getColoredMeshesOpen()
+    {
+        return _coloredMeshesOpen;
     }
 }

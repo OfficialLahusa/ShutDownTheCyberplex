@@ -42,10 +42,13 @@ public class MapHandler
         // Brick wall
         _tileProviders.put(1, new WallTileProvider(_objLoader.loadFromFile("./res/models/brick_wall.obj"), "grau", _objLoader.loadFromFile("./res/models/simple_wall_pillar.obj"), "grau"));
         // Wooden door
-        ArrayList<Pair<Mesh, String>> woodenDoor = new ArrayList<Pair<Mesh, String>>();
-        woodenDoor.add(new Pair<Mesh, String>(_objLoader.loadFromFile("./res/models/wooden_door.obj"), "orange"));
-        woodenDoor.add(new Pair<Mesh, String>(_objLoader.loadFromFile("./res/models/wooden_door_handle.obj"), "gelb"));
-        _tileProviders.put(2, new DoorTileProvider(woodenDoor));
+        ArrayList<Pair<Mesh, String>> woodenDoorClosed = new ArrayList<Pair<Mesh, String>>();
+        woodenDoorClosed.add(new Pair<Mesh, String>(_objLoader.loadFromFile("./res/models/wooden_door.obj"), "orange"));
+        woodenDoorClosed.add(new Pair<Mesh, String>(_objLoader.loadFromFile("./res/models/wooden_door_handle.obj"), "gelb"));
+        ArrayList<Pair<Mesh, String>> woodenDoorOpen = new ArrayList<Pair<Mesh, String>>();
+        woodenDoorOpen.add(new Pair<Mesh, String>(_objLoader.loadFromFile("./res/models/wooden_door_open.obj"), "orange"));
+        woodenDoorOpen.add(new Pair<Mesh, String>(_objLoader.loadFromFile("./res/models/wooden_door_handle_open.obj"), "gelb"));
+        _tileProviders.put(2, new DoorTileProvider(woodenDoorClosed, woodenDoorOpen, true));
         // Dirt floor grass
         ArrayList<Pair<Mesh, String>> dirtFloorGrass = new ArrayList<Pair<Mesh, String>>();
         dirtFloorGrass.add(new Pair<Mesh, String>(_objLoader.loadFromFile("./res/models/dirt_floor_borderless.obj"), "orange"));

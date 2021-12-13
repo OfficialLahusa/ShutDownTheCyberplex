@@ -1,81 +1,38 @@
+import java.util.*;
+import javafx.util.*;
 
 /**
- * Ein dreidimensionales Objekt in der Spielwelt
+ * Beschreiben Sie hier die Klasse DoorGameObject.
  * 
  * @author Lasse Huber-Saffer
- * @version 02.12.2021
+ * @version 13.12.2021
  */
-public class StaticGameObject implements IGameObject
+public class DoorGameObject implements IGameObject
 {
-    private Mesh _mesh;
+    private ArrayList<Pair<Mesh, String>> _coloredMeshesClosed;
+    private ArrayList<Pair<Mesh, String>> _coloredMeshesOpen;
+    
+    private boolean _isOpen;
+    
     private Vector3 _position;
     private Vector3 _rotation;
     private Vector3 _scale;
-    private String _color;
     private Matrix4 _model;
-
-    /**
-     * Parameterloser Konstruktor
-     */
-    public StaticGameObject()
-    {
-        this(new Mesh(), "gruen", new Vector3(), new Vector3(), new Vector3(1.0, 1.0, 1.0));
-    }
     
     /**
-     * Konstruktor für GameObjects mit gegebenem Mesh
-     * @param mesh Mesh (3D-Modell)
-     */
-    public StaticGameObject(Mesh mesh)
-    {
-        this(mesh, "gruen", new Vector3(), new Vector3(), new Vector3(1.0, 1.0, 1.0));
-    }
-    
-    /**
-     * Konstruktor für GameObjects mit gegebenem Mesh
-     * @param mesh Mesh (3D-Modell)
-     * @param color Farbe des Meshs
-     */
-    public StaticGameObject(Mesh mesh, String color)
-    {
-        this(mesh, color, new Vector3(), new Vector3(), new Vector3(1.0, 1.0, 1.0));
-    }
-    
-    /**
-     * Konstruktor für GameObjects mit gegebenem Mesh (3D-Modell), Position, Rotation und Skalierung
-     * @param mesh Mesh (3D-Modell)
-     * @param color Farbe des Meshs
-     * @param position Position
-     */
-    public StaticGameObject(Mesh mesh, String color, Vector3 position)
-    {
-        this(mesh, color, position, new Vector3(), new Vector3(1.0, 1.0, 1.0));
-    }
-    
-    /**
-     * Konstruktor für GameObjects mit gegebenem Mesh (3D-Modell), Position, Rotation und Skalierung
-     * @param mesh Mesh (3D-Modell)
-     * @param color Farbe des Meshs
-     * @param position Position
-     * @param rotation Rotation
-     */
-    public StaticGameObject(Mesh mesh, String color, Vector3 position, Vector3 rotation)
-    {
-        this(mesh, color, position, rotation, new Vector3(1.0, 1.0, 1.0));
-    }
-    
-    /**
-     * Konstruktor für GameObjects mit gegebenem Mesh (3D-Modell), Position, Rotation und Skalierung
-     * @param mesh Mesh (3D-Modell)
-     * @param color Farbe des Meshs
+     * Konstruktor für Türen mit gegebenem Mesh, Position, Rotation und Skalierung
+     * @param coloredMeshesClosed Liste von Mesh-Farb-Paaren, die im geschlossenen Zustand gerendert werden
+     * @param coloredMeshesOpen Liste von Mesh-Farb-Paaren, die im offenen Zustand gerendert werden
+     * @param isOpen Offenheit der Tür
      * @param position Position
      * @param rotation Rotation
      * @param scale Skalierung
      */
-    public StaticGameObject(Mesh mesh, String color, Vector3 position, Vector3 rotation, Vector3 scale)
+    public DoorGameObject(ArrayList<Pair<Mesh, String>> coloredMeshesClosed, ArrayList<Pair<Mesh, String>> coloredMeshesOpen, boolean isOpen, Vector3 position, Vector3 rotation, Vector3 scale)
     {
-        _mesh = new Mesh(mesh);
-        _color = color;
+        _coloredMeshesClosed = coloredMeshesClosed;
+        _coloredMeshesOpen = coloredMeshesOpen;
+        _isOpen = isOpen;
         _position = new Vector3(position);
         _rotation = new Vector3(rotation);
         _scale = new Vector3(scale);
@@ -89,7 +46,12 @@ public class StaticGameObject implements IGameObject
      */
     public void draw(Renderer renderer, Camera camera)
     {
-        renderer.drawMesh(_mesh, getModelMatrix(), _color, camera);
+        ArrayList<Pair<Mesh, String>> coloredMeshList = (_isOpen)? _coloredMeshesOpen : _coloredMeshesClosed;
+        
+        for(Pair<Mesh, String> coloredMesh : coloredMeshList)
+        {
+            renderer.drawMesh(coloredMesh.getKey(), getModelMatrix(), coloredMesh.getValue(), camera);
+        }
     }
     
     /**
@@ -110,6 +72,24 @@ public class StaticGameObject implements IGameObject
         }
 
         return _model;
+    }
+    
+    /**
+     * Gibt zurück, ob die Tür offen ist
+     * @return Offenheit der Tür
+     */
+    public boolean isOpen()
+    {
+        return _isOpen;
+    }
+    
+    /**
+     * Setzt die Offenheit der Tür
+     * @param isOpen Offenheit der Tür
+     */
+    public void setOpen(boolean isOpen)
+    {
+        _isOpen = isOpen;
     }
     
     /**
@@ -145,7 +125,7 @@ public class StaticGameObject implements IGameObject
      */
     public String getColor()
     {
-        return _color;
+        return null;
     }
     
     /**
@@ -154,6 +134,6 @@ public class StaticGameObject implements IGameObject
      */
     public void setColor(String color)
     {
-        _color = color;
+        return;
     }
 }
