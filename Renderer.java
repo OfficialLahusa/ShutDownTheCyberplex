@@ -193,7 +193,71 @@ class Renderer
         }
     }
     
-    private void drawStripesAroundCorner(Vector3 cornerOrigin, Vector3 pointA, Vector3 pointB, int numStripes, String farbe, Camera camera)
+    
+    /**
+     * Zeichnet die Lebensanzeige eines Spielers
+     * 
+     * @param player der Spieler von dem die Leben angezeigt werden sollen
+     */
+    public void drawHealthbar(Player player)
+    {   
+        // Rahmen
+        final double xOffset = 20.0;
+        final double yOffset = 460.0;
+        final double length = 150.0;
+        final double height = 15.0;
+        final double cuttedLength = Math.max(0.0, length - height);
+        
+        Vector2 outerTopLeft = new Vector2(xOffset, yOffset);
+        Vector2 outerBottomLeft = new Vector2(xOffset, yOffset + height);
+        Vector2 outerTopRight = new Vector2(xOffset + cuttedLength, yOffset);
+        Vector2 outerBottomRight = new Vector2(xOffset + length, yOffset + height);
+        
+        // Aktuelle Leben
+        double innerLength = length * ((double)player.getHealth() / 100);
+        double innerCuttedLength = Math.max(0.0, innerLength - height);
+        double innerHeight = Math.min(height, innerLength);
+        
+        Vector2 innerTopLeft = new Vector2(xOffset, yOffset + height - innerHeight);
+        Vector2 innerBottomLeft = new Vector2(xOffset, yOffset + height);
+        Vector2 innerTopRight = new Vector2(xOffset + innerCuttedLength, yOffset + height - innerHeight);
+        Vector2 innerBottomRight = new Vector2(xOffset + innerLength, yOffset + height);
+        
+        String color = "gruen";
+        if (player.getHealth() > 70)
+        {
+            color = "gruen";
+        }
+        else if (player.getHealth() > 40)
+        {
+            color = "orange";
+        }
+        else
+        {
+            color = "rot";
+        }
+        
+        drawStripedQuad2D(innerTopLeft, innerBottomLeft, innerTopRight, innerBottomRight, color, 5);
+        drawQuad2D(outerTopLeft, outerBottomLeft, outerTopRight, outerBottomRight, "weiss");
+    }
+    
+    private void drawStripesAroundCorner2D(Vector2 cornerOrigin, Vector2 pointA, Vector2 pointB, int numStripes, String farbe)
+    {
+        for (int i = 1; i <= numStripes; i++)
+        {
+            Vector2 temp = pointA.subtract(cornerOrigin);
+            temp = temp.multiply((double)i / (numStripes + 1));
+            Vector2 pointLeft = cornerOrigin.add(temp);
+            
+            temp = pointB.subtract(cornerOrigin);
+            temp = temp.multiply((double)i / (numStripes + 1));
+            Vector2 pointRight = cornerOrigin.add(temp);
+            
+            drawLine(pointLeft, pointRight, farbe);
+        }
+    }
+    
+    private void drawStripesAroundCorner3D(Vector3 cornerOrigin, Vector3 pointA, Vector3 pointB, int numStripes, String farbe, Camera camera)
     {
         for (int i = 1; i <= numStripes; i++)
         {
@@ -209,8 +273,16 @@ class Renderer
         }
     }
     
+    public void drawQuad2D(Vector2 topLeft, Vector2 bottomLeft, Vector2 topRight, Vector2 bottomRight, String farbe)
+    {
+        drawLine(topLeft, topRight, farbe);
+        drawLine(topRight, bottomRight, farbe);
+        drawLine(bottomRight, bottomLeft, farbe);
+        drawLine(bottomLeft, topLeft, farbe);
+    }
+    
     /**
-     * Zeichnet ein gestreiftes Rechteck
+     * Zeichnet ein gestreiftes Rechteck in 2D-Ansicht
      * 
      * @param topLeft Der Punkt Oben-links
      * @param bottomLeft Der Punkt Unten-links
@@ -218,7 +290,40 @@ class Renderer
      * @param bottomRight Der Punkt Unten-rechts
      * @param farbe Die gewünschte Farb
      */
-    public void drawStripedQuad(Vector3 topLeft, Vector3 bottomLeft, Vector3 topRight, Vector3 bottomRight, String farbe, Camera camera)
+    public void drawStripedQuad2D(Vector2 topLeft, Vector2 bottomLeft, Vector2 topRight, Vector2 bottomRight, String farbe, int numDiagonals)
+    {
+        // 
+        drawQuad2D(topLeft, bottomLeft, topRight, bottomRight, farbe);
+        
+        // Zeichne diagonalen
+        drawLine(topLeft, bottomRight, farbe);
+        
+        // Die Anzahl der Diagonalen muss ungerade sein, weil wir immer die eine in der Mitte haben.
+        if (numDiagonals % 2 == 0)
+        {
+            numDiagonals -= 1;
+        }
+        
+        int numStripesForOneHalf = (numDiagonals - 1) / 2;
+        
+        // Untere Hälfte des Rechtsecks
+        drawStripesAroundCorner2D(bottomLeft, topLeft, bottomRight, numStripesForOneHalf, farbe);
+        
+        // Obere Hälfte des Rechtecks
+        drawStripesAroundCorner2D(topRight, topLeft, bottomRight, numStripesForOneHalf, farbe);
+    }
+    
+    /**
+     * Zeichnet ein gestreiftes Rechteck in 3D-Ansicht
+     * 
+     * @param topLeft Der Punkt Oben-links
+     * @param bottomLeft Der Punkt Unten-links
+     * @param topRight Der Punkt Oben-rechts
+     * @param bottomRight Der Punkt Unten-rechts
+     * @param farbe Die gewünschte Farb
+     * @param camera die benutzte Camera
+     */
+    public void drawStripedQuad3D(Vector3 topLeft, Vector3 bottomLeft, Vector3 topRight, Vector3 bottomRight, String farbe, Camera camera)
     {
         // 
         drawLine3D(topLeft, topRight, farbe, camera);
@@ -231,10 +336,10 @@ class Renderer
         
         final int numStripesForOneHalf = 10;
         // Untere Hälfte des Rechtsecks
-        drawStripesAroundCorner(bottomLeft, topLeft, bottomRight, numStripesForOneHalf, farbe, camera);
+        drawStripesAroundCorner3D(bottomLeft, topLeft, bottomRight, numStripesForOneHalf, farbe, camera);
         
         // Obere Hälfte des Rechtecks
-        drawStripesAroundCorner(topRight, topLeft, bottomRight, numStripesForOneHalf, farbe, camera);
+        drawStripesAroundCorner3D(topRight, topLeft, bottomRight, numStripesForOneHalf, farbe, camera);
     }
     
     public void drawAxis(Camera camera)
