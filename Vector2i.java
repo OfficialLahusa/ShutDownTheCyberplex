@@ -1,3 +1,4 @@
+import java.util.Objects;
 
 /**
  * Zweidimensionaler Vektor aus Integern
@@ -40,6 +41,27 @@ public class Vector2i
     {
         _x = x;
         _y = y;
+    }
+    
+    /**
+     * Prüft diesen Vektor auf Gleichheit mit einem gegebenen Anderen
+     * @param o 
+     * @return Gleichheit der Vektoren
+     */
+    @Override
+    public boolean equals(Object o)
+    {
+        if(o == this) return true;
+        if(!(o instanceof Vector2i)) return false;
+        
+        Vector2i vec = (Vector2i)o;
+        return _x == vec._x && _y == vec._y;
+    }
+    
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(_x, _y);
     }
 
     /**

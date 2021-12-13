@@ -60,44 +60,44 @@ public class WallTileProvider implements ITileProvider
         
         // Wände
         // Wand auf +X-Seite
-        if(!MapHandler.isTileSolidOrNone(env.px))
+        if(!Tile.isSolidOrNone(env.px))
         {
             result.add(new StaticGameObject(getWallMesh(), getWallColor(), new Vector3((x + 1.0) * tileWidth, 0.0, mirrorFactor * (z + 0.5) * tileWidth), new Vector3(0.0, 90.0, 0.0), new Vector3(1.0, 1.0, 1.0)));
         }
         // Wand auf +Z-Seite
-        if(!MapHandler.isTileSolidOrNone(env.pz))
+        if(!Tile.isSolidOrNone(env.pz))
         {
             result.add(new StaticGameObject(getWallMesh(), getWallColor(), new Vector3((x + 0.5) * tileWidth, 0.0, mirrorFactor * (z + 1.0) * tileWidth)));
         }
         // Wand auf -X-Seite
-        if(!MapHandler.isTileSolidOrNone(env.nx))
+        if(!Tile.isSolidOrNone(env.nx))
         {
             result.add(new StaticGameObject(getWallMesh(), getWallColor(), new Vector3((x      ) * tileWidth, 0.0, mirrorFactor * (z + 0.5) * tileWidth), new Vector3(0.0, 90.0, 0.0), new Vector3(1.0, 1.0, 1.0)));
         }
         // Wand auf -Z-Seite
-        if(!MapHandler.isTileSolidOrNone(env.nz))
+        if(!Tile.isSolidOrNone(env.nz))
         {
             result.add(new StaticGameObject(getWallMesh(), getWallColor(), new Vector3((x + 0.5) * tileWidth, 0.0, mirrorFactor * (z      ) * tileWidth)));
         }
         
         // Säulen
         // Säule an Ecke -X-Z
-        if(!MapHandler.isTileSolidOrNone(env.nxnz) && !MapHandler.isTileSolidOrNone(env.nx) && !MapHandler.isTileSolidOrNone(env.nz))
+        if(!Tile.isSolidOrNone(env.nxnz) && !Tile.isSolidOrNone(env.nx) && !Tile.isSolidOrNone(env.nz))
         {
             result.add(new StaticGameObject(getPillarMesh(), getPillarColor(), new Vector3(x * tileWidth, 0.0, mirrorFactor * z * tileWidth)));
         }
         // Säule an Ecke +X-Z
-        if(!MapHandler.isTileSolidOrNone(env.pxnz) && !MapHandler.isTileSolidOrNone(env.px) && !MapHandler.isTileSolidOrNone(env.nz))
+        if(!Tile.isSolidOrNone(env.pxnz) && !Tile.isSolidOrNone(env.px) && !Tile.isSolidOrNone(env.nz))
         {
             result.add(new StaticGameObject(getPillarMesh(), getPillarColor(), new Vector3((x + 1.0) * tileWidth, 0.0, mirrorFactor * z * tileWidth)));
         }
         // Säule an Ecke +X+Z
-        if(!MapHandler.isTileSolidOrNone(env.pxpz) && !MapHandler.isTileSolidOrNone(env.px) && !MapHandler.isTileSolidOrNone(env.pz))
+        if(!Tile.isSolidOrNone(env.pxpz) && !Tile.isSolidOrNone(env.px) && !Tile.isSolidOrNone(env.pz))
         {
             result.add(new StaticGameObject(getPillarMesh(), getPillarColor(), new Vector3((x + 1.0) * tileWidth, 0.0, mirrorFactor * (z + 1.0) * tileWidth)));
         }
         // Säule an Ecke -X+Z
-        if(!MapHandler.isTileSolidOrNone(env.nxpz) && !MapHandler.isTileSolidOrNone(env.nx) && !MapHandler.isTileSolidOrNone(env.pz))
+        if(!Tile.isSolidOrNone(env.nxpz) && !Tile.isSolidOrNone(env.nx) && !Tile.isSolidOrNone(env.pz))
         {
             result.add(new StaticGameObject(getPillarMesh(), getPillarColor(), new Vector3(x * tileWidth, 0.0, mirrorFactor * (z + 1.0) * tileWidth)));
         }

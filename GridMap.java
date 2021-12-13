@@ -61,18 +61,29 @@ public class GridMap
             }
         }
         
+        ArrayList<Vector2i> roomFloodFills = new ArrayList<Vector2i>();
+        
         // Funktionsebene
         for(int z = 0; z < _functionLayer.size(); z++)
         {
             for(int x = 0; x < _functionLayer.get(z).size(); x++)
             {
                 int value = _functionLayer.get(z).get(x);
-                if(value == 60 || value == 61 || value == 62 || value == 63)
+                switch(value)
                 {
-                    _playerSpawn = new Vector3((x + 0.5) * MapHandler.TILE_WIDTH, 2.0, (mirrorZAxis ? -1 : 1) * (z + 0.5) * MapHandler.TILE_WIDTH);
+                    case Tile.PLAYER_SPAWN_DOWN:
+                    case Tile.PLAYER_SPAWN_RIGHT:
+                    case Tile.PLAYER_SPAWN_UP:
+                    case Tile.PLAYER_SPAWN_LEFT:
+                        _playerSpawn = new Vector3((x + 0.5) * MapHandler.TILE_WIDTH, 2.0, (mirrorZAxis ? -1 : 1) * (z + 0.5) * MapHandler.TILE_WIDTH);
+                        break;
+                    case Tile.ROOM_FLOODFILL:
+                        roomFloodFills.add(new Vector2i(x, z));
                 }
             }
         }
+        
+        System.out.println("Rooms: " + roomFloodFills.size());
     }
     
     /**

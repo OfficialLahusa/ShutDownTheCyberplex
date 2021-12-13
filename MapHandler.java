@@ -39,9 +39,11 @@ public class MapHandler
         dirtFloorLODs.add(new Pair<Double, Mesh>(30.0, _objLoader.loadFromFile("./res/models/dirt_floor_borderless_lod1.obj")));
         dirtFloorLODs.add(new Pair<Double, Mesh>(40.0, _objLoader.loadFromFile("./res/models/dirt_floor_borderless_lod2.obj")));
         dirtFloorLODs.add(new Pair<Double, Mesh>(50.0, _objLoader.loadFromFile("./res/models/dirt_floor_borderless_lod3.obj")));
-        _tileProviders.put(0, new SimpleLODTileProvider(dirtFloorLODs, "orange"));
+        _tileProviders.put(Tile.DIRT_FLOOR, new SimpleLODTileProvider(dirtFloorLODs, "orange"));
+        
         // Brick wall
-        _tileProviders.put(1, new WallTileProvider(_objLoader.loadFromFile("./res/models/brick_wall.obj"), "grau", _objLoader.loadFromFile("./res/models/simple_wall_pillar.obj"), "grau"));
+        _tileProviders.put(Tile.BRICK_WALL, new WallTileProvider(_objLoader.loadFromFile("./res/models/brick_wall.obj"), "grau", _objLoader.loadFromFile("./res/models/simple_wall_pillar.obj"), "grau"));
+        
         // Wooden door
         ArrayList<Pair<Mesh, String>> woodenDoorClosed = new ArrayList<Pair<Mesh, String>>();
         woodenDoorClosed.add(new Pair<Mesh, String>(_objLoader.loadFromFile("./res/models/wooden_door.obj"), "orange"));
@@ -49,20 +51,26 @@ public class MapHandler
         ArrayList<Pair<Mesh, String>> woodenDoorOpen = new ArrayList<Pair<Mesh, String>>();
         woodenDoorOpen.add(new Pair<Mesh, String>(_objLoader.loadFromFile("./res/models/wooden_door_open.obj"), "orange"));
         woodenDoorOpen.add(new Pair<Mesh, String>(_objLoader.loadFromFile("./res/models/wooden_door_handle_open.obj"), "gelb"));
-        _tileProviders.put(2, new DoorTileProvider(woodenDoorClosed, woodenDoorOpen, true));
+        _tileProviders.put(Tile.WOODEN_DOOR, new DoorTileProvider(woodenDoorClosed, woodenDoorOpen, true));
+        
         // Dirt floor grass
         ArrayList<Pair<Mesh, String>> dirtFloorGrass = new ArrayList<Pair<Mesh, String>>();
         dirtFloorGrass.add(new Pair<Mesh, String>(_objLoader.loadFromFile("./res/models/dirt_floor_borderless.obj"), "orange"));
         dirtFloorGrass.add(new Pair<Mesh, String>(_objLoader.loadFromFile("./res/models/dirt_floor_grassdetail.obj"), "gruen"));
-        _tileProviders.put(20, new MultiMeshTileProvider(dirtFloorGrass));
+        _tileProviders.put(Tile.DIRT_FLOOR_GRASS, new MultiMeshTileProvider(dirtFloorGrass));
+        
         // Dirt floor grass 2
         ArrayList<Pair<Mesh, String>> dirtFloorGrass2 = new ArrayList<Pair<Mesh, String>>();
         dirtFloorGrass2.add(new Pair<Mesh, String>(_objLoader.loadFromFile("./res/models/dirt_floor_borderless.obj"), "orange"));
         dirtFloorGrass2.add(new Pair<Mesh, String>(_objLoader.loadFromFile("./res/models/dirt_floor_grassdetail2.obj"), "gruen"));
         dirtFloorGrass2.add(new Pair<Mesh, String>(_objLoader.loadFromFile("./res/models/dirt_floor_stonedetail.obj"), "dunkelgrau"));
-        _tileProviders.put(40, new MultiMeshTileProvider(dirtFloorGrass2));
+        _tileProviders.put(Tile.DIRT_FLOOR_GRASS2, new MultiMeshTileProvider(dirtFloorGrass2));
     }
     
+    /**
+     * Lädt eine Map
+     * @param mapName Name der Map (KEIN Pfad)
+     */
     public void load(String mapName)
     {
         _map = _csvLoader.loadFromFile(MAP_DIRECTORY + mapName + TILE_LAYER_SUFFIX, MAP_DIRECTORY + mapName + FUNCTION_LAYER_SUFFIX);
@@ -78,25 +86,5 @@ public class MapHandler
     {
         //new Vector3((x + 0.5) * tileWidth, 0.0, (mirrorZAxis ? -1 : 1) * (z + 0.5) * tileWidth)
         return new Vector2i((int)Math.round(worldPos.getX() / TILE_WIDTH - 0.5), (int)Math.round((MIRROR_Z_AXIS ? -1 : 1) * worldPos.getZ() / TILE_WIDTH - 0.5));
-    }
-
-    public static boolean isTileSolid(int tileType)
-    {
-        return tileType == 1;    
-    }
-    
-    public static boolean isTileNone(int tileType)
-    {
-        return tileType == -1;
-    }
-    
-    public static boolean isTileSolidOrNone(int tileType)
-    {
-        return isTileSolid(tileType) || isTileNone(tileType);
-    }
-    
-    public static boolean isTilePassableOrNone(int tileType)
-    {
-        return !isTileSolid(tileType) || isTileNone(tileType);
     }
 }

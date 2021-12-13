@@ -39,7 +39,7 @@ public class DoorTileProvider implements ITileProvider
     {
         ArrayList<IGameObject> result = new ArrayList<IGameObject>();
         
-        boolean facingZ = (MapHandler.isTileSolidOrNone(env.px) && MapHandler.isTileSolidOrNone(env.nx));
+        boolean facingZ = (Tile.isSolidOrNone(env.px) && Tile.isSolidOrNone(env.nx));
         
         result.add(new DoorGameObject(_coloredMeshesClosed, _coloredMeshesOpen, _isOpen, new Vector3((x + 0.5) * tileWidth, 0.0, (mirrorZAxis ? -1 : 1) * (z + 0.5) * tileWidth), new Vector3(0.0, (facingZ)? 90.0 : 0.0, 0.0), new Vector3(1.0, 1.0, 1.0)));
         
