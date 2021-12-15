@@ -2,8 +2,8 @@
 /**
  * Haupt-Szene des Spiels
  * 
- * @author Lasse Huber-Saffer
- * @version 09.12.2021
+ * @author Lasse Huber-Saffer, Nico Hädicke, Sven Schreiber
+ * @version 15.12.2021
  */
 public class GameScene extends Scene
 {
@@ -18,7 +18,7 @@ public class GameScene extends Scene
     {
         super(state);
         
-        _mapHandler = new MapHandler();
+        _mapHandler = new MapHandler(state);
         _camera = new Camera(new Vector3(0.0, 2.0, 10.0), 1.0, 90.0);
         _muzzleFlash = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/muzzleFlash.obj"), "blau", new Vector3 (-2, -2.2,-11));
         _pistolMain = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/pistolMain.obj"), "grau", new Vector3 (-1.5, -1,-10));
@@ -37,6 +37,8 @@ public class GameScene extends Scene
         
         _state.soundRegistry.loadSource("music1", "./res/sounds/to_the_front.mp3");
         _state.soundRegistry.loadSource("powerup3", "./res/sounds/Powerup3.wav");
+        _state.soundRegistry.loadSource("wooden_door_open", "./res/sounds/wooden_door_open.wav");
+        _state.soundRegistry.loadSource("wooden_door_close", "./res/sounds/wooden_door_close.wav");
         
         _state.soundRegistry.playSound("music1", 0.2, true);
         
@@ -77,25 +79,12 @@ public class GameScene extends Scene
         {
             _state.inputHandler.setKeepMouseInPlace(true);
         }
-        if(roomChangeCooldown <= 0.0 && _state.inputHandler.isKeyPressed(KeyCode.KEY_PLUS))
-        {
-            _mapHandler.getMap().activeRoom = (_mapHandler.getMap().activeRoom + 1) % _mapHandler.getMap().getRoomCount();
-            roomChangeCooldown = 0.4;
-        }
-        if(roomChangeCooldown <= 0.0 && _state.inputHandler.isKeyPressed(KeyCode.KEY_MINUS))
-        {
-            _mapHandler.getMap().activeRoom--;
-            if(_mapHandler.getMap().activeRoom < 0) _mapHandler.getMap().activeRoom = _mapHandler.getMap().getRoomCount() - 1;
-            roomChangeCooldown = 0.4;
-        }
     }
     
     public void update(double deltaTime, double runTime)
     {
-        // Berechnet Map-LOD-Stufen in Abhängigkeit von der Kameraposition neu
-        _mapHandler.getMap().updateLOD(_camera.getPosition());
-        // Sortiert Mapgeometrie so, dass die Objekte in der Reihenfolge ihrer Distanz zur Kamera sortiert sind.
-        _mapHandler.getMap().reorderAroundCamera(_camera.getPosition());
+        // Updatet die Map
+        _mapHandler.getMap().update(deltaTime, runTime, _camera.getPosition());
         // Entfernt bereits durchgelaufene Sounds
         _state.soundRegistry.removeStoppedSounds();
         

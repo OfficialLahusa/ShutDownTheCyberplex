@@ -8,20 +8,18 @@ import javafx.util.*;
  * @version 03.12.2021
  */
 public class GridMap
-{
+{    
+    // Map-Layout
+    private ArrayList<Vector2i> _doorLocations;
+    private ArrayList<IDoorGameObject> _doors;
+    private ArrayList<Room> _rooms; 
     private ArrayList<ArrayList<Integer>> _tileLayer;
     private ArrayList<ArrayList<Integer>> _functionLayer;
     private ArrayList<IGameObject> _mapGeometry;
     
-    // Map-Layout
-    private ArrayList<Vector2i> _doorLocations;
-    private ArrayList<DoorGameObject> _doors;
-    private ArrayList<Room> _rooms;
-    
-    public int activeRoom = 0;
-    
     private Vector3 _playerSpawn;
     
+    private int _activeRoom = 0;
     private static final boolean DEBUG_FULLDRAW = false;
 
     /**
@@ -35,9 +33,33 @@ public class GridMap
         _functionLayer = functionLayer;
         _mapGeometry = new ArrayList<IGameObject>();
         _doorLocations = new ArrayList<Vector2i>();
-        _doors = new ArrayList<DoorGameObject>();
+        _doors = new ArrayList<IDoorGameObject>();
         _rooms = new ArrayList<Room>();
         _playerSpawn = new Vector3(0.0, 2.0, 0.0);
+    }
+    
+    /**
+     * Updated die GridMap.
+     * Levels of Detail und Draw Order werden neu berechnet.
+     * @param deltaTime Deltazeit des Frames in Sekunden
+     * @param runTime Laufzeit des Programms in Sekunden
+     * @param cameraPosition Position der Kamera im World Space
+     */
+    public void update(double deltaTime, double runTime, Vector3 cameraPosition)
+    {
+        updateLOD(cameraPosition);
+        reorderAroundCamera(cameraPosition);
+        for(IDoorGameObject door : _doors)
+        {
+            door.update(deltaTime, runTime, cameraPosition);
+        }
+        
+        Vector2i tilePos = MapHandler.worldPosToTilePos(cameraPosition);
+        Integer roomID = getRoom(tilePos);
+        if(roomID != null && roomID != _activeRoom)
+        {
+            _activeRoom = roomID;
+        }
     }
     
     /**
@@ -60,7 +82,7 @@ public class GridMap
             HashSet<Vector2i> completedDoors = new HashSet<Vector2i>();
             
             // Zeichnet rekursiv alle Räume, vom aktuellen Raum aus
-            drawConnectedRooms(activeRoom, completedRooms, completedDoors, renderer, camera);
+            drawConnectedRooms(_activeRoom, completedRooms, completedDoors, renderer, camera);
         }
     }
     
@@ -78,12 +100,15 @@ public class GridMap
         Room room = _rooms.get(roomID);
         room.draw(renderer, camera);
         
-        for(DoorGameObject door : room.getDoors())
+        for(IDoorGameObject door : room.getDoors())
         {
             // Tür nur zeichnen, wenn sie im selben Frame nicht zuvor gezeichnet wurde
             if(!completedDoors.contains(door.getTilePosition()))
             {
-                door.draw(renderer, camera);
+                if(door instanceof IGameObject)
+                {
+                    ((IGameObject)door).draw(renderer, camera);
+                }
                 completedDoors.add(door.getTilePosition());
             }
             
@@ -92,7 +117,7 @@ public class GridMap
             {
                 // ID des Raums am anderen Ende der Tür feststellen
                 Integer otherRoom = null;
-                Pair<Integer, Integer> doorConnection = door.getAttachedRoomIDs();
+                Pair<Integer, Integer> doorConnection = door.getConnectedRoomIDs();
                 if(roomID == doorConnection.getKey())
                 {
                     otherRoom = doorConnection.getValue();
@@ -107,6 +132,167 @@ public class GridMap
                 {
                     completedRooms.add(otherRoom);
                     drawConnectedRooms(otherRoom, completedRooms, completedDoors, renderer, camera);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Updated die Levels-of-Detail der Mapgeometrie im Verhältnis zu einem Bezugspunkt
+     * @param cameraPosition Position der Kamera, die als Bezugspunkt der LOD-Berechnung genutzt wird
+     */
+    private void updateLOD(Vector3 cameraPosition)
+    {
+        if(DEBUG_FULLDRAW)
+        {
+            for(int i = 0; i < _mapGeometry.size(); i++)
+            {
+                if(_mapGeometry.get(i) instanceof ILODGameObject)
+                {
+                    ((ILODGameObject)_mapGeometry.get(i)).updateLOD(cameraPosition);
+                }
+            }
+        }
+        else
+        {
+            HashSet<Integer> completedRooms = new HashSet<Integer>();
+            HashSet<Vector2i> completedDoors = new HashSet<Vector2i>();
+            
+            // Updated rekursiv die LODs aller Räume, vom aktuellen Raum aus
+            lodUpdateConnectedRooms(_activeRoom, completedRooms, completedDoors, cameraPosition);
+        }
+    }
+    
+    /**
+     * Updated die Levels-of-Detail für einen gegebenen Raum und alle damit verknüpften Räume und Türen
+     * @param roomID ID des Raums in der GridMap-Raumliste
+     * @param completedRooms HashSet der bereits gezeichneten RaumIDs
+     * @param completedDoors HashSet der bereits gezeichneten Türpositionen
+     * @param cameraPosition Position der Kamera, die als Bezugspunkt der LOD-Berechnung genutzt wird
+     */
+    private void lodUpdateConnectedRooms(int roomID, HashSet<Integer> completedRooms, HashSet<Vector2i> completedDoors, Vector3 cameraPosition)
+    {
+        // Aktuellen Raum bekommen und updaten
+        Room room = _rooms.get(roomID);
+        room.updateLOD(cameraPosition);
+        
+        for(IDoorGameObject door : room.getDoors())
+        {
+            // Tür nur updaten, wenn sie im selben Frame nicht zuvor geupdated wurde
+            if(!completedDoors.contains(door.getTilePosition()))
+            {
+                if(door instanceof ILODGameObject)
+                {
+                    ((ILODGameObject)door).updateLOD(cameraPosition);                    
+                }
+                completedDoors.add(door.getTilePosition());
+            }
+            
+            // Raum dahinter nur behandeln, wenn die Tür offen ist
+            if(door.isOpen())
+            {
+                // ID des Raums am anderen Ende der Tür feststellen
+                Integer otherRoom = null;
+                Pair<Integer, Integer> doorConnection = door.getConnectedRoomIDs();
+                if(roomID == doorConnection.getKey())
+                {
+                    otherRoom = doorConnection.getValue();
+                }
+                else if(roomID == doorConnection.getValue())
+                {
+                    otherRoom = doorConnection.getKey();
+                }
+                
+                // Nächsten Raum nur updaten, wenn er existiert und nicht bereits geupdated wurde
+                if(otherRoom != null && !completedRooms.contains(otherRoom))
+                {
+                    completedRooms.add(otherRoom);
+                    lodUpdateConnectedRooms(otherRoom, completedRooms, completedDoors, cameraPosition);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Sortiert die GameObjects, die Teil der Mapgeometrie sind, neu, sodass sie mit aufsteigender Distanz zur Kamera sortiert sind.
+     * Dies sorgt dafür, dass das Flackern, das durch das Fehlen des Back Buffers entsteht, möglichst entfernt von der Kamera stattfindet und somit weniger bemerkbar ist.
+     * @param cameraPosition Position der Kamera, im Bezug zu der die GameObjects sortiert werden sollen
+     */
+    private void reorderAroundCamera(Vector3 cameraPosition)
+    {
+        // Distanz-Komparator
+        Comparator gameObjectDistanceComparator = new Comparator<IGameObject>() {
+            @Override
+            public int compare(IGameObject obj1, IGameObject obj2)
+            {
+                double dist1 = obj1.getPosition().subtract(cameraPosition).getLength();
+                double dist2 = obj2.getPosition().subtract(cameraPosition).getLength();
+                
+                if(dist1 > dist2)
+                {
+                    return 1;
+                }
+                else if(dist1 < dist2)
+                {
+                    return -1;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        };
+        
+        if(DEBUG_FULLDRAW)
+        {
+            // Sortiert die Collection
+            Collections.sort(_mapGeometry,
+                 gameObjectDistanceComparator        
+            );
+        }
+        else
+        {
+            HashSet<Integer> completedRooms = new HashSet<Integer>();
+            
+            // Updated rekursiv die Draw-Reihenfolge aller Räume, vom aktuellen Raum aus
+            reorderConnectedRooms(_activeRoom, completedRooms, cameraPosition);
+        }
+    }
+    
+    /**
+     * Updated den Draw Order für einen gegebenen Raum und alle damit verknüpften Räume
+     * @param roomID ID des Raums in der GridMap-Raumliste
+     * @param completedRooms HashSet der bereits gezeichneten RaumIDs
+     * @param cameraPosition Position der Kamera, die als Bezugspunkt der LOD-Berechnung genutzt wird
+     */
+    private void reorderConnectedRooms(int roomID, HashSet<Integer> completedRooms, Vector3 cameraPosition)
+    {
+        // Aktuellen Raum bekommen und updaten
+        Room room = _rooms.get(roomID);
+        room.reorderAroundCamera(cameraPosition);
+        
+        for(IDoorGameObject door : room.getDoors())
+        {
+            // Raum hinter Tür nur behandeln, wenn die Tür offen ist
+            if(door.isOpen())
+            {
+                // ID des Raums am anderen Ende der Tür feststellen
+                Integer otherRoom = null;
+                Pair<Integer, Integer> doorConnection = door.getConnectedRoomIDs();
+                if(roomID == doorConnection.getKey())
+                {
+                    otherRoom = doorConnection.getValue();
+                }
+                else if(roomID == doorConnection.getValue())
+                {
+                    otherRoom = doorConnection.getKey();
+                }
+                
+                // Nächsten Raum nur updaten, wenn er existiert und nicht bereits geupdated wurde
+                if(otherRoom != null && !completedRooms.contains(otherRoom))
+                {
+                    completedRooms.add(otherRoom);
+                    reorderConnectedRooms(otherRoom, completedRooms, cameraPosition);
                 }
             }
         }
@@ -203,16 +389,17 @@ public class GridMap
                 else
                 {
                     ArrayList<IGameObject> doorObjList = tileProviders.get(value).getTileObjects(new TileEnvironment(_tileLayer, x, z), x, z);
-                    for(IGameObject doorObj : doorObjList)
+                    for(IGameObject obj : doorObjList)
                     {
-                        if(!(doorObj instanceof DoorGameObject))
+                        if(!(obj instanceof IDoorGameObject))
                         {
                             throw new RuntimeException("Tried adding a non-door GameObject to Door List");
                         }
                         else
                         {
-                            _doors.add((DoorGameObject)doorObj);
-                            connectDoor((DoorGameObject)doorObj);
+                            IDoorGameObject doorObj = (IDoorGameObject)obj;
+                            _doors.add(doorObj);
+                            connectDoor(doorObj);
                         }
                     }  
                 }
@@ -220,7 +407,7 @@ public class GridMap
         }
     }
     
-    private void connectDoor(DoorGameObject door)
+    private void connectDoor(IDoorGameObject door)
     {
         if(door == null)
         {
@@ -256,7 +443,7 @@ public class GridMap
         
         if(firstRoom != null || secondRoom != null) {
             // Verbindung bei der Tür registrieren
-            door.setAttachedRoomIDs(firstRoom, secondRoom);
+            door.setConnectedRoomIDs(firstRoom, secondRoom);
             
             // Verbindung bei den Räumen registrieren
             if(firstRoom != null)
@@ -378,54 +565,5 @@ public class GridMap
     public int getRoomCount()
     {
         return (_rooms == null)? 0 : _rooms.size();
-    }
-    
-    /**
-     * Updated den Levels-of-Detail des GameObjects im Verhältnis zu einem Bezugspunkt
-     * @param cameraPosition Position der Kamera, die als Bezugspunkt der LOD-Berechnung genutzt wird
-     */
-    public void updateLOD(Vector3 cameraPosition)
-    {
-        for(int i = 0; i < _mapGeometry.size(); i++)
-        {
-            if(_mapGeometry.get(i) instanceof ILODGameObject)
-            {
-                ((ILODGameObject)_mapGeometry.get(i)).updateLOD(cameraPosition);
-            }
-        }
-    }
-    
-    /**
-     * Sortiert die GameObjects, die Teil der Mapgeometrie sind neu, sodass sie mit aufsteigender Distanz zur Kamera sortiert sind.
-     * Dies sorgt dafür, dass das Flackern, das durch das Fehlen des Back Buffers entsteht, möglichst entfernt von der Kamera stattfindet und somit weniger bemerkbar ist.
-     * @param cameraPosition Position der Kamera, im Bezug zu der die GameObjects sortiert werden sollen
-     */
-    public void reorderAroundCamera(Vector3 cameraPosition)
-    {
-        // Sortiert die Collection
-        Collections.sort(_mapGeometry,
-            // Distanz-Komparator
-            new Comparator<IGameObject>() {
-                @Override
-                public int compare(IGameObject obj1, IGameObject obj2)
-                {
-                    double dist1 = obj1.getPosition().subtract(cameraPosition).getLength();
-                    double dist2 = obj2.getPosition().subtract(cameraPosition).getLength();
-                    
-                    if(dist1 > dist2)
-                    {
-                        return 1;
-                    }
-                    else if(dist1 < dist2)
-                    {
-                        return -1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                }
-            }
-        );
     }
 }

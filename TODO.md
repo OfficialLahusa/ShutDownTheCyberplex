@@ -1,7 +1,7 @@
 # TODO:
 - Crosshair hinzufügen
 - Cracked Brick Wall TileProvider
-- Draw Order der Map überarbeiten (Update auch rekursiv ausführen)
+- Raum-Draw Order der Map überarbeiten (Räume iterativ statt rekursiv zeichnen)
 - Für Szenen @inheritDoc verwenden (https://stackoverflow.com/a/41509917/13332329)
 - Physics Engine:
     - 2D Top Down

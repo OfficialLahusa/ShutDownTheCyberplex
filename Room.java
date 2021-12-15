@@ -11,7 +11,7 @@ public class Room
     private HashSet<Vector2i> _tiles;
     private ArrayList<IGameObject> _geometry;
     private ArrayList<Vector2i> _doorLocations;
-    private ArrayList<DoorGameObject> _doors;
+    private ArrayList<IDoorGameObject> _doors;
     
     // Bounds im Grid
     private int _minX;
@@ -27,7 +27,7 @@ public class Room
         _tiles = new HashSet<Vector2i>();
         _geometry = new ArrayList<IGameObject>();
         _doorLocations = new ArrayList<Vector2i>();
-        _doors = new ArrayList<DoorGameObject>();
+        _doors = new ArrayList<IDoorGameObject>();
     }
     
     /**
@@ -77,6 +77,57 @@ public class Room
         }
     }
     
+    /**
+     * Updated die Levels-of-Detail der Raumgeometrie im Verhältnis zu einem Bezugspunkt
+     * @param cameraPosition Position der Kamera, die als Bezugspunkt der LOD-Berechnung genutzt wird
+     */
+    public void updateLOD(Vector3 cameraPosition)
+    {
+        for(int i = 0; i < _geometry.size(); i++)
+        {
+            if(_geometry.get(i) instanceof ILODGameObject)
+            {
+                ((ILODGameObject)_geometry.get(i)).updateLOD(cameraPosition);
+            }
+        }
+    }
+    
+    /**
+     * Sortiert die GameObjects, die Teil der Raumgeometrie sind, neu, sodass sie mit aufsteigender Distanz zur Kamera sortiert sind.
+     * Dies sorgt dafür, dass das Flackern, das durch das Fehlen des Back Buffers entsteht, möglichst entfernt von der Kamera stattfindet und somit weniger bemerkbar ist.
+     * @param cameraPosition Position der Kamera, im Bezug zu der die GameObjects sortiert werden sollen
+     */
+    public void reorderAroundCamera(Vector3 cameraPosition)
+    {
+        // Distanz-Komparator
+        Comparator gameObjectDistanceComparator = new Comparator<IGameObject>() {
+            @Override
+            public int compare(IGameObject obj1, IGameObject obj2)
+            {
+                double dist1 = obj1.getPosition().subtract(cameraPosition).getLength();
+                double dist2 = obj2.getPosition().subtract(cameraPosition).getLength();
+                
+                if(dist1 > dist2)
+                {
+                    return 1;
+                }
+                else if(dist1 < dist2)
+                {
+                    return -1;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        };
+        
+        // Sortiert die Collection
+        Collections.sort(_geometry,
+             gameObjectDistanceComparator        
+        );
+    }
+    
     public void addTile(int x, int z)
     {
         if(!_tiles.contains(new Vector2i(x, z)))
@@ -112,7 +163,7 @@ public class Room
         }
     }
     
-    public void addDoor(DoorGameObject door)
+    public void addDoor(IDoorGameObject door)
     {
         if(door != null)
         {
@@ -135,7 +186,7 @@ public class Room
         return contains(pos.getX(), pos.getY());
     }
     
-    public ArrayList<DoorGameObject> getDoors()
+    public ArrayList<IDoorGameObject> getDoors()
     {
         return _doors;
     }

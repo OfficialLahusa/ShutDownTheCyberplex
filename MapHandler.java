@@ -24,7 +24,7 @@ public class MapHandler
     /**
      * Konstruktor für Objekte der Klasse MapHandler
      */
-    public MapHandler()
+    public MapHandler(GameState state)
     {
         _map = null;
         _csvLoader = new CSVMapLoader();
@@ -51,7 +51,11 @@ public class MapHandler
         ArrayList<Pair<Mesh, String>> woodenDoorOpen = new ArrayList<Pair<Mesh, String>>();
         woodenDoorOpen.add(new Pair<Mesh, String>(_objLoader.loadFromFile("./res/models/wooden_door_open.obj"), "orange"));
         woodenDoorOpen.add(new Pair<Mesh, String>(_objLoader.loadFromFile("./res/models/wooden_door_handle_open.obj"), "gelb"));
-        _tileProviders.put(Tile.WOODEN_DOOR, new DoorTileProvider(woodenDoorClosed, woodenDoorOpen, _tileProviders.get(Tile.DIRT_FLOOR), (WallTileProvider)_tileProviders.get(Tile.BRICK_WALL), true));
+        _tileProviders.put(Tile.WOODEN_DOOR, new DoorTileProvider(
+            woodenDoorClosed, woodenDoorOpen, false,
+            _tileProviders.get(Tile.DIRT_FLOOR), (WallTileProvider)_tileProviders.get(Tile.BRICK_WALL),
+            state.soundRegistry, "wooden_door_open", "wooden_door_close"
+        ));
         
         // Dirt floor grass
         ArrayList<Pair<Mesh, String>> dirtFloorGrass = new ArrayList<Pair<Mesh, String>>();
@@ -77,14 +81,22 @@ public class MapHandler
         _map.populate(_tileProviders);
     }
     
+    /**
+     * Gibt eine Referenz zur aktuellen Map zurück
+     * @return Referenz zur aktuellen Map
+     */
     public GridMap getMap()
     {
         return _map;
     }
     
+    /**
+     * Konvertiert eine Position in World Space zu einer Tile-Position
+     * @param worldPos dreidimensionaler Vektor einer Position im World Space
+     * @return zweidimensionale Koordinaten der umschließenden Tile im Grid
+     */
     public static Vector2i worldPosToTilePos(Vector3 worldPos)
     {
-        //new Vector3((x + 0.5) * tileWidth, 0.0, (mirrorZAxis ? -1 : 1) * (z + 0.5) * tileWidth)
         return new Vector2i((int)Math.round(worldPos.getX() / TILE_WIDTH - 0.5), (int)Math.round((MIRROR_Z_AXIS ? -1 : 1) * worldPos.getZ() / TILE_WIDTH - 0.5));
     }
 }

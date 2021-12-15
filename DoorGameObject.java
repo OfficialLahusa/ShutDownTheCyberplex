@@ -5,61 +5,73 @@ import javafx.util.*;
  * Beschreiben Sie hier die Klasse DoorGameObject.
  * 
  * @author Lasse Huber-Saffer
- * @version 13.12.2021
+ * @version 15.12.2021
  */
-public class DoorGameObject implements IGameObject
+public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObject
 {
-    private ArrayList<Pair<Mesh, String>> _coloredMeshesClosed;
-    private ArrayList<Pair<Mesh, String>> _coloredMeshesOpen;
-    
-    private ArrayList<IGameObject> _floor;
-    private ArrayList<IGameObject> _walls;
-    
-    private boolean _facingZ;
-    private boolean _isOpen;
-    private Vector2i _tilePosition;
-    
+    // Transformation
     private Vector3 _position;
     private Vector3 _rotation;
     private Vector3 _scale;
     private Matrix4 _model;
     
+    // Functionality
+    private boolean _facingZ;
+    private boolean _isOpen;
+    private Vector2i _tilePosition;
+    private HashSet<Vector2i> _doorTriggers;
+    
     // Interpretation: null -> Kein Raum verbunden. >=0 -> Raum mit ID ist verbunden. <0 -> Illegaler Zustand
     private Pair<Integer, Integer> _connectedRoomIDs;
     
+    // Rendering
+    private ArrayList<Pair<Mesh, String>> _coloredMeshesClosed;
+    private ArrayList<Pair<Mesh, String>> _coloredMeshesOpen;
+    private ArrayList<IGameObject> _floor;
+    private ArrayList<IGameObject> _walls;
+    
+    // Sound
+    private SoundRegistry _soundReg;
+    private String _openSoundKey;
+    private String _closeSoundKey;    
+    
     /**
-     * Konstruktor für Türen mit gegebenem Mesh, Position, Rotation und Skalierung
-     * @param coloredMeshesClosed Liste von Mesh-Farb-Paaren, die im geschlossenen Zustand gerendert werden
-     * @param coloredMeshesOpen Liste von Mesh-Farb-Paaren, die im offenen Zustand gerendert werden
-     * @param facingZ Führt die z-Achse durch diese Tür hindurch?
-     * @param isOpen Offenheit der Tür
-     * @param tilePosition Position der Tür im Grid
+     * Konstruktor für Türen mit gegebenem Mesh, Position, Rotation, Skalierung und Boden- sowie Wand-GameObjects
      * @param position Position
      * @param rotation Rotation
      * @param scale Skalierung
+     * @param facingZ Führt die z-Achse durch diese Tür hindurch?
+     * @param isOpen Offenheit der Tür
+     * @param tilePosition Position der Tür im Grid
+     * @param coloredMeshesClosed Liste von Mesh-Farb-Paaren, die im geschlossenen Zustand gerendert werden
+     * @param coloredMeshesOpen Liste von Mesh-Farb-Paaren, die im offenen Zustand gerendert werden
      */
-    public DoorGameObject(ArrayList<Pair<Mesh, String>> coloredMeshesClosed, ArrayList<Pair<Mesh, String>> coloredMeshesOpen, boolean facingZ, boolean isOpen, Vector2i tilePosition, Vector3 position, Vector3 rotation, Vector3 scale)
+    public DoorGameObject(Vector3 position, Vector3 rotation, Vector3 scale,
+        boolean facingZ, boolean isOpen, Vector2i tilePosition,
+        ArrayList<Pair<Mesh, String>> coloredMeshesClosed, ArrayList<Pair<Mesh, String>> coloredMeshesOpen
+    )
     {
-        this(coloredMeshesClosed, coloredMeshesOpen, facingZ, isOpen, null, null, tilePosition, position, rotation, scale);
+        this(position, rotation, scale, facingZ, isOpen, tilePosition, coloredMeshesClosed, coloredMeshesOpen,  null, null);
     }
     
     /**
      * Konstruktor für Türen mit gegebenem Mesh, Position, Rotation, Skalierung und Boden- sowie Wand-GameObjects
-     * @param coloredMeshesClosed Liste von Mesh-Farb-Paaren, die im geschlossenen Zustand gerendert werden
-     * @param coloredMeshesOpen Liste von Mesh-Farb-Paaren, die im offenen Zustand gerendert werden
-     * @param facingZ Führt die z-Achse durch diese Tür hindurch?
-     * @param isOpen Offenheit der Tür
-     * @param floor(OPTIONAL) Liste an GameObjects, die als Fußboden gerendert werden sollen
-     * @param walls (OPTIONAL) Liste an GameObjects, die als Mauern gerendert werden sollen
-     * @param tilePosition Position der Tür im Grid
      * @param position Position
      * @param rotation Rotation
      * @param scale Skalierung
+     * @param facingZ Führt die z-Achse durch diese Tür hindurch?
+     * @param isOpen Offenheit der Tür
+     * @param tilePosition Position der Tür im Grid
+     * @param coloredMeshesClosed Liste von Mesh-Farb-Paaren, die im geschlossenen Zustand gerendert werden
+     * @param coloredMeshesOpen Liste von Mesh-Farb-Paaren, die im offenen Zustand gerendert werden
+     * @param floor(OPTIONAL) Liste an GameObjects, die als Fußboden gerendert werden sollen
+     * @param walls (OPTIONAL) Liste an GameObjects, die als Mauern gerendert werden sollen
      */
-    public DoorGameObject(ArrayList<Pair<Mesh, String>> coloredMeshesClosed, ArrayList<Pair<Mesh, String>> coloredMeshesOpen,
-        boolean facingZ, boolean isOpen,
-        ArrayList<IGameObject> floor, ArrayList<IGameObject> walls,
-        Vector2i tilePosition, Vector3 position, Vector3 rotation, Vector3 scale)
+    public DoorGameObject(Vector3 position, Vector3 rotation, Vector3 scale,
+        boolean facingZ, boolean isOpen, Vector2i tilePosition,
+        ArrayList<Pair<Mesh, String>> coloredMeshesClosed, ArrayList<Pair<Mesh, String>> coloredMeshesOpen,
+        ArrayList<IGameObject> floor, ArrayList<IGameObject> walls
+    )
     {
         _coloredMeshesClosed = coloredMeshesClosed;
         _coloredMeshesOpen = coloredMeshesOpen;
@@ -73,8 +85,45 @@ public class DoorGameObject implements IGameObject
         _scale = new Vector3(scale);
         _model = null;
         
+        _doorTriggers = new HashSet<Vector2i>();
+        _doorTriggers.add(_tilePosition);
+        if(facingZ)
+        {
+            _doorTriggers.add(new Vector2i(_tilePosition.getX(), _tilePosition.getY() - 1));
+            _doorTriggers.add(new Vector2i(_tilePosition.getX(), _tilePosition.getY() + 1));
+        }
+        else
+        {
+            _doorTriggers.add(new Vector2i(_tilePosition.getX() - 1, _tilePosition.getY()));
+            _doorTriggers.add(new Vector2i(_tilePosition.getX() + 1, _tilePosition.getY()));
+        }
+        
         // Bei Initialisierung sind noch keine Räume zugewiesen
         _connectedRoomIDs = new Pair<Integer, Integer>(null, null);
+        
+        // Bei Initialisierung sind noch keine Sounds aktiv
+        _soundReg = null;
+        _openSoundKey = null;
+        _closeSoundKey = null;
+    }
+    
+    /**
+     * @see IDoorGameObject#upd
+     */
+    public void update(double deltaTime, double runTime, Vector3 cameraPosition)
+    {
+        Vector2i tilePos = MapHandler.worldPosToTilePos(cameraPosition);
+        
+        if(!_isOpen && _doorTriggers.contains(tilePos))
+        {
+            _isOpen = true;
+            playSound(_openSoundKey);
+        }
+        else if(_isOpen && !_doorTriggers.contains(tilePos))
+        {
+            _isOpen = false;
+            playSound(_closeSoundKey);
+        }
     }
     
     /**
@@ -108,20 +157,69 @@ public class DoorGameObject implements IGameObject
     }
     
     /**
-     * Setzt die IDs der verbundenen Räume der Tür
-     * @param first erster verbundener Raum, null -> kein erster Raum (Reihenfolge irrelevant)
-     * @param second zweiter verbundener Raum, null -> kein zweiter Raum (Reihenfolge irrelevant)
+     * @see IDoorGameObject#setSound()
      */
-    public void setAttachedRoomIDs(Integer first, Integer second)
+    public void setSound(SoundRegistry soundReg, String openSoundKey, String closeSoundKey)
+    {
+        _soundReg = soundReg;
+        _openSoundKey = openSoundKey;
+        _closeSoundKey = closeSoundKey;
+    }
+    
+    private void playSound(String key)
+    {
+        if(_soundReg != null)
+        {
+            if(key != null && _soundReg.containsSource(key))
+            {
+                _soundReg.playSound(key, 0.6, false);
+            }
+        }
+    }
+    
+    /**
+     * @see ILODGameObject#updateLOD()
+     */
+    public void updateLOD(Vector3 cameraPosition)
+    {
+        for(IGameObject obj : _floor)
+        {
+            if(obj instanceof ILODGameObject)
+            {
+                ((ILODGameObject)obj).updateLOD(cameraPosition);
+            }
+        }
+        
+        for(IGameObject obj : _floor)
+        {
+            if(obj instanceof ILODGameObject)
+            {
+                ((ILODGameObject)obj).updateLOD(cameraPosition);
+            }
+        }
+    }
+    
+    /**
+     * @see ILODGameObject#getLODLevel()
+     */
+    public int getLODLevel()
+    {
+        // Base Door Mesh is always on the most detailed LOD
+        return 0;
+    }
+    
+    /**
+     * @see IDoorGameObject#setConnectedRoomIDs()
+     */
+    public void setConnectedRoomIDs(Integer first, Integer second)
     {
         _connectedRoomIDs = new Pair<Integer, Integer>(first, second);
     }
     
     /**
-     * Gibt die IDs der verbundenen Räume der Tür zurück
-     * @return Paar zweier Integer, die jeweils eine Raum-ID oder null, d.h. kein Raum, sind
+     * @see IDoorGameObject#getConnectedRoomIDs
      */
-    public Pair<Integer, Integer> getAttachedRoomIDs()
+    public Pair<Integer, Integer> getConnectedRoomIDs()
     {
         return _connectedRoomIDs;
     }
@@ -147,8 +245,7 @@ public class DoorGameObject implements IGameObject
     }
     
     /**
-     * Gibt zurück, ob die Tür offen ist
-     * @return Offenheit der Tür
+     * @see IDoorGameObject#isOpen()
      */
     public boolean isOpen()
     {
@@ -156,8 +253,7 @@ public class DoorGameObject implements IGameObject
     }
     
     /**
-     * Setzt die Offenheit der Tür
-     * @param isOpen Offenheit der Tür
+     * @see IDoorGameObject#setOpen()
      */
     public void setOpen(boolean isOpen)
     {
@@ -165,8 +261,7 @@ public class DoorGameObject implements IGameObject
     }
     
     /**
-     * Gibt zurück, ob die z-Achse durch die Öffnung dieser Tür hindurchgeht
-     * @return Ob die z-Achse durch die Öffnung dieser Tür hindurchgeht
+     * @see IDoorGameObject#isFacingZ()
      */
     public boolean isFacingZ()
     {
@@ -174,8 +269,7 @@ public class DoorGameObject implements IGameObject
     }
     
     /**
-     * Gibt die Position der Tür-Tile im Grid zurück
-     * @return Position der Tür-Tile im Grid
+     * @see IDoorGameObject#getTilePosition()
      */
     public Vector2i getTilePosition()
     {

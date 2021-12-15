@@ -5,7 +5,7 @@ import javafx.util.*;
  * TileProvider für Türen, die in Abhängigkeit von der Umgebung entlang der X- oder Z-Achse ausgerichtet sein können
  * 
  * @author Lasse Huber-Saffer
- * @version 04.12.2021
+ * @version 16.12.2021
  */
 public class DoorTileProvider implements ITileProvider
 {
@@ -14,6 +14,9 @@ public class DoorTileProvider implements ITileProvider
     private ITileProvider _floorTileProvider;
     private WallTileProvider _wallTileProvider;
     private boolean _isOpen;
+    private SoundRegistry _soundReg;
+    private String _openSoundKey;
+    private String _closeSoundKey;
     
     /**
      * Konstruktor für Objekte der Klasse DoorTileProvider
@@ -23,7 +26,7 @@ public class DoorTileProvider implements ITileProvider
      */
     public DoorTileProvider(ArrayList<Pair<Mesh, String>> coloredMeshesClosed, ArrayList<Pair<Mesh, String>> coloredMeshesOpen, boolean isOpen)
     {
-        this(coloredMeshesClosed, coloredMeshesOpen, null, null, isOpen);
+        this(coloredMeshesClosed, coloredMeshesOpen, isOpen, null, null, null, null, null);
     }
     
     /**
@@ -31,14 +34,42 @@ public class DoorTileProvider implements ITileProvider
      * @param coloredMeshesClosed Liste von Mesh-Farb-Paaren, die im geschlossenen Zustand gerendert werden
      * @param coloredMeshesOpen Liste von Mesh-Farb-Paaren, die im offenen Zustand gerendert werden
      * @param isOpen Offenheit der Tür
+     * @param floorTileProvider (Optional) TileProvider, der für den Boden unter der Tür verwendet werden soll
+     * @param wallTileProvider (Optional) WallTileProvider, der für die Wände an den Seiten der Tür verwendet werden soll
      */
-    public DoorTileProvider(ArrayList<Pair<Mesh, String>> coloredMeshesClosed, ArrayList<Pair<Mesh, String>> coloredMeshesOpen, ITileProvider floorTileProvider, WallTileProvider wallTileProvider, boolean isOpen)
+    public DoorTileProvider(
+        ArrayList<Pair<Mesh, String>> coloredMeshesClosed, ArrayList<Pair<Mesh, String>> coloredMeshesOpen, boolean isOpen,
+        ITileProvider floorTileProvider, WallTileProvider wallTileProvider
+    )
+    {
+        this(coloredMeshesClosed, coloredMeshesOpen, isOpen, floorTileProvider, wallTileProvider, null, null, null);
+    }
+    
+    /**
+     * Konstruktor für Objekte der Klasse DoorTileProvider
+     * @param coloredMeshesClosed Liste von Mesh-Farb-Paaren, die im geschlossenen Zustand gerendert werden
+     * @param coloredMeshesOpen Liste von Mesh-Farb-Paaren, die im offenen Zustand gerendert werden
+     * @param isOpen Offenheit der Tür
+     * @param floorTileProvider (Optional) TileProvider, der für den Boden unter der Tür verwendet werden soll
+     * @param wallTileProvider (Optional) WallTileProvider, der für die Wände an den Seiten der Tür verwendet werden soll
+     * @param soundReg (Optional) SoundRegistry, indem die nachfolgenden Sounds vorzufinden sind
+     * @param openSoundKey (Optional) Soundquelle, die für den Sound beim Öffnen der Tür verwendet wird
+     * @param closeSoundKey (Optional) Soundquelle, die für den Sound beim Schließen der Tür verwendet wird
+     */
+    public DoorTileProvider(
+        ArrayList<Pair<Mesh, String>> coloredMeshesClosed, ArrayList<Pair<Mesh, String>> coloredMeshesOpen, boolean isOpen,
+        ITileProvider floorTileProvider, WallTileProvider wallTileProvider,
+        SoundRegistry soundReg, String openSoundKey, String closeSoundKey
+    )
     {
         _coloredMeshesClosed = coloredMeshesClosed;
         _coloredMeshesOpen = coloredMeshesOpen;
         _floorTileProvider = floorTileProvider;
         _wallTileProvider = wallTileProvider;
         _isOpen = isOpen;
+        _soundReg = soundReg;
+        _openSoundKey = openSoundKey;
+        _closeSoundKey = closeSoundKey;
     }
     
         
@@ -72,12 +103,16 @@ public class DoorTileProvider implements ITileProvider
             }
         }
         
-        result.add(new DoorGameObject(_coloredMeshesClosed, _coloredMeshesOpen,
-            facingZ, _isOpen, floorGeometry, wallGeometry, new Vector2i(x, z),
+        DoorGameObject obj = new DoorGameObject(
             new Vector3((x + 0.5) * MapHandler.TILE_WIDTH, 0.0, (MapHandler.MIRROR_Z_AXIS ? -1 : 1) * (z + 0.5) * MapHandler.TILE_WIDTH),
-            new Vector3(0.0, (facingZ)? 90.0 : 0.0, 0.0), new Vector3(1.0, 1.0, 1.0))
+            new Vector3(0.0, (facingZ)? 90.0 : 0.0, 0.0), new Vector3(1.0, 1.0, 1.0),
+            facingZ, _isOpen,  new Vector2i(x, z),
+            _coloredMeshesClosed, _coloredMeshesOpen, floorGeometry, wallGeometry
         );
+        obj.setSound(_soundReg, _openSoundKey, _closeSoundKey);
         
+        result.add(obj);
+
         return result;
     }
     
