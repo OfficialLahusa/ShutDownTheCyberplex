@@ -18,7 +18,7 @@ public class MapHandler
     private static final String MAP_DIRECTORY = "./res/maps/";
     private static final String TILE_LAYER_SUFFIX = "_tile.csv";
     private static final String FUNCTION_LAYER_SUFFIX = "_function.csv";    
-    private static final boolean MIRROR_Z_AXIS = true;
+    public static final boolean MIRROR_Z_AXIS = true;
     public static final double TILE_WIDTH = 8.0;
     
     /**
@@ -51,7 +51,7 @@ public class MapHandler
         ArrayList<Pair<Mesh, String>> woodenDoorOpen = new ArrayList<Pair<Mesh, String>>();
         woodenDoorOpen.add(new Pair<Mesh, String>(_objLoader.loadFromFile("./res/models/wooden_door_open.obj"), "orange"));
         woodenDoorOpen.add(new Pair<Mesh, String>(_objLoader.loadFromFile("./res/models/wooden_door_handle_open.obj"), "gelb"));
-        _tileProviders.put(Tile.WOODEN_DOOR, new DoorTileProvider(woodenDoorClosed, woodenDoorOpen, true));
+        _tileProviders.put(Tile.WOODEN_DOOR, new DoorTileProvider(woodenDoorClosed, woodenDoorOpen, _tileProviders.get(Tile.DIRT_FLOOR), (WallTileProvider)_tileProviders.get(Tile.BRICK_WALL), true));
         
         // Dirt floor grass
         ArrayList<Pair<Mesh, String>> dirtFloorGrass = new ArrayList<Pair<Mesh, String>>();
@@ -74,7 +74,7 @@ public class MapHandler
     public void load(String mapName)
     {
         _map = _csvLoader.loadFromFile(MAP_DIRECTORY + mapName + TILE_LAYER_SUFFIX, MAP_DIRECTORY + mapName + FUNCTION_LAYER_SUFFIX);
-        _map.populate(_tileProviders, MIRROR_Z_AXIS);
+        _map.populate(_tileProviders);
     }
     
     public GridMap getMap()

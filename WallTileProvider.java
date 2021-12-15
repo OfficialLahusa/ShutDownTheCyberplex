@@ -37,16 +37,31 @@ public class WallTileProvider implements ITileProvider
         _pillarMesh = pillarMesh;
         _pillarColor = pillarColor;
     }
-        
+    
     /**
-     * Gibt die GameObjects zurück, die der TileProvider in der gegebenen Umgebung generiert
-     * @param env Umgebung der Tile
+     * Gibt ein GameObject zurück, das für eine bestimmte Tile eine Mauer in eine bestimmte Richtung darstellt
+     * @param variant Seite/Richtung der Mauer. px: 0, pz: 1, nx: 2, nz: 3 [0,3]
      * @param x x-Position der Tile
      * @param y y-Position der Tile
-     * @param mirrorZAxis gibt an, ob z-Achse der generierten Objekte gespiegelt sein soll
-     * @return Liste an GameObjects, die von der Tile platziert werden
+     * @return neue Instanz eines GameObjects der Mauer
      */
-    public ArrayList<IGameObject> getTileObjects(TileEnvironment env, int x, int z, double tileWidth, boolean mirrorZAxis)
+    public IGameObject getWallVariant(int variant, int x, int z)
+    {
+        int xOffFac = 0, zOffFac = 0;
+        if(variant == 0) xOffFac = 1;
+        else if(variant == 1) zOffFac = 1;
+        else if(variant == 2) xOffFac = -1;
+        else if(variant == 3) zOffFac = -1;
+        return new StaticGameObject(
+            getWallMesh(), getWallColor(), new Vector3((x + (1 + xOffFac) * 0.5) * MapHandler.TILE_WIDTH, 0.0, (MapHandler.MIRROR_Z_AXIS ? -1 : 1) * (z + (1 + zOffFac) * 0.5) * MapHandler.TILE_WIDTH),
+            new Vector3(0.0, (variant == 0 || variant == 2) ? 90.0 : 0.0, 0.0), new Vector3(1.0, 1.0, 1.0)
+        );
+    }
+        
+    /**
+     * @see ITileProvider#getTileObjects()
+     */
+    public ArrayList<IGameObject> getTileObjects(TileEnvironment env, int x, int z)
     {
         // Environment muss bei diesem Typ != null sein (siehe ITileProvider.requiresEnvironment())
         if(env == null)
@@ -56,58 +71,56 @@ public class WallTileProvider implements ITileProvider
         
         // Rückgabe-ArrayList
         ArrayList<IGameObject> result = new ArrayList<IGameObject>();
-        double mirrorFactor = mirrorZAxis ? -1 : 1;
         
         // Wände
         // Wand auf +X-Seite
         if(!Tile.isSolidOrNone(env.px))
         {
-            result.add(new StaticGameObject(getWallMesh(), getWallColor(), new Vector3((x + 1.0) * tileWidth, 0.0, mirrorFactor * (z + 0.5) * tileWidth), new Vector3(0.0, 90.0, 0.0), new Vector3(1.0, 1.0, 1.0)));
+            result.add(getWallVariant(0, x, z));
         }
         // Wand auf +Z-Seite
         if(!Tile.isSolidOrNone(env.pz))
         {
-            result.add(new StaticGameObject(getWallMesh(), getWallColor(), new Vector3((x + 0.5) * tileWidth, 0.0, mirrorFactor * (z + 1.0) * tileWidth)));
+            result.add(getWallVariant(1, x, z));
         }
         // Wand auf -X-Seite
         if(!Tile.isSolidOrNone(env.nx))
         {
-            result.add(new StaticGameObject(getWallMesh(), getWallColor(), new Vector3((x      ) * tileWidth, 0.0, mirrorFactor * (z + 0.5) * tileWidth), new Vector3(0.0, 90.0, 0.0), new Vector3(1.0, 1.0, 1.0)));
+            result.add(getWallVariant(2, x, z));
         }
         // Wand auf -Z-Seite
         if(!Tile.isSolidOrNone(env.nz))
         {
-            result.add(new StaticGameObject(getWallMesh(), getWallColor(), new Vector3((x + 0.5) * tileWidth, 0.0, mirrorFactor * (z      ) * tileWidth)));
+            result.add(getWallVariant(3, x, z));
         }
         
         // Säulen
         // Säule an Ecke -X-Z
-        if(!Tile.isSolidOrNone(env.nxnz) && !Tile.isSolidOrNone(env.nx) && !Tile.isSolidOrNone(env.nz))
+        if(!Tile.isSolidOrNone(env.nxnz) && !Tile.isSolid(env.nx) && !Tile.isSolid(env.nz))
         {
-            result.add(new StaticGameObject(getPillarMesh(), getPillarColor(), new Vector3(x * tileWidth, 0.0, mirrorFactor * z * tileWidth)));
+            result.add(new StaticGameObject(getPillarMesh(), getPillarColor(), new Vector3(x * MapHandler.TILE_WIDTH, 0.0, (MapHandler.MIRROR_Z_AXIS ? -1 : 1) * z * MapHandler.TILE_WIDTH)));
         }
         // Säule an Ecke +X-Z
-        if(!Tile.isSolidOrNone(env.pxnz) && !Tile.isSolidOrNone(env.px) && !Tile.isSolidOrNone(env.nz))
+        if(!Tile.isSolidOrNone(env.pxnz) && !Tile.isSolid(env.px) && !Tile.isSolid(env.nz))
         {
-            result.add(new StaticGameObject(getPillarMesh(), getPillarColor(), new Vector3((x + 1.0) * tileWidth, 0.0, mirrorFactor * z * tileWidth)));
+            result.add(new StaticGameObject(getPillarMesh(), getPillarColor(), new Vector3((x + 1.0) * MapHandler.TILE_WIDTH, 0.0, (MapHandler.MIRROR_Z_AXIS ? -1 : 1) * z * MapHandler.TILE_WIDTH)));
         }
         // Säule an Ecke +X+Z
-        if(!Tile.isSolidOrNone(env.pxpz) && !Tile.isSolidOrNone(env.px) && !Tile.isSolidOrNone(env.pz))
+        if(!Tile.isSolidOrNone(env.pxpz) && !Tile.isSolid(env.px) && !Tile.isSolid(env.pz))
         {
-            result.add(new StaticGameObject(getPillarMesh(), getPillarColor(), new Vector3((x + 1.0) * tileWidth, 0.0, mirrorFactor * (z + 1.0) * tileWidth)));
+            result.add(new StaticGameObject(getPillarMesh(), getPillarColor(), new Vector3((x + 1.0) * MapHandler.TILE_WIDTH, 0.0, (MapHandler.MIRROR_Z_AXIS ? -1 : 1) * (z + 1.0) * MapHandler.TILE_WIDTH)));
         }
         // Säule an Ecke -X+Z
-        if(!Tile.isSolidOrNone(env.nxpz) && !Tile.isSolidOrNone(env.nx) && !Tile.isSolidOrNone(env.pz))
+        if(!Tile.isSolidOrNone(env.nxpz) && !Tile.isSolid(env.nx) && !Tile.isSolid(env.pz))
         {
-            result.add(new StaticGameObject(getPillarMesh(), getPillarColor(), new Vector3(x * tileWidth, 0.0, mirrorFactor * (z + 1.0) * tileWidth)));
+            result.add(new StaticGameObject(getPillarMesh(), getPillarColor(), new Vector3(x * MapHandler.TILE_WIDTH, 0.0, (MapHandler.MIRROR_Z_AXIS ? -1 : 1) * (z + 1.0) * MapHandler.TILE_WIDTH)));
         }
         
         return result;
     }
     
     /**
-     * Gibt zurück, ob der TileProvider ein TileEnvironment als Parameter der Funktion getStaticTileObject bekommen soll, oder nicht, da nicht jeder TileProvider-Typ diesen Parametertyp benötigt
-     * @return Wahrheitswert der Aussage "Dieser TileProvider benötigt als Parameter ein TileEnvironment ungleich null"
+     * @see ITileProvider#requiresEnvironment()
      */
     public boolean requiresEnvironment()
     {

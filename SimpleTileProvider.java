@@ -24,23 +24,17 @@ public class SimpleTileProvider implements ITileProvider
     
         
     /**
-     * Gibt die GameObjects zurück, die der TileProvider in der gegebenen Umgebung generiert
-     * @param env Umgebung der Tile
-     * @param x x-Position der Tile
-     * @param y y-Position der Tile
-     * @param mirrorZAxis gibt an, ob z-Achse der generierten Objekte gespiegelt sein soll
-     * @return Liste an GameObjects, die von der Tile platziert werden
+     * @see ITileProvider#getTileObjects()
      */
-    public ArrayList<IGameObject> getTileObjects(TileEnvironment env, int x, int z, double tileWidth, boolean mirrorZAxis)
+    public ArrayList<IGameObject> getTileObjects(TileEnvironment env, int x, int z)
     {
         ArrayList<IGameObject> result = new ArrayList<IGameObject>();
-        result.add(new StaticGameObject(getMesh(), getColor(), new Vector3((x + 0.5) * tileWidth, 0.0, (mirrorZAxis ? -1 : 1) * (z + 0.5) * tileWidth)));
+        result.add(new StaticGameObject(getMesh(), getColor(), new Vector3((x + 0.5) * MapHandler.TILE_WIDTH, 0.0, (MapHandler.MIRROR_Z_AXIS ? -1 : 1) * (z + 0.5) * MapHandler.TILE_WIDTH)));
         return result;
     }
     
     /**
-     * Gibt zurück, ob der TileProvider ein TileEnvironment als Parameter der Funktion getStaticTileObject bekommen soll, oder nicht, da nicht jeder TileProvider-Typ diesen Parametertyp benötigt
-     * @return Wahrheitswert der Aussage "Dieser TileProvider benötigt als Parameter ein TileEnvironment ungleich null"
+     * @see ITileProvider#requiresEnvironment()
      */
     public boolean requiresEnvironment()
     {

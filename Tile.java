@@ -102,6 +102,15 @@ public class Tile
     }
     
     /**
+     * Gibt zurück, ob ein Tile-Typ eine Tür ist
+     * @return true, wenn Tile-Typ eine normale Tür ist
+     */
+    public static boolean isDoor(int tileType)
+    {
+        return isNormalDoor(tileType) || isSecretDoor(tileType);
+    }
+    
+    /**
      * Gibt zurück, ob ein Tile-Typ eine normale Tür ist
      * @return true, wenn Tile-Typ eine normale Tür ist, sonst false
      */

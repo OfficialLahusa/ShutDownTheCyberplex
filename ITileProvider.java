@@ -14,10 +14,9 @@ public interface ITileProvider
      * @param env Umgebung der Tile
      * @param x x-Position der Tile
      * @param y y-Position der Tile
-     * @param mirrorZAxis gibt an, ob z-Achse der generierten Objekte gespiegelt sein soll
      * @return Liste an GameObjects, die von der Tile platziert werden
      */
-    public ArrayList<IGameObject> getTileObjects(TileEnvironment env, int x, int z, double tileWidth, boolean mirrorZAxis);
+    public ArrayList<IGameObject> getTileObjects(TileEnvironment env, int x, int z);
     
     /**
      * Gibt zurück, ob der TileProvider ein TileEnvironment als Parameter der Funktion getStaticTileObject bekommen soll, oder nicht, da nicht jeder TileProvider-Typ diesen Parametertyp benötigt

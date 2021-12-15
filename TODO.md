@@ -1,8 +1,7 @@
 # TODO:
-- Title Screen:
-    - Titel: "Shut down the Cyberplex"
-- Game in Szenen abstrahieren
 - Crosshair hinzufügen
+- Cracked Brick Wall TileProvider
+- Draw Order der Map überarbeiten (Update auch rekursiv ausführen)
 - Physics Engine:
     - 2D Top Down
     - Line-Circle Intersection
@@ -17,16 +16,11 @@
     . Wände mit verschiedenen Höhen
     - Moderne Labortiles mit Dach & maybe Glühbirnen an der Decke
     - Moderne Tür (sliding) (auch Deko-only-Variante)
-    - Funktionstile Room-Floodfill
     - Health Recharger
-    - Level exit
-    - Tür-Trigger
     - Geschütztürme
     - Stromgeneratoren
     - Texttafeln in Level (z.B. "3D Printing Unit"), LOD lässt Text unklar erscheinen
 - Wall-Mounting-Tileprovider
-- Room-Floodfills und Partitionierung des Levels
-- Nur aktive Räume drawen
 - Gegnertypen:
     - Drohne die Routen abfliegen und rot blinkenden Sensor haben, wenn sie den Spieler detecten
     - Geschützturm mit bestimmtem Schussfeld

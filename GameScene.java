@@ -11,6 +11,9 @@ public class GameScene extends Scene
     private Camera _camera;
     private DynamicViewModelGameObject _test, _muzzleFlash, _pistolMain, _primaryMain, _sniperMain, _pistolDetails, _primaryDetails, _sniperDetails, _pistolHandsIdle, _pistolHandsShot, _primaryHandsIdle, _primaryHandsShot;
     
+    private double roomChangeCooldown = 0.0;
+    private static final double DEBUG_SPEED_MULT = 3.0;
+    
     public GameScene(GameState state)
     {
         super(state);
@@ -50,21 +53,21 @@ public class GameScene extends Scene
         
         if(_state.inputHandler.isKeyPressed(KeyCode.KEY_W))
         {
-            _camera.move(_camera.getDirection().multiply(-6.5 * deltaTime));
+            _camera.move(_camera.getDirection().multiply(DEBUG_SPEED_MULT * -6.5 * deltaTime));
         }
         if(_state.inputHandler.isKeyPressed(KeyCode.KEY_S))
         {
-            _camera.move(_camera.getDirection().multiply(6.5 * deltaTime));
+            _camera.move(_camera.getDirection().multiply(DEBUG_SPEED_MULT * 6.5 * deltaTime));
         }
         if(_state.inputHandler.isKeyPressed(KeyCode.KEY_A))
         {
             //_camera.rotateYaw(-120.0 * deltaTime);
-            _camera.move(_camera.getRight().multiply(-6.0 * deltaTime));
+            _camera.move(_camera.getRight().multiply(DEBUG_SPEED_MULT * -6.0 * deltaTime));
         }
         if(_state.inputHandler.isKeyPressed(KeyCode.KEY_D))
         {
             //_camera.rotateYaw(120.0 * deltaTime);
-            _camera.move(_camera.getRight().multiply(6.0 * deltaTime));
+            _camera.move(_camera.getRight().multiply(DEBUG_SPEED_MULT * 6.0 * deltaTime));
         }
         if(_state.inputHandler.isKeyPressed(KeyCode.KEY_ESCAPE))
         {
@@ -74,9 +77,16 @@ public class GameScene extends Scene
         {
             _state.inputHandler.setKeepMouseInPlace(true);
         }
-        if(_state.inputHandler.isKeyPressed(KeyCode.KEY_PLUS))
+        if(roomChangeCooldown <= 0.0 && _state.inputHandler.isKeyPressed(KeyCode.KEY_PLUS))
         {
-            _state.soundRegistry.playSound("powerup3", 0.2, false);
+            _mapHandler.getMap().activeRoom = (_mapHandler.getMap().activeRoom + 1) % _mapHandler.getMap().getRoomCount();
+            roomChangeCooldown = 0.4;
+        }
+        if(roomChangeCooldown <= 0.0 && _state.inputHandler.isKeyPressed(KeyCode.KEY_MINUS))
+        {
+            _mapHandler.getMap().activeRoom--;
+            if(_mapHandler.getMap().activeRoom < 0) _mapHandler.getMap().activeRoom = _mapHandler.getMap().getRoomCount() - 1;
+            roomChangeCooldown = 0.4;
         }
     }
     
@@ -86,9 +96,11 @@ public class GameScene extends Scene
         _mapHandler.getMap().updateLOD(_camera.getPosition());
         // Sortiert Mapgeometrie so, dass die Objekte in der Reihenfolge ihrer Distanz zur Kamera sortiert sind.
         _mapHandler.getMap().reorderAroundCamera(_camera.getPosition());
-        
         // Entfernt bereits durchgelaufene Sounds
         _state.soundRegistry.removeStoppedSounds();
+        
+        roomChangeCooldown -= deltaTime;
+        if(roomChangeCooldown <= 0.0) roomChangeCooldown = 0.0;
     }
     
     public void draw(double deltaTime, double runTime)
