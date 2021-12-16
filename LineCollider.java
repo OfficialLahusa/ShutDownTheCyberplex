@@ -28,7 +28,54 @@ public class LineCollider implements ICollider
      */
     public boolean intersects(ICollider other)
     {
-        throw new UnsupportedOperationException("Not implemented yet");
+        if(other instanceof LineCollider)
+        {
+            LineCollider otherLine = (LineCollider)other;
+            
+            Vector2 a = _pos1, b = _pos2, c = otherLine.getFirstPoint(), d = otherLine.getSecondPoint();
+            Vector2 e = b.subtract(a), f = d.subtract(c);
+            Vector2 p = new Vector2(-e.getY(), e.getX());
+            double h = (a.subtract(c).dot(p)) / (f.dot(p));
+            return h >= 0.0 && h <= 1.0;
+        }
+        else if(other instanceof CircleCollider)
+        {
+            CircleCollider otherCircle = (CircleCollider)other;
+            double dist = getPointDistance(otherCircle.getPosition());
+            return dist <= otherCircle.getRadius();
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Berechnet den Schnittpunkt dieses LineColliders mit einem anderen
+     * @param otherLine zweiter LineCollider, zu dem der Schnittpunkt berechnet werden soll
+     * @return null, wenn es keinen Schnittpunkt gibt, sonst den Schnittpunkt
+     */
+    public Vector2 getLineIntersection(LineCollider otherLine)
+    {
+        if(!intersects(otherLine))
+        {
+            return null;
+        }
+        else
+        {
+            Vector2 a = _pos1, b = _pos2, c = otherLine.getFirstPoint(), d = otherLine.getSecondPoint();
+            Vector2 e = b.subtract(a), f = d.subtract(c);
+            Vector2 p = new Vector2(-e.getY(), e.getX());
+            double h = (a.subtract(c).dot(p)) / (f.dot(p));
+            return new Vector2(c.getX() + h * f.getX(), c.getY() + h * f.getY());
+        }
+    }
+    
+    public double getPointDistance(Vector2 point)
+    {
+        Vector2 a = _pos1, b = _pos2, c = point;
+        Vector2 d = b.subtract(a).normalize();
+        double t = d.getX() * (c.getX() - a.getX()) + d.getY() * (c.getY() - a.getY());
+        Vector2 e = a.add(d.multiply(t));
+        return e.subtract(c).getLength();
     }
     
     /**
