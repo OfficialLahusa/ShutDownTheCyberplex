@@ -22,7 +22,7 @@ public class GameScene extends Scene
         
         _mapHandler = new MapHandler(state);
         _camera = new Camera(new Vector3(0.0, 2.0, 10.0), 1.0, 90.0);
-        _muzzleFlash = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/muzzleFlash.obj"), "blau", new Vector3 (-2, -2.2,-11));
+        _muzzleFlash = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/muzzleFlash.obj"), "cyan", new Vector3 (-2, -2.2,-11));
         _pistolMain = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/pistolMain.obj"), "grau", new Vector3 (-1.5, -1,-10));
         _pistolDetails = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/pistolDetails.obj"), "orange", new Vector3 (-1.5, -1,-10));
         _pistolHandsIdle = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/pistolHandsIdle.obj"), "weiss", new Vector3 (-1.5, -1,-10));
@@ -109,8 +109,11 @@ public class GameScene extends Scene
     {
         // Cleart das Bild
         _state.renderer.clear(0, 0, 0);
-            
-        // Rendering
+        
+        // Draw Map
+        _mapHandler.getMap().draw(_state.renderer, _camera);
+        
+        // Draw Viewmodel
         if(_state.inputHandler.isKeyPressed(KeyCode.MOUSE_BUTTON_LEFT))
         {
             _pistolHandsShot.draw(_state.renderer, _camera);
@@ -120,13 +123,15 @@ public class GameScene extends Scene
         {
             _pistolHandsIdle.draw(_state.renderer, _camera);
         }
-        
         _pistolMain.draw(_state.renderer, _camera);
         _pistolDetails.draw(_state.renderer, _camera);
-        _mapHandler.getMap().draw(_state.renderer, _camera);
+        
+        // Draw UI
+        _state.renderer.drawHealthbar(_player);
         
         Vector2i tilePos = MapHandler.worldPosToTilePos(_camera.getPosition());
         _state.textRenderer.write(new Vector2(10,30), 5, "Pos: X:" + tilePos.getX() + ", Z:" + tilePos.getY(), "rot");
+        
         // X-, Y- und Z-Achse zeichnen
         _state.renderer.drawAxis(_camera);
     }
