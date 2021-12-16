@@ -11,7 +11,7 @@ public interface IDoorGameObject
 {
     /**
      * Updated das Türobjekt
-     * @param deltaTime Deltazeit des aktuellen Frames
+     * @param deltaTime Deltazeit des vorigen Frames
      * @param runTime Laufzeit des Programms
      * @param cameraPosition Position der Kamera im dreidimensionalen Raum
      */

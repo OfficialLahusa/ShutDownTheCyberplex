@@ -11,6 +11,8 @@ public class GameScene extends Scene
     private Camera _camera;
     private DynamicViewModelGameObject _test, _muzzleFlash, _pistolMain, _primaryMain, _sniperMain, _pistolDetails, _primaryDetails, _sniperDetails, _pistolHandsIdle, _pistolHandsShot, _primaryHandsIdle, _primaryHandsShot;
     
+    private Player _player;
+    
     private double roomChangeCooldown = 0.0;
     private static final double DEBUG_SPEED_MULT = 3.0;
     
@@ -32,7 +34,9 @@ public class GameScene extends Scene
         _sniperMain = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/sniperMain.obj"), "grau", new Vector3 (-1.5, 1,-12));
         _sniperDetails = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/sniperDetails.obj"), "gruen", new Vector3 (-1.5, 1,-12));
         
-        _mapHandler.load("TestMap");
+        _player = new Player();
+        
+        _mapHandler.load("level_1_breakin");
         _camera.setPosition(_mapHandler.getMap().getPlayerSpawn());
         
         _state.soundRegistry.loadSource("music1", "./res/sounds/to_the_front.mp3");
@@ -45,6 +49,9 @@ public class GameScene extends Scene
         _state.inputHandler.setKeepMouseInPlace(true);
     }
     
+    /**
+     * @see Scene#handleInput()
+     */
     public void handleInput(double deltaTime, double runTime)
     {
         double deltaX = _state.inputHandler.getAndResetMouseDelta().getX();
@@ -81,6 +88,9 @@ public class GameScene extends Scene
         }
     }
     
+    /**
+     * @see Scene#update()
+     */
     public void update(double deltaTime, double runTime)
     {
         // Updatet die Map
@@ -92,13 +102,13 @@ public class GameScene extends Scene
         if(roomChangeCooldown <= 0.0) roomChangeCooldown = 0.0;
     }
     
+    /**
+     * @see Scene#draw()
+     */
     public void draw(double deltaTime, double runTime)
     {
         // Cleart das Bild
         _state.renderer.clear(0, 0, 0);
-        
-        Vector2i tilePos = MapHandler.worldPosToTilePos(_camera.getPosition());
-        _state.textRenderer.write(new Vector2(10,30), 5, "Pos: X:" + tilePos.getX() + ", Z:" + tilePos.getY(), "rot");
             
         // Rendering
         if(_state.inputHandler.isKeyPressed(KeyCode.MOUSE_BUTTON_LEFT))
@@ -113,9 +123,10 @@ public class GameScene extends Scene
         
         _pistolMain.draw(_state.renderer, _camera);
         _pistolDetails.draw(_state.renderer, _camera);
-        
         _mapHandler.getMap().draw(_state.renderer, _camera);
         
+        Vector2i tilePos = MapHandler.worldPosToTilePos(_camera.getPosition());
+        _state.textRenderer.write(new Vector2(10,30), 5, "Pos: X:" + tilePos.getX() + ", Z:" + tilePos.getY(), "rot");
         // X-, Y- und Z-Achse zeichnen
         _state.renderer.drawAxis(_camera);
     }

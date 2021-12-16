@@ -1,8 +1,8 @@
 /**
- * Beschreiben Sie hier die Klasse TitleScene.
+ * Titelbildschirm und Hauptmenü des Spiels
  * 
- * @author Lasse Huber-Saffer
- * @version 09.12.2021
+ * @author Lasse Huber-Saffer, Nico Hädicke
+ * @version 16.12.2021
  */
 public class TitleScene extends Scene
 {
@@ -37,15 +37,24 @@ public class TitleScene extends Scene
         _mauern = new StaticGameObject(_state.objLoader.loadFromFile("./res/models/mauern.obj"), "cyan", new Vector3 (-1.48, 0.34, -2.5));
     }
     
+    /**
+     * @see Scene#handleInput()
+     */
     public void handleInput(double deltaTime, double runTime)
     {
     }
     
+    /**
+     * @see Scene#update()
+     */
     public void update(double deltaTime, double runTime)
     {
         if(_audioVisualizer != null) _audioVisualizer.update(deltaTime);
     }
     
+    /**
+     * @see Scene#draw()
+     */
     public void draw(double deltaTime, double runTime)
     {
         _state.renderer.clear(10, 10, 10);

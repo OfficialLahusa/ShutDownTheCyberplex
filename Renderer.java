@@ -96,6 +96,14 @@ class Renderer
         drawLine3D(a, b, farbe, null, camera, false);
     }
     
+    /**
+     * Gibt den Schnittpunkt einer Strecke mit einer Ebene zurück
+     * @param lineP1 erster Punkt der Linie
+     * @param lineP2 zweiter Punkt der Linie
+     * @param planeP1 Ortsvektor der Ebene
+     * @param planeNormal Normalenvektor der Ebene
+     * @return null, wenn es keinen Schnittpunkt gibt, ansonsten den Schnittpunkt
+     */
     private Vector3 getLinePlaneIntersection(Vector3 lineP1, Vector3 lineP2, Vector3 planeP1, Vector3 planeNormal)
     {
         Vector3 u = lineP2.subtract(lineP1);
@@ -112,14 +120,28 @@ class Renderer
         return null;
     }
     
+    /**
+     * Gibt zurück ob ein Punkt im Frustum der Kamera liegt
+     * @param p Punkt
+     * @param camPos Position der Kamera im Raum
+     * @param camDir Richtungsvektor der Kamera
+     * @return true, wenn Punkt innerhalb des Frustums liegt
+     */
     private boolean isPointInFrustum(Vector3 p, Vector3 camPos, Vector3 camDir)
     {
         Vector3 pDir = p.subtract(camPos);
         double pDot = pDir.dot(camDir);
-
         return pDot < 0.0;
     }
     
+    /**
+     * Gibt zurück ob eine Linie im Frustum der Kamera liegt
+     * @param a erster Punkt der Linie
+     * @param b zweiter Punkt der Linie
+     * @param camPos Position der Kamera im Raum
+     * @param camDir Richtungsvektor der Kamera
+     * @return true, wenn Linie innerhalb des Frustums liegt
+     */
     private boolean isLineInFrustum(Vector3 a, Vector3 b, Vector3 camPos, Vector3 camDir)
     {   
         return isPointInFrustum(a, camPos, camDir) && isPointInFrustum(b, camPos, camDir);
