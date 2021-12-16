@@ -90,9 +90,15 @@ public class StaticLODGameObject implements IGameObject, ILODGameObject
     }
     
     /**
-     * Zeichnet das GameObject mit dem gegebenen Renderer aus der Perspektive der gegebenen Kamera
-     * @param renderer Renderer, der zum Zeichnen benutzt wird
-     * @param camera Kamera, aus deren Perspektive gerendert wird
+     * @see IGameObject#update()
+     */
+    public void update(double deltaTime, double runTime, Vector3 cameraPosition)
+    {
+        return;
+    }
+    
+    /**
+     * @see IGameObject#draw()
      */
     public void draw(Renderer renderer, Camera camera)
     {
@@ -100,8 +106,7 @@ public class StaticLODGameObject implements IGameObject, ILODGameObject
     }
     
     /**
-     * Updated den Levels-of-Detail des GameObjects im Verhältnis zu einem Bezugspunkt
-     * @param cameraPosition Position der Kamera, die als Bezugspunkt der LOD-Berechnung genutzt wird
+     * @see ILODGameObject#updateLOD()
      */
     public void updateLOD(Vector3 cameraPosition)
     {
@@ -121,8 +126,7 @@ public class StaticLODGameObject implements IGameObject, ILODGameObject
     }
     
     /**
-     * Gibt das Level-of-Detail, das unter dem aktuellen Bezugspunkt genutzt wird, zurück
-     * @return Level-of-Detail, das vom GameObject genutzt wird. Je höher, desto weiter ist das Mesh vom Originalmesh entfernt.
+     * @see ILODGameObject#getLODLevel()
      */
     public int getLODLevel()
     {
@@ -146,8 +150,7 @@ public class StaticLODGameObject implements IGameObject, ILODGameObject
     }
     
     /**
-     * Gibt die Position zurück
-     * @return Position
+     * @see IGameObject#getPosition()
      */
     public Vector3 getPosition()
     {
@@ -155,8 +158,7 @@ public class StaticLODGameObject implements IGameObject, ILODGameObject
     }
     
     /**
-     * Gibt die Rotation zurück
-     * @return Rotation
+     * @see IGameObject#getRotation()
      */
     public Vector3 getRotation()
     {
@@ -164,8 +166,7 @@ public class StaticLODGameObject implements IGameObject, ILODGameObject
     }
     
     /**
-     * Gibt die Skalierung zurück
-     * @return Skalierung
+     * @see IGameObject#getScale()
      */
     public Vector3 getScale()
     {
@@ -173,8 +174,7 @@ public class StaticLODGameObject implements IGameObject, ILODGameObject
     }
     
     /**
-     * Gibt die Farbe zurück
-     * @return Farbe des Objekts
+     * @see IGameObject#getColor()
      */
     public String getColor()
     {
@@ -182,8 +182,7 @@ public class StaticLODGameObject implements IGameObject, ILODGameObject
     }
     
     /**
-     * Setzt die Farbe
-     * @param color Farbe des Objekts
+     * @see IGameObject#setColor()
      */
     public void setColor(String color)
     {

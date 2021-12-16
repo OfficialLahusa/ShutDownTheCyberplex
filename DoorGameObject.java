@@ -108,7 +108,7 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
     }
     
     /**
-     * @see IDoorGameObject#upd
+     * @see IGameObject#update()
      */
     public void update(double deltaTime, double runTime, Vector3 cameraPosition)
     {
@@ -127,9 +127,7 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
     }
     
     /**
-     * Zeichnet das GameObject mit dem gegebenen Renderer aus der Perspektive der gegebenen Kamera
-     * @param renderer Renderer, der zum Zeichnen benutzt wird
-     * @param camera Kamera, aus deren Perspektive gerendert wird
+     * @see IGameObject#draw()
      */
     public void draw(Renderer renderer, Camera camera)
     {
@@ -277,8 +275,7 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
     }
     
     /**
-     * Gibt die Position zurück
-     * @return Position
+     * @see IGameObject#getPosition()
      */
     public Vector3 getPosition()
     {
@@ -286,8 +283,7 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
     }
     
     /**
-     * Gibt die Rotation zurück
-     * @return Rotation
+     * @see IGameObject#getRotation()
      */
     public Vector3 getRotation()
     {
@@ -295,8 +291,7 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
     }
     
     /**
-     * Gibt die Skalierung zurück
-     * @return Skalierung
+     * @see IGameObject#getScale()
      */
     public Vector3 getScale()
     {
@@ -304,8 +299,7 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
     }
     
     /**
-     * Gibt die Farbe zurück
-     * @return Farbe des Objekts
+     * @see IGameObject#getColor()
      */
     public String getColor()
     {
@@ -313,8 +307,7 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
     }
     
     /**
-     * Setzt die Farbe
-     * @param color Farbe des Objekts
+     * @see IGameObject#setColor()
      */
     public void setColor(String color)
     {

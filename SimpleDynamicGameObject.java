@@ -81,9 +81,15 @@ public class SimpleDynamicGameObject implements IDynamicGameObject
     }
     
     /**
-     * Zeichnet das SimpleDynamicGameObject mit dem gegebenen Renderer aus der Perspektive der gegebenen Kamera
-     * @param renderer Renderer, der zum Zeichnen benutzt wird
-     * @param camera Kamera, aus deren Perspektive gerendert wird
+     * @see IGameObject#update()
+     */
+    public void update(double deltaTime, double runTime, Vector3 cameraPosition)
+    {
+        return;
+    }
+    
+    /**
+     * @see IGameObject#draw()
      */
     public void draw(Renderer renderer, Camera camera)
     {
@@ -91,8 +97,7 @@ public class SimpleDynamicGameObject implements IDynamicGameObject
     }
     
     /**
-     * Bewegt das Objekt um einen Vektor
-     * @param delta Bewegungsvektor
+     * @see IDynamicGameObject#move()
      */
     public void move(Vector3 delta)
     {
@@ -100,8 +105,7 @@ public class SimpleDynamicGameObject implements IDynamicGameObject
     }
     
     /**
-     * Rotiert das Objekt
-     * @param rotation Vektor aus drei Rotationswinkeln in Grad
+     * @see IDynamicGameObject#rotate()
      */
     public void rotate(Vector3 rotation)
     {
@@ -109,8 +113,7 @@ public class SimpleDynamicGameObject implements IDynamicGameObject
     }
     
     /**
-     * Skaliert das Object relativ zu seiner vorherigen Größe
-     * @param scale Vektor der Skalierung
+     * @see IDynamicGameObject#scale()
      */
     public void scale(Vector3 scale)
     {
@@ -152,8 +155,7 @@ public class SimpleDynamicGameObject implements IDynamicGameObject
     }
     
     /**
-     * Gibt die Position zurück
-     * @return Position
+     * @see IGameObject#getPosition()
      */
     public Vector3 getPosition()
     {
@@ -161,8 +163,7 @@ public class SimpleDynamicGameObject implements IDynamicGameObject
     }
     
     /**
-     * Gibt die Rotation zurück
-     * @return Rotation
+     * @see IGameObject#getRotation()
      */
     public Vector3 getRotation()
     {
@@ -170,8 +171,7 @@ public class SimpleDynamicGameObject implements IDynamicGameObject
     }
     
     /**
-     * Gibt die Skalierung zurück
-     * @return Skalierung
+     * @see IGameObject#getScale()
      */
     public Vector3 getScale()
     {
@@ -179,8 +179,7 @@ public class SimpleDynamicGameObject implements IDynamicGameObject
     }
     
     /**
-     * Gibt die Farbe zurück
-     * @return Farbe des Objekts
+     * @see IGameObject#getColor()
      */
     public String getColor()
     {
@@ -188,8 +187,7 @@ public class SimpleDynamicGameObject implements IDynamicGameObject
     }
     
     /**
-     * Setzt die Farbe
-     * @param color Farbe des Objekts
+     * @see IGameObject#setColor()
      */
     public void setColor(String color)
     {
@@ -206,8 +204,7 @@ public class SimpleDynamicGameObject implements IDynamicGameObject
     }
     
     /**
-     * Setzt die Position
-     * @param position Position
+     * @see IDynamicGameObject#setPosition()
      */
     public void setPosition(Vector3 position)
     {
@@ -215,8 +212,7 @@ public class SimpleDynamicGameObject implements IDynamicGameObject
     }
     
     /**
-     * Setzt die Rotation
-     * @param rotation Rotation
+     * @see IDynamicGameObject#setRotation()
      */
     public void setRotation(Vector3 rotation)
     {
@@ -224,8 +220,7 @@ public class SimpleDynamicGameObject implements IDynamicGameObject
     }
     
     /**
-     * Setzt die Skalierung
-     * @param scale Skalierung
+     * @see IDynamicGameObject#setScale()
      */
     public void setScale(Vector3 scale)
     {

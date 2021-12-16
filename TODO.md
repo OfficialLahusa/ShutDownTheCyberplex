@@ -21,6 +21,7 @@
     - Geschütztürme
     - Stromgeneratoren
     - Texttafeln in Level (z.B. "3D Printing Unit"), LOD lässt Text unklar erscheinen
+    - Loot Crate
 - Wall-Mounting-Tileprovider
 - Gegnertypen:
     - Drohne die Routen abfliegen und rot blinkenden Sensor haben, wenn sie den Spieler detecten

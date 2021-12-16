@@ -44,4 +44,12 @@ public interface IGameObject
      * @param camera Kamera, aus deren Perspektive gerendert wird
      */
     public void draw(Renderer renderer, Camera camera);
+    
+    /**
+     * Updated das GameObject
+     * @param deltaTime Deltazeit des vorigen Frames
+     * @param runTime Laufzeit des Programms
+     * @param cameraPosition Position der Kamera im dreidimensionalen Raum
+     */
+    public void update(double deltaTime, double runTime, Vector3 cameraPosition);
 }

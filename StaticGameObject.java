@@ -83,9 +83,15 @@ public class StaticGameObject implements IGameObject
     }
     
     /**
-     * Zeichnet das GameObject mit dem gegebenen Renderer aus der Perspektive der gegebenen Kamera
-     * @param renderer Renderer, der zum Zeichnen benutzt wird
-     * @param camera Kamera, aus deren Perspektive gerendert wird
+     * @see IGameObject#update()
+     */
+    public void update(double deltaTime, double runTime, Vector3 cameraPosition)
+    {
+        return;
+    }
+    
+    /**
+     * @see IGameObject#draw()
      */
     public void draw(Renderer renderer, Camera camera)
     {
@@ -113,8 +119,7 @@ public class StaticGameObject implements IGameObject
     }
     
     /**
-     * Gibt die Position zurück
-     * @return Position
+     * @see IGameObject#getPosition()
      */
     public Vector3 getPosition()
     {
@@ -122,8 +127,7 @@ public class StaticGameObject implements IGameObject
     }
     
     /**
-     * Gibt die Rotation zurück
-     * @return Rotation
+     * @see IGameObject#getRotation()
      */
     public Vector3 getRotation()
     {
@@ -131,8 +135,7 @@ public class StaticGameObject implements IGameObject
     }
     
     /**
-     * Gibt die Skalierung zurück
-     * @return Skalierung
+     * @see IGameObject#getScale()
      */
     public Vector3 getScale()
     {
@@ -140,8 +143,7 @@ public class StaticGameObject implements IGameObject
     }
     
     /**
-     * Gibt die Farbe zurück
-     * @return Farbe des Objekts
+     * @see IGameObject#getColor()
      */
     public String getColor()
     {
@@ -149,8 +151,7 @@ public class StaticGameObject implements IGameObject
     }
     
     /**
-     * Setzt die Farbe
-     * @param color Farbe des Objekts
+     * @see IGameObject#setColor()
      */
     public void setColor(String color)
     {
