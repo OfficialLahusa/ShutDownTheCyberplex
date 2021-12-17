@@ -9,9 +9,10 @@ public class LineCollider implements ICollider
     private PhysicsLayer _layer;
     private Vector2 _pos1;
     private Vector2 _pos2;
+    private ICollisionListener _listener;
 
     /**
-     * Konstruktor für Objekte der Klasse LineCollider
+     * Konstruktor mit zwei Punkten
      * @param pos1 erster Punkt der Linie
      * @param pos2 zweiter Punkt der Linie
      * @param layer Physik-Ebene auf der dieser Collider agiert
@@ -21,6 +22,22 @@ public class LineCollider implements ICollider
         _pos1 = new Vector2(pos1);
         _pos2 = new Vector2(pos2);
         _layer = layer;
+        _listener = null;
+    }
+    
+    /**
+     * Konstruktor mit Punkt, Richtungsvektor und Länge
+     * @param pos Startpunkt
+     * @param dir Richtungsvektor
+     * @param length Länge des Linie
+     * @param layer Physik-Eben auf der dieser Collider agiert
+     */
+    public LineCollider(Vector2 pos, Vector2 dir, double length, PhysicsLayer layer)
+    {
+        _pos1 = pos;
+        _pos2 = pos.add(dir.normalize().multiply(length));
+        _layer = layer;
+        _listener = null;
     }
     
     /**
@@ -28,6 +45,8 @@ public class LineCollider implements ICollider
      */
     public boolean intersects(ICollider other)
     {
+        boolean didIntersect = false;
+        
         if(other instanceof LineCollider)
         {
             LineCollider otherLine = (LineCollider)other;
@@ -36,16 +55,21 @@ public class LineCollider implements ICollider
             Vector2 e = b.subtract(a), f = d.subtract(c);
             Vector2 p = new Vector2(-e.getY(), e.getX());
             double h = (a.subtract(c).dot(p)) / (f.dot(p));
-            return h >= 0.0 && h <= 1.0;
+            didIntersect = h >= 0.0 && h <= 1.0;
         }
         else if(other instanceof CircleCollider)
         {
             CircleCollider otherCircle = (CircleCollider)other;
             double dist = getPointDistance(otherCircle.getPosition());
-            return dist <= otherCircle.getRadius();
+            didIntersect = dist <= otherCircle.getRadius();
         }
         
-        return false;
+        if(didIntersect && _listener != null)
+        {
+            _listener.onCollision(this, other);
+        }
+        
+        return didIntersect;
     }
     
     /**
@@ -76,6 +100,22 @@ public class LineCollider implements ICollider
         double t = d.getX() * (c.getX() - a.getX()) + d.getY() * (c.getY() - a.getY());
         Vector2 e = a.add(d.multiply(t));
         return e.subtract(c).getLength();
+    }
+    
+    /**
+     * @see ICollider#getListener()
+     */
+    public ICollisionListener getListener()
+    {
+        return _listener;
+    }
+    
+    /**
+     * @see ICollider#setListener()
+     */
+    public void setListener(ICollisionListener listener)
+    {
+        _listener = listener;
     }
     
     /**

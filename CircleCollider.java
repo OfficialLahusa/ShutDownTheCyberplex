@@ -1,5 +1,5 @@
 /**
- * Kreis-Collider
+ * Kreis-Collider mit Mittelpunkt und Radius
  * 
  * @author Lasse Huber-Saffer
  * @version 16.12.2021
@@ -9,6 +9,7 @@ public class CircleCollider implements ICollider
     private PhysicsLayer _layer;
     private Vector2 _position;
     private double _radius;
+    private ICollisionListener _listener;
 
     /**
      * Konstruktor für Objekte der Klasse CircleCollider
@@ -25,6 +26,7 @@ public class CircleCollider implements ICollider
         }
         _radius = radius;
         _layer = layer;
+        _listener = null;
     }
     
     /**
@@ -32,15 +34,22 @@ public class CircleCollider implements ICollider
      */
     public boolean intersects(ICollider other)
     {
+        boolean didIntersect = false;
+        
         if(other instanceof CircleCollider)
         {
             CircleCollider otherCircle = (CircleCollider)other;
             double dist = Math.abs(otherCircle.getPosition().subtract(_position).getLength());
             double radiusSum = _radius + otherCircle.getRadius();
-            return dist <= radiusSum;
+            didIntersect = dist <= radiusSum;
         }
         
-        return false;
+        if(didIntersect && _listener != null)
+        {
+            _listener.onCollision(this, other);
+        }
+        
+        return didIntersect;
     }
     
     /**
@@ -68,6 +77,22 @@ public class CircleCollider implements ICollider
     public void move(Vector2 translation)
     {
         _position = _position.add(translation);
+    }
+    
+    /**
+     * @see ICollider#getListener()
+     */
+    public ICollisionListener getListener()
+    {
+        return _listener;
+    }
+    
+    /**
+     * @see ICollider#setListener()
+     */
+    public void setListener(ICollisionListener listener)
+    {
+        _listener = listener;
     }
     
     /**

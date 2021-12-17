@@ -26,4 +26,18 @@ public interface ICollider
      * @return Physik-Ebene, auf der dieser Collider agiert
      */
     public PhysicsLayer getLayer();
+    
+    /**
+     * Gibt den Kollisions-Listener dieses Colliders zurück.
+     * Der Kollisionslistener bietet Callback-Methoden für Kollisionen und Kollisionsauflösungen.
+     * @return Instanz des Kollisionslisteners, null, wenn keiner gesetzt ist
+     */
+    public ICollisionListener getListener();
+    
+    /**
+     * Setzt den Kollisions-Listener dieses Colliders.
+     * Der Kollisionslistener bietet Callback-Methoden für Kollisionen und Kollisionsauflösungen.
+     * @param listener zu verwendender Listener
+     */
+    public void setListener(ICollisionListener listener);
 }
