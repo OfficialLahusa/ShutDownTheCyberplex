@@ -14,6 +14,7 @@ public class MapHandler
     private WavefrontObjectLoader _objLoader;
     private LODGenerator _lodGenerator;
     private HashMap<Integer, ITileProvider> _tileProviders;
+    private HashMap<Integer, IColliderProvider> _colliderProviders;
     
     private static final String MAP_DIRECTORY = "./res/maps/";
     private static final String TILE_LAYER_SUFFIX = "_tile.csv";
@@ -32,7 +33,9 @@ public class MapHandler
         _lodGenerator = new LODGenerator();
         
         _tileProviders = new HashMap<Integer, ITileProvider>();
+        _colliderProviders = new HashMap<Integer, IColliderProvider>();
         
+        // Initialisierung der TileProvider
         // Dirt floor
         ArrayList<Pair<Double, Mesh>> dirtFloorLODs = new ArrayList<Pair<Double, Mesh>>();
         dirtFloorLODs.add(new Pair<Double, Mesh>(0.0, _objLoader.loadFromFile("./res/models/dirt_floor_borderless.obj")));
@@ -53,6 +56,7 @@ public class MapHandler
         woodenDoorOpen.add(new Pair<Mesh, String>(_objLoader.loadFromFile("./res/models/wooden_door_handle_open.obj"), "gelb"));
         _tileProviders.put(Tile.WOODEN_DOOR, new DoorTileProvider(
             woodenDoorClosed, woodenDoorOpen, false,
+            new BlockedTunnelColliderProvider(), new TunnelColliderProvider(),
             _tileProviders.get(Tile.DIRT_FLOOR), (WallTileProvider)_tileProviders.get(Tile.BRICK_WALL),
             state.soundRegistry, "wooden_door_open", "wooden_door_close"
         ));
@@ -69,6 +73,9 @@ public class MapHandler
         dirtFloorGrass2.add(new Pair<Mesh, String>(_objLoader.loadFromFile("./res/models/dirt_floor_grassdetail2.obj"), "gruen"));
         dirtFloorGrass2.add(new Pair<Mesh, String>(_objLoader.loadFromFile("./res/models/dirt_floor_stonedetail.obj"), "dunkelgrau"));
         _tileProviders.put(Tile.DIRT_FLOOR_GRASS2, new MultiMeshTileProvider(dirtFloorGrass2));
+        
+        // Initialisierung der ColliderProvider
+        _colliderProviders.put(Tile.BRICK_WALL, new WallColliderProvider());
     }
     
     /**
@@ -78,7 +85,7 @@ public class MapHandler
     public void load(String mapName)
     {
         _map = _csvLoader.loadFromFile(MAP_DIRECTORY + mapName + TILE_LAYER_SUFFIX, MAP_DIRECTORY + mapName + FUNCTION_LAYER_SUFFIX);
-        _map.populate(_tileProviders);
+        _map.populate(_tileProviders, _colliderProviders);
     }
     
     /**

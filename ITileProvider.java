@@ -19,8 +19,8 @@ public interface ITileProvider
     public ArrayList<IGameObject> getTileObjects(TileEnvironment env, int x, int z);
     
     /**
-     * Gibt zurück, ob der TileProvider ein TileEnvironment als Parameter der Funktion getStaticTileObject bekommen soll, oder nicht, da nicht jeder TileProvider-Typ diesen Parametertyp benötigt
-     * @return Wahrheitswert der Aussage "Dieser TileProvider benötigt als Parameter ein TileEnvironment ungleich null"
+     * Gibt zurück, ob der TileProvider ein TileEnvironment als Parameter der Funktion getTileObject bekommen soll, oder nicht, da nicht jeder TileProvider-Typ diesen Parametertyp benötigt
+     * @return true, wenn dieser TileProvider als Parameter ein TileEnvironment ungleich null benötigt, sonst false
      */
     public boolean requiresEnvironment();
 }

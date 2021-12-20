@@ -11,10 +11,6 @@ public class GameScene extends Scene
     private DynamicViewModelGameObject _test, _muzzleFlash, _pistolMain, _primaryMain, _sniperMain, _pistolDetails, _primaryDetails, _sniperDetails, _pistolHandsIdle, _pistolHandsShot, _primaryHandsIdle, _primaryHandsShot;
     
     private Player _player;
-    
-    private LineCollider _line1;
-    private LineCollider _line2;
-    private CircleCollider _circle;
 
     private static final double DEBUG_SPEED_MULT = 3.0;
     
@@ -34,10 +30,6 @@ public class GameScene extends Scene
         _primaryHandsShot = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/primaryHandsShot.obj"), "weiss", new Vector3 (-2, -1,-11));
         _sniperMain = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/sniperMain.obj"), "grau", new Vector3 (-1.5, 1,-12));
         _sniperDetails = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/sniperDetails.obj"), "gruen", new Vector3 (-1.5, 1,-12));
-        
-        _line1 = new LineCollider(new Vector2(0.0, 0.0), new Vector2(50.0, 50.0), PhysicsLayer.SOLID);
-        _line2 = new LineCollider(new Vector2(0.0, 50.0), new Vector2(50.0, 0.0), PhysicsLayer.SOLID);
-        _circle = new CircleCollider(new Vector2(50.0, 50.0), 12.0, PhysicsLayer.SOLID);
         
         _mapHandler.load("level_1_breakin");
         
@@ -105,9 +97,7 @@ public class GameScene extends Scene
         
         // Kollisionsbehandlung
         CircleCollider playerCollider = _player.getCollider();
-        playerCollider.detectCollision(_line1);
-        playerCollider.detectCollision(_line2);
-        playerCollider.detectCollision(_circle);
+        _mapHandler.getMap().handleCollisions(playerCollider);
     }
     
     /**
@@ -138,14 +128,6 @@ public class GameScene extends Scene
         
         // Draw UI
         _state.renderer.drawHealthbar(_player);
-        
-        _state.renderer.drawLine3D(new Vector3(_line1.getFirstPoint().getX(), 0.0, _line1.getFirstPoint().getY()), new Vector3(_line1.getSecondPoint().getX(), 0.0, _line1.getSecondPoint().getY()), "blau", playerCam);
-        _state.renderer.drawLine3D(new Vector3(_line2.getFirstPoint().getX(), 0.0, _line2.getFirstPoint().getY()), new Vector3(_line2.getSecondPoint().getX(), 0.0, _line2.getSecondPoint().getY()), "gruen", playerCam);
-        if(_line1.intersects(_line2))
-        {
-            Vector2 intersection = _line1.getLineIntersection(_line2);
-            _state.renderer.drawLine3D(new Vector3(intersection.getX(), 0.0, intersection.getY()), new Vector3(intersection.getX(), 5.0, intersection.getY()), "rot", playerCam);
-        }
         
         Vector2i tilePos = MapHandler.worldPosToTilePos(playerCam.getPosition());
         _state.textRenderer.write(new Vector2(10,30), 5, "Pos: X:" + tilePos.getX() + ", Z:" + tilePos.getY(), "rot");

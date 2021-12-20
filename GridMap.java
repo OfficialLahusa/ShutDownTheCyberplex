@@ -63,6 +63,19 @@ public class GridMap
     }
     
     /**
+     * Verarbeitet die Kollisionen eines Colliders mit den Collidern der Map
+     * @param collider Collider, dessen Kollisionen verarbeitet werden
+     */
+    public void handleCollisions(ICollider collider)
+    {
+        _rooms.get(_activeRoom).handleCollisions(collider);
+        for(IDoorGameObject doorObj : _rooms.get(_activeRoom).getDoors())
+        {
+            doorObj.handleCollisions(collider);
+        }
+    }
+    
+    /**
      * Zeichnet die Mapgeometrie mit einem gegebenen Renderer in das Sichtfeld einer gegebenen Kamera
      * @param renderer zu nutzender Renderer
      * @param camera zu benutzende Kamera
@@ -301,9 +314,9 @@ public class GridMap
     /**
      * Verarbeitet die Tile-Werte und erstellt die spielbare Map
      * @param tileProviders Hashmap der TileProvider. Der Key entspricht der Tile-ID
-     * @param mirrorZAxis soll eine Spiegelung entlang der z-Achse stattfinden, sodass die Map im Spiel wie im Editor angezeigt wird?
+     * @param colliderProviders Hashmap der ColliderProvider. Der Key entspricht der Tile-ID
      */
-    public void populate(HashMap<Integer, ITileProvider> tileProviders)
+    public void populate(HashMap<Integer, ITileProvider> tileProviders, HashMap<Integer, IColliderProvider> colliderProviders)
     {
         // Geometrieebene
         for(int z = 0; z < _tileLayer.size(); z++)
@@ -354,15 +367,14 @@ public class GridMap
             }
         }
         
-        System.out.println("FloodFills: " + roomFloodFills.size());
-        
+        // Räume aus Floodfills erstellen
         for(int i = 0; i < roomFloodFills.size(); i++)
         {
             Vector2i source = roomFloodFills.get(i);
             Room room = floodFillFromSource(source);
             if(room != null)
             {
-                room.populate(tileProviders, _tileLayer);
+                room.populate(tileProviders, colliderProviders, _tileLayer);
                 _rooms.add(room);
             }
             else
@@ -376,11 +388,7 @@ public class GridMap
         {
             int x = doorLocation.getX(), z = doorLocation.getY();
             int value = _tileLayer.get(z).get(x);
-            if(!Tile.isDoor(value))
-            {
-                
-            }
-            else
+            if(Tile.isDoor(value))
             {
                 if(!tileProviders.containsKey(value))
                 {

@@ -2,7 +2,7 @@
  * Kreis-Collider mit Mittelpunkt und Radius
  * 
  * @author Lasse Huber-Saffer
- * @version 16.12.2021
+ * @version 20.12.2021
  */
 public class CircleCollider implements ICollider
 {

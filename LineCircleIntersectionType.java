@@ -3,7 +3,7 @@
  * Mögliche Typen des Schnitts eines Kreises und einer Linie
  * 
  * @author  Lasse Huber-Saffer
- * @version 17.12.2021
+ * @version 20.12.2021
  */
 public enum LineCircleIntersectionType
 {

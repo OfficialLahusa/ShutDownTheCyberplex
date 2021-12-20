@@ -62,4 +62,10 @@ public interface IDoorGameObject
      * @param closeSoundKey Schlüssel des Sounds für das Schließen (nullable)
      */
     public void setSound(SoundRegistry soundReg, String openSoundKey, String closeSoundKey);
+    
+    /**
+     * Verarbeitet die Kollisionen eines Colliders mit den Collidern der Tür
+     * @param collider Collider, dessen Kollisionen verarbeitet werden
+     */
+    public void handleCollisions(ICollider collider);
 }

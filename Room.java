@@ -10,6 +10,7 @@ public class Room
 {
     private HashSet<Vector2i> _tiles;
     private ArrayList<IGameObject> _geometry;
+    private ArrayList<ICollider> _colliders;
     private ArrayList<Vector2i> _doorLocations;
     private ArrayList<IDoorGameObject> _doors;
     
@@ -26,6 +27,7 @@ public class Room
     {
         _tiles = new HashSet<Vector2i>();
         _geometry = new ArrayList<IGameObject>();
+        _colliders = new ArrayList<ICollider>();
         _doorLocations = new ArrayList<Vector2i>();
         _doors = new ArrayList<IDoorGameObject>();
     }
@@ -33,10 +35,10 @@ public class Room
     /**
      * Verarbeitet die Tile-Werte und erstellt die spielbare Map
      * @param tileProviders Hashmap der TileProvider. Der Key entspricht der Tile-ID
+     * @param colliderProviders Hashmap der ColliderProvider. Der Key entspricht der Tile-ID
      * @param tileLayer Mapdaten
-     * @param mirrorZAxis soll eine Spiegelung entlang der z-Achse stattfinden, sodass die Map im Spiel wie im Editor angezeigt wird?
      */
-    public void populate(HashMap<Integer, ITileProvider> tileProviders, ArrayList<ArrayList<Integer>> tileLayer)
+    public void populate(HashMap<Integer, ITileProvider> tileProviders, HashMap<Integer, IColliderProvider> colliderProviders, ArrayList<ArrayList<Integer>> tileLayer)
     {
         // Geometrieebene (Iteriert nur innerhalb der Bounds)
         for(int z = _minZ; z <= _maxZ; z++)
@@ -61,8 +63,32 @@ public class Room
                         
                         _geometry.addAll(provider.getTileObjects(env, x, z));
                     }
+                    
+                    if(colliderProviders.containsKey(value))
+                    {
+                        IColliderProvider provider = colliderProviders.get(value);
+                        TileEnvironment env = null;
+                        if(provider.requiresEnvironment())
+                        {
+                            env = new TileEnvironment(tileLayer, this, x, z);
+                        }
+                        
+                        _colliders.addAll(provider.getColliders(env, x, z));
+                    }
                 }
             }
+        }
+    }
+    
+    /**
+     * Verarbeitet die Kollisionen eines Colliders mit den Collidern des Raums
+     * @param collider Collider, dessen Kollisionen verarbeitet werden
+     */
+    public void handleCollisions(ICollider collider)
+    {
+        for(ICollider col : _colliders)
+        {
+            collider.detectCollision(col);
         }
     }
     

@@ -30,6 +30,10 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
     private ArrayList<IGameObject> _floor;
     private ArrayList<IGameObject> _walls;
     
+    // Physics
+    private ArrayList<ICollider> _closedColliders;
+    private ArrayList<ICollider> _openColliders;
+    
     // Sound
     private SoundRegistry _soundReg;
     private String _openSoundKey;
@@ -45,44 +49,32 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
      * @param tilePosition Position der Tür im Grid
      * @param coloredMeshesClosed Liste von Mesh-Farb-Paaren, die im geschlossenen Zustand gerendert werden
      * @param coloredMeshesOpen Liste von Mesh-Farb-Paaren, die im offenen Zustand gerendert werden
-     */
-    public DoorGameObject(Vector3 position, Vector3 rotation, Vector3 scale,
-        boolean facingZ, boolean isOpen, Vector2i tilePosition,
-        ArrayList<Pair<Mesh, String>> coloredMeshesClosed, ArrayList<Pair<Mesh, String>> coloredMeshesOpen
-    )
-    {
-        this(position, rotation, scale, facingZ, isOpen, tilePosition, coloredMeshesClosed, coloredMeshesOpen,  null, null);
-    }
-    
-    /**
-     * Konstruktor für Türen mit gegebenem Mesh, Position, Rotation, Skalierung und Boden- sowie Wand-GameObjects
-     * @param position Position
-     * @param rotation Rotation
-     * @param scale Skalierung
-     * @param facingZ Führt die z-Achse durch diese Tür hindurch?
-     * @param isOpen Offenheit der Tür
-     * @param tilePosition Position der Tür im Grid
-     * @param coloredMeshesClosed Liste von Mesh-Farb-Paaren, die im geschlossenen Zustand gerendert werden
-     * @param coloredMeshesOpen Liste von Mesh-Farb-Paaren, die im offenen Zustand gerendert werden
-     * @param floor(OPTIONAL) Liste an GameObjects, die als Fußboden gerendert werden sollen
+     * @param closedColliders (Optional) Liste an Collidern, die im geschlossenen Zustand für die Kollisionserkennung verwendet werden
+     * @param openColliders (Optional) Liste an Collidern, die im offenen Zustand für die Kollisionserkennung verwendet werden
+     * @param floor (OPTIONAL) Liste an GameObjects, die als Fußboden gerendert werden sollen
      * @param walls (OPTIONAL) Liste an GameObjects, die als Mauern gerendert werden sollen
      */
     public DoorGameObject(Vector3 position, Vector3 rotation, Vector3 scale,
         boolean facingZ, boolean isOpen, Vector2i tilePosition,
         ArrayList<Pair<Mesh, String>> coloredMeshesClosed, ArrayList<Pair<Mesh, String>> coloredMeshesOpen,
+        ArrayList<ICollider> closedColliders, ArrayList<ICollider> openColliders,
         ArrayList<IGameObject> floor, ArrayList<IGameObject> walls
     )
     {
-        _coloredMeshesClosed = coloredMeshesClosed;
-        _coloredMeshesOpen = coloredMeshesOpen;
-        _facingZ = facingZ;
-        _isOpen = isOpen;
-        _floor = floor;
-        _walls = walls;
-        _tilePosition = new Vector2i(tilePosition);
         _position = new Vector3(position);
         _rotation = new Vector3(rotation);
         _scale = new Vector3(scale);
+        _facingZ = facingZ;
+        _isOpen = isOpen;
+        _tilePosition = new Vector2i(tilePosition);
+        _coloredMeshesClosed = coloredMeshesClosed;
+        _coloredMeshesOpen = coloredMeshesOpen;
+        _closedColliders = closedColliders;
+        _openColliders = openColliders;
+        _floor = floor;
+        _walls = walls;
+        
+
         _model = null;
         
         _doorTriggers = new HashSet<Vector2i>();
@@ -127,6 +119,27 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
     }
     
     /**
+     * @see IDoorObject#handleCollisions()
+     */
+    public void handleCollisions(ICollider collider)
+    {
+        if(_isOpen)
+        {
+            for(ICollider col : _openColliders)
+            {
+                collider.detectCollision(col);
+            }            
+        }
+        else
+        {
+            for(ICollider col : _closedColliders)
+            {
+                collider.detectCollision(col);
+            }            
+        }
+    }
+    
+    /**
      * @see IGameObject#draw()
      */
     public void draw(Renderer renderer, Camera camera)
@@ -148,9 +161,12 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
             }
         }
         
-        for(Pair<Mesh, String> coloredMesh : coloredMeshList)
+        if(coloredMeshList != null)
         {
-            renderer.drawMesh(coloredMesh.getKey(), getModelMatrix(), coloredMesh.getValue(), camera);
+            for(Pair<Mesh, String> coloredMesh : coloredMeshList)
+            {
+                renderer.drawMesh(coloredMesh.getKey(), getModelMatrix(), coloredMesh.getValue(), camera);
+            }
         }
     }
     

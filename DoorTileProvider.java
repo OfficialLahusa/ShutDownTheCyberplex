@@ -14,6 +14,8 @@ public class DoorTileProvider implements ITileProvider
     private ITileProvider _floorTileProvider;
     private WallTileProvider _wallTileProvider;
     private boolean _isOpen;
+    private IColliderProvider _closedColliderProvider;
+    private IColliderProvider _openColliderProvider;
     private SoundRegistry _soundReg;
     private String _openSoundKey;
     private String _closeSoundKey;
@@ -23,33 +25,8 @@ public class DoorTileProvider implements ITileProvider
      * @param coloredMeshesClosed Liste von Mesh-Farb-Paaren, die im geschlossenen Zustand gerendert werden
      * @param coloredMeshesOpen Liste von Mesh-Farb-Paaren, die im offenen Zustand gerendert werden
      * @param isOpen Offenheit der Tür
-     */
-    public DoorTileProvider(ArrayList<Pair<Mesh, String>> coloredMeshesClosed, ArrayList<Pair<Mesh, String>> coloredMeshesOpen, boolean isOpen)
-    {
-        this(coloredMeshesClosed, coloredMeshesOpen, isOpen, null, null, null, null, null);
-    }
-    
-    /**
-     * Konstruktor für Objekte der Klasse DoorTileProvider
-     * @param coloredMeshesClosed Liste von Mesh-Farb-Paaren, die im geschlossenen Zustand gerendert werden
-     * @param coloredMeshesOpen Liste von Mesh-Farb-Paaren, die im offenen Zustand gerendert werden
-     * @param isOpen Offenheit der Tür
-     * @param floorTileProvider (Optional) TileProvider, der für den Boden unter der Tür verwendet werden soll
-     * @param wallTileProvider (Optional) WallTileProvider, der für die Wände an den Seiten der Tür verwendet werden soll
-     */
-    public DoorTileProvider(
-        ArrayList<Pair<Mesh, String>> coloredMeshesClosed, ArrayList<Pair<Mesh, String>> coloredMeshesOpen, boolean isOpen,
-        ITileProvider floorTileProvider, WallTileProvider wallTileProvider
-    )
-    {
-        this(coloredMeshesClosed, coloredMeshesOpen, isOpen, floorTileProvider, wallTileProvider, null, null, null);
-    }
-    
-    /**
-     * Konstruktor für Objekte der Klasse DoorTileProvider
-     * @param coloredMeshesClosed Liste von Mesh-Farb-Paaren, die im geschlossenen Zustand gerendert werden
-     * @param coloredMeshesOpen Liste von Mesh-Farb-Paaren, die im offenen Zustand gerendert werden
-     * @param isOpen Offenheit der Tür
+     * @param closedColliderProvider (Optional) ColliderProvider, der im geschlossenen Zustand für Kollisionsberechnungen verwendet wird
+     * @param openColliderProvider (Optional) ColliderProvider, der im offenen Zustand für Kollisionsberechnungen verwendet wird
      * @param floorTileProvider (Optional) TileProvider, der für den Boden unter der Tür verwendet werden soll
      * @param wallTileProvider (Optional) WallTileProvider, der für die Wände an den Seiten der Tür verwendet werden soll
      * @param soundReg (Optional) SoundRegistry, indem die nachfolgenden Sounds vorzufinden sind
@@ -58,6 +35,7 @@ public class DoorTileProvider implements ITileProvider
      */
     public DoorTileProvider(
         ArrayList<Pair<Mesh, String>> coloredMeshesClosed, ArrayList<Pair<Mesh, String>> coloredMeshesOpen, boolean isOpen,
+        IColliderProvider closedColliderProvider, IColliderProvider openColliderProvider,
         ITileProvider floorTileProvider, WallTileProvider wallTileProvider,
         SoundRegistry soundReg, String openSoundKey, String closeSoundKey
     )
@@ -67,6 +45,8 @@ public class DoorTileProvider implements ITileProvider
         _floorTileProvider = floorTileProvider;
         _wallTileProvider = wallTileProvider;
         _isOpen = isOpen;
+        _closedColliderProvider = closedColliderProvider;
+        _openColliderProvider = openColliderProvider;
         _soundReg = soundReg;
         _openSoundKey = openSoundKey;
         _closeSoundKey = closeSoundKey;
@@ -81,6 +61,17 @@ public class DoorTileProvider implements ITileProvider
         ArrayList<IGameObject> result = new ArrayList<IGameObject>();
         
         boolean facingZ = (Tile.isSolidOrNone(env.px) && Tile.isSolidOrNone(env.nx));
+        
+        ArrayList<ICollider> closedColliders = null;
+        ArrayList<ICollider> openColliders = null;
+        if(_closedColliderProvider != null)
+        {
+            closedColliders = _closedColliderProvider.getColliders(env, x, z);
+        }
+        if(_openColliderProvider != null)
+        {
+            openColliders = _openColliderProvider.getColliders(env, x, z);
+        }
         
         ArrayList<IGameObject> floorGeometry = null, wallGeometry = null;
         if(_floorTileProvider != null)
@@ -107,7 +98,9 @@ public class DoorTileProvider implements ITileProvider
             new Vector3((x + 0.5) * MapHandler.TILE_WIDTH, 0.0, (MapHandler.MIRROR_Z_AXIS ? -1 : 1) * (z + 0.5) * MapHandler.TILE_WIDTH),
             new Vector3(0.0, (facingZ)? 90.0 : 0.0, 0.0), new Vector3(1.0, 1.0, 1.0),
             facingZ, _isOpen,  new Vector2i(x, z),
-            _coloredMeshesClosed, _coloredMeshesOpen, floorGeometry, wallGeometry
+            _coloredMeshesClosed, _coloredMeshesOpen,
+            closedColliders, openColliders,
+            floorGeometry, wallGeometry
         );
         obj.setSound(_soundReg, _openSoundKey, _closeSoundKey);
         
