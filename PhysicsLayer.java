@@ -7,20 +7,20 @@
 public enum PhysicsLayer
 {
     // Bsp: Brick Wall
-    Solid,
+    SOLID,
     
     // Bsp: Glass, Crate
-    Semisolid,
+    SEMISOLID,
     
     // Der Spieler
-    Player,
+    PLAYER,
     
     // Bsp: Health Pickup
-    Item,
+    ITEM,
     
     // Bsp: Drone
-    Enemy,
+    ENEMY,
     
     // Bsp: Reflective Wall
-    Reflective
+    REFLECTIVE
 }

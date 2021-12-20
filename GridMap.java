@@ -346,7 +346,7 @@ public class GridMap
                     case Tile.PLAYER_SPAWN_RIGHT:
                     case Tile.PLAYER_SPAWN_UP:
                     case Tile.PLAYER_SPAWN_LEFT:
-                        _playerSpawn = new Vector3((x + 0.5) * MapHandler.TILE_WIDTH, 2.0, (MapHandler.MIRROR_Z_AXIS ? -1 : 1) * (z + 0.5) * MapHandler.TILE_WIDTH);
+                        _playerSpawn = new Vector3((x + 0.5) * MapHandler.TILE_WIDTH, 0.0, (MapHandler.MIRROR_Z_AXIS ? -1 : 1) * (z + 0.5) * MapHandler.TILE_WIDTH);
                         break;
                     case Tile.ROOM_FLOODFILL:
                         roomFloodFills.add(new Vector2i(x, z));

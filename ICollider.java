@@ -9,7 +9,15 @@
 public interface ICollider
 {
     /**
-     * Prüft, ob dieser Collider und ein anderer sich überschneiden
+     * Prüft, ob dieser Collider und ein anderer sich überschneiden.
+     * Im Falle einer Überschneidung wird die Methode onCollision beider Listener ausgeführt.
+     * @param other Collider, zu dem die Überschneidung geprüft werden soll
+     * @return true, wenn die Collider sich überschneiden, sonst false
+     */
+    public boolean detectCollision(ICollider other);
+    
+    /**
+     * Prüft, ob dieser Collider und ein anderer sich überschneiden.
      * @param other Collider, zu dem die Überschneidung geprüft werden soll
      * @return true, wenn die Collider sich überschneiden, sonst false
      */

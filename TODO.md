@@ -2,14 +2,9 @@
 - Crosshair hinzufügen
 - Cracked Brick Wall TileProvider
 - Raum-Draw Order der Map überarbeiten (Räume iterativ statt rekursiv zeichnen)
-- Für Szenen @inheritDoc verwenden (https://stackoverflow.com/a/41509917/13332329)
+- LineCircleIntersectionType.HALF_INTERSECTION in LineCollider#getCircleIntersection prüfen (0 <= t <= LAB enforcen)
 - Physics Engine:
-    - 2D Top Down
-    - Line-Circle Intersection
-    - Line-Tile DDA Raycast
-    - Line-Circle Collision Resolution
-    - IPhysicsTileProvider
-    - Enum Set für Kollisionsmaskierung
+    - IColliderProvider
 - Partikeleffekte:
     - Feuer (Rote, gelbe Flammen die Skaliert werden und Rauch/Funkenpartikel, die sich bewegen, skalieren und vielleicht rotieren)
     - Gegner zersplittert beim Tod in Schussrichtung
@@ -38,3 +33,4 @@
     - Gegnerwellen
     - Jede Stage schaltet einen neuen Teil des Levels frei.
     - Man muss Computerkonsolen anschießen und am Screen ablesen, um die richtige zu finden.
+- Debug Speed Multiplier entfernen

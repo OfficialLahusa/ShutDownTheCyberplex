@@ -8,15 +8,14 @@
 public class GameScene extends Scene
 {
     private MapHandler _mapHandler;
-    private Camera _camera;
     private DynamicViewModelGameObject _test, _muzzleFlash, _pistolMain, _primaryMain, _sniperMain, _pistolDetails, _primaryDetails, _sniperDetails, _pistolHandsIdle, _pistolHandsShot, _primaryHandsIdle, _primaryHandsShot;
     
     private Player _player;
     
     private LineCollider _line1;
     private LineCollider _line2;
-    
-    private double roomChangeCooldown = 0.0;
+    private CircleCollider _circle;
+
     private static final double DEBUG_SPEED_MULT = 3.0;
     
     public GameScene(GameState state)
@@ -24,7 +23,6 @@ public class GameScene extends Scene
         super(state);
         
         _mapHandler = new MapHandler(state);
-        _camera = new Camera(new Vector3(0.0, 2.0, 10.0), 1.0, 90.0);
         _muzzleFlash = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/muzzleFlash.obj"), "cyan", new Vector3 (-2, -2.2,-11));
         _pistolMain = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/pistolMain.obj"), "grau", new Vector3 (-1.5, -1,-10));
         _pistolDetails = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/pistolDetails.obj"), "orange", new Vector3 (-1.5, -1,-10));
@@ -37,13 +35,13 @@ public class GameScene extends Scene
         _sniperMain = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/sniperMain.obj"), "grau", new Vector3 (-1.5, 1,-12));
         _sniperDetails = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/sniperDetails.obj"), "gruen", new Vector3 (-1.5, 1,-12));
         
-        _player = new Player();
-        
-        _line1 = new LineCollider(new Vector2(0.0, 0.0), new Vector2(50.0, 50.0), PhysicsLayer.Solid);
-        _line2 = new LineCollider(new Vector2(0.0, 50.0), new Vector2(50.0, 0.0), PhysicsLayer.Solid);
+        _line1 = new LineCollider(new Vector2(0.0, 0.0), new Vector2(50.0, 50.0), PhysicsLayer.SOLID);
+        _line2 = new LineCollider(new Vector2(0.0, 50.0), new Vector2(50.0, 0.0), PhysicsLayer.SOLID);
+        _circle = new CircleCollider(new Vector2(50.0, 50.0), 12.0, PhysicsLayer.SOLID);
         
         _mapHandler.load("level_1_breakin");
-        _camera.setPosition(_mapHandler.getMap().getPlayerSpawn());
+        
+        _player = new Player(_mapHandler.getMap().getPlayerSpawn());
         
         _state.soundRegistry.loadSource("music1", "./res/sounds/to_the_front.mp3");
         _state.soundRegistry.loadSource("powerup3", "./res/sounds/Powerup3.wav");
@@ -60,29 +58,29 @@ public class GameScene extends Scene
      */
     public void handleInput(double deltaTime, double runTime)
     {
+        Camera playerCam = _player.getCamera();
+        
         double deltaX = _state.inputHandler.getAndResetMouseDelta().getX();
         if(_state.inputHandler.getKeepMouseInPlace())
         {
-            _camera.rotateYaw(0.20 * deltaX);
+            _player.rotate(new Vector3(0.0, 0.20 * deltaX, 0.0));
         }
         
         if(_state.inputHandler.isKeyPressed(KeyCode.KEY_W))
         {
-            _camera.move(_camera.getDirection().multiply(DEBUG_SPEED_MULT * -6.5 * deltaTime));
+            _player.move(playerCam.getDirection().multiply(DEBUG_SPEED_MULT * -6.5 * deltaTime));
         }
         if(_state.inputHandler.isKeyPressed(KeyCode.KEY_S))
         {
-            _camera.move(_camera.getDirection().multiply(DEBUG_SPEED_MULT * 6.5 * deltaTime));
+            _player.move(playerCam.getDirection().multiply(DEBUG_SPEED_MULT * 6.5 * deltaTime));
         }
         if(_state.inputHandler.isKeyPressed(KeyCode.KEY_A))
         {
-            //_camera.rotateYaw(-120.0 * deltaTime);
-            _camera.move(_camera.getRight().multiply(DEBUG_SPEED_MULT * -6.0 * deltaTime));
+            _player.move(playerCam.getRight().multiply(DEBUG_SPEED_MULT * -6.0 * deltaTime));
         }
         if(_state.inputHandler.isKeyPressed(KeyCode.KEY_D))
         {
-            //_camera.rotateYaw(120.0 * deltaTime);
-            _camera.move(_camera.getRight().multiply(DEBUG_SPEED_MULT * 6.0 * deltaTime));
+            _player.move(playerCam.getRight().multiply(DEBUG_SPEED_MULT * 6.0 * deltaTime));
         }
         if(_state.inputHandler.isKeyPressed(KeyCode.KEY_ESCAPE))
         {
@@ -100,12 +98,16 @@ public class GameScene extends Scene
     public void update(double deltaTime, double runTime)
     {
         // Updatet die Map
-        _mapHandler.getMap().update(deltaTime, runTime, _camera.getPosition());
+        _mapHandler.getMap().update(deltaTime, runTime, _player.getCamera().getPosition());
+        
         // Entfernt bereits durchgelaufene Sounds
         _state.soundRegistry.removeStoppedSounds();
         
-        roomChangeCooldown -= deltaTime;
-        if(roomChangeCooldown <= 0.0) roomChangeCooldown = 0.0;
+        // Kollisionsbehandlung
+        CircleCollider playerCollider = _player.getCollider();
+        playerCollider.detectCollision(_line1);
+        playerCollider.detectCollision(_line2);
+        playerCollider.detectCollision(_circle);
     }
     
     /**
@@ -113,40 +115,42 @@ public class GameScene extends Scene
      */
     public void draw(double deltaTime, double runTime)
     {
+        Camera playerCam = _player.getCamera();
+        
         // Cleart das Bild
         _state.renderer.clear(0, 0, 0);
         
         // Draw Map
-        _mapHandler.getMap().draw(_state.renderer, _camera);
+        _mapHandler.getMap().draw(_state.renderer, playerCam);
         
         // Draw Viewmodel
         if(_state.inputHandler.isKeyPressed(KeyCode.MOUSE_BUTTON_LEFT))
         {
-            _pistolHandsShot.draw(_state.renderer, _camera);
-            _muzzleFlash.draw(_state.renderer, _camera);
+            _pistolHandsShot.draw(_state.renderer, playerCam);
+            _muzzleFlash.draw(_state.renderer, playerCam);
         }
         else
         {
-            _pistolHandsIdle.draw(_state.renderer, _camera);
+            _pistolHandsIdle.draw(_state.renderer, playerCam);
         }
-        _pistolMain.draw(_state.renderer, _camera);
-        _pistolDetails.draw(_state.renderer, _camera);
+        _pistolMain.draw(_state.renderer, playerCam);
+        _pistolDetails.draw(_state.renderer, playerCam);
         
         // Draw UI
         _state.renderer.drawHealthbar(_player);
         
-        _state.renderer.drawLine3D(new Vector3(_line1.getFirstPoint().getX(), 0.0, _line1.getFirstPoint().getY()), new Vector3(_line1.getSecondPoint().getX(), 0.0, _line1.getSecondPoint().getY()), "blau", _camera);
-        _state.renderer.drawLine3D(new Vector3(_line2.getFirstPoint().getX(), 0.0, _line2.getFirstPoint().getY()), new Vector3(_line2.getSecondPoint().getX(), 0.0, _line2.getSecondPoint().getY()), "gruen", _camera);
+        _state.renderer.drawLine3D(new Vector3(_line1.getFirstPoint().getX(), 0.0, _line1.getFirstPoint().getY()), new Vector3(_line1.getSecondPoint().getX(), 0.0, _line1.getSecondPoint().getY()), "blau", playerCam);
+        _state.renderer.drawLine3D(new Vector3(_line2.getFirstPoint().getX(), 0.0, _line2.getFirstPoint().getY()), new Vector3(_line2.getSecondPoint().getX(), 0.0, _line2.getSecondPoint().getY()), "gruen", playerCam);
         if(_line1.intersects(_line2))
         {
             Vector2 intersection = _line1.getLineIntersection(_line2);
-            _state.renderer.drawLine3D(new Vector3(intersection.getX(), 0.0, intersection.getY()), new Vector3(intersection.getX(), 5.0, intersection.getY()), "rot", _camera);
+            _state.renderer.drawLine3D(new Vector3(intersection.getX(), 0.0, intersection.getY()), new Vector3(intersection.getX(), 5.0, intersection.getY()), "rot", playerCam);
         }
         
-        Vector2i tilePos = MapHandler.worldPosToTilePos(_camera.getPosition());
+        Vector2i tilePos = MapHandler.worldPosToTilePos(playerCam.getPosition());
         _state.textRenderer.write(new Vector2(10,30), 5, "Pos: X:" + tilePos.getX() + ", Z:" + tilePos.getY(), "rot");
         
         // X-, Y- und Z-Achse zeichnen
-        _state.renderer.drawAxis(_camera);
+        _state.renderer.drawAxis(playerCam);
     }
 }
