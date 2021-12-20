@@ -127,6 +127,7 @@ public class GameScene extends Scene
         _pistolDetails.draw(_state.renderer, playerCam);
         
         // Draw UI
+        _state.renderer.drawCrosshair(8.0, 6.0, "gruen");
         _state.renderer.drawHealthbar(_player);
         
         Vector2i tilePos = MapHandler.worldPosToTilePos(playerCam.getPosition());

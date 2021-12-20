@@ -1,10 +1,8 @@
 # TODO:
-- Crosshair hinzufügen
 - Cracked Brick Wall TileProvider
 - Raum-Draw Order der Map überarbeiten (Räume iterativ statt rekursiv zeichnen)
 - LineCircleIntersectionType.HALF_INTERSECTION in LineCollider#getCircleIntersection prüfen (0 <= t <= LAB enforcen)
-- Physics Engine:
-    - IColliderProvider
+- Farben zu Enums machen
 - Partikeleffekte:
     - Feuer (Rote, gelbe Flammen die Skaliert werden und Rauch/Funkenpartikel, die sich bewegen, skalieren und vielleicht rotieren)
     - Gegner zersplittert beim Tod in Schussrichtung

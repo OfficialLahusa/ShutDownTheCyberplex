@@ -74,6 +74,24 @@ class Renderer
     }
     
     /**
+     * Zeichnet ein Crosshair (Zielhilfe) auf den Bildschirm
+     * @param length Länge der einzelnen Linien des Crosshairs
+     * @param distance Abstand der Linien zum Mittelpunkt
+     * @param farbe Farbe des Crosshairs
+     */
+    public void drawCrosshair(double length, double distance, String farbe)
+    {
+        // Nach oben
+        drawLine(new Vector2(250.0, 250.0 + distance), new Vector2(250.0, 250.0 + distance + length), farbe);
+        // Nach unten
+        drawLine(new Vector2(250.0, 250.0 - distance), new Vector2(250.0, 250.0 - distance - length), farbe);
+        // Nach links
+        drawLine(new Vector2(250.0 - distance, 250.0), new Vector2(250.0 - distance - length, 250.0), farbe);
+        // Nach rechts
+        drawLine(new Vector2(250.0 + distance, 250.0), new Vector2(250.0 + distance + length, 250.0), farbe);
+    }
+    
+    /**
      * Zeichnet eine rote Linie zwischen zwei Punkten im dreidimensionalen Raum
      * @param a Startpunkt
      * @param b Endpunkt
