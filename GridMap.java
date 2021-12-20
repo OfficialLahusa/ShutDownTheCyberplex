@@ -5,7 +5,7 @@ import javafx.util.*;
  * Beschreiben Sie hier die Klasse GridMap.
  * 
  * @author Lasse Huber-Saffer 
- * @version 03.12.2021
+ * @version 20.12.2021
  */
 public class GridMap
 {    

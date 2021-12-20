@@ -4,7 +4,7 @@ import javafx.util.*;
  * Interface für GameObjects mit Tür-Funktionalität
  * 
  * @author Lasse Huber-Saffer
- * @version 15.12.2021
+ * @version 20.12.2021
  */
 
 public interface IDoorGameObject

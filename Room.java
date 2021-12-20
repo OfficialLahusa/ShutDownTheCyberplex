@@ -4,7 +4,7 @@ import java.util.*;
  * Ein räumlich eingegrenzter Abschnitt einer Gridmap, innerhalb dessen Simulationen durchgeführt werden
  * 
  * @author Lasse Huber-Saffer
- * @version 13.12.2021
+ * @version 20.12.2021
  */
 public class Room
 {

@@ -5,7 +5,7 @@ import javafx.util.*;
  * TileProvider für Türen, die in Abhängigkeit von der Umgebung entlang der X- oder Z-Achse ausgerichtet sein können
  * 
  * @author Lasse Huber-Saffer
- * @version 16.12.2021
+ * @version 20.12.2021
  */
 public class DoorTileProvider implements ITileProvider
 {

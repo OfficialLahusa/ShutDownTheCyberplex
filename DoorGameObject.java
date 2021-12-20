@@ -5,7 +5,7 @@ import javafx.util.*;
  * Beschreiben Sie hier die Klasse DoorGameObject.
  * 
  * @author Lasse Huber-Saffer
- * @version 15.12.2021
+ * @version 20.12.2021
  */
 public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObject
 {

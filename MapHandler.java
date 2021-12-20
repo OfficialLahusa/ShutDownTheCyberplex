@@ -5,7 +5,7 @@ import javafx.util.*;
  * Verwaltet verschiedene GridMaps und stellt zusätzliche Funktionalität bereit, insbesondere zur Performance-Optimierung
  * 
  * @author Lasse Huber-Saffer
- * @version 04.12.2021
+ * @version 20.12.2021
  */
 public class MapHandler
 {
