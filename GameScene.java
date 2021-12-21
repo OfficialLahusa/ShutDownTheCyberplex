@@ -62,8 +62,6 @@ public class GameScene extends Scene
     public void handleInput(double deltaTime, double runTime)
     {
         Camera playerCam = _player.getCamera();
-        Vector3 camDir = playerCam.getDirection();
-        Vector3 camRight = playerCam.getRight();
         
         // Maus-Bewegung zu Kamera-Yaw umwandeln
         double deltaX = _state.inputHandler.getAndResetMouseDelta().getX();
@@ -71,6 +69,9 @@ public class GameScene extends Scene
         {
             _player.rotate(new Vector3(0.0, 0.20 * deltaX, 0.0));
         }
+        
+        Vector3 camDir = playerCam.getDirection();
+        Vector3 camRight = playerCam.getRight();
         
         // Schieﬂen
         if(_state.inputHandler.isKeyPressed(KeyCode.MOUSE_BUTTON_LEFT))

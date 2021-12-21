@@ -21,7 +21,7 @@ public class Tile
     public static final int INVISIBLE_WALL = 8;
     
     public static final int DIRT_FLOOR_GRASS = 20;
-    public static final int CRACKED_STONE_WALL_DOOR = 21;
+    public static final int CRACKED_BRICK_WALL_DOOR = 21;
     public static final int ROAD_MARKINGS_X = 27;
     
     public static final int DIRT_FLOOR_GRASS2 = 40;
@@ -93,7 +93,7 @@ public class Tile
         {
             case WOODEN_DOOR:
             case CYBER_DOOR:
-            case CRACKED_STONE_WALL_DOOR:
+            case CRACKED_BRICK_WALL_DOOR:
             case GLASS:
                 return true;
             default:
@@ -134,7 +134,7 @@ public class Tile
     {
         switch(tileType)
         {
-            case CRACKED_STONE_WALL_DOOR:
+            case CRACKED_BRICK_WALL_DOOR:
                 return true;
             default:
                 return false;

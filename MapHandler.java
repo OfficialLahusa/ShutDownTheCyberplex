@@ -67,12 +67,32 @@ public class MapHandler
         dirtFloorGrass.add(new Pair<Mesh, String>(_objLoader.loadFromFile("./res/models/dirt_floor_grassdetail.obj"), "gruen"));
         _tileProviders.put(Tile.DIRT_FLOOR_GRASS, new MultiMeshTileProvider(dirtFloorGrass));
         
+        // Cracked brick wall
+        ArrayList<Pair<Mesh, String>> secretDoorClosed = new ArrayList<Pair<Mesh, String>>();
+        secretDoorClosed.add(new Pair<Mesh, String>(_objLoader.loadFromFile("./res/models/wooden_door.obj"), "rot"));
+        secretDoorClosed.add(new Pair<Mesh, String>(_objLoader.loadFromFile("./res/models/wooden_door_handle.obj"), "cyan"));
+        ArrayList<Pair<Mesh, String>> secretDoorOpen = new ArrayList<Pair<Mesh, String>>();
+        secretDoorOpen.add(new Pair<Mesh, String>(_objLoader.loadFromFile("./res/models/wooden_door_open.obj"), "rot"));
+        secretDoorOpen.add(new Pair<Mesh, String>(_objLoader.loadFromFile("./res/models/wooden_door_handle_open.obj"), "cyan"));
+        _tileProviders.put(Tile.CRACKED_BRICK_WALL_DOOR, new DoorTileProvider(
+            secretDoorClosed, secretDoorOpen, false,
+            new BlockedTunnelColliderProvider(), new TunnelColliderProvider(),
+            _tileProviders.get(Tile.DIRT_FLOOR), (WallTileProvider)_tileProviders.get(Tile.BRICK_WALL),
+            state.soundRegistry, "wooden_door_open", "wooden_door_close"
+        ));
+        
+        // Road Markings X
+        _tileProviders.put(Tile.ROAD_MARKINGS_X, new SimpleTileProvider(_objLoader.loadFromFile("./res/models/road_markings_x.obj"), "gelb"));
+        
         // Dirt floor grass 2
         ArrayList<Pair<Mesh, String>> dirtFloorGrass2 = new ArrayList<Pair<Mesh, String>>();
         dirtFloorGrass2.add(new Pair<Mesh, String>(_objLoader.loadFromFile("./res/models/dirt_floor_borderless.obj"), "orange"));
         dirtFloorGrass2.add(new Pair<Mesh, String>(_objLoader.loadFromFile("./res/models/dirt_floor_grassdetail2.obj"), "gruen"));
         dirtFloorGrass2.add(new Pair<Mesh, String>(_objLoader.loadFromFile("./res/models/dirt_floor_stonedetail.obj"), "dunkelgrau"));
         _tileProviders.put(Tile.DIRT_FLOOR_GRASS2, new MultiMeshTileProvider(dirtFloorGrass2));
+        
+        // Road Markings Z
+        _tileProviders.put(Tile.ROAD_MARKINGS_Z, new SimpleTileProvider(_objLoader.loadFromFile("./res/models/road_markings_z.obj"), "gelb"));
         
         // Initialisierung der ColliderProvider
         _colliderProviders.put(Tile.BRICK_WALL, new WallColliderProvider());
