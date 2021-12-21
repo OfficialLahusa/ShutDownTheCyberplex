@@ -78,7 +78,7 @@ public class GameScene extends Scene
             Vector2 source = new Vector2(_player.getPosition().getX(), _player.getPosition().getZ());
             Vector2 dir = new Vector2(camDir.getX(), camDir.getZ()).invert();
             double dist = 500.0;
-            _raycast = Physics.raycast(source, dir, dist, _mapHandler.getMap(), null, null);
+            _raycast = Physics.raycast(source, dir, dist, _mapHandler.getMap(), null, EnumSet.of(PhysicsLayer.PLAYER));
             _raycastSource = new Vector3(_player.getPosition());
             Vector2 target = source.add(dir.normalize().multiply(dist));
             _raycastTarget = new Vector3(target.getX(), 0.0, target.getY());
