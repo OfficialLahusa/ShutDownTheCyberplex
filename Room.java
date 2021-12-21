@@ -4,7 +4,7 @@ import java.util.*;
  * Ein räumlich eingegrenzter Abschnitt einer Gridmap, innerhalb dessen Simulationen durchgeführt werden
  * 
  * @author Lasse Huber-Saffer
- * @version 20.12.2021
+ * @version 21.12.2021
  */
 public class Room
 {
@@ -154,6 +154,11 @@ public class Room
         );
     }
     
+    /**
+     * Fügt eine bestimmte Tile zum Gebiet dieses Raumes hinzu
+     * @param x x-Koordinate der Tile
+     * @param z z-Koordinate der Tile
+     */
     public void addTile(int x, int z)
     {
         if(!_tiles.contains(new Vector2i(x, z)))
@@ -189,6 +194,10 @@ public class Room
         }
     }
     
+    /**
+     * Fügt ein Türobjekt zum Raum hinzu
+     * @param door Türobjekt
+     */
     public void addDoor(IDoorGameObject door)
     {
         if(door != null)
@@ -197,23 +206,51 @@ public class Room
         }
     }
     
+    /**
+     * Prüft, ob ein Koordinatenpaar im Raum enthalten ist
+     * @param x x-Koordinate
+     * @param z z-Koordinate
+     * @return true, wenn Koordinatenpaar im Raum enthalten ist, sonst false
+     */
     public boolean contains(int x, int z)
     {
         return _tiles.contains(new Vector2i(x, z));
     }
     
+    /**
+     * Fügt eine bestimmte Tile zum Gebiet dieses Raumes hinzu
+     * @param pos Position der Tile
+     */
     public void addTile(Vector2i pos)
     {
         addTile(pos.getX(), pos.getY());
     }
     
+    /**
+     * Prüft, ob ein Koordinatenpaar im Raum enthalten ist
+     * @param pos Koordinatenpaar
+     * @return true, wenn Koordinatenpaar im Raum enthalten ist, sonst false
+     */
     public boolean contains(Vector2i pos)
     {
         return contains(pos.getX(), pos.getY());
     }
     
+    /**
+     * Gibt die Türobjekte des Raums zurück
+     * @return Liste der Türobjekte des Raums
+     */
     public ArrayList<IDoorGameObject> getDoors()
     {
         return _doors;
+    }
+    
+    /**
+     * Gibt die Collider des Raums zurück
+     * @return Liste der Collider des Raums
+     */
+    public ArrayList<ICollider> getColliders()
+    {
+        return _colliders;
     }
 }

@@ -19,7 +19,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -135,69 +135,76 @@ implements IDynamicGameObject, ICollisionListener</pre>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>CircleCollider</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCollider()">getCollider</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gibt den CircleCollider des Spielers als Referenz zurück</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getColor()">getColor</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gibt die Farbe zurück</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getHealth()">getHealth</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gibt die Lebenspunkte des Spielers zurück</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>Mesh</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMesh()">getMesh</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gibt eine Kopie des Meshs (3D-Modell) zurück</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>Mesh</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMeshRef()">getMeshRef</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gibt eine Referenz auf das Mesh (3D-Modell) zurück</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>Vector3</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPosition()">getPosition</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gibt die Position zurück</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>Vector3</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRotation()">getRotation</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gibt die Rotation zurück</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>Vector3</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getScale()">getScale</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gibt die Skalierung zurück</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#heal(int)">heal</a></span>&#8203;(int&nbsp;amount)</code></th>
 <td class="colLast">
 <div class="block">Heilt den Spieler</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#move(Vector3)">move</a></span>&#8203;(Vector3&nbsp;delta)</code></th>
 <td class="colLast">
 <div class="block">Bewegt das Objekt um einen Vektor</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onCollision(ICollider,ICollider)">onCollision</a></span>&#8203;(ICollider&nbsp;self,
            ICollider&nbsp;other)</code></th>
@@ -205,7 +212,7 @@ implements IDynamicGameObject, ICollisionListener</pre>
 <div class="block">Callback-Methode, die im Fall einer Kollision ausgeführt wird</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onResolution(ICollider,ICollider)">onResolution</a></span>&#8203;(ICollider&nbsp;self,
             ICollider&nbsp;other)</code></th>
@@ -213,63 +220,63 @@ implements IDynamicGameObject, ICollisionListener</pre>
 <div class="block">Callback-Methode, die im Fall einer Kollisionsauflösung ausgeführt wird</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rotate(Vector3)">rotate</a></span>&#8203;(Vector3&nbsp;rotation)</code></th>
 <td class="colLast">
 <div class="block">Rotiert das Objekt</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#scale(Vector3)">scale</a></span>&#8203;(Vector3&nbsp;scale)</code></th>
 <td class="colLast">
 <div class="block">Skaliert das Object relativ zu seiner vorherigen Größe</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setColor(java.lang.String)">setColor</a></span>&#8203;(java.lang.String&nbsp;color)</code></th>
 <td class="colLast">
 <div class="block">Setzt die Farbe</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setHealth(int)">setHealth</a></span>&#8203;(int&nbsp;amount)</code></th>
 <td class="colLast">
 <div class="block">Setzt die Leben des Spielers</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setMesh(Mesh)">setMesh</a></span>&#8203;(Mesh&nbsp;mesh)</code></th>
 <td class="colLast">
 <div class="block">Setzt das Mesh (3D-Modell)</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPosition(Vector3)">setPosition</a></span>&#8203;(Vector3&nbsp;position)</code></th>
 <td class="colLast">
 <div class="block">Setzt die Position</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setRotation(Vector3)">setRotation</a></span>&#8203;(Vector3&nbsp;rotation)</code></th>
 <td class="colLast">
 <div class="block">Setzt die Rotation</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setScale(Vector3)">setScale</a></span>&#8203;(Vector3&nbsp;scale)</code></th>
 <td class="colLast">
 <div class="block">Setzt die Skalierung</div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#update(double,double,Vector3)">update</a></span>&#8203;(double&nbsp;deltaTime,
       double&nbsp;runTime,
@@ -493,6 +500,20 @@ implements IDynamicGameObject, ICollisionListener</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>Kamera des Spielers</dd>
+</dl>
+</li>
+</ul>
+<a id="getCollider()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getCollider</h4>
+<pre class="methodSignature">public&nbsp;CircleCollider&nbsp;getCollider()</pre>
+<div class="block">Gibt den CircleCollider des Spielers als Referenz zurück</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>CircleCollider des Spielers</dd>
 </dl>
 </li>
 </ul>

@@ -2,7 +2,7 @@
  * Unterebene des Physiksystems, die die physikalischen Eigenschaften eines Colliders bestimmt
  * 
  * @author  Lasse Huber-Saffer
- * @version 16.12.2021
+ * @version 21.12.2021
  */
 public enum PhysicsLayer
 {
@@ -22,5 +22,8 @@ public enum PhysicsLayer
     ENEMY,
     
     // Bsp: Reflective Wall
-    REFLECTIVE
+    REFLECTIVE,
+    
+    // Raycasts über die Physics-Klasse
+    RAYCAST
 }

@@ -1,4 +1,5 @@
 import javafx.util.*;
+import java.util.*;
 
 /**
  * Interface für GameObjects mit Tür-Funktionalität
@@ -68,4 +69,10 @@ public interface IDoorGameObject
      * @param collider Collider, dessen Kollisionen verarbeitet werden
      */
     public void handleCollisions(ICollider collider);
+    
+    /**
+     * Gibt die aktuell von der Tür verwendeten Collider zurück
+     * @return List der von der Tür im aktuellen Zustand verwendeten Collider
+     */
+    public ArrayList<ICollider> getColliders();
 }

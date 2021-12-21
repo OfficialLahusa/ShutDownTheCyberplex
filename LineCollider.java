@@ -50,12 +50,13 @@ public class LineCollider implements ICollider
         if(other instanceof LineCollider)
         {
             LineCollider otherLine = (LineCollider)other;
-            
             Vector2 a = _pos1, b = _pos2, c = otherLine.getFirstPoint(), d = otherLine.getSecondPoint();
-            Vector2 e = b.subtract(a), f = d.subtract(c);
-            Vector2 p = new Vector2(-e.getY(), e.getX());
-            double h = (a.subtract(c).dot(p)) / (f.dot(p));
-            didIntersect = h >= 0.0 && h <= 1.0;
+            
+            double h = computeH(a, b, c, d);
+            double g = computeH(c, d, a, b);
+            
+            // Skalare g und h müssen beide innerhalb von [0.0, 1.0] liegen, um einen Schnitt zu haben
+            didIntersect = h >= 0.0 && h <= 1.0 && g >= 0.0 && g <= 1.0;
         }
         else if(other instanceof CircleCollider)
         {
@@ -65,6 +66,22 @@ public class LineCollider implements ICollider
         }
         
         return didIntersect;
+    }
+    
+    /**
+     * Berechnet den Skalar h gemäß des Algorithmus nach https://stackoverflow.com/a/563275/13332329
+     * @param a 1. Punkt der ersten Linie
+     * @param b 2. Punkt der ersten Linie
+     * @param c 1. Punkt der zweiten Linie
+     * @param d 2. Punkt der zweiten Linie
+     * @return h-Wert
+     */
+    private double computeH(Vector2 a, Vector2 b, Vector2 c, Vector2 d)
+    {
+        Vector2 e = b.subtract(a), f = d.subtract(c);
+        Vector2 p = new Vector2(-e.getY(), e.getX());
+        double h = (a.subtract(c).dot(p)) / (f.dot(p));
+        return h;
     }
     
     /**
@@ -115,6 +132,7 @@ public class LineCollider implements ICollider
         LineCircleIntersection result = null;
         
         Vector2 a = _pos1, b = _pos2, c = otherCircle.getPosition();
+        double length_ab = b.subtract(a).getLength();
         double r = otherCircle.getRadius();
         Vector2 dir = b.subtract(a).normalize();
         double t = dir.getX() * (c.getX() - a.getX()) + dir.getY() * (c.getY() - a.getY());
@@ -131,7 +149,22 @@ public class LineCollider implements ICollider
             Vector2 firstIntersection = dir.multiply(t-dt).add(a);
             Vector2 secondIntersection = dir.multiply(t+dt).add(a);
             
-            return new LineCircleIntersection(LineCircleIntersectionType.FULL_INTERSECTION, firstIntersection, secondIntersection);
+            // Unterscheidung zwischen HALF_INTERSECTION und FULL_INTERSECTION
+            // Beide Punkte liegen auf der Linie
+            if(t - dt >= 0.0 && t + dt <= length_ab)
+            {
+                return new LineCircleIntersection(LineCircleIntersectionType.FULL_INTERSECTION, firstIntersection, secondIntersection);
+            }
+            // Erster Punkt liegt nicht auf der Linie
+            else if(t - dt < 0.0)
+            {
+                return new LineCircleIntersection(LineCircleIntersectionType.HALF_INTERSECTION, secondIntersection, null);
+            }
+            // Zweiter Punkt liegt nicht auf der Linie
+            else if(t + dt > length_ab)
+            {
+                return new LineCircleIntersection(LineCircleIntersectionType.HALF_INTERSECTION, firstIntersection, null);
+            }
         }
         // Linie ist Tangente
         else if (length_ec == r)

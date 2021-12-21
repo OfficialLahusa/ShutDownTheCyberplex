@@ -1,3 +1,4 @@
+import java.util.*;
 
 /**
  * Haupt-Szene des Spiels
@@ -11,6 +12,10 @@ public class GameScene extends Scene
     private DynamicViewModelGameObject _test, _muzzleFlash, _pistolMain, _primaryMain, _sniperMain, _pistolDetails, _primaryDetails, _sniperDetails, _pistolHandsIdle, _pistolHandsShot, _primaryHandsIdle, _primaryHandsShot;
     
     private Player _player;
+    private ArrayList<RaycastHit> _raycast;
+    private Vector3 _raycastSource;
+    private Vector3 _raycastTarget;
+    private CircleCollider _testEnemy;
 
     private static final double DEBUG_SPEED_MULT = 3.0;
     
@@ -32,8 +37,14 @@ public class GameScene extends Scene
         _sniperDetails = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/sniperDetails.obj"), "gruen", new Vector3 (-1.5, 1,-12));
         
         _mapHandler.load("level_1_breakin");
-        
+        _testEnemy = new CircleCollider(new Vector2(253.57, -118.77), 3.0, PhysicsLayer.ENEMY);
+        _mapHandler.getMap().globalColliders.add(_testEnemy);
         _player = new Player(_mapHandler.getMap().getPlayerSpawn());
+        _mapHandler.getMap().globalColliders.add(_player.getCollider());
+        
+        _raycast = null;
+        _raycastSource = null;
+        _raycastTarget = null;
         
         _state.soundRegistry.loadSource("music1", "./res/sounds/to_the_front.mp3");
         _state.soundRegistry.loadSource("powerup3", "./res/sounds/Powerup3.wav");
@@ -51,28 +62,44 @@ public class GameScene extends Scene
     public void handleInput(double deltaTime, double runTime)
     {
         Camera playerCam = _player.getCamera();
+        Vector3 camDir = playerCam.getDirection();
+        Vector3 camRight = playerCam.getRight();
         
+        // Maus-Bewegung zu Kamera-Yaw umwandeln
         double deltaX = _state.inputHandler.getAndResetMouseDelta().getX();
         if(_state.inputHandler.getKeepMouseInPlace())
         {
             _player.rotate(new Vector3(0.0, 0.20 * deltaX, 0.0));
         }
         
+        // Schieﬂen
+        if(_state.inputHandler.isKeyPressed(KeyCode.MOUSE_BUTTON_LEFT))
+        {
+            Vector2 source = new Vector2(_player.getPosition().getX(), _player.getPosition().getZ());
+            Vector2 dir = new Vector2(camDir.getX(), camDir.getZ()).invert();
+            double dist = 500.0;
+            _raycast = Physics.raycast(source, dir, dist, _mapHandler.getMap(), null, null);
+            _raycastSource = new Vector3(_player.getPosition());
+            Vector2 target = source.add(dir.normalize().multiply(dist));
+            _raycastTarget = new Vector3(target.getX(), 0.0, target.getY());
+        }
+        
+        // Tastenbelegungen
         if(_state.inputHandler.isKeyPressed(KeyCode.KEY_W))
         {
-            _player.move(playerCam.getDirection().multiply(DEBUG_SPEED_MULT * -6.5 * deltaTime));
+            _player.move(camDir.multiply(DEBUG_SPEED_MULT * -6.5 * deltaTime));
         }
         if(_state.inputHandler.isKeyPressed(KeyCode.KEY_S))
         {
-            _player.move(playerCam.getDirection().multiply(DEBUG_SPEED_MULT * 6.5 * deltaTime));
+            _player.move(camDir.multiply(DEBUG_SPEED_MULT * 6.5 * deltaTime));
         }
         if(_state.inputHandler.isKeyPressed(KeyCode.KEY_A))
         {
-            _player.move(playerCam.getRight().multiply(DEBUG_SPEED_MULT * -6.0 * deltaTime));
+            _player.move(camRight.multiply(DEBUG_SPEED_MULT * -6.0 * deltaTime));
         }
         if(_state.inputHandler.isKeyPressed(KeyCode.KEY_D))
         {
-            _player.move(playerCam.getRight().multiply(DEBUG_SPEED_MULT * 6.0 * deltaTime));
+            _player.move(camRight.multiply(DEBUG_SPEED_MULT * 6.0 * deltaTime));
         }
         if(_state.inputHandler.isKeyPressed(KeyCode.KEY_ESCAPE))
         {
@@ -97,6 +124,7 @@ public class GameScene extends Scene
         
         // Kollisionsbehandlung
         CircleCollider playerCollider = _player.getCollider();
+        playerCollider.detectCollision(_testEnemy);
         _mapHandler.getMap().handleCollisions(playerCollider);
     }
     
@@ -112,6 +140,17 @@ public class GameScene extends Scene
         
         // Draw Map
         _mapHandler.getMap().draw(_state.renderer, playerCam);
+        
+        // Debug Raycast Drawing
+        if(_raycast != null)
+        {
+            for(RaycastHit hit : _raycast)
+            {
+                _state.renderer.drawLine3D(new Vector3(hit.position.getX(), 0.0, hit.position.getY()), new Vector3(hit.position.getX(), 4.0, hit.position.getY()), playerCam);
+            }
+            
+            _state.renderer.drawLine3D(_raycastSource, _raycastTarget, "cyan", playerCam);
+        }
         
         // Draw Viewmodel
         if(_state.inputHandler.isKeyPressed(KeyCode.MOUSE_BUTTON_LEFT))

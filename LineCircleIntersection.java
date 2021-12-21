@@ -3,7 +3,7 @@
  * Auswertung über den Schnitt eines Kreises mit einer Linie
  * 
  * @author Lasse Huber-Saffer
- * @version 20.12.2021
+ * @version 21.12.2021
  */
 public class LineCircleIntersection
 {

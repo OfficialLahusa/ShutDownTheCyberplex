@@ -5,22 +5,37 @@ import javafx.util.*;
  * Beschreiben Sie hier die Klasse GridMap.
  * 
  * @author Lasse Huber-Saffer 
- * @version 20.12.2021
+ * @version 21.12.2021
  */
 public class GridMap
-{    
-    // Map-Layout
+{
+    // Positionen von Türobjekten im Grid
     private ArrayList<Vector2i> _doorLocations;
-    private ArrayList<IDoorGameObject> _doors;
-    private ArrayList<Room> _rooms; 
+    // Rohe Mapdaten
     private ArrayList<ArrayList<Integer>> _tileLayer;
     private ArrayList<ArrayList<Integer>> _functionLayer;
+    // Debug Fulldraw-Daten
     private ArrayList<IGameObject> _mapGeometry;
-    
+    private static final boolean DEBUG_FULLDRAW = false;
+    // Spieler-Spawnpunkt
     private Vector3 _playerSpawn;
     
-    private int _activeRoom = 0;
-    private static final boolean DEBUG_FULLDRAW = false;
+    /**
+     * Index des aktuell aktiven Raumes der GridMap
+     */
+    public int activeRoom = 0;
+    /**
+     * Liste aller Türobjekte der Map
+     */ 
+    public ArrayList<IDoorGameObject> doors;
+    /**
+     * Liste aller Räume
+     */ 
+    public ArrayList<Room> rooms;
+    /**
+     * Liste aller nicht-raumgebundenen Collider
+     */
+    public ArrayList<ICollider> globalColliders;
 
     /**
      * Konstruktor für Objekte der Klasse GridMap
@@ -33,8 +48,9 @@ public class GridMap
         _functionLayer = functionLayer;
         _mapGeometry = new ArrayList<IGameObject>();
         _doorLocations = new ArrayList<Vector2i>();
-        _doors = new ArrayList<IDoorGameObject>();
-        _rooms = new ArrayList<Room>();
+        doors = new ArrayList<IDoorGameObject>();
+        rooms = new ArrayList<Room>();
+        globalColliders = new ArrayList<ICollider>();
         _playerSpawn = new Vector3(0.0, 2.0, 0.0);
     }
     
@@ -49,16 +65,16 @@ public class GridMap
     {
         updateLOD(cameraPosition);
         reorderAroundCamera(cameraPosition);
-        for(IDoorGameObject door : _doors)
+        for(IDoorGameObject door : doors)
         {
             door.update(deltaTime, runTime, cameraPosition);
         }
         
         Vector2i tilePos = MapHandler.worldPosToTilePos(cameraPosition);
-        Integer roomID = getRoom(tilePos);
-        if(roomID != null && roomID != _activeRoom)
+        Integer roomID = getRoomID(tilePos);
+        if(roomID != null && roomID != activeRoom)
         {
-            _activeRoom = roomID;
+            activeRoom = roomID;
         }
     }
     
@@ -68,8 +84,8 @@ public class GridMap
      */
     public void handleCollisions(ICollider collider)
     {
-        _rooms.get(_activeRoom).handleCollisions(collider);
-        for(IDoorGameObject doorObj : _rooms.get(_activeRoom).getDoors())
+        rooms.get(activeRoom).handleCollisions(collider);
+        for(IDoorGameObject doorObj : rooms.get(activeRoom).getDoors())
         {
             doorObj.handleCollisions(collider);
         }
@@ -95,7 +111,7 @@ public class GridMap
             HashSet<Vector2i> completedDoors = new HashSet<Vector2i>();
             
             // Zeichnet rekursiv alle Räume, vom aktuellen Raum aus
-            drawConnectedRooms(_activeRoom, completedRooms, completedDoors, renderer, camera);
+            drawConnectedRooms(activeRoom, completedRooms, completedDoors, renderer, camera);
         }
     }
     
@@ -110,7 +126,7 @@ public class GridMap
     private void drawConnectedRooms(int roomID, HashSet<Integer> completedRooms, HashSet<Vector2i> completedDoors, Renderer renderer, Camera camera)
     {
         // Aktuellen Raum bekommen und rendern
-        Room room = _rooms.get(roomID);
+        Room room = rooms.get(roomID);
         room.draw(renderer, camera);
         
         for(IDoorGameObject door : room.getDoors())
@@ -172,7 +188,7 @@ public class GridMap
             HashSet<Vector2i> completedDoors = new HashSet<Vector2i>();
             
             // Updated rekursiv die LODs aller Räume, vom aktuellen Raum aus
-            lodUpdateConnectedRooms(_activeRoom, completedRooms, completedDoors, cameraPosition);
+            lodUpdateConnectedRooms(activeRoom, completedRooms, completedDoors, cameraPosition);
         }
     }
     
@@ -186,7 +202,7 @@ public class GridMap
     private void lodUpdateConnectedRooms(int roomID, HashSet<Integer> completedRooms, HashSet<Vector2i> completedDoors, Vector3 cameraPosition)
     {
         // Aktuellen Raum bekommen und updaten
-        Room room = _rooms.get(roomID);
+        Room room = rooms.get(roomID);
         room.updateLOD(cameraPosition);
         
         for(IDoorGameObject door : room.getDoors())
@@ -268,7 +284,7 @@ public class GridMap
             HashSet<Integer> completedRooms = new HashSet<Integer>();
             
             // Updated rekursiv die Draw-Reihenfolge aller Räume, vom aktuellen Raum aus
-            reorderConnectedRooms(_activeRoom, completedRooms, cameraPosition);
+            reorderConnectedRooms(activeRoom, completedRooms, cameraPosition);
         }
     }
     
@@ -281,7 +297,7 @@ public class GridMap
     private void reorderConnectedRooms(int roomID, HashSet<Integer> completedRooms, Vector3 cameraPosition)
     {
         // Aktuellen Raum bekommen und updaten
-        Room room = _rooms.get(roomID);
+        Room room = rooms.get(roomID);
         room.reorderAroundCamera(cameraPosition);
         
         for(IDoorGameObject door : room.getDoors())
@@ -375,7 +391,7 @@ public class GridMap
             if(room != null)
             {
                 room.populate(tileProviders, colliderProviders, _tileLayer);
-                _rooms.add(room);
+                rooms.add(room);
             }
             else
             {
@@ -406,7 +422,7 @@ public class GridMap
                         else
                         {
                             IDoorGameObject doorObj = (IDoorGameObject)obj;
-                            _doors.add(doorObj);
+                            doors.add(doorObj);
                             connectDoor(doorObj);
                         }
                     }  
@@ -415,6 +431,10 @@ public class GridMap
         }
     }
     
+    /**
+     * Richtet die Raum-Tür-Verbindungen eines Türobjekts für diese Map ein
+     * @param door Tür, die verbunden werden soll
+     */
     private void connectDoor(IDoorGameObject door)
     {
         if(door == null)
@@ -430,22 +450,22 @@ public class GridMap
         {
             if(z > 0)
             {
-                firstRoom = getRoom(new Vector2i(x, z - 1));
+                firstRoom = getRoomID(new Vector2i(x, z - 1));
             }
             if(z < _tileLayer.get(0).size()-1)
             {
-                secondRoom = getRoom(new Vector2i(x, z + 1));
+                secondRoom = getRoomID(new Vector2i(x, z + 1));
             }
         }
         else
         {
             if(x > 0)
             {
-                firstRoom = getRoom(new Vector2i(x - 1, z));
+                firstRoom = getRoomID(new Vector2i(x - 1, z));
             }
             if(x < _tileLayer.size()-1)
             {
-                secondRoom = getRoom(new Vector2i(x + 1, z));
+                secondRoom = getRoomID(new Vector2i(x + 1, z));
             }
         }
         
@@ -456,15 +476,20 @@ public class GridMap
             // Verbindung bei den Räumen registrieren
             if(firstRoom != null)
             {
-                _rooms.get(firstRoom).addDoor(door);
+                rooms.get(firstRoom).addDoor(door);
             }
             if(secondRoom != null)
             {
-                _rooms.get(secondRoom).addDoor(door);
+                rooms.get(secondRoom).addDoor(door);
             }
         }
     }
     
+    /**
+     * Füllt von einer Quell-Tile aus eine Raumfläche auf
+     * @param source Quell-Tile
+     * @return entstandener Raum
+     */
     private Room floodFillFromSource(Vector2i source)
     {
         if(source == null)
@@ -474,9 +499,9 @@ public class GridMap
         
         System.out.println("Source: x:" + source.getX() + ", z:" + source.getY());
         
-        for(int i = 0; i < _rooms.size(); i++)
+        for(int i = 0; i < rooms.size(); i++)
         {
-            if(_rooms.get(i).contains(source.getX(), source.getY()))
+            if(rooms.get(i).contains(source.getX(), source.getY()))
             {
                 System.out.println("Already contained in room" + i);
             }
@@ -489,6 +514,11 @@ public class GridMap
         return result;
     }
     
+    /**
+     * Einzelschritt des Floodfill-Algorithmus
+     * @param source Quell-Tile dieses Schrittes
+     * @param room bisheriger Raum
+     */
     private void floodFillStep(Vector2i source, Room room)
     {
         if(!room.contains(source))
@@ -518,6 +548,13 @@ public class GridMap
         }
     }
     
+    /**
+     * Einzelner direktionaler Schritt des Floodfill-Algorithmus
+     * @param dx x-Verschiebung von der Quell-Tile
+     * @param dz z-Verschiebung von der Quell-Tile
+     * @param source Quell-Tile
+     * @param room bisheriger Raum
+     */
     private void floodFillDirection(int dx, int dz, Vector2i source, Room room)
     {
         int x = source.getX(), z = source.getY();
@@ -545,11 +582,11 @@ public class GridMap
      * @param pos Position der Tile im Grid
      * @return null, wenn die Tile in keinem Raum liegt, ansonsten ID des Raums
      */
-    public Integer getRoom(Vector2i pos)
+    public Integer getRoomID(Vector2i pos)
     {
-        for(int i = 0; i < _rooms.size(); i++)
+        for(int i = 0; i < rooms.size(); i++)
         {
-            if(_rooms.get(i).contains(pos))
+            if(rooms.get(i).contains(pos))
             {
                 return i;
             }
@@ -572,6 +609,6 @@ public class GridMap
      */    
     public int getRoomCount()
     {
-        return (_rooms == null)? 0 : _rooms.size();
+        return (rooms == null)? 0 : rooms.size();
     }
 }

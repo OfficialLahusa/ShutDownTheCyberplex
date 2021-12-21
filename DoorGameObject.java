@@ -5,7 +5,7 @@ import javafx.util.*;
  * Beschreiben Sie hier die Klasse DoorGameObject.
  * 
  * @author Lasse Huber-Saffer
- * @version 20.12.2021
+ * @version 21.12.2021
  */
 public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObject
 {
@@ -223,14 +223,6 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
     }
     
     /**
-     * @see IDoorGameObject#setConnectedRoomIDs()
-     */
-    public void setConnectedRoomIDs(Integer first, Integer second)
-    {
-        _connectedRoomIDs = new Pair<Integer, Integer>(first, second);
-    }
-    
-    /**
      * @see IDoorGameObject#getConnectedRoomIDs
      */
     public Pair<Integer, Integer> getConnectedRoomIDs()
@@ -267,19 +259,19 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
     }
     
     /**
-     * @see IDoorGameObject#setOpen()
-     */
-    public void setOpen(boolean isOpen)
-    {
-        _isOpen = isOpen;
-    }
-    
-    /**
      * @see IDoorGameObject#isFacingZ()
      */
     public boolean isFacingZ()
     {
         return _facingZ;
+    }
+    
+    /**
+     * @see IDoorGameObject#getColliders()
+     */
+    public ArrayList<ICollider> getColliders()
+    {
+        return (_isOpen) ? _openColliders : _closedColliders;
     }
     
     /**
@@ -320,6 +312,22 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
     public String getColor()
     {
         return null;
+    }
+    
+    /**
+     * @see IDoorGameObject#setConnectedRoomIDs()
+     */
+    public void setConnectedRoomIDs(Integer first, Integer second)
+    {
+        _connectedRoomIDs = new Pair<Integer, Integer>(first, second);
+    }
+    
+    /**
+     * @see IDoorGameObject#setOpen()
+     */
+    public void setOpen(boolean isOpen)
+    {
+        _isOpen = isOpen;
     }
     
     /**
