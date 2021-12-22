@@ -19,6 +19,7 @@ public class GridMap
     private static final boolean DEBUG_FULLDRAW = false;
     // Spieler-Spawnpunkt
     private Vector3 _playerSpawn;
+    private Player _player;
     
     /**
      * Index des aktuell aktiven Raumes der GridMap
@@ -63,13 +64,20 @@ public class GridMap
      */
     public void update(double deltaTime, double runTime, Vector3 cameraPosition)
     {
+        // LODs und DrawOrder updaten
         updateLOD(cameraPosition);
         reorderAroundCamera(cameraPosition);
+        
+        // Aktiven Raum updaten
+        rooms.get(activeRoom).update(deltaTime, runTime, cameraPosition);
+        
+        // Türen updaten
         for(IDoorGameObject door : doors)
         {
             door.update(deltaTime, runTime, cameraPosition);
         }
         
+        // ID des aktiven Raums neu berechnen
         Vector2i tilePos = MapHandler.worldPosToTilePos(cameraPosition);
         Integer roomID = getRoomID(tilePos);
         if(roomID != null && roomID != activeRoom)
@@ -328,11 +336,12 @@ public class GridMap
     }
     
     /**
-     * Verarbeitet die Tile-Werte und erstellt die spielbare Map
-     * @param tileProviders Hashmap der TileProvider. Der Key entspricht der Tile-ID
-     * @param colliderProviders Hashmap der ColliderProvider. Der Key entspricht der Tile-ID
+     * Verarbeitet die Tile-Werte und erstellt die spielbare Map.
+     * @param tileProviders Hashmap der TileProvider. Der Key entspricht der Tile-ID.
+     * @param colliderProviders Hashmap der ColliderProvider. Der Key entspricht der Tile-ID.
+     * @param entityMeshes Hashmap der von Entities verwendeten Meshes.
      */
-    public void populate(HashMap<Integer, ITileProvider> tileProviders, HashMap<Integer, IColliderProvider> colliderProviders)
+    public void populate(HashMap<Integer, ITileProvider> tileProviders, HashMap<Integer, IColliderProvider> colliderProviders, HashMap<String, Mesh> entityMeshes)
     {
         // Geometrieebene
         for(int z = 0; z < _tileLayer.size(); z++)
@@ -344,7 +353,7 @@ public class GridMap
                 {
                     if(!tileProviders.containsKey(value))
                     {
-                        System.out.println("[Error] Tile mesh not provided: " + value);
+                        System.out.println("Tile mesh not provided: " + value);
                     }
                     else
                     {
@@ -363,7 +372,7 @@ public class GridMap
         
         ArrayList<Vector2i> roomFloodFills = new ArrayList<Vector2i>();
         
-        // Funktionsebene
+        // Funktionsebene (Nur nicht-raumeigene Funktionstiles werden ausgelesen)
         for(int z = 0; z < _functionLayer.size(); z++)
         {
             for(int x = 0; x < _functionLayer.get(z).size(); x++)
@@ -383,14 +392,14 @@ public class GridMap
             }
         }
         
-        // Räume aus Floodfills erstellen
+        // Räume aus Floodfills füllen und populaten
         for(int i = 0; i < roomFloodFills.size(); i++)
         {
             Vector2i source = roomFloodFills.get(i);
             Room room = floodFillFromSource(source);
             if(room != null)
             {
-                room.populate(tileProviders, colliderProviders, _tileLayer);
+                room.populate(tileProviders, colliderProviders, entityMeshes, _tileLayer, _functionLayer);
                 rooms.add(room);
             }
             else
@@ -399,7 +408,7 @@ public class GridMap
             }
         }
     
-        // Türobjekte generieren
+        // Türobjekte (Verknüpfungen zwischen Räumen) generieren
         for(Vector2i doorLocation : _doorLocations)
         {
             int x = doorLocation.getX(), z = doorLocation.getY();
@@ -507,7 +516,7 @@ public class GridMap
             }
         }
         
-        Room result = new Room();
+        Room result = new Room(this);
         
         floodFillStep(source, result);
         
@@ -595,6 +604,40 @@ public class GridMap
     }
     
     /**
+     * Gibt den Wert des Tile-Layers an einer gegebenen Position zurück
+     * @param pos Position im Grid
+     * @return Wert des Tile-Layers an der Position, Tile.NONE für Out-of-Bounds-Werte
+     */
+    public int getTileValue(Vector2i pos)
+    {
+        if(pos.getX() < 0 || pos.getY() < 0 || pos.getX() >= _tileLayer.get(0).size() || pos.getY() >= _tileLayer.size())
+        {
+            return Tile.NONE;
+        }
+        else
+        {
+            return _tileLayer.get(pos.getY()).get(pos.getX());
+        }
+    }
+    
+    /**
+     * Gibt den Wert des Function-Layers an einer gegebenen Position zurück
+     * @param pos Position im Grid
+     * @return Wert des Function-Layers an der Position, Tile.NONE für Out-of-Bounds-Werte
+     */
+    public int getFunctionValue(Vector2i pos)
+    {
+        if(pos.getX() < 0 || pos.getY() < 0 || pos.getX() >= _functionLayer.get(0).size() || pos.getY() >= _functionLayer.size())
+        {
+            return Tile.NONE;
+        }
+        else
+        {
+            return _functionLayer.get(pos.getY()).get(pos.getX());
+        }
+    }
+    
+    /**
      * Gibt den Spawnpunkt des Spielers zurück
      * @return Spawnpunkt des Spielers in der Map
      */
@@ -610,5 +653,23 @@ public class GridMap
     public int getRoomCount()
     {
         return (rooms == null)? 0 : rooms.size();
+    }
+    
+    /**
+     * Gibt eine Referenz zum Spieler zurück, wenn diese zuvor gesetzt wurde
+     * @return Referenz zum Spieler, null, falls nicht gesetzt
+     */
+    public Player getPlayer()
+    {
+        return _player;
+    }
+    
+    /**
+     * Setzt die Spielerreferenz der Map
+     * @param player Spieler
+     */
+    public void setPlayer(Player player)
+    {
+        _player = player;
     }
 }

@@ -4,17 +4,24 @@ import java.util.*;
  * Ein räumlich eingegrenzter Abschnitt einer Gridmap, innerhalb dessen Simulationen durchgeführt werden
  * 
  * @author Lasse Huber-Saffer
- * @version 21.12.2021
+ * @version 22.12.2021
  */
 public class Room
 {
-    private HashSet<Vector2i> _tiles;
+    // Parent
+    private GridMap _map;
+    
+    // Map Geometry & Physics
     private ArrayList<IGameObject> _geometry;
     private ArrayList<ICollider> _colliders;
     private ArrayList<Vector2i> _doorLocations;
     private ArrayList<IDoorGameObject> _doors;
     
+    // Entities in Room
+    private ArrayList<IGameObject> _entities;
+    
     // Bounds im Grid
+    private HashSet<Vector2i> _tiles;
     private int _minX;
     private int _minZ;
     private int _maxX;
@@ -22,35 +29,48 @@ public class Room
 
     /**
      * Konstruktor für Objekte der Klasse Room
+     * @param map GridMap, in der der Raum sich befindet
      */
-    public Room()
+    public Room(GridMap map)
     {
+        if(map == null) throw new IllegalArgumentException("Room parent GridMap must not be null");
+        _map = map;
+        
         _tiles = new HashSet<Vector2i>();
         _geometry = new ArrayList<IGameObject>();
         _colliders = new ArrayList<ICollider>();
         _doorLocations = new ArrayList<Vector2i>();
         _doors = new ArrayList<IDoorGameObject>();
+        
+        _entities = new ArrayList<IGameObject>();
     }
     
     /**
      * Verarbeitet die Tile-Werte und erstellt die spielbare Map
      * @param tileProviders Hashmap der TileProvider. Der Key entspricht der Tile-ID
      * @param colliderProviders Hashmap der ColliderProvider. Der Key entspricht der Tile-ID
-     * @param tileLayer Mapdaten
+     * @param entityMeshes Hashmap der von Entities verwendeten Meshes.
+     * @param tileLayer rohe Geometrie-Mapdaten
+     * @param functionLayer rohe Funktions-Mapdaten
      */
-    public void populate(HashMap<Integer, ITileProvider> tileProviders, HashMap<Integer, IColliderProvider> colliderProviders, ArrayList<ArrayList<Integer>> tileLayer)
+    public void populate(HashMap<Integer, ITileProvider> tileProviders, HashMap<Integer, IColliderProvider> colliderProviders, HashMap<String, Mesh> entityMeshes, ArrayList<ArrayList<Integer>> tileLayer, ArrayList<ArrayList<Integer>> functionLayer)
     {
+        // Null-Check der Parameter
+        if(tileProviders == null)       throw new IllegalArgumentException("tileProviders was null when populating room");
+        if(colliderProviders == null)   throw new IllegalArgumentException("colliderProviders was null when populating room");
+        if(entityMeshes == null)        throw new IllegalArgumentException("entityMeshes was null when populating room");
+        
         // Geometrieebene (Iteriert nur innerhalb der Bounds)
         for(int z = _minZ; z <= _maxZ; z++)
         {
             for(int x = _minX; x <= _maxX; x++)
             {
-                int value = tileLayer.get(z).get(x);
+                int value = _map.getTileValue(new Vector2i(x, z));
                 if(value != -1 && this.contains(x, z))
                 {
                     if(!tileProviders.containsKey(value))
                     {
-                        System.out.println("[Error] Tile mesh not provided: " + value);
+                        System.out.println("Tile mesh not provided: " + value);
                     }
                     else
                     {
@@ -78,6 +98,33 @@ public class Room
                 }
             }
         }
+        
+        // Funktionsebene (Nur im Kontext des Raumes wichtige Tiles, iteriert nur innerhalb der Bounds)
+        for(int z = _minZ; z <= _maxZ; z++)
+        {
+            for(int x = _minX; x <= _maxX; x++)
+            {
+                int value = functionLayer.get(z).get(x);
+                if(value != -1 && this.contains(x, z))
+                {
+                    switch(value)
+                    {
+                        case Tile.SPAWN_TURRET_INACTIVE:
+                            Turret inactive_turret = new Turret(MapHandler.tilePosToWorldPos(new Vector2i(x, z)), false, entityMeshes.get("turret_active"), entityMeshes.get("turret_inactive"), "hellgrau", this);
+                            _entities.add(inactive_turret);
+                            _colliders.add(inactive_turret.getCollider());
+                            break;
+                        case Tile.SPAWN_TURRET_ACTIVE:
+                            Turret active_turret = new Turret(MapHandler.tilePosToWorldPos(new Vector2i(x, z)), true, entityMeshes.get("turret_active"), entityMeshes.get("turret_inactive"), "hellgrau", this);
+                            _entities.add(active_turret);
+                            _colliders.add(active_turret.getCollider());
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
     }
     
     /**
@@ -97,9 +144,30 @@ public class Room
      */
     public void draw(Renderer renderer, Camera camera)
     {
+        // Raumgeometrie zeichnen
         for(IGameObject obj : _geometry)
         {
             obj.draw(renderer, camera);
+        }
+        
+        // Entities zeichnen
+        for(IGameObject entity : _entities)
+        {
+            entity.draw(renderer, camera);
+        }
+    }
+    
+    /**
+     * Updated den Raum.
+     * @param deltaTime Deltazeit des Frames in Sekunden
+     * @param runTime Laufzeit des Programms in Sekunden
+     * @param cameraPosition Position der Kamera im World Space
+     */
+    public void update(double deltaTime, double runTime, Vector3 cameraPosition)
+    {
+        for(IGameObject entity : _entities)
+        {
+            entity.update(deltaTime, runTime, cameraPosition);
         }
     }
     
@@ -252,5 +320,50 @@ public class Room
     public ArrayList<ICollider> getColliders()
     {
         return _colliders;
+    }
+    
+    /**
+     * Gibt die Map, in der dieser Raum liegt, zurück
+     * @return Referenz zur Map, in der dieser Raum liegt
+     */
+    public GridMap getMap()
+    {
+        return _map;
+    }
+    
+    /**
+     * Gibt den unteren inklusiven x-Wert der Bounding Box des Raums zurück
+     * @return unterer inklusiver x-Wert der Bounding Box
+     */
+    public int getMinX()
+    {
+        return _minX;
+    }
+    
+    /**
+     * Gibt den oberen inklusiven x-Wert der Bounding Box des Raums zurück
+     * @return oberer inklusiver x-Wert der Bounding Box
+     */
+    public int getMaxX()
+    {
+        return _maxX;
+    }
+    
+    /**
+     * Gibt den unteren inklusiven z-Wert der Bounding Box des Raums zurück
+     * @return unterer inklusiver z-Wert der Bounding Box
+     */
+    public int getMinZ()
+    {
+        return _minZ;
+    }
+    
+    /**
+     * Gibt den oberen inklusiven z-Wert der Bounding Box des Raums zurück
+     * @return oberer inklusiver z-Wert der Bounding Box
+     */
+    public int getMaxZ()
+    {
+        return _maxZ;
     }
 }

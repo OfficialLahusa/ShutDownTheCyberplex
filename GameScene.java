@@ -4,7 +4,7 @@ import java.util.*;
  * Haupt-Szene des Spiels
  * 
  * @author Lasse Huber-Saffer, Nico Hädicke, Sven Schreiber
- * @version 15.12.2021
+ * @version 22.12.2021
  */
 public class GameScene extends Scene
 {
@@ -36,7 +36,7 @@ public class GameScene extends Scene
         _sniperMain = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/sniperMain.obj"), "grau", new Vector3 (-1.5, 1,-12));
         _sniperDetails = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/sniperDetails.obj"), "gruen", new Vector3 (-1.5, 1,-12));
         
-        _mapHandler.load("level_1_breakin");
+        _mapHandler.load("TestMap2");
         _testEnemy = new CircleCollider(new Vector2(253.57, -118.77), 3.0, PhysicsLayer.ENEMY);
         _mapHandler.getMap().globalColliders.add(_testEnemy);
         _player = new Player(_mapHandler.getMap().getPlayerSpawn());

@@ -3,7 +3,7 @@
  * Compiletime-Register aller im Spiel verwendeten TileIDs
  * 
  * @author Lasse Huber-Saffer 
- * @version 13.12.2021
+ * @version 22.12.2021
  */
 public class Tile
 {
