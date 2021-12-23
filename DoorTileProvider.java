@@ -5,7 +5,7 @@ import javafx.util.*;
  * TileProvider für Türen, die in Abhängigkeit von der Umgebung entlang der X- oder Z-Achse ausgerichtet sein können
  * 
  * @author Lasse Huber-Saffer
- * @version 20.12.2021
+ * @version 23.12.2021
  */
 public class DoorTileProvider implements ITileProvider
 {
@@ -16,7 +16,7 @@ public class DoorTileProvider implements ITileProvider
     private boolean _isOpen;
     private IColliderProvider _closedColliderProvider;
     private IColliderProvider _openColliderProvider;
-    private SoundRegistry _soundReg;
+    private SoundEngine _soundEngine;
     private String _openSoundKey;
     private String _closeSoundKey;
     
@@ -29,7 +29,7 @@ public class DoorTileProvider implements ITileProvider
      * @param openColliderProvider (Optional) ColliderProvider, der im offenen Zustand für Kollisionsberechnungen verwendet wird
      * @param floorTileProvider (Optional) TileProvider, der für den Boden unter der Tür verwendet werden soll
      * @param wallTileProvider (Optional) WallTileProvider, der für die Wände an den Seiten der Tür verwendet werden soll
-     * @param soundReg (Optional) SoundRegistry, indem die nachfolgenden Sounds vorzufinden sind
+     * @param soundEngine (Optional) SoundEngine, in der die nachfolgenden Sounds vorzufinden sind
      * @param openSoundKey (Optional) Soundquelle, die für den Sound beim Öffnen der Tür verwendet wird
      * @param closeSoundKey (Optional) Soundquelle, die für den Sound beim Schließen der Tür verwendet wird
      */
@@ -37,7 +37,7 @@ public class DoorTileProvider implements ITileProvider
         ArrayList<Pair<Mesh, String>> coloredMeshesClosed, ArrayList<Pair<Mesh, String>> coloredMeshesOpen, boolean isOpen,
         IColliderProvider closedColliderProvider, IColliderProvider openColliderProvider,
         ITileProvider floorTileProvider, WallTileProvider wallTileProvider,
-        SoundRegistry soundReg, String openSoundKey, String closeSoundKey
+        SoundEngine soundEngine, String openSoundKey, String closeSoundKey
     )
     {
         _coloredMeshesClosed = coloredMeshesClosed;
@@ -47,7 +47,7 @@ public class DoorTileProvider implements ITileProvider
         _isOpen = isOpen;
         _closedColliderProvider = closedColliderProvider;
         _openColliderProvider = openColliderProvider;
-        _soundReg = soundReg;
+        _soundEngine = soundEngine;
         _openSoundKey = openSoundKey;
         _closeSoundKey = closeSoundKey;
     }
@@ -102,7 +102,7 @@ public class DoorTileProvider implements ITileProvider
             closedColliders, openColliders,
             floorGeometry, wallGeometry
         );
-        obj.setSound(_soundReg, _openSoundKey, _closeSoundKey);
+        obj.setSound(_soundEngine, _openSoundKey, _closeSoundKey);
         
         result.add(obj);
 

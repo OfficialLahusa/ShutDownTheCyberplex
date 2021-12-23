@@ -5,7 +5,7 @@ import java.util.*;
  * Interface für GameObjects mit Tür-Funktionalität
  * 
  * @author Lasse Huber-Saffer
- * @version 20.12.2021
+ * @version 23.12.2021
  */
 
 public interface IDoorGameObject
@@ -58,11 +58,11 @@ public interface IDoorGameObject
     /**
      * Setzt das Soundregister und die Soundschlüssel für das Öffnen und Schließen der Tür.
      * Parameter mit dem Wert null werden nicht verwendet.
-     * @param soundReg setzt das Soundregister, indem die nachfolgenden Schlüssel enthalten sind (nullable)
+     * @param soundEngine setzt die Sound Engine, in der die nachfolgenden Schlüssel enthalten sind (nullable)
      * @param openSoundKey Schlüssel des Sounds für das Öffnen (nullable)
      * @param closeSoundKey Schlüssel des Sounds für das Schließen (nullable)
      */
-    public void setSound(SoundRegistry soundReg, String openSoundKey, String closeSoundKey);
+    public void setSound(SoundEngine soundEngine, String openSoundKey, String closeSoundKey);
     
     /**
      * Verarbeitet die Kollisionen eines Colliders mit den Collidern der Tür

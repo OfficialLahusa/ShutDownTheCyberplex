@@ -11,7 +11,7 @@ public class GameState
     public TimeManager timeManager;
     public InputHandler inputHandler;
     public TextRenderer textRenderer;
-    public SoundRegistry soundRegistry;
+    public SoundEngine soundEngine;
     public WavefrontObjectLoader objLoader;
     public Scene scene;
     
@@ -25,7 +25,7 @@ public class GameState
         timeManager = new TimeManager();
         inputHandler = new InputHandler();
         textRenderer = new TextRenderer(renderer);
-        soundRegistry = new SoundRegistry();
+        soundEngine = new SoundEngine();
         objLoader = new WavefrontObjectLoader();
         scene = null;
     }

@@ -20,9 +20,9 @@ public class TitleScene extends Scene
         _camera.setPosition(new Vector3(0.0, 2, 5.0));
         _camera.setFov(30.0);
         
-        _state.soundRegistry.loadSource("music2", Directory.SOUND + "music/midnight_drive.mp3");
+        _state.soundEngine.loadSource("music2", Directory.SOUND + "music/midnight_drive.mp3");
         
-        Sound backgroundMusic = _state.soundRegistry.playSound("music2", 0.35, true);
+        Sound backgroundMusic = _state.soundEngine.playSound("music2", 0.35, true);
     
         //backgroundMusic.setAudioSpectrumNumBands(256+128);
         backgroundMusic.setAudioSpectrumNumBands(96);
@@ -101,7 +101,7 @@ public class TitleScene extends Scene
             // damit man wirklich einen ganzen Klick auf dem Button bleiben muss.
             if (_state.inputHandler.isKeyPressed(KeyCode.MOUSE_BUTTON_LEFT))
             {
-                _state.soundRegistry.removeAllSounds();
+                _state.soundEngine.removeAllSounds();
                 _state.scene = new GameScene(_state);
             }
         }

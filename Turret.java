@@ -15,7 +15,7 @@ public class Turret implements ILivingEntity, ICollisionListener, IDynamicGameOb
     private Random _random;
     
     // Sound
-    private SoundRegistry _soundRegistry;
+    private SoundEngine _soundEngine;
     
     // Functionality
     private boolean _isActive;
@@ -55,6 +55,7 @@ public class Turret implements ILivingEntity, ICollisionListener, IDynamicGameOb
     private static final double MAXIMUM_INACCURACY_ANGLE = 6.0;
     private static final double FIRING_ANGLE_TOLERANCE = 2.0;
     private static final double RELOAD_VOICELINE_DELAY = 0.25;
+    private static final double VOICELINE_VOLUME = 0.8;
     
     /**
      * Konstruktor für Turret mit Position und Meshes
@@ -62,21 +63,21 @@ public class Turret implements ILivingEntity, ICollisionListener, IDynamicGameOb
      * @param active Ob das Turret aktiv sein soll
      * @param room umgebender Raum
      * @param entityMeshes Register der EntityMeshes, aus dem die Meshes bezogen werden
-     * @param soundRegistry Soundregister, aus dem die Sounds der Entity bezogen werden
+     * @param soundEngine Sound Engine, aus der die Sounds der Entity bezogen werden
      */
-    public Turret(Vector3 position, boolean active, Room room, HashMap<String, Mesh> entityMeshes, SoundRegistry soundRegistry)
+    public Turret(Vector3 position, boolean active, Room room, HashMap<String, Mesh> entityMeshes, SoundEngine soundEngine)
     {
         _room = room;
         
         _random = new Random();
         
-        _soundRegistry = soundRegistry;
+        _soundEngine = soundEngine;
         
         _isActive = active;
         _currentAmmo = MAGAZINE_CAPACITY;
         _timeSinceLastShot = 0.0;
-        _health = 100;
-        _maxHealth = 100;
+        _health = 50;
+        _maxHealth = 50;
         _reloadingVoiceLineTriggered = true;
         
         _position = new Vector3(position);
@@ -130,7 +131,7 @@ public class Turret implements ILivingEntity, ICollisionListener, IDynamicGameOb
             // Nachlade-Voiceline
             if(!_reloadingVoiceLineTriggered && _timeSinceLastShot >= RELOAD_VOICELINE_DELAY)
             {
-                _soundRegistry.playSoundFromGroup("turret_reload", 0.8, false);
+                _soundEngine.playSoundFromGroup("turret_reload", VOICELINE_VOLUME, false);
                 _reloadingVoiceLineTriggered = true;
             }
             
@@ -235,7 +236,7 @@ public class Turret implements ILivingEntity, ICollisionListener, IDynamicGameOb
                     }
                     
                     // Zufälligen Schusssound abspielen
-                    _soundRegistry.playSoundFromGroup("heavy_shot", 0.65, false);
+                    _soundEngine.playSoundFromGroup("heavy_shot", 0.65, false);
                 }
             }
         }
@@ -454,6 +455,12 @@ public class Turret implements ILivingEntity, ICollisionListener, IDynamicGameOb
         _health -= amount;
         if(_health < 0) _health = 0;
         if(_health > _maxHealth) _health = _maxHealth;
+        
+        if(_health == 0) 
+        {
+            _isActive = false;
+            _soundEngine.playSoundFromGroup("turret_death", VOICELINE_VOLUME, false);
+        }
     }
     
     /**

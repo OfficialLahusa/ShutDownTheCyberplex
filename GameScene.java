@@ -12,12 +12,14 @@ public class GameScene extends Scene
     private DynamicViewModelGameObject _test, _muzzleFlash, _pistolMain, _primaryMain, _sniperMain, _pistolDetails, _primaryDetails, _sniperDetails, _pistolHandsIdle, _pistolHandsShot, _primaryHandsIdle, _primaryHandsShot;
     
     private Player _player;
+    private double _timeSinceLastShot;
     private ArrayList<RaycastHit> _raycast;
     private Vector3 _raycastSource;
     private Vector3 _raycastTarget;
-    private CircleCollider _testEnemy;
 
+    private static final double PISTOL_SHOT_COOLDOWN = 0.3;
     private static final double DEBUG_SPEED_MULT = 3.0;
+    private static final boolean DEBUG_SHOW_RAYCAST = false;
     
     public GameScene(GameState state)
     {
@@ -38,10 +40,7 @@ public class GameScene extends Scene
         
         _mapHandler.load("TestMap2");
         
-        _testEnemy = new CircleCollider(new Vector2(253.57, -118.77), 3.0, PhysicsLayer.ENEMY);
-        _mapHandler.getMap().globalColliders.add(_testEnemy);
-        
-        _player = new Player(_mapHandler.getMap().getPlayerSpawn(), new Vector3(), _state.soundRegistry);
+        _player = new Player(_mapHandler.getMap().getPlayerSpawn(), new Vector3(), _state.soundEngine);
         _mapHandler.getMap().globalColliders.add(_player.getCollider());
         _mapHandler.getMap().setPlayer(_player);
     
@@ -50,33 +49,49 @@ public class GameScene extends Scene
         _raycastTarget = null;
         
         // Soundquellen laden
-        _state.soundRegistry.loadSource("music1", Directory.SOUND + "/music/to_the_front.mp3");
-        _state.soundRegistry.loadSource("powerup3", Directory.SOUND + "Powerup3.wav");
-        _state.soundRegistry.loadSource("wooden_door_open", Directory.SOUND + "tile/wooden_door_open.wav");
-        _state.soundRegistry.loadSource("wooden_door_close", Directory.SOUND + "tile/wooden_door_close.wav");
-        _state.soundRegistry.loadSource("heavy_shot1", Directory.SOUND + "turret/shot/Heavy_Shot.wav");
-        _state.soundRegistry.loadSource("heavy_shot2", Directory.SOUND + "turret/shot/Heavy_Shot2.wav");
-        _state.soundRegistry.loadSource("heavy_shot3", Directory.SOUND + "turret/shot/Heavy_Shot3.wav");
-        _state.soundRegistry.loadSource("turret_reloading", Directory.SOUND + "turret/reload/reloading.wav");
-        _state.soundRegistry.loadSource("turret_tactical_reload", Directory.SOUND + "turret/reload/tactical_reload.wav");
-        _state.soundRegistry.loadSource("turret_restocking_ammunition", Directory.SOUND + "turret/reload/restocking_ammunition.wav");
-        _state.soundRegistry.loadSource("pain1", Directory.SOUND + "player/pain1.wav");
-        _state.soundRegistry.loadSource("pain2", Directory.SOUND + "player/pain2.wav");
-        _state.soundRegistry.loadSource("pain3", Directory.SOUND + "player/pain3.wav");
-        _state.soundRegistry.loadSource("pain4", Directory.SOUND + "player/pain4.wav");
-        _state.soundRegistry.loadSource("pain5", Directory.SOUND + "player/pain5.wav");
-        _state.soundRegistry.loadSource("pain6", Directory.SOUND + "player/pain6.wav");
-        _state.soundRegistry.loadSource("die1", Directory.SOUND + "player/die1.wav");
-        _state.soundRegistry.loadSource("die2", Directory.SOUND + "player/die2.wav");
+        _state.soundEngine.loadSource("music1", Directory.SOUND + "/music/to_the_front.mp3");
+        _state.soundEngine.loadSource("powerup3", Directory.SOUND + "Powerup3.wav");
+        
+        _state.soundEngine.loadSource("wooden_door_open", Directory.SOUND + "tile/wooden_door_open.wav");
+        _state.soundEngine.loadSource("wooden_door_close", Directory.SOUND + "tile/wooden_door_close.wav");
+        
+        _state.soundEngine.loadSource("pistol1", Directory.SOUND + "weapon/pistol/Laser_Shoot.wav");
+        _state.soundEngine.loadSource("pistol2", Directory.SOUND + "weapon/pistol/Laser_Shoot3.wav");
+        _state.soundEngine.loadSource("pistol3", Directory.SOUND + "weapon/pistol/Laser_Shoot4.wav");
+        _state.soundEngine.loadSource("pistol4", Directory.SOUND + "weapon/pistol/Laser_Shoot5.wav");
+        
+        _state.soundEngine.loadSource("heavy_shot1", Directory.SOUND + "turret/shot/Heavy_Shot.wav");
+        _state.soundEngine.loadSource("heavy_shot2", Directory.SOUND + "turret/shot/Heavy_Shot2.wav");
+        _state.soundEngine.loadSource("heavy_shot3", Directory.SOUND + "turret/shot/Heavy_Shot3.wav");
+        
+        _state.soundEngine.loadSource("turret_reloading", Directory.SOUND + "turret/reload/reloading.wav");
+        _state.soundEngine.loadSource("turret_tactical_reload", Directory.SOUND + "turret/reload/tactical_reload.wav");
+        _state.soundEngine.loadSource("turret_restocking_ammunition", Directory.SOUND + "turret/reload/restocking_ammunition.wav");
+        
+        _state.soundEngine.loadSource("turret_system_failure", Directory.SOUND + "turret/death/system_failure.wav");
+        _state.soundEngine.loadSource("turret_offline", Directory.SOUND + "turret/death/turret_offline.wav");
+        
+        _state.soundEngine.loadSource("pain1", Directory.SOUND + "player/pain1.wav");
+        _state.soundEngine.loadSource("pain2", Directory.SOUND + "player/pain2.wav");
+        _state.soundEngine.loadSource("pain3", Directory.SOUND + "player/pain3.wav");
+        _state.soundEngine.loadSource("pain4", Directory.SOUND + "player/pain4.wav");
+        _state.soundEngine.loadSource("pain5", Directory.SOUND + "player/pain5.wav");
+        _state.soundEngine.loadSource("pain6", Directory.SOUND + "player/pain6.wav");
+        _state.soundEngine.loadSource("die1", Directory.SOUND + "player/die1.wav");
+        _state.soundEngine.loadSource("die2", Directory.SOUND + "player/die2.wav");
         
         // Soundgruppen erstellen
-        _state.soundRegistry.createGroup("heavy_shot", new String[]{"heavy_shot1", "heavy_shot2", "heavy_shot3"});
-        _state.soundRegistry.createGroup("turret_reload", new String[]{"turret_reloading", "turret_reloading", "turret_reloading", "turret_restocking_ammunition", "turret_tactical_reload"});
-        _state.soundRegistry.createGroup("pain", new String[]{"pain1", "pain2", "pain3", "pain4", "pain5", "pain6"});
-        _state.soundRegistry.createGroup("die", new String[]{"die1", "die2"});
+        _state.soundEngine.createGroup("pistol_shot", new String[]{"pistol1", "pistol2", "pistol3", "pistol4"});
+        _state.soundEngine.createGroup("heavy_shot", new String[]{"heavy_shot1", "heavy_shot2", "heavy_shot3"});
+        _state.soundEngine.createGroup("turret_reload", new String[]{"turret_reloading", "turret_reloading", "turret_reloading", "turret_restocking_ammunition", "turret_tactical_reload"});
+        _state.soundEngine.createGroup("turret_death", new String[]{"turret_system_failure", "turret_offline", "turret_offline"});
+        _state.soundEngine.createGroup("pain", new String[]{"pain1", "pain2", "pain3", "pain4", "pain5", "pain6"});
+        _state.soundEngine.createGroup("die", new String[]{"die1", "die2"});
         
-        _state.soundRegistry.playSound("music1", 0.2, true);
+        // Musik-Loop starten
+        _state.soundEngine.playSound("music1", 0.2, true);
         
+        // Maus in Fenstermitte zentrieren
         _state.inputHandler.setKeepMouseInPlace(true);
     }
     
@@ -98,15 +113,37 @@ public class GameScene extends Scene
         Vector3 camRight = playerCam.getRight();
         
         // Schießen
-        if(_state.inputHandler.isKeyPressed(KeyCode.MOUSE_BUTTON_LEFT))
+        if(_state.inputHandler.isKeyPressed(KeyCode.MOUSE_BUTTON_LEFT) && _timeSinceLastShot >= PISTOL_SHOT_COOLDOWN)
         {
+            // Timer zurücksetzen
+            _timeSinceLastShot = 0.0;
+            
+            // TODO: Energie abziehen
+            
+            // Raycast vorbereiten
             Vector2 source = new Vector2(_player.getPosition().getX(), _player.getPosition().getZ());
             Vector2 dir = new Vector2(camDir.getX(), camDir.getZ()).invert();
             double dist = 500.0;
-            _raycast = Physics.raycast(source, dir, dist, _mapHandler.getMap(), null, EnumSet.of(PhysicsLayer.PLAYER));
+            _raycast = Physics.raycast(source, dir, dist, _mapHandler.getMap(), EnumSet.of(PhysicsLayer.SOLID, PhysicsLayer.ENEMY), EnumSet.of(PhysicsLayer.PLAYER));
+            
+            if(_raycast.size() > 0 && _raycast.get(_raycast.size() - 1).collider.getLayer() == PhysicsLayer.ENEMY)
+            {
+                ICollisionListener listener = _raycast.get(_raycast.size() - 1).collider.getListener();
+                
+                if(listener instanceof ILivingEntity)
+                {
+                    ILivingEntity livingEntity = (ILivingEntity)listener;
+                    livingEntity.damage(12, "laser pistol shot");
+                }
+            }
+            
+            
+            // debug
             _raycastSource = new Vector3(_player.getPosition());
             Vector2 target = source.add(dir.normalize().multiply(dist));
             _raycastTarget = new Vector3(target.getX(), 0.0, target.getY());
+            
+            _state.soundEngine.playSoundFromGroup("pistol_shot", 0.7, false);
         }
         
         // Tastenbelegungen
@@ -141,15 +178,16 @@ public class GameScene extends Scene
      */
     public void update(double deltaTime, double runTime)
     {
+        _timeSinceLastShot += deltaTime;
+        
         // Updatet die Map
         _mapHandler.getMap().update(deltaTime, runTime, _player.getCamera().getPosition());
         
         // Entfernt bereits durchgelaufene Sounds
-        _state.soundRegistry.removeStoppedSounds();
+        _state.soundEngine.removeStoppedSounds();
         
         // Kollisionsbehandlung
         CircleCollider playerCollider = _player.getCollider();
-        playerCollider.detectCollision(_testEnemy);
         _mapHandler.getMap().handleCollisions(playerCollider);
     }
     
@@ -167,7 +205,7 @@ public class GameScene extends Scene
         _mapHandler.getMap().draw(_state.renderer, playerCam);
         
         // Debug Raycast Drawing
-        if(_raycast != null)
+        if(DEBUG_SHOW_RAYCAST && _raycast != null)
         {
             for(RaycastHit hit : _raycast)
             {

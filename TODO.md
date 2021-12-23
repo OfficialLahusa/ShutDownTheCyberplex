@@ -1,6 +1,8 @@
 # TODO:
 - Cracked Brick Wall TileProvider
 - Farben zu Enums machen
+- Spielertod, Respawning, Checkpoints, Map Regen, etc.
+- Tür Soundsetzung überarbeiten
 - Partikeleffekte:
     - Für Molotovs, Kaputte Gegner: Feuer (Rote, gelbe Flammen die Skaliert werden und Rauch/Funkenpartikel, die sich bewegen, skalieren und vielleicht rotieren)
 - Tiles erstellen für:

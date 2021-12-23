@@ -5,7 +5,7 @@ import java.util.*;
  * Der Spieler ist ein DynamicGameObject, das kein Rendering durchführt und die Rotation repurposed.
  * 
  * @author Sven Schreiber, Lasse Huber-Saffer
- * @version 21.12.2021
+ * @version 23.12.2021
  */
 public class Player implements ILivingEntity, IDynamicGameObject, ICollisionListener
 {
@@ -14,7 +14,7 @@ public class Player implements ILivingEntity, IDynamicGameObject, ICollisionList
     private int _maxHealth;
     
     // Sound
-    private SoundRegistry _soundRegistry;
+    private SoundEngine _soundEngine;
     
     // Positionierung
     private Vector3 _position;
@@ -35,14 +35,14 @@ public class Player implements ILivingEntity, IDynamicGameObject, ICollisionList
      * Konstruktor für Player mit Position und Rotation
      * @param position Position
      * @param rotation Rotationswerte für die Kamera (pitch, yaw, *)
-     * @param soundRegistry Soundregister, aus dem die Spielersounds bezogen werden
+     * @param soundEngine Sound Engine, in der die Spielersounds geladen sind
      */
-    public Player(Vector3 position, Vector3 rotation, SoundRegistry soundRegistry)
+    public Player(Vector3 position, Vector3 rotation, SoundEngine soundEngine)
     {
         _health = 100;
         _maxHealth = 100;
         
-        _soundRegistry = soundRegistry;
+        _soundEngine = soundEngine;
         
         _position = new Vector3(position);
         _rotation = new Vector3(rotation);
@@ -250,11 +250,11 @@ public class Player implements ILivingEntity, IDynamicGameObject, ICollisionList
         // Überprüfen, ob Spieler noch am Leben ist
         if(_health > 0) 
         {
-            _soundRegistry.playSoundFromGroup("pain", 0.8, false);
+            _soundEngine.playSoundFromGroup("pain", 0.8, false);
         }
         else
         {
-            _soundRegistry.playSoundFromGroup("die", 0.8, false);
+            _soundEngine.playSoundFromGroup("die", 0.8, false);
             System.out.println("Player was killed by " + source);
         }
     }

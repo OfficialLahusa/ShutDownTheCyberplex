@@ -8,9 +8,9 @@ import java.net.MalformedURLException;
  * Lädt, speichert und spielt Sounddateien sowie Quellen
  * 
  * @author Lasse Huber-Saffer 
- * @version 03.12.2021
+ * @version 23.12.2021
  */
-public class SoundRegistry
+public class SoundEngine
 {
     private HashMap<String, Media> _soundSources;
     private HashMap<String, String[]> _soundGroups;
@@ -20,7 +20,7 @@ public class SoundRegistry
     /**
      * Konstruktor für Objekte der Klasse SoundPlayer
      */
-    public SoundRegistry()
+    public SoundEngine()
     {
         _soundSources = new HashMap<String, Media>();
         _soundGroups = new HashMap<String, String[]>();

@@ -75,7 +75,7 @@ public class MapHandler
             woodenDoorClosed, woodenDoorOpen, false,
             new BlockedTunnelColliderProvider(), new TunnelColliderProvider(),
             _tileProviders.get(Tile.DIRT_FLOOR), (WallTileProvider)_tileProviders.get(Tile.BRICK_WALL),
-            _state.soundRegistry, "wooden_door_open", "wooden_door_close"
+            _state.soundEngine, "wooden_door_open", "wooden_door_close"
         ));
         
         // Dirt floor grass
@@ -95,7 +95,7 @@ public class MapHandler
             secretDoorClosed, secretDoorOpen, false,
             new BlockedTunnelColliderProvider(), new TunnelColliderProvider(),
             _tileProviders.get(Tile.DIRT_FLOOR), (WallTileProvider)_tileProviders.get(Tile.BRICK_WALL),
-            _state.soundRegistry, "wooden_door_open", "wooden_door_close"
+            _state.soundEngine, "wooden_door_open", "wooden_door_close"
         ));
         
         // Road Markings X
@@ -129,7 +129,7 @@ public class MapHandler
     public void load(String mapName)
     {
         _map = _csvLoader.loadFromFile(Directory.MAP + mapName + TILE_LAYER_SUFFIX, Directory.MAP + mapName + FUNCTION_LAYER_SUFFIX);
-        _map.populate(_tileProviders, _colliderProviders, _entityMeshes, _state.soundRegistry);
+        _map.populate(_tileProviders, _colliderProviders, _entityMeshes, _state.soundEngine);
     }
     
     /**

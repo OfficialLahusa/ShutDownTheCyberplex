@@ -5,7 +5,7 @@ import javafx.util.*;
  * Beschreiben Sie hier die Klasse DoorGameObject.
  * 
  * @author Lasse Huber-Saffer
- * @version 21.12.2021
+ * @version 23.12.2021
  */
 public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObject
 {
@@ -35,7 +35,7 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
     private ArrayList<ICollider> _openColliders;
     
     // Sound
-    private SoundRegistry _soundReg;
+    private SoundEngine _soundEngine;
     private String _openSoundKey;
     private String _closeSoundKey;    
     
@@ -94,7 +94,7 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
         _connectedRoomIDs = new Pair<Integer, Integer>(null, null);
         
         // Bei Initialisierung sind noch keine Sounds aktiv
-        _soundReg = null;
+        _soundEngine = null;
         _openSoundKey = null;
         _closeSoundKey = null;
     }
@@ -173,20 +173,20 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
     /**
      * @see IDoorGameObject#setSound()
      */
-    public void setSound(SoundRegistry soundReg, String openSoundKey, String closeSoundKey)
+    public void setSound(SoundEngine soundEngine, String openSoundKey, String closeSoundKey)
     {
-        _soundReg = soundReg;
+        _soundEngine = soundEngine;
         _openSoundKey = openSoundKey;
         _closeSoundKey = closeSoundKey;
     }
     
     private void playSound(String key)
     {
-        if(_soundReg != null)
+        if(_soundEngine != null)
         {
-            if(key != null && _soundReg.containsSource(key))
+            if(key != null && _soundEngine.containsSource(key))
             {
-                _soundReg.playSound(key, 0.6, false);
+                _soundEngine.playSound(key, 0.6, false);
             }
         }
     }
