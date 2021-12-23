@@ -3,7 +3,7 @@
  * Tragen Sie hier eine Beschreibung des Interface ILivingEntity ein.
  * 
  * @author Lasse Huber-Saffer
- * @version (eine Versionsnummer oder ein Datum)
+ * @version 23.12.2021
  */
 
 public interface ILivingEntity
@@ -36,13 +36,15 @@ public interface ILivingEntity
      * Fügt dem Spieler Schaden zu.
      * Seine Lebenspunkte können 0 nicht unterschreiten
      * @param amount Menge an Lebenspunkten
+     * @param source Bezeichung der Schadensquelle (z.B. "turret shot")
      */
-    public void damage(int amount);
+    public void damage(int amount, String source);
     
     /**
      * Heilt den Spieler.
      * Seine Lebenspunkte können seine maximalen Lebenspunkte nicht überschreiten.
      * @param amount Menge an Lebenspunkten
+     * @param source Bezeichnung der Heilungsursache (z.B. "health powerup")
      */
-    public void heal(int amount);
+    public void heal(int amount, String source);
 }

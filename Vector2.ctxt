@@ -37,6 +37,9 @@ comment19.text=\r\n\ Gibt\ den\ Winkel\ zwischen\ zwei\ Vektoren\ zur\u00FCck\r\
 comment2.params=copy
 comment2.target=Vector2(Vector2)
 comment2.text=\r\n\ Kopie-Konstruktor\r\n\ @param\ copy\ zu\ kopierender\ Vektor\r\n
+comment20.params=theta
+comment20.target=Vector2\ rotateAroundOrigin(double)
+comment20.text=\r\n\ Rotiert\ den\ Vektor\ einen\ bestimmen\ Winkel\ um\ den\ Koordinatenursprung\r\n\ @param\ theta\ Drehungswinkel\ in\ Grad\r\n\ @return\ Rotierte\ Version\ des\ Vektors\r\n
 comment3.params=x\ y
 comment3.target=Vector2(double,\ double)
 comment3.text=\r\n\ Konstruktor\ mit\ zwei\ Parametern\ f\u00FCr\ jeweilige\ Komponenten\r\n\ @param\ x\ x-Komponente\ des\ Vektors\r\n\ @param\ y\ y-Komponente\ des\ Vektors\r\n
@@ -58,4 +61,4 @@ comment8.text=\r\n\ Gibt\ die\ L\u00E4nge\ des\ Vektors\ zur\u00FCck\r\n\ @retur
 comment9.params=
 comment9.target=Vector2\ normalize()
 comment9.text=\r\n\ Normalisiert\ den\ Vektor\ zu\ einem\ Einheitsvektor\ (L\u00E4nge\ \=\ 1.0)\r\n\ @return\ Normalisierte\ Version\ des\ Vektors\r\n
-numComments=20
+numComments=21

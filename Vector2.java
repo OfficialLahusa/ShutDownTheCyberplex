@@ -209,4 +209,15 @@ public class Vector2
     {
         return Math.toDegrees(Math.acos(dot(v)/(getLength()*v.getLength())));
     }
+    
+    /**
+     * Rotiert den Vektor einen bestimmen Winkel um den Koordinatenursprung
+     * @param theta Drehungswinkel in Grad
+     * @return Rotierte Version des Vektors
+     */
+    public Vector2 rotateAroundOrigin(double theta)
+    {
+        double angle = Math.toRadians(theta);
+        return new Vector2(Math.cos(angle) * _x - Math.sin(angle) * _y, Math.sin(angle) * _x + Math.cos(angle) * _y);
+    }
 }

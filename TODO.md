@@ -14,7 +14,6 @@
 - Wall-Mounting-Tileprovider
 - Gegnertypen:
     - Drohne die Routen abfliegen und rot blinkenden Sensor haben, wenn sie den Spieler detecten
-    - Geschützturm mit bestimmtem Schussfeld
 - AI-Behaviour, Patrouillensystem
 - Voiceline-System
     - Bsp.: Commander gibt ein Tutorial 
@@ -26,4 +25,4 @@
     - Gegnerwellen
     - Jede Stage schaltet einen neuen Teil des Levels frei.
     - Man muss Computerkonsolen anschießen und am Screen ablesen, um die richtige zu finden.
-- Debug Speed Multiplier entfernen
+- Debug Speed Multiplier entfernen (?)

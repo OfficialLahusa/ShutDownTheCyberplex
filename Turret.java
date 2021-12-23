@@ -4,51 +4,95 @@ import java.util.*;
  * Geschützturm, der sich zum Spieler ausrichtet und ihn beschießt
  * 
  * @author Lasse Huber-Saffer
- * @version 22.12.2021
+ * @version 23.12.2021
  */
 public class Turret implements ILivingEntity, ICollisionListener, IDynamicGameObject
 {
+    // Parent-Raum
+    private Room _room;
+    
+    // Zufallsgenerator
+    private Random _random;
+    
+    // Sound
+    private SoundRegistry _soundRegistry;
+    
+    // Functionality
     private boolean _isActive;
+    private int _currentAmmo;
+    private double _timeSinceLastShot;
     private int _health;
     private int _maxHealth;
+    private boolean _reloadingVoiceLineTriggered;
+    
+    // Physics
     private CircleCollider _collider;
+    
+    // Positionierung
     private Vector3 _position;
     private Vector3 _rotation;
     private Vector3 _scale;
+    private Vector3 _muzzlePos;
     
+    // Rendering
     private Mesh _activeMesh;
     private Mesh _inactiveMesh;
+    private SimpleDynamicGameObject _muzzleFlash;
     private String _color;
-    
     private boolean _recalculateModelMatrix;
     private Matrix4 _model;
+    private Vector3 _lastShotPos1;
+    private Vector3 _lastShotPos2;
     
+    // Konstanten
     private static final double COLLIDER_RADIUS = 1.5;
+    private static final double MAX_RANGE = 500.0;
+    private static final int MAGAZINE_CAPACITY = 15;
+    private static final double FIRING_COOLDOWN = 0.065;
+    private static final double RELOAD_TIME = 3.25;
+    private static final double SHOT_VISIBILITY_TIME = 0.065;
+    private static final int BULLET_DAMAGE = 2;
+    private static final double MAXIMUM_INACCURACY_ANGLE = 6.0;
+    private static final double FIRING_ANGLE_TOLERANCE = 2.0;
+    private static final double RELOAD_VOICELINE_DELAY = 0.25;
     
     /**
      * Konstruktor für Turret mit Position und Meshes
      * @param position Position
      * @param active Ob das Turret aktiv sein soll
-     * @param activeMesh Mesh des Turrets im aktiven Zustand
-     * @param inactiveMesh Mesh des Turrets im inaktiven Zustand
-     * @param color Farbe des Turrets
      * @param room umgebender Raum
+     * @param entityMeshes Register der EntityMeshes, aus dem die Meshes bezogen werden
+     * @param soundRegistry Soundregister, aus dem die Sounds der Entity bezogen werden
      */
-    public Turret(Vector3 position, boolean active, Mesh activeMesh, Mesh inactiveMesh, String color, Room room)
+    public Turret(Vector3 position, boolean active, Room room, HashMap<String, Mesh> entityMeshes, SoundRegistry soundRegistry)
     {
+        _room = room;
+        
+        _random = new Random();
+        
+        _soundRegistry = soundRegistry;
+        
         _isActive = active;
+        _currentAmmo = MAGAZINE_CAPACITY;
+        _timeSinceLastShot = 0.0;
         _health = 100;
         _maxHealth = 100;
+        _reloadingVoiceLineTriggered = true;
+        
         _position = new Vector3(position);
         _rotation = new Vector3();
         _scale = new Vector3(1.0, 1.0, 1.0);
+        _muzzlePos = new Vector3(3.27203, 1.99736, 0.0);
         
-        _activeMesh = new Mesh(activeMesh);
-        _inactiveMesh = new Mesh(inactiveMesh);
-        _color = color;
+        _activeMesh = entityMeshes.get("turret_active");
+        _inactiveMesh = entityMeshes.get("turret_inactive");
+        _color = "hellgrau";
+        _muzzleFlash = new SimpleDynamicGameObject(entityMeshes.get("turret_muzzle_flash"), "rot");
         
         _recalculateModelMatrix = true;
         _model = null;
+        _lastShotPos1 = null;
+        _lastShotPos2 = null;
         
         _collider = new CircleCollider(new Vector2(_position.getX(), _position.getZ()), COLLIDER_RADIUS, PhysicsLayer.ENEMY);
         _collider.setListener(this);
@@ -59,18 +103,145 @@ public class Turret implements ILivingEntity, ICollisionListener, IDynamicGameOb
      */
     public void update(double deltaTime, double runTime, Vector3 cameraPosition)
     {
-        // Aktivitätsstatus des Geschützes prüfen
+        _timeSinceLastShot += deltaTime;
         
-        // Line-of-sight-Check mit Spieler machen
+        // 1. Aktivitätsstatus des Geschützes prüfen
+        if(!_isActive) return;
         
-        // Geschütz zum Spieler ausrichten
+        // 2. Mündungsfeuer positionieren und skalieren
+        _muzzleFlash.setRotation(_rotation);
+        _muzzleFlash.setPosition(getCurrentMuzzlePosition());
+        double scaleValue;
         
-        // Schießen, wenn Cooldown niedrig ist
+        // Zeitabhängig skalieren
+        if(_timeSinceLastShot <= SHOT_VISIBILITY_TIME)
+        {
+            scaleValue = (SHOT_VISIBILITY_TIME - _timeSinceLastShot) / SHOT_VISIBILITY_TIME;
+        }
+        else
+        {
+            scaleValue = 1.0;
+        }
+        _muzzleFlash.setScale(new Vector3(scaleValue, scaleValue, scaleValue));
         
-        // Feuer-/Rauchpartikel aktivieren?
+        // 3. Waffe Laden
+        if(_currentAmmo == 0)
+        {
+            // Nachlade-Voiceline
+            if(!_reloadingVoiceLineTriggered && _timeSinceLastShot >= RELOAD_VOICELINE_DELAY)
+            {
+                _soundRegistry.playSoundFromGroup("turret_reload", 0.8, false);
+                _reloadingVoiceLineTriggered = true;
+            }
+            
+            // Magazin füllen
+            if(_timeSinceLastShot >= RELOAD_TIME)
+            {
+                _currentAmmo = MAGAZINE_CAPACITY;
+            }
+        }
         
-        //_recalculateModelMatrix = true;
+        // 4. Line-of-sight-Check mit Spieler machen
+        Player player = _room.getMap().getPlayer();
         
+        // Raycast vorbereiten
+        Vector2 source = new Vector2(_position.getX(), _position.getZ());
+        Vector2 target = new Vector2(player.getPosition().getX(), player.getPosition().getZ());
+        Vector2 direction = target.subtract(source).normalize();
+        EnumSet<PhysicsLayer> terminationFilter = EnumSet.of(PhysicsLayer.PLAYER, PhysicsLayer.SOLID);
+        EnumSet<PhysicsLayer> exclusionFilter = EnumSet.of(PhysicsLayer.ENEMY);
+        ArrayList<RaycastHit> raycast = Physics.raycast(source, direction, MAX_RANGE, _room.getMap(), terminationFilter, exclusionFilter);
+        
+        // Sichtbarkeit berechnen (Bdg.: der letzte Treffer des Raycasts muss der Spieler sein)
+        boolean isPlayerVisible = (raycast.size() > 0 && raycast.get(raycast.size() - 1).collider.getLayer() == PhysicsLayer.PLAYER);
+        
+        // Nachfolgendes nur ausführen, wenn Spieler sichtbar ist
+        if(isPlayerVisible)
+        {
+            // 5. Geschütz zum Spieler ausrichten
+            Vector3 baseDirection = new Vector3(1.0, 0.0, 0.0);
+            Vector3 toPlayer = player.getPosition().subtract(_position).normalize();
+            
+            // Kleinstmöglicher Winkel zwischen baseDirection und toPlayer
+            double angleToPlayer = baseDirection.getAngleBetween(toPlayer);
+            double prevAngle = _rotation.getY();
+            
+            // Winkel umkehren, wenn z-Koordinate des Spielers größer ist, als die des Turrets
+            if(player.getPosition().getZ() > _position.getZ())
+            {
+                angleToPlayer = 360.0 - angleToPlayer;
+            }
+            
+            // 360°-Flip bei 360° zu 0°-Transition und umgekehrt verhindern
+            if(prevAngle > 270.0 && angleToPlayer < 90.0)       angleToPlayer += 360.0;
+            else if(angleToPlayer > 270.0 && prevAngle < 90.0)  prevAngle += 360.0;
+            
+            // Neuen Winkel setzen (Langsamer Übergang)
+            double newAngle = ((angleToPlayer + 15.0*prevAngle) / 16.0) % 360.0;
+            _rotation.setY(newAngle);
+            _recalculateModelMatrix = true;
+            
+            // 6. Schießen, wenn Munition vorhanden ist, Spieler genau genug anvisiert ist, und genug Zeit vergangen ist
+            if(_currentAmmo > 0 && _timeSinceLastShot > FIRING_COOLDOWN)
+            {
+                // Anvisieren überprüfen
+                Vector2 currentDirection = new Vector2(Math.cos(Math.toRadians(-_rotation.getY())), Math.sin(Math.toRadians(-_rotation.getY())));
+                Vector2 idealDirection = new Vector2(toPlayer.getX(), toPlayer.getZ());
+                double inaccuracyAngle = idealDirection.getAngleBetween(currentDirection);
+                
+                // Nur schießen, wenn korrekt anvisiert wurde
+                if(inaccuracyAngle <= FIRING_ANGLE_TOLERANCE)
+                {
+                    // Munition abziehen und Timer zurücksetzen
+                    _currentAmmo--;
+                    _timeSinceLastShot = 0.0;
+                    
+                    // Reload-Voiceline zurücksetzen
+                    _reloadingVoiceLineTriggered = false;
+                    
+                    // Raycast vorbereiten
+                    source = new Vector2(_position.getX(), _position.getZ());
+                    target = new Vector2(player.getPosition().getX(), player.getPosition().getZ());
+                    direction = target.subtract(source).normalize();                
+                    terminationFilter = EnumSet.of(PhysicsLayer.PLAYER, PhysicsLayer.SOLID);
+                    exclusionFilter = EnumSet.of(PhysicsLayer.ENEMY);
+                    
+                    // Ungenauigkeit zum Schuss hinzufügen
+                    direction = direction.rotateAroundOrigin((_random.nextDouble()*2.0-1.0) * MAXIMUM_INACCURACY_ANGLE);
+                    
+                    // Raycast durchführen
+                    raycast = Physics.raycast(source, direction, MAX_RANGE, _room.getMap(), terminationFilter, exclusionFilter);
+                    
+                    // Schussergebnis berechnen
+                    if(raycast.size() > 0)
+                    {
+                        RaycastHit lastHit = raycast.get(raycast.size() - 1);
+                        
+                        // Schuss-Tracer setzen
+                        _lastShotPos1 = new Vector3(getCurrentMuzzlePosition());
+                        _lastShotPos2 = new Vector3(lastHit.position.getX(), 1.2, lastHit.position.getY());
+                        
+                        // Herausfinden, ob Spieler getroffen wurde
+                        if(lastHit.collider.getLayer() == PhysicsLayer.PLAYER && lastHit.collider.getListener() != null)
+                        {
+                            if(lastHit.collider.getListener() instanceof ILivingEntity)
+                            {
+                                ILivingEntity victim = (ILivingEntity)lastHit.collider.getListener();
+                                
+                                // Spieler Schaden hinzufügen
+                                victim.damage(BULLET_DAMAGE, "turret shot");
+                            }
+                        }
+                    }
+                    
+                    // Zufälligen Schusssound abspielen
+                    _soundRegistry.playSoundFromGroup("heavy_shot", 0.65, false);
+                }
+            }
+        }
+        
+        //TODO:
+        // 7. Feuer-/Rauchpartikel aktivieren
         return;
     }
     
@@ -79,9 +250,22 @@ public class Turret implements ILivingEntity, ICollisionListener, IDynamicGameOb
      */
     public void draw(Renderer renderer, Camera camera)
     {
+        // Aktives und inaktives Turret unterschiedlich zeichnen
         if(_isActive)
         {
             renderer.drawMesh(_activeMesh, getModelMatrix(), _color, camera);
+            
+            // Für eine bestimmte Zeit nach Abfeuern des Schusses den Trace und das Mündungsfeuer rendern
+            if(_timeSinceLastShot <= SHOT_VISIBILITY_TIME)
+            {
+                _muzzleFlash.draw(renderer, camera);
+                
+                // Schusstracer zeichnen
+                if(_lastShotPos1 != null && _lastShotPos2 != null)
+                {
+                    renderer.drawLine3D(_lastShotPos1, _lastShotPos2, _muzzleFlash.getColor(), camera);
+                }
+            }
         }
         else
         {
@@ -103,6 +287,15 @@ public class Turret implements ILivingEntity, ICollisionListener, IDynamicGameOb
     public void onResolution(ICollider self, ICollider other)
     {
         return;
+    }
+    
+    /**
+     * Gibt die transformierte Position der Laufmündung im World Space zurück
+     * @return Position der Laufmündung im World Space
+     */
+    private Vector3 getCurrentMuzzlePosition()
+    {
+        return getModelMatrix().multiply(new Vector4(_muzzlePos, 1.0)).getXYZ();
     }
     
     /**
@@ -256,7 +449,7 @@ public class Turret implements ILivingEntity, ICollisionListener, IDynamicGameOb
     /**
      * @see ILivingEntity#damage()
      */
-    public void damage(int amount)
+    public void damage(int amount, String source)
     {
         _health -= amount;
         if(_health < 0) _health = 0;
@@ -266,7 +459,7 @@ public class Turret implements ILivingEntity, ICollisionListener, IDynamicGameOb
     /**
      * @see ILivingEntity#heal()
      */
-    public void heal(int amount)
+    public void heal(int amount, String source)
     {
         _health += amount;
         if(_health < 0) _health = 0;

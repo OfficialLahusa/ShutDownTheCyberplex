@@ -50,10 +50,11 @@ public class Room
      * @param tileProviders Hashmap der TileProvider. Der Key entspricht der Tile-ID
      * @param colliderProviders Hashmap der ColliderProvider. Der Key entspricht der Tile-ID
      * @param entityMeshes Hashmap der von Entities verwendeten Meshes.
+     * @param soundRegistry Soundregister
      * @param tileLayer rohe Geometrie-Mapdaten
      * @param functionLayer rohe Funktions-Mapdaten
      */
-    public void populate(HashMap<Integer, ITileProvider> tileProviders, HashMap<Integer, IColliderProvider> colliderProviders, HashMap<String, Mesh> entityMeshes, ArrayList<ArrayList<Integer>> tileLayer, ArrayList<ArrayList<Integer>> functionLayer)
+    public void populate(HashMap<Integer, ITileProvider> tileProviders, HashMap<Integer, IColliderProvider> colliderProviders, HashMap<String, Mesh> entityMeshes, SoundRegistry soundRegistry, ArrayList<ArrayList<Integer>> tileLayer, ArrayList<ArrayList<Integer>> functionLayer)
     {
         // Null-Check der Parameter
         if(tileProviders == null)       throw new IllegalArgumentException("tileProviders was null when populating room");
@@ -110,12 +111,12 @@ public class Room
                     switch(value)
                     {
                         case Tile.SPAWN_TURRET_INACTIVE:
-                            Turret inactive_turret = new Turret(MapHandler.tilePosToWorldPos(new Vector2i(x, z)), false, entityMeshes.get("turret_active"), entityMeshes.get("turret_inactive"), "hellgrau", this);
+                            Turret inactive_turret = new Turret(MapHandler.tilePosToWorldPos(new Vector2i(x, z)), false, this, entityMeshes, soundRegistry);
                             _entities.add(inactive_turret);
                             _colliders.add(inactive_turret.getCollider());
                             break;
                         case Tile.SPAWN_TURRET_ACTIVE:
-                            Turret active_turret = new Turret(MapHandler.tilePosToWorldPos(new Vector2i(x, z)), true, entityMeshes.get("turret_active"), entityMeshes.get("turret_inactive"), "hellgrau", this);
+                            Turret active_turret = new Turret(MapHandler.tilePosToWorldPos(new Vector2i(x, z)), true, this, entityMeshes, soundRegistry);
                             _entities.add(active_turret);
                             _colliders.add(active_turret.getCollider());
                             break;

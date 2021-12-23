@@ -5,7 +5,7 @@ import javafx.util.*;
  * Beschreiben Sie hier die Klasse GridMap.
  * 
  * @author Lasse Huber-Saffer 
- * @version 21.12.2021
+ * @version 23.12.2021
  */
 public class GridMap
 {
@@ -340,8 +340,9 @@ public class GridMap
      * @param tileProviders Hashmap der TileProvider. Der Key entspricht der Tile-ID.
      * @param colliderProviders Hashmap der ColliderProvider. Der Key entspricht der Tile-ID.
      * @param entityMeshes Hashmap der von Entities verwendeten Meshes.
+     * @param soundRegistry Soundregister
      */
-    public void populate(HashMap<Integer, ITileProvider> tileProviders, HashMap<Integer, IColliderProvider> colliderProviders, HashMap<String, Mesh> entityMeshes)
+    public void populate(HashMap<Integer, ITileProvider> tileProviders, HashMap<Integer, IColliderProvider> colliderProviders, HashMap<String, Mesh> entityMeshes, SoundRegistry soundRegistry)
     {
         // Geometrieebene
         for(int z = 0; z < _tileLayer.size(); z++)
@@ -399,7 +400,7 @@ public class GridMap
             Room room = floodFillFromSource(source);
             if(room != null)
             {
-                room.populate(tileProviders, colliderProviders, entityMeshes, _tileLayer, _functionLayer);
+                room.populate(tileProviders, colliderProviders, entityMeshes, soundRegistry, _tileLayer, _functionLayer);
                 rooms.add(room);
             }
             else

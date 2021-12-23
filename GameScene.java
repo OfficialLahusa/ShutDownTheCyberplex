@@ -4,7 +4,7 @@ import java.util.*;
  * Haupt-Szene des Spiels
  * 
  * @author Lasse Huber-Saffer, Nico Hädicke, Sven Schreiber
- * @version 22.12.2021
+ * @version 23.12.2021
  */
 public class GameScene extends Scene
 {
@@ -24,32 +24,56 @@ public class GameScene extends Scene
         super(state);
         
         _mapHandler = new MapHandler(state);
-        _muzzleFlash = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/muzzleFlash.obj"), "cyan", new Vector3 (-2, -2.2,-11));
-        _pistolMain = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/pistolMain.obj"), "grau", new Vector3 (-1.5, -1,-10));
-        _pistolDetails = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/pistolDetails.obj"), "orange", new Vector3 (-1.5, -1,-10));
-        _pistolHandsIdle = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/pistolHandsIdle.obj"), "weiss", new Vector3 (-1.5, -1,-10));
-        _pistolHandsShot = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/pistolHandsShot.obj"), "weiss", new Vector3 (-1.5, -1,-10));
-        _primaryMain = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/primaryMain.obj"), "grau", new Vector3 (-2, -1,-11));
-        _primaryDetails = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/primaryDetails.obj"), "gelb", new Vector3 (-2, -1,-11));
-        _primaryHandsIdle = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/primaryHandsIdle.obj"), "weiss", new Vector3 (-2, -1,-11));
-        _primaryHandsShot = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/primaryHandsShot.obj"), "weiss", new Vector3 (-2, -1,-11));
-        _sniperMain = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/sniperMain.obj"), "grau", new Vector3 (-1.5, 1,-12));
-        _sniperDetails = new DynamicViewModelGameObject(_state.objLoader.loadFromFile("./res/models/guns/new/sniperDetails.obj"), "gruen", new Vector3 (-1.5, 1,-12));
+        _muzzleFlash = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "guns/muzzleFlash.obj"), "cyan", new Vector3 (-2, -2.2,-11));
+        _pistolMain = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "guns/new/pistolMain.obj"), "grau", new Vector3 (-1.5, -1,-10));
+        _pistolDetails = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "guns/new/pistolDetails.obj"), "orange", new Vector3 (-1.5, -1,-10));
+        _pistolHandsIdle = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "guns/new/pistolHandsIdle.obj"), "weiss", new Vector3 (-1.5, -1,-10));
+        _pistolHandsShot = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "guns/new/pistolHandsShot.obj"), "weiss", new Vector3 (-1.5, -1,-10));
+        _primaryMain = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "guns/new/primaryMain.obj"), "grau", new Vector3 (-2, -1,-11));
+        _primaryDetails = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "guns/new/primaryDetails.obj"), "gelb", new Vector3 (-2, -1,-11));
+        _primaryHandsIdle = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "guns/new/primaryHandsIdle.obj"), "weiss", new Vector3 (-2, -1,-11));
+        _primaryHandsShot = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "guns/new/primaryHandsShot.obj"), "weiss", new Vector3 (-2, -1,-11));
+        _sniperMain = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "guns/new/sniperMain.obj"), "grau", new Vector3 (-1.5, 1,-12));
+        _sniperDetails = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "guns/new/sniperDetails.obj"), "gruen", new Vector3 (-1.5, 1,-12));
         
         _mapHandler.load("TestMap2");
+        
         _testEnemy = new CircleCollider(new Vector2(253.57, -118.77), 3.0, PhysicsLayer.ENEMY);
         _mapHandler.getMap().globalColliders.add(_testEnemy);
-        _player = new Player(_mapHandler.getMap().getPlayerSpawn());
-        _mapHandler.getMap().globalColliders.add(_player.getCollider());
         
+        _player = new Player(_mapHandler.getMap().getPlayerSpawn(), new Vector3(), _state.soundRegistry);
+        _mapHandler.getMap().globalColliders.add(_player.getCollider());
+        _mapHandler.getMap().setPlayer(_player);
+    
         _raycast = null;
         _raycastSource = null;
         _raycastTarget = null;
         
-        _state.soundRegistry.loadSource("music1", "./res/sounds/to_the_front.mp3");
-        _state.soundRegistry.loadSource("powerup3", "./res/sounds/Powerup3.wav");
-        _state.soundRegistry.loadSource("wooden_door_open", "./res/sounds/wooden_door_open.wav");
-        _state.soundRegistry.loadSource("wooden_door_close", "./res/sounds/wooden_door_close.wav");
+        // Soundquellen laden
+        _state.soundRegistry.loadSource("music1", Directory.SOUND + "/music/to_the_front.mp3");
+        _state.soundRegistry.loadSource("powerup3", Directory.SOUND + "Powerup3.wav");
+        _state.soundRegistry.loadSource("wooden_door_open", Directory.SOUND + "tile/wooden_door_open.wav");
+        _state.soundRegistry.loadSource("wooden_door_close", Directory.SOUND + "tile/wooden_door_close.wav");
+        _state.soundRegistry.loadSource("heavy_shot1", Directory.SOUND + "turret/shot/Heavy_Shot.wav");
+        _state.soundRegistry.loadSource("heavy_shot2", Directory.SOUND + "turret/shot/Heavy_Shot2.wav");
+        _state.soundRegistry.loadSource("heavy_shot3", Directory.SOUND + "turret/shot/Heavy_Shot3.wav");
+        _state.soundRegistry.loadSource("turret_reloading", Directory.SOUND + "turret/reload/reloading.wav");
+        _state.soundRegistry.loadSource("turret_tactical_reload", Directory.SOUND + "turret/reload/tactical_reload.wav");
+        _state.soundRegistry.loadSource("turret_restocking_ammunition", Directory.SOUND + "turret/reload/restocking_ammunition.wav");
+        _state.soundRegistry.loadSource("pain1", Directory.SOUND + "player/pain1.wav");
+        _state.soundRegistry.loadSource("pain2", Directory.SOUND + "player/pain2.wav");
+        _state.soundRegistry.loadSource("pain3", Directory.SOUND + "player/pain3.wav");
+        _state.soundRegistry.loadSource("pain4", Directory.SOUND + "player/pain4.wav");
+        _state.soundRegistry.loadSource("pain5", Directory.SOUND + "player/pain5.wav");
+        _state.soundRegistry.loadSource("pain6", Directory.SOUND + "player/pain6.wav");
+        _state.soundRegistry.loadSource("die1", Directory.SOUND + "player/die1.wav");
+        _state.soundRegistry.loadSource("die2", Directory.SOUND + "player/die2.wav");
+        
+        // Soundgruppen erstellen
+        _state.soundRegistry.createGroup("heavy_shot", new String[]{"heavy_shot1", "heavy_shot2", "heavy_shot3"});
+        _state.soundRegistry.createGroup("turret_reload", new String[]{"turret_reloading", "turret_reloading", "turret_reloading", "turret_restocking_ammunition", "turret_tactical_reload"});
+        _state.soundRegistry.createGroup("pain", new String[]{"pain1", "pain2", "pain3", "pain4", "pain5", "pain6"});
+        _state.soundRegistry.createGroup("die", new String[]{"die1", "die2"});
         
         _state.soundRegistry.playSound("music1", 0.2, true);
         

@@ -9,39 +9,41 @@ import java.util.*;
  */
 public class Player implements ILivingEntity, IDynamicGameObject, ICollisionListener
 {
+    // Leben
     private int _health;
     private int _maxHealth;
-    private Camera _camera;
-    private CircleCollider _collider;
+    
+    // Sound
+    private SoundRegistry _soundRegistry;
+    
+    // Positionierung
     private Vector3 _position;
-    /**
-     * Wird NICHT für Rendering verwendet: x-Rotation =^= Camera Pitch, y-Rotation =^= Camera Yaw
-     */ 
+    // Wird nicht für Rendering verwendet: x-Rotation =^= Camera Pitch, y-Rotation =^= Camera Yaw
     private Vector3 _rotation;
     
+    // Child-Elemente
+    private Camera _camera;
+    private CircleCollider _collider;
+    
+    // Konstanten
     private static final double COLLIDER_RADIUS = 1.5;
     private static final double ASPECT_RATIO = 1.0;
     private static final double FOV = 90.0;
-    private static final double CAMERA_HEIGHT = 2.0;
-    
-    /**
-     * Konstruktor für Player mit Position
-     * @param position Position
-     */
-    public Player(Vector3 position)
-    {
-        this(position, new Vector3());
-    }
+    private static final double CAMERA_HEIGHT = 2.2;
     
     /**
      * Konstruktor für Player mit Position und Rotation
      * @param position Position
      * @param rotation Rotationswerte für die Kamera (pitch, yaw, *)
+     * @param soundRegistry Soundregister, aus dem die Spielersounds bezogen werden
      */
-    public Player(Vector3 position, Vector3 rotation)
+    public Player(Vector3 position, Vector3 rotation, SoundRegistry soundRegistry)
     {
         _health = 100;
         _maxHealth = 100;
+        
+        _soundRegistry = soundRegistry;
+        
         _position = new Vector3(position);
         _rotation = new Vector3(rotation);
         
@@ -241,17 +243,26 @@ public class Player implements ILivingEntity, IDynamicGameObject, ICollisionList
     /**
      * @see ILivingEntity#damage()
      */
-    public void damage(int amount)
+    public void damage(int amount, String source)
     {
-        _health -= amount;
-        if(_health < 0) _health = 0;
-        if(_health > _maxHealth) _health = _maxHealth;
+        _health = Math.max(0, Math.min(_health - amount, _maxHealth));
+        
+        // Überprüfen, ob Spieler noch am Leben ist
+        if(_health > 0) 
+        {
+            _soundRegistry.playSoundFromGroup("pain", 0.8, false);
+        }
+        else
+        {
+            _soundRegistry.playSoundFromGroup("die", 0.8, false);
+            System.out.println("Player was killed by " + source);
+        }
     }
     
     /**
      * @see ILivingEntity#heal()
      */
-    public void heal(int amount)
+    public void heal(int amount, String source)
     {
         _health += amount;
         if(_health < 0) _health = 0;

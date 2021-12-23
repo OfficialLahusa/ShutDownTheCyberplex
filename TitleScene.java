@@ -2,7 +2,7 @@
  * Titelbildschirm und Hauptmenü des Spiels
  * 
  * @author Lasse Huber-Saffer, Nico Hädicke
- * @version 16.12.2021
+ * @version 23.12.2021
  */
 public class TitleScene extends Scene
 {
@@ -20,7 +20,7 @@ public class TitleScene extends Scene
         _camera.setPosition(new Vector3(0.0, 2, 5.0));
         _camera.setFov(30.0);
         
-        _state.soundRegistry.loadSource("music2", "./res/sounds/midnight_drive.mp3");
+        _state.soundRegistry.loadSource("music2", Directory.SOUND + "music/midnight_drive.mp3");
         
         Sound backgroundMusic = _state.soundRegistry.playSound("music2", 0.35, true);
     
@@ -33,8 +33,8 @@ public class TitleScene extends Scene
         _audioVisualizer = new BarAudioVisualizer(backgroundMusic);
         backgroundMusic.setAudioSpectrumListener(_audioVisualizer);
         
-        _title = new StaticGameObject(_state.objLoader.loadFromFile("./res/models/title.obj"), "cyan", new Vector3 (0.0, 5, -14));
-        _mauern = new StaticGameObject(_state.objLoader.loadFromFile("./res/models/mauern.obj"), "cyan", new Vector3 (-1.48, 0.34, -2.5));
+        _title = new StaticGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "title.obj"), "cyan", new Vector3 (0.0, 5, -14));
+        _mauern = new StaticGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "mauern.obj"), "cyan", new Vector3 (-1.48, 0.34, -2.5));
     }
     
     /**
