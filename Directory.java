@@ -1,6 +1,6 @@
 
 /**
- * Speicher häufig genutzter Konstanter Pfade
+ * Speicher häufig genutzter konstanter Pfade
  * 
  * @author Lasse Huber-Saffer
  * @version 23.12.2021
