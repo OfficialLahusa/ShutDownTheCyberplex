@@ -12,16 +12,19 @@ public class Room
     private GridMap _map;
     
     // Map Geometry & Physics
+    private HashSet<Vector2i> _tiles;
     private ArrayList<IGameObject> _geometry;
     private ArrayList<ICollider> _colliders;
+    
+    // Functionality
     private ArrayList<Vector2i> _doorLocations;
     private ArrayList<IDoorGameObject> _doors;
+    private ArrayList<Vector2i> _focusPoints;
     
     // Entities in Room
     private ArrayList<IGameObject> _entities;
     
     // Bounds im Grid
-    private HashSet<Vector2i> _tiles;
     private int _minX;
     private int _minZ;
     private int _maxX;
@@ -39,6 +42,7 @@ public class Room
         _tiles = new HashSet<Vector2i>();
         _geometry = new ArrayList<IGameObject>();
         _colliders = new ArrayList<ICollider>();
+        
         _doorLocations = new ArrayList<Vector2i>();
         _doors = new ArrayList<IDoorGameObject>();
         
@@ -119,6 +123,14 @@ public class Room
                             Turret active_turret = new Turret(MapHandler.tilePosToWorldPos(new Vector2i(x, z)), true, this, entityMeshes, soundEngine);
                             _entities.add(active_turret);
                             _colliders.add(active_turret.getCollider());
+                            break;
+                        case Tile.SPAWN_DRONE:
+                            Drone drone = new Drone(MapHandler.tilePosToWorldPos(new Vector2i(x, z)), true, this, entityMeshes, soundEngine);
+                            _entities.add(drone);
+                            _colliders.add(drone.getCollider());
+                            break;
+                        case Tile.TURRET_FOCUS_POINT:
+                            
                             break;
                         default:
                             break;

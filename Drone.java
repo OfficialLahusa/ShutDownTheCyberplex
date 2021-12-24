@@ -1,12 +1,12 @@
 import java.util.*;
 
 /**
- * Geschützturm, der sich zum Spieler ausrichtet und ihn beschießt
+ * Drohne, der sich zum Spieler ausrichtet, ihn verfolgt und beschießt
  * 
  * @author Lasse Huber-Saffer
  * @version 24.12.2021
  */
-public class Turret implements ILivingEntity, ICollisionListener, IDynamicGameObject
+public class Drone implements ILivingEntity, ICollisionListener, IDynamicGameObject
 {
     // Parent-Raum
     private Room _room;
@@ -27,6 +27,8 @@ public class Turret implements ILivingEntity, ICollisionListener, IDynamicGameOb
     
     // Child-Objekte
     private SimpleDynamicGameObject _muzzleFlash;
+    private SimpleDynamicGameObject _rotorLeft;
+    private SimpleDynamicGameObject _rotorRight;
     
     // Physik
     private CircleCollider _collider;
@@ -35,7 +37,8 @@ public class Turret implements ILivingEntity, ICollisionListener, IDynamicGameOb
     private Vector3 _position;
     private Vector3 _rotation;
     private Vector3 _scale;
-    private Vector3 _muzzlePos;
+    private Vector3 _muzzlePos1;
+    private Vector3 _muzzlePos2;
     
     // Rendering
     private Mesh _activeMesh;
@@ -47,28 +50,29 @@ public class Turret implements ILivingEntity, ICollisionListener, IDynamicGameOb
     private Vector3 _lastShotPos2;
     
     // Konstanten
-    private static final double COLLIDER_RADIUS = 1.5;
-    private static final double MAX_RANGE = 500.0;
-    private static final int MAGAZINE_CAPACITY = 15;
-    private static final double FIRING_COOLDOWN = 0.065;
+    private static final double FLYING_HEIGHT = 5.0;
+    private static final double COLLIDER_RADIUS = 0.6;
+    private static final double MAX_RANGE = 20.0;
+    private static final int MAGAZINE_CAPACITY = 6;
+    private static final double FIRING_COOLDOWN = 0.5;
     private static final double RELOAD_TIME = 3.25;
     private static final double SHOT_VISIBILITY_TIME = 0.065;
-    private static final int BULLET_DAMAGE = 2;
+    private static final int BULLET_DAMAGE = 1;
     private static final double MAXIMUM_INACCURACY_ANGLE = 6.0;
-    private static final double FIRING_ANGLE_TOLERANCE = 2.0;
+    private static final double FIRING_ANGLE_TOLERANCE = 4.0;
     private static final double TRACKING_SLOWNESS = 15.0;
     private static final double RELOAD_VOICELINE_DELAY = 0.25;
     private static final double VOICELINE_VOLUME = 0.8;
     
     /**
-     * Konstruktor für Turret mit Position und Meshes
+     * Konstruktor für Drone mit Position und Meshes
      * @param position Position
-     * @param active Ob das Turret aktiv sein soll
+     * @param active Ob das Drone aktiv sein soll
      * @param room umgebender Raum
      * @param entityMeshes Register der EntityMeshes, aus dem die Meshes bezogen werden
      * @param soundEngine Sound Engine, aus der die Sounds der Entity bezogen werden
      */
-    public Turret(Vector3 position, boolean active, Room room, HashMap<String, Mesh> entityMeshes, SoundEngine soundEngine)
+    public Drone(Vector3 position, boolean active, Room room, HashMap<String, Mesh> entityMeshes, SoundEngine soundEngine)
     {
         _room = room;
         
@@ -83,15 +87,19 @@ public class Turret implements ILivingEntity, ICollisionListener, IDynamicGameOb
         _maxHealth = 50;
         _reloadingVoiceLineTriggered = true;
         
-        _position = new Vector3(position);
+        _muzzleFlash = new SimpleDynamicGameObject(entityMeshes.get("turret_muzzle_flash"), "rot");
+        _rotorLeft = new SimpleDynamicGameObject(entityMeshes.get("drone_rotor"), "hellgrau");
+        _rotorRight = new SimpleDynamicGameObject(entityMeshes.get("drone_rotor"), "hellgrau");
+        
+        _position = new Vector3(position.getX(), FLYING_HEIGHT, position.getZ());
         _rotation = new Vector3();
         _scale = new Vector3(1.0, 1.0, 1.0);
-        _muzzlePos = new Vector3(3.27203, 1.99736, 0.0);
+        _muzzlePos1 = new Vector3(0.987184, -0.782814, -0.1238);
+        _muzzlePos2 = new Vector3(0.987184, -0.782814, 0.1238);
         
-        _activeMesh = entityMeshes.get("turret_active");
-        _inactiveMesh = entityMeshes.get("turret_inactive");
+        _activeMesh = entityMeshes.get("drone_active");
+        _inactiveMesh = entityMeshes.get("drone_active");
         _color = "hellgrau";
-        _muzzleFlash = new SimpleDynamicGameObject(entityMeshes.get("turret_muzzle_flash"), "rot");
         
         _recalculateModelMatrix = true;
         _model = null;
@@ -254,7 +262,7 @@ public class Turret implements ILivingEntity, ICollisionListener, IDynamicGameOb
      */
     public void draw(Renderer renderer, Camera camera)
     {
-        // Aktives und inaktives Turret unterschiedlich zeichnen
+        // Aktives und inaktives Drone unterschiedlich zeichnen
         if(_isActive)
         {
             renderer.drawMesh(_activeMesh, getModelMatrix(), _color, camera);
@@ -299,7 +307,7 @@ public class Turret implements ILivingEntity, ICollisionListener, IDynamicGameOb
      */
     private Vector3 getCurrentMuzzlePosition()
     {
-        return getModelMatrix().multiply(new Vector4(_muzzlePos, 1.0)).getXYZ();
+        return getModelMatrix().multiply(new Vector4(_muzzlePos1, 1.0)).getXYZ();
     }
     
     /**

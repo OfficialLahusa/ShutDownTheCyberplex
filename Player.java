@@ -245,6 +245,8 @@ public class Player implements ILivingEntity, IDynamicGameObject, ICollisionList
      */
     public void damage(int amount, String source)
     {
+        if(_health == 0) return;
+        
         _health = Math.max(0, Math.min(_health - amount, _maxHealth));
         
         // Überprüfen, ob Spieler noch am Leben ist

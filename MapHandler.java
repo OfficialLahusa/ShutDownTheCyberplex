@@ -5,7 +5,7 @@ import javafx.util.*;
  * Verwaltet die GridMap und stellt zusätzliche Funktionalität bereit, insbesondere zum Map-Loading und zur Performance-Optimierung
  * 
  * @author Lasse Huber-Saffer
- * @version 22.12.2021
+ * @version 24.12.2021
  */
 public class MapHandler
 {
@@ -117,9 +117,12 @@ public class MapHandler
         
         
         // Initialisierung der Entity Meshes
-        _entityMeshes.put("turret_inactive", _objLoader.loadFromFile(Directory.MODEL + "turret_inactive.obj"));
-        _entityMeshes.put("turret_active", _objLoader.loadFromFile(Directory.MODEL + "turret_active.obj"));
-        _entityMeshes.put("turret_muzzle_flash", _objLoader.loadFromFile(Directory.MODEL + "turret_muzzle_flash.obj"));
+        _entityMeshes.put("turret_inactive", _objLoader.loadFromFile(Directory.MODEL + "turret/turret_inactive.obj"));
+        _entityMeshes.put("turret_active", _objLoader.loadFromFile(Directory.MODEL + "turret/turret_active.obj"));
+        _entityMeshes.put("turret_muzzle_flash", _objLoader.loadFromFile(Directory.MODEL + "turret/turret_muzzle_flash.obj"));
+        _entityMeshes.put("drone_active", _objLoader.loadFromFile(Directory.MODEL + "drone/drone.obj"));
+        _entityMeshes.put("drone_inactive", _objLoader.loadFromFile(Directory.MODEL + "drone/drone.obj"));
+        _entityMeshes.put("drone_rotor", _objLoader.loadFromFile(Directory.MODEL + "drone/drone_rotor.obj"));
     }
     
     /**
