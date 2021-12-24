@@ -100,6 +100,9 @@ public class Turret implements ILivingEntity, ICollisionListener, IDynamicGameOb
         
         _collider = new CircleCollider(new Vector2(_position.getX(), _position.getZ()), COLLIDER_RADIUS, PhysicsLayer.ENEMY);
         _collider.setListener(this);
+        
+        // Auf nächsten Fokuspunkt ausrichten, wenn es einen gibt
+        aimAtFocusPoint();
     }
     
     /**
@@ -163,18 +166,8 @@ public class Turret implements ILivingEntity, ICollisionListener, IDynamicGameOb
         if(isPlayerVisible)
         {
             // 5. Geschütz zum Spieler ausrichten
-            Vector3 baseDirection = new Vector3(1.0, 0.0, 0.0);
-            Vector3 toPlayer = player.getPosition().subtract(_position).normalize();
-            
-            // Kleinstmöglicher Winkel zwischen baseDirection und toPlayer
-            double angleToPlayer = baseDirection.getAngleBetween(toPlayer);
+            double angleToPlayer = getAngleTo(player.getPosition());
             double prevAngle = _rotation.getY();
-            
-            // Winkel umkehren, wenn z-Koordinate des Spielers größer ist, als die des Turrets
-            if(player.getPosition().getZ() > _position.getZ())
-            {
-                angleToPlayer = 360.0 - angleToPlayer;
-            }
             
             // 360°-Flip bei 360° zu 0°-Transition und umgekehrt verhindern
             if(prevAngle > 270.0 && angleToPlayer < 90.0)       angleToPlayer += 360.0;
@@ -182,15 +175,14 @@ public class Turret implements ILivingEntity, ICollisionListener, IDynamicGameOb
             
             // Neuen Winkel setzen (Langsamer Übergang)
             double newAngle = ((angleToPlayer + TRACKING_SLOWNESS*prevAngle) / (TRACKING_SLOWNESS + 1.0)) % 360.0;
-            _rotation.setY(newAngle);
-            _recalculateModelMatrix = true;
+            setAngle(newAngle);
             
             // 6. Schießen, wenn Munition vorhanden ist, Spieler genau genug anvisiert ist, und genug Zeit vergangen ist
             if(_currentAmmo > 0 && _timeSinceLastShot > FIRING_COOLDOWN)
             {
                 // Anvisieren überprüfen
                 Vector2 currentDirection = new Vector2(Math.cos(Math.toRadians(-_rotation.getY())), Math.sin(Math.toRadians(-_rotation.getY())));
-                Vector2 idealDirection = new Vector2(toPlayer.getX(), toPlayer.getZ());
+                Vector2 idealDirection = new Vector2(player.getPosition().getX() - _position.getX(), player.getPosition().getZ() - _position.getZ());
                 double inaccuracyAngle = idealDirection.getAngleBetween(currentDirection);
                 
                 // Nur schießen, wenn korrekt anvisiert wurde
@@ -275,6 +267,68 @@ public class Turret implements ILivingEntity, ICollisionListener, IDynamicGameOb
         {
             renderer.drawMesh(_inactiveMesh, getModelMatrix(), _color, camera);
         }
+    }
+    
+    /**
+     * Richtet das Geschütz zum nächsten Fokuspunkt aus, falls einer vorhanden ist
+     */
+    private void aimAtFocusPoint()
+    {
+        ArrayList<Vector2i> focusPoints = (ArrayList<Vector2i>)_room.getFocusPoints().clone();
+        
+        // Nur fortfahren, wenn es mindestens einen Fokuspunkt gibt
+        if(focusPoints != null && focusPoints.size() > 0)
+        {
+            // Nächsten Fokuspunkt berechnen
+            // Fokuspunkte nach Distanz aufsteigend sortieren
+            Collections.sort(focusPoints,new Comparator<Vector2i>(){
+                @Override
+                public int compare(Vector2i firstTile, Vector2i secondTile) {
+                    Vector3 firstFocusPoint = MapHandler.tilePosToWorldPos(firstTile);
+                    Double firstDistance = firstFocusPoint.subtract(_position).getLength();
+                    Vector3 secondFocusPoint = MapHandler.tilePosToWorldPos(secondTile);
+                    Double secondDistance = secondFocusPoint.subtract(_position).getLength();
+                    return firstDistance.compareTo(secondDistance);
+                }
+            });
+            
+            // Auf Punkt fokussieren
+            Vector3 nearestFocusPoint = MapHandler.tilePosToWorldPos(focusPoints.get(0));
+            double angleToPoint = getAngleTo(nearestFocusPoint);
+            setAngle(angleToPoint);
+        }
+    }
+    
+    /**
+     * Gibt den Winkel zu einem Zielpunkt zurück
+     * @param target Zielpunkt
+     * @return Ausrichtungswinkel, in dem das Geschütz genau auf den Zielpunkt ausgerichtet ist
+     */
+    private double getAngleTo(Vector3 target)
+    {
+        Vector3 baseDirection = new Vector3(1.0, 0.0, 0.0);
+        Vector3 toTarget = target.subtract(_position).normalize();
+        
+        // Kleinstmöglicher Winkel zwischen baseDirection und toTarget
+        double resultingAngle = baseDirection.getAngleBetween(toTarget);
+        
+        // Winkel umkehren, wenn z-Koordinate des Zielpunkts größer ist, als die des Turrets
+        if(target.getZ() > _position.getZ())
+        {
+            resultingAngle = 360.0 - resultingAngle;
+        }
+        
+        return resultingAngle;
+    }
+    
+    /**
+     * Setzt den Winkel, in dem der Geschützturm ausgerichtet ist
+     * @param angle neuer Ausrichtungswinkel
+     */
+    private void setAngle(double angle)
+    {
+        _rotation.setY(angle);
+        _recalculateModelMatrix = true;
     }
     
     /**

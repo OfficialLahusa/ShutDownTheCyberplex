@@ -106,6 +106,27 @@ public class Room
         }
         
         // Funktionsebene (Nur im Kontext des Raumes wichtige Tiles, iteriert nur innerhalb der Bounds)
+        // Erster Lauf:
+        for(int z = _minZ; z <= _maxZ; z++)
+        {
+            for(int x = _minX; x <= _maxX; x++)
+            {
+                int value = functionLayer.get(z).get(x);
+                if(value != -1 && this.contains(x, z))
+                {
+                    switch(value)
+                    {
+                        case Tile.TURRET_FOCUS_POINT:
+                            _focusPoints.add(new Vector2i(x, z));
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+        
+        // Zweiter Lauf (Entities)
         for(int z = _minZ; z <= _maxZ; z++)
         {
             for(int x = _minX; x <= _maxX; x++)
@@ -126,9 +147,6 @@ public class Room
                         case Tile.SPAWN_DRONE:
                             Drone drone = new Drone(MapHandler.tilePosToWorldPos(new Vector2i(x, z)), true, this, entityMeshes, soundEngine);
                             _entities.add(drone);
-                            break;
-                        case Tile.TURRET_FOCUS_POINT:
-                            _focusPoints.add(new Vector2i(x, z));
                             break;
                         case Tile.SPAWN_HEALTH_POWERUP:
                             HealthPowerup healthPowerup = new HealthPowerup(MapHandler.tilePosToWorldPos(new Vector2i(x, z)), this, entityMeshes, soundEngine);

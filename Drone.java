@@ -170,19 +170,9 @@ public class Drone implements ILivingEntity, ICollisionListener, IDynamicGameObj
         // Nachfolgendes nur ausführen, wenn Spieler sichtbar ist
         if(isPlayerVisible)
         {
-            // 5. Geschütz zum Spieler ausrichten
-            Vector3 baseDirection = new Vector3(1.0, 0.0, 0.0);
-            Vector3 toPlayer = player.getPosition().subtract(_position).normalize();
-            
-            // Kleinstmöglicher Winkel zwischen baseDirection und toPlayer
-            double angleToPlayer = baseDirection.getAngleBetween(toPlayer);
+            // 5. Drohne zum Spieler ausrichten
+            double angleToPlayer = getAngleTo(player.getPosition());
             double prevAngle = _rotation.getY();
-            
-            // Winkel umkehren, wenn z-Koordinate des Spielers größer ist, als die des Turrets
-            if(player.getPosition().getZ() > _position.getZ())
-            {
-                angleToPlayer = 360.0 - angleToPlayer;
-            }
             
             // 360°-Flip bei 360° zu 0°-Transition und umgekehrt verhindern
             if(prevAngle > 270.0 && angleToPlayer < 90.0)       angleToPlayer += 360.0;
@@ -190,15 +180,14 @@ public class Drone implements ILivingEntity, ICollisionListener, IDynamicGameObj
             
             // Neuen Winkel setzen (Langsamer Übergang)
             double newAngle = ((angleToPlayer + TRACKING_SLOWNESS*prevAngle) / (TRACKING_SLOWNESS + 1.0)) % 360.0;
-            _rotation.setY(newAngle);
-            _recalculateModelMatrix = true;
+            setAngle(newAngle);
             
             // 6. Schießen, wenn Munition vorhanden ist, Spieler genau genug anvisiert ist, und genug Zeit vergangen ist
             if(_currentAmmo > 0 && _timeSinceLastShot > FIRING_COOLDOWN)
             {
                 // Anvisieren überprüfen
                 Vector2 currentDirection = new Vector2(Math.cos(Math.toRadians(-_rotation.getY())), Math.sin(Math.toRadians(-_rotation.getY())));
-                Vector2 idealDirection = new Vector2(toPlayer.getX(), toPlayer.getZ());
+                Vector2 idealDirection = new Vector2(player.getPosition().getX() - _position.getX(), player.getPosition().getZ() - _position.getZ());
                 double inaccuracyAngle = idealDirection.getAngleBetween(currentDirection);
                 
                 // Nur schießen, wenn korrekt anvisiert wurde
@@ -283,6 +272,38 @@ public class Drone implements ILivingEntity, ICollisionListener, IDynamicGameObj
         {
             renderer.drawMesh(_inactiveMesh, getModelMatrix(), _color, camera);
         }
+    }
+    
+    /**
+     * Gibt den Winkel zu einem Zielpunkt zurück
+     * @param target Zielpunkt
+     * @return Ausrichtungswinkel, in dem die Drohne genau auf den Zielpunkt ausgerichtet ist
+     */
+    private double getAngleTo(Vector3 target)
+    {
+        Vector3 baseDirection = new Vector3(1.0, 0.0, 0.0);
+        Vector3 toTarget = target.subtract(_position).normalize();
+        
+        // Kleinstmöglicher Winkel zwischen baseDirection und toTarget
+        double resultingAngle = baseDirection.getAngleBetween(toTarget);
+        
+        // Winkel umkehren, wenn z-Koordinate des Zielpunkts größer ist, als die des Turrets
+        if(target.getZ() > _position.getZ())
+        {
+            resultingAngle = 360.0 - resultingAngle;
+        }
+        
+        return resultingAngle;
+    }
+    
+    /**
+     * Setzt den Winkel, in dem die Drohne ausgerichtet ist
+     * @param angle neuer Ausrichtungswinkel
+     */
+    private void setAngle(double angle)
+    {
+        _rotation.setY(angle);
+        _recalculateModelMatrix = true;
     }
     
     /**

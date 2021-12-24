@@ -5,7 +5,7 @@ import javafx.util.*;
  * Beschreiben Sie hier die Klasse GridMap.
  * 
  * @author Lasse Huber-Saffer 
- * @version 23.12.2021
+ * @version 24.12.2021
  */
 public class GridMap
 {
@@ -502,8 +502,6 @@ public class GridMap
         {
             return null;
         }
-        
-        System.out.println("Source: x:" + source.getX() + ", z:" + source.getY());
         
         for(int i = 0; i < rooms.size(); i++)
         {
