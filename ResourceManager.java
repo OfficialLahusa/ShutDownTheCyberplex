@@ -13,9 +13,9 @@ public class ResourceManager
     /**
      * Konstruktor für Objekte der Klasse ResourceManager
      */
-    public ResourceManager(WavefrontObjectLoader objLoader)
+    public ResourceManager()
     {
-        _objLoader = objLoader;
+        _objLoader = new WavefrontObjectLoader();
     }
     
     /**

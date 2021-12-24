@@ -26,7 +26,7 @@ public class GameState
         inputHandler = new InputHandler();
         textRenderer = new TextRenderer(renderer);
         soundEngine = new SoundEngine();
-        resourceManager = new ResourceManager(new WavefrontObjectLoader());
+        resourceManager = new ResourceManager();
         scene = null;
     }
 }
