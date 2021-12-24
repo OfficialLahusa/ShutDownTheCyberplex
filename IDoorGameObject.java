@@ -5,10 +5,10 @@ import java.util.*;
  * Interface für GameObjects mit Tür-Funktionalität
  * 
  * @author Lasse Huber-Saffer
- * @version 23.12.2021
+ * @version 24.12.2021
  */
 
-public interface IDoorGameObject
+public interface IDoorGameObject extends IGameObject
 {
     /**
      * Updated das Türobjekt
@@ -63,16 +63,4 @@ public interface IDoorGameObject
      * @param closeSoundKey Schlüssel des Sounds für das Schließen (nullable)
      */
     public void setSound(SoundEngine soundEngine, String openSoundKey, String closeSoundKey);
-    
-    /**
-     * Verarbeitet die Kollisionen eines Colliders mit den Collidern der Tür
-     * @param collider Collider, dessen Kollisionen verarbeitet werden
-     */
-    public void handleCollisions(ICollider collider);
-    
-    /**
-     * Gibt die aktuell von der Tür verwendeten Collider zurück
-     * @return List der von der Tür im aktuellen Zustand verwendeten Collider
-     */
-    public ArrayList<ICollider> getColliders();
 }

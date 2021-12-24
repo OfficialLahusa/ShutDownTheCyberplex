@@ -26,17 +26,17 @@ public class GameScene extends Scene
         super(state);
         
         _mapHandler = new MapHandler(state);
-        _muzzleFlash = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "guns/muzzleFlash.obj"), "cyan", new Vector3 (-2, -2.2,-11));
-        _pistolMain = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "guns/new/pistolMain.obj"), "grau", new Vector3 (-1.5, -1,-10));
-        _pistolDetails = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "guns/new/pistolDetails.obj"), "orange", new Vector3 (-1.5, -1,-10));
-        _pistolHandsIdle = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "guns/new/pistolHandsIdle.obj"), "weiss", new Vector3 (-1.5, -1,-10));
-        _pistolHandsShot = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "guns/new/pistolHandsShot.obj"), "weiss", new Vector3 (-1.5, -1,-10));
-        _primaryMain = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "guns/new/primaryMain.obj"), "grau", new Vector3 (-2, -1,-11));
-        _primaryDetails = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "guns/new/primaryDetails.obj"), "gelb", new Vector3 (-2, -1,-11));
-        _primaryHandsIdle = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "guns/new/primaryHandsIdle.obj"), "weiss", new Vector3 (-2, -1,-11));
-        _primaryHandsShot = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "guns/new/primaryHandsShot.obj"), "weiss", new Vector3 (-2, -1,-11));
-        _sniperMain = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "guns/new/sniperMain.obj"), "grau", new Vector3 (-1.5, 1,-12));
-        _sniperDetails = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "guns/new/sniperDetails.obj"), "gruen", new Vector3 (-1.5, 1,-12));
+        _muzzleFlash = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "gun/muzzleFlash.obj"), "cyan", new Vector3 (-2, -2.2,-11));
+        _pistolMain = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "gun/new/pistolMain.obj"), "grau", new Vector3 (-1.5, -1,-10));
+        _pistolDetails = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "gun/new/pistolDetails.obj"), "orange", new Vector3 (-1.5, -1,-10));
+        _pistolHandsIdle = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "gun/new/pistolHandsIdle.obj"), "weiss", new Vector3 (-1.5, -1,-10));
+        _pistolHandsShot = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "gun/new/pistolHandsShot.obj"), "weiss", new Vector3 (-1.5, -1,-10));
+        _primaryMain = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "gun/new/primaryMain.obj"), "grau", new Vector3 (-2, -1,-11));
+        _primaryDetails = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "gun/new/primaryDetails.obj"), "gelb", new Vector3 (-2, -1,-11));
+        _primaryHandsIdle = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "gun/new/primaryHandsIdle.obj"), "weiss", new Vector3 (-2, -1,-11));
+        _primaryHandsShot = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "gun/new/primaryHandsShot.obj"), "weiss", new Vector3 (-2, -1,-11));
+        _sniperMain = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "gun/new/sniperMain.obj"), "grau", new Vector3 (-1.5, 1,-12));
+        _sniperDetails = new DynamicViewModelGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "gun/new/sniperDetails.obj"), "gruen", new Vector3 (-1.5, 1,-12));
         
         _mapHandler.load("TestMap2");
         
@@ -50,7 +50,6 @@ public class GameScene extends Scene
         
         // Soundquellen laden
         _state.soundEngine.loadSource("music1", Directory.SOUND + "/music/to_the_front.mp3");
-        _state.soundEngine.loadSource("powerup3", Directory.SOUND + "Powerup3.wav");
         
         _state.soundEngine.loadSource("wooden_door_open", Directory.SOUND + "tile/wooden_door_open.wav");
         _state.soundEngine.loadSource("wooden_door_close", Directory.SOUND + "tile/wooden_door_close.wav");
@@ -70,6 +69,8 @@ public class GameScene extends Scene
         
         _state.soundEngine.loadSource("turret_system_failure", Directory.SOUND + "turret/death/system_failure.wav");
         _state.soundEngine.loadSource("turret_offline", Directory.SOUND + "turret/death/turret_offline.wav");
+        
+        _state.soundEngine.loadSource("health_powerup_collected", Directory.SOUND + "item/health_powerup_collected.wav");
         
         _state.soundEngine.loadSource("pain1", Directory.SOUND + "player/pain1.wav");
         _state.soundEngine.loadSource("pain2", Directory.SOUND + "player/pain2.wav");

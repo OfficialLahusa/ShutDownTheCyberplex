@@ -2,10 +2,10 @@ import java.util.*;
 import javafx.util.*;
 
 /**
- * TileProvider für Türen, die in Abhängigkeit von der Umgebung entlang der X- oder Z-Achse ausgerichtet sein können
+ * TileProvider für Geheimtüren, die in Abhängigkeit von der Umgebung entlang der X- oder Z-Achse ausgerichtet sein können
  * 
  * @author Lasse Huber-Saffer
- * @version 23.12.2021
+ * @version 24.12.2021
  */
 public class SecretDoorTileProvider implements ITileProvider
 {
@@ -94,12 +94,15 @@ public class SecretDoorTileProvider implements ITileProvider
             }
         }
         
+        ICollider[] closedCollidersArray = closedColliders.toArray(new ICollider[closedColliders.size()]);
+        ICollider[] openCollidersArray = openColliders.toArray(new ICollider[openColliders.size()]);
+        
         DoorGameObject obj = new DoorGameObject(
             new Vector3((x + 0.5) * MapHandler.TILE_WIDTH, 0.0, (MapHandler.MIRROR_Z_AXIS ? -1 : 1) * (z + 0.5) * MapHandler.TILE_WIDTH),
             new Vector3(0.0, (facingZ)? 90.0 : 0.0, 0.0), new Vector3(1.0, 1.0, 1.0),
             facingZ, _isOpen,  new Vector2i(x, z),
             _coloredMeshesClosed, _coloredMeshesOpen,
-            closedColliders, openColliders,
+            new CompoundCollider(closedCollidersArray, PhysicsLayer.SEMISOLID), new CompoundCollider(openCollidersArray, PhysicsLayer.SEMISOLID),
             floorGeometry, wallGeometry
         );
         obj.setSound(_soundEngine, _openSoundKey, _closeSoundKey);

@@ -54,7 +54,7 @@ public class Game
             runTime = _state.timeManager.getRunTime();
             deltaTime = _state.timeManager.getDeltaTime();
             
-            // reset frameCap Timer
+            // FrameCap-Timer zurücksetzen
             _frameCapTimeManager.getDeltaTime();
             
             // Input-Handling

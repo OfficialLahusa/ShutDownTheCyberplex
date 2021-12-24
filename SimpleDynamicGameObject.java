@@ -3,7 +3,7 @@
  * Ein dreidimensionales dynamisch bewegbares Objekt in der Spielwelt
  * 
  * @author Lasse Huber-Saffer
- * @version 02.12.2021
+ * @version 24.12.2021
  */
 public class SimpleDynamicGameObject implements IDynamicGameObject
 {
@@ -152,6 +152,14 @@ public class SimpleDynamicGameObject implements IDynamicGameObject
     public Mesh getMeshRef()
     {
         return _mesh;
+    }
+    
+    /**
+     * @see IGameObject#getCollider()
+     */
+    public ICollider getCollider()
+    {
+        return null;
     }
     
     /**

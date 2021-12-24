@@ -3,7 +3,7 @@
  * Ein dreidimensionales dynamisch bewegbares Objekt in der Spielwelt, das als ViewModel für die Kamera gerendert wird, also nicht mit der ViewMatrix verschoben wird
  * 
  * @author Lasse Huber-Saffer
- * @version 02.12.2021
+ * @version 24.12.2021
  */
 public class DynamicViewModelGameObject implements IDynamicGameObject
 {
@@ -152,6 +152,14 @@ public class DynamicViewModelGameObject implements IDynamicGameObject
     public Mesh getMeshRef()
     {
         return _mesh;
+    }
+    
+    /**
+     * @see IGameObject#getCollider()
+     */
+    public ICollider getCollider()
+    {
+        return null;
     }
     
     /**

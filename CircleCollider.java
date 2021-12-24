@@ -2,7 +2,7 @@
  * Kreis-Collider mit Mittelpunkt und Radius
  * 
  * @author Lasse Huber-Saffer
- * @version 20.12.2021
+ * @version 24.12.2021
  */
 public class CircleCollider implements ICollider
 {
@@ -49,6 +49,15 @@ public class CircleCollider implements ICollider
         {
             didIntersect = other.intersects(this);
         }
+        // Compount-Kreis-Kollision wird über Compound erkannt
+        else if(other instanceof CompoundCollider)
+        {
+            didIntersect = other.intersects(this);
+        }
+        else
+        {
+            throw new UnsupportedOperationException("This collider type is not supported by CircleCollider");
+        }
         
         return didIntersect;
     }
@@ -94,7 +103,7 @@ public class CircleCollider implements ICollider
      * @param otherLine Collider, dem ausgewichen werden soll (Line oder Circle)
      */
     public void resolveCollision(ICollider other)
-    {
+    {        
         if(other instanceof LineCollider)
         {
             resolveLineCollision((LineCollider)other);
@@ -102,6 +111,13 @@ public class CircleCollider implements ICollider
         else if(other instanceof CircleCollider)
         {
             resolveCircleCollision((CircleCollider)other);
+        }
+        else if(other instanceof CompoundCollider)
+        {
+            for(ICollider child : ((CompoundCollider)other).getColliders())
+            {
+                resolveCollision(child);
+            }
         }
         else
         {

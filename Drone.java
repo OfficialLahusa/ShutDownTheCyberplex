@@ -65,9 +65,9 @@ public class Drone implements ILivingEntity, ICollisionListener, IDynamicGameObj
     private static final double VOICELINE_VOLUME = 0.8;
     
     /**
-     * Konstruktor für Drone mit Position und Meshes
+     * Konstruktor für Drohne mit Position und Meshes
      * @param position Position
-     * @param active Ob das Drone aktiv sein soll
+     * @param active Ob das Drohne aktiv sein soll
      * @param room umgebender Raum
      * @param entityMeshes Register der EntityMeshes, aus dem die Meshes bezogen werden
      * @param soundEngine Sound Engine, aus der die Sounds der Entity bezogen werden

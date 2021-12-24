@@ -1,9 +1,9 @@
 
 /**
- * Tragen Sie hier eine Beschreibung des Interface IDynamicGameObject ein.
+ * GameObject, das nach Erstellung bewegt werden kann
  * 
- * @author (Ihr Name) 
- * @version (eine Versionsnummer oder ein Datum)
+ * @author Lasse Huber-Saffer
+ * @version 24.12.2021
  */
 
 public interface IDynamicGameObject extends IGameObject

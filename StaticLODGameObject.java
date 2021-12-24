@@ -5,7 +5,7 @@ import java.util.*;
  * Ein dreidimensionales Objekt in der Spielwelt
  * 
  * @author Lasse Huber-Saffer
- * @version 02.12.2021
+ * @version 24.12.2021
  */
 public class StaticLODGameObject implements IGameObject, ILODGameObject
 {
@@ -147,6 +147,14 @@ public class StaticLODGameObject implements IGameObject, ILODGameObject
             
         Matrix4 transform = translation.multiply(scale.multiply(rotationZ.multiply(rotationY.multiply(rotationX))));
         return transform;
+    }
+    
+    /**
+     * @see IGameObject#getCollider()
+     */
+    public ICollider getCollider()
+    {
+        return null;
     }
     
     /**

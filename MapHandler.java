@@ -62,7 +62,7 @@ public class MapHandler
         _tileProviders.put(Tile.DIRT_FLOOR, new SimpleLODTileProvider(dirtFloorLODs, "orange"));
         
         // Brick wall
-        _tileProviders.put(Tile.BRICK_WALL, new WallTileProvider(_objLoader.loadFromFile("./res/models/brick_wall.obj"), "grau", _objLoader.loadFromFile("./res/models/simple_wall_pillar.obj"), "grau"));
+        _tileProviders.put(Tile.BRICK_WALL, new WallTileProvider(_objLoader.loadFromFile(Directory.MODEL + "brick_wall.obj"), "grau", _objLoader.loadFromFile(Directory.MODEL + "simple_wall_pillar.obj"), "grau"));
         
         // Wooden door
         ArrayList<Pair<Mesh, String>> woodenDoorClosed = new ArrayList<Pair<Mesh, String>>();
@@ -123,6 +123,7 @@ public class MapHandler
         _entityMeshes.put("drone_active", _objLoader.loadFromFile(Directory.MODEL + "drone/drone.obj"));
         _entityMeshes.put("drone_inactive", _objLoader.loadFromFile(Directory.MODEL + "drone/drone.obj"));
         _entityMeshes.put("drone_rotor", _objLoader.loadFromFile(Directory.MODEL + "drone/drone_rotor.obj"));
+        _entityMeshes.put("health_powerup", _objLoader.loadFromFile(Directory.MODEL + "item/health_powerup.obj"));
     }
     
     /**

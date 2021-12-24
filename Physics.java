@@ -26,16 +26,17 @@ public class Physics
         // Collider des Raumes beschaffen
         Room room = map.rooms.get(map.activeRoom);
         ArrayList<ICollider> mapColliders = new ArrayList<ICollider>();
-        mapColliders.addAll(room.getColliders());
+        mapColliders.addAll(room.getStaticColliders());
+        mapColliders.addAll(room.getEntityColliders());
         mapColliders.addAll(map.globalColliders);
         
         // Tür-Collider zur Liste hinzufügen
         for(IDoorGameObject door : room.getDoors())
         {
-            ArrayList<ICollider> doorColliders = door.getColliders();
-            if(doorColliders != null && doorColliders.size() > 0)
+            ICollider doorCollider = door.getCollider();
+            if(doorCollider != null)
             {
-                mapColliders.addAll(doorColliders);
+                mapColliders.add(doorCollider);
             }
         }
         

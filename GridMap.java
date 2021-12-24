@@ -93,10 +93,6 @@ public class GridMap
     public void handleCollisions(ICollider collider)
     {
         rooms.get(activeRoom).handleCollisions(collider);
-        for(IDoorGameObject doorObj : rooms.get(activeRoom).getDoors())
-        {
-            doorObj.handleCollisions(collider);
-        }
     }
     
     /**

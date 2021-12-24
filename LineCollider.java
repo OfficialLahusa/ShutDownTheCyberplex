@@ -2,7 +2,7 @@
  * Linien-Collider zwischen zwei Punkten
  * 
  * @author Lasse Huber-Saffer
- * @version 20.12.2021
+ * @version 24.12.2021
  */
 public class LineCollider implements ICollider
 {
@@ -63,6 +63,15 @@ public class LineCollider implements ICollider
             CircleCollider otherCircle = (CircleCollider)other;
             double dist = getPointDistance(otherCircle.getPosition());
             didIntersect = dist <= otherCircle.getRadius();
+        }
+        // Compount-Linien-Kollision wird über Compound erkannt
+        else if(other instanceof CompoundCollider)
+        {
+            didIntersect = other.intersects(this);
+        }
+        else
+        {
+            throw new UnsupportedOperationException("This collider type is not supported by CircleCollider");
         }
         
         return didIntersect;

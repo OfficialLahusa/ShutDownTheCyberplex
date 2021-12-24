@@ -79,10 +79,7 @@ public class Player implements ILivingEntity, IDynamicGameObject, ICollisionList
         EnumSet<PhysicsLayer> ignoredLayers = EnumSet.of(PhysicsLayer.ITEM, PhysicsLayer.RAYCAST, PhysicsLayer.PLAYER);
         if(!ignoredLayers.contains(other.getLayer()))
         {
-            if(other instanceof LineCollider || other instanceof CircleCollider)
-            {
-                ((CircleCollider)self).resolveCollision(other);
-            }
+            ((CircleCollider)self).resolveCollision(other);
         }
     }
     

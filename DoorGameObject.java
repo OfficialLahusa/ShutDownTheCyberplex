@@ -5,7 +5,7 @@ import javafx.util.*;
  * Beschreiben Sie hier die Klasse DoorGameObject.
  * 
  * @author Lasse Huber-Saffer
- * @version 23.12.2021
+ * @version 24.12.2021
  */
 public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObject
 {
@@ -31,8 +31,8 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
     private ArrayList<IGameObject> _walls;
     
     // Physics
-    private ArrayList<ICollider> _closedColliders;
-    private ArrayList<ICollider> _openColliders;
+    private ICollider _closedCollider;
+    private ICollider _openCollider;
     
     // Sound
     private SoundEngine _soundEngine;
@@ -49,15 +49,15 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
      * @param tilePosition Position der Tür im Grid
      * @param coloredMeshesClosed Liste von Mesh-Farb-Paaren, die im geschlossenen Zustand gerendert werden
      * @param coloredMeshesOpen Liste von Mesh-Farb-Paaren, die im offenen Zustand gerendert werden
-     * @param closedColliders (Optional) Liste an Collidern, die im geschlossenen Zustand für die Kollisionserkennung verwendet werden
-     * @param openColliders (Optional) Liste an Collidern, die im offenen Zustand für die Kollisionserkennung verwendet werden
+     * @param closedCollider (Optional) Collider, der im geschlossenen Zustand für die Kollisionserkennung verwendet wird
+     * @param openCollider (Optional) Collider, der im offenen Zustand für die Kollisionserkennung verwendet wird
      * @param floor (OPTIONAL) Liste an GameObjects, die als Fußboden gerendert werden sollen
      * @param walls (OPTIONAL) Liste an GameObjects, die als Mauern gerendert werden sollen
      */
     public DoorGameObject(Vector3 position, Vector3 rotation, Vector3 scale,
         boolean facingZ, boolean isOpen, Vector2i tilePosition,
         ArrayList<Pair<Mesh, String>> coloredMeshesClosed, ArrayList<Pair<Mesh, String>> coloredMeshesOpen,
-        ArrayList<ICollider> closedColliders, ArrayList<ICollider> openColliders,
+        ICollider closedCollider, ICollider openCollider,
         ArrayList<IGameObject> floor, ArrayList<IGameObject> walls
     )
     {
@@ -69,12 +69,11 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
         _tilePosition = new Vector2i(tilePosition);
         _coloredMeshesClosed = coloredMeshesClosed;
         _coloredMeshesOpen = coloredMeshesOpen;
-        _closedColliders = closedColliders;
-        _openColliders = openColliders;
+        _closedCollider = closedCollider;
+        _openCollider = openCollider;
         _floor = floor;
         _walls = walls;
         
-
         _model = null;
         
         _doorTriggers = new HashSet<Vector2i>();
@@ -119,23 +118,17 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
     }
     
     /**
-     * @see IDoorObject#handleCollisions()
+     * @see IGameObject#getCollider()
      */
-    public void handleCollisions(ICollider collider)
+    public ICollider getCollider()
     {
         if(_isOpen)
         {
-            for(ICollider col : _openColliders)
-            {
-                collider.detectCollision(col);
-            }            
+            return _openCollider;    
         }
         else
         {
-            for(ICollider col : _closedColliders)
-            {
-                collider.detectCollision(col);
-            }            
+            return _closedCollider;       
         }
     }
     
@@ -264,14 +257,6 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
     public boolean isFacingZ()
     {
         return _facingZ;
-    }
-    
-    /**
-     * @see IDoorGameObject#getColliders()
-     */
-    public ArrayList<ICollider> getColliders()
-    {
-        return (_isOpen) ? _openColliders : _closedColliders;
     }
     
     /**

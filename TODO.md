@@ -1,5 +1,6 @@
 # TODO:
 - Cracked Brick Wall TileProvider
+- MatrixGenerator#generateLookAtMatrix() entfernen
 - Farben zu Enums machen
 - Spielertod, Respawning, Checkpoints, Map Regen, etc.
 - Tür Soundsetzung überarbeiten

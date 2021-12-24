@@ -4,7 +4,7 @@ import java.util.*;
  * Ein räumlich eingegrenzter Abschnitt einer Gridmap, innerhalb dessen Simulationen durchgeführt werden
  * 
  * @author Lasse Huber-Saffer
- * @version 22.12.2021
+ * @version 24.12.2021
  */
 public class Room
 {
@@ -14,7 +14,7 @@ public class Room
     // Map Geometry & Physics
     private HashSet<Vector2i> _tiles;
     private ArrayList<IGameObject> _geometry;
-    private ArrayList<ICollider> _colliders;
+    private ArrayList<ICollider> _staticColliders;
     
     // Functionality
     private ArrayList<Vector2i> _doorLocations;
@@ -41,10 +41,11 @@ public class Room
         
         _tiles = new HashSet<Vector2i>();
         _geometry = new ArrayList<IGameObject>();
-        _colliders = new ArrayList<ICollider>();
+        _staticColliders = new ArrayList<ICollider>();
         
         _doorLocations = new ArrayList<Vector2i>();
         _doors = new ArrayList<IDoorGameObject>();
+        _focusPoints = new ArrayList<Vector2i>();
         
         _entities = new ArrayList<IGameObject>();
     }
@@ -98,7 +99,7 @@ public class Room
                             env = new TileEnvironment(tileLayer, this, x, z);
                         }
                         
-                        _colliders.addAll(provider.getColliders(env, x, z));
+                        _staticColliders.addAll(provider.getColliders(env, x, z));
                     }
                 }
             }
@@ -117,20 +118,21 @@ public class Room
                         case Tile.SPAWN_TURRET_INACTIVE:
                             Turret inactive_turret = new Turret(MapHandler.tilePosToWorldPos(new Vector2i(x, z)), false, this, entityMeshes, soundEngine);
                             _entities.add(inactive_turret);
-                            _colliders.add(inactive_turret.getCollider());
                             break;
                         case Tile.SPAWN_TURRET_ACTIVE:
                             Turret active_turret = new Turret(MapHandler.tilePosToWorldPos(new Vector2i(x, z)), true, this, entityMeshes, soundEngine);
                             _entities.add(active_turret);
-                            _colliders.add(active_turret.getCollider());
                             break;
                         case Tile.SPAWN_DRONE:
                             Drone drone = new Drone(MapHandler.tilePosToWorldPos(new Vector2i(x, z)), true, this, entityMeshes, soundEngine);
                             _entities.add(drone);
-                            _colliders.add(drone.getCollider());
                             break;
                         case Tile.TURRET_FOCUS_POINT:
-                            
+                            _focusPoints.add(new Vector2i(x, z));
+                            break;
+                        case Tile.SPAWN_HEALTH_POWERUP:
+                            HealthPowerup healthPowerup = new HealthPowerup(MapHandler.tilePosToWorldPos(new Vector2i(x, z)), this, entityMeshes, soundEngine);
+                            _entities.add(healthPowerup);
                             break;
                         default:
                             break;
@@ -146,7 +148,24 @@ public class Room
      */
     public void handleCollisions(ICollider collider)
     {
-        for(ICollider col : _colliders)
+        // Raum-Collider überprüfen
+        for(ICollider col : _staticColliders)
+        {
+            collider.detectCollision(col);
+        }
+        
+        // An den Raum angrenzende Türen überprüfen
+        for(IDoorGameObject door : _doors)
+        {
+            ICollider col = door.getCollider();
+            if(col != null)
+            {
+                collider.detectCollision(col);
+            }
+        }
+        
+        // Entity-Collider überprüfen
+        for(ICollider col : getEntityColliders())
         {
             collider.detectCollision(col);
         }
@@ -318,6 +337,24 @@ public class Room
     }
     
     /**
+     * Gibt die Map, in der dieser Raum liegt, zurück
+     * @return Referenz zur Map, in der dieser Raum liegt
+     */
+    public GridMap getMap()
+    {
+        return _map;
+    }
+    
+    /**
+     * Gibt die Liste der im Raum registrierten Turret-Fokuspunkte zurück
+     * @return Liste der Turret-Fokuspunkte
+     */
+    public ArrayList<Vector2i> getFocusPoints()
+    {
+        return _focusPoints;
+    }
+        
+    /**
      * Gibt die Türobjekte des Raums zurück
      * @return Liste der Türobjekte des Raums
      */
@@ -327,21 +364,43 @@ public class Room
     }
     
     /**
-     * Gibt die Collider des Raums zurück
+     * Gibt die statischen Collider des Raums zurück
      * @return Liste der Collider des Raums
      */
-    public ArrayList<ICollider> getColliders()
+    public ArrayList<ICollider> getStaticColliders()
     {
-        return _colliders;
+        return _staticColliders;
     }
     
     /**
-     * Gibt die Map, in der dieser Raum liegt, zurück
-     * @return Referenz zur Map, in der dieser Raum liegt
+     * Gibt die Collider der Entities im Raum zurück.
+     * Nicht jede Entity hat einen Collider.
+     * @return Liste der Collider der dynamischen Entities im Raum
      */
-    public GridMap getMap()
+    public ArrayList<ICollider> getEntityColliders()
     {
-        return _map;
+        ArrayList<ICollider> result = new ArrayList<ICollider>();
+        
+        for(IGameObject entity : _entities)
+        {
+            ICollider collider = entity.getCollider();
+            
+            if(collider != null)
+            {
+                result.add(collider);
+            }
+        }
+        
+        return result;
+    }
+    
+    /**
+     * Gibt die Entities innerhalb des Raums zurück
+     * @return Liste der Entities innerhalb des Raums
+     */
+    public ArrayList<IGameObject> getEntities()
+    {
+        return _entities;
     }
     
     /**
