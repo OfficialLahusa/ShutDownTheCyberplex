@@ -3,7 +3,7 @@
  * Geteilte Spielressourcen zwischen verschiedenen Szenen
  * 
  * @author Lasse Huber-Saffer
- * @version 09.12.2021
+ * @version 24.12.2021
  */
 public class GameState
 {
@@ -12,7 +12,7 @@ public class GameState
     public InputHandler inputHandler;
     public TextRenderer textRenderer;
     public SoundEngine soundEngine;
-    public WavefrontObjectLoader objLoader;
+    public ResourceManager resourceManager;
     public Scene scene;
     
     /**
@@ -26,7 +26,7 @@ public class GameState
         inputHandler = new InputHandler();
         textRenderer = new TextRenderer(renderer);
         soundEngine = new SoundEngine();
-        objLoader = new WavefrontObjectLoader();
+        resourceManager = new ResourceManager(new WavefrontObjectLoader());
         scene = null;
     }
 }

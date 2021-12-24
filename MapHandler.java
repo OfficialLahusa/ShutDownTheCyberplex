@@ -12,12 +12,11 @@ public class MapHandler
     // Aktuelle Gridmap
     private GridMap _map;
     
-    // Aktuelles GameState
-    private GameState _state;
+    // Sound-Engine
+    private SoundEngine _soundEngine;
     
     // Utility
     private CSVMapLoader _csvLoader;
-    private WavefrontObjectLoader _objLoader;
     private LODGenerator _lodGenerator;
     
     // Register der TileProvider für Erstellung der Mapgeometrie
@@ -37,93 +36,87 @@ public class MapHandler
     
     /**
      * Konstruktor für Objekte der Klasse MapHandler
-     * @param state Referenz zum GameState
+     * @param tileMeshes HashMap von namentlich aufgeführten Meshes für zu erstellende TileProvider
+     * @param entityMeshes HashMap von namentlich aufgeführten Meshes für zu erstellende Entities
+     * @param soundEngine SoundEngine für Tile-Sounds
      */
-    public MapHandler(GameState state)
+    public MapHandler(HashMap<String, Mesh> tileMeshes, HashMap<String, Mesh> entityMeshes, SoundEngine soundEngine)
     {
         _map = null;
-        _state = state;
+        
+        _soundEngine = soundEngine;
         
         _csvLoader = new CSVMapLoader();
-        _objLoader = new WavefrontObjectLoader();
         _lodGenerator = new LODGenerator();
         
         _tileProviders = new HashMap<Integer, ITileProvider>();
         _colliderProviders = new HashMap<Integer, IColliderProvider>();
-        _entityMeshes = new HashMap<String, Mesh>();
+        _entityMeshes = entityMeshes;
         
         // Initialisierung der TileProvider
         // Dirt floor
         ArrayList<Pair<Double, Mesh>> dirtFloorLODs = new ArrayList<Pair<Double, Mesh>>();
-        dirtFloorLODs.add(new Pair<Double, Mesh>(0.0, _objLoader.loadFromFile(Directory.MODEL + "dirt_floor_borderless.obj")));
-        dirtFloorLODs.add(new Pair<Double, Mesh>(30.0, _objLoader.loadFromFile(Directory.MODEL + "dirt_floor_borderless_lod1.obj")));
-        dirtFloorLODs.add(new Pair<Double, Mesh>(40.0, _objLoader.loadFromFile(Directory.MODEL + "dirt_floor_borderless_lod2.obj")));
-        dirtFloorLODs.add(new Pair<Double, Mesh>(50.0, _objLoader.loadFromFile(Directory.MODEL + "dirt_floor_borderless_lod3.obj")));
+        dirtFloorLODs.add(new Pair<Double, Mesh>(0.0, tileMeshes.get("dirt_floor_borderless")));
+        dirtFloorLODs.add(new Pair<Double, Mesh>(30.0, tileMeshes.get("dirt_floor_borderless_lod1")));
+        dirtFloorLODs.add(new Pair<Double, Mesh>(40.0, tileMeshes.get("dirt_floor_borderless_lod2")));
+        dirtFloorLODs.add(new Pair<Double, Mesh>(50.0, tileMeshes.get("dirt_floor_borderless_lod3")));
         _tileProviders.put(Tile.DIRT_FLOOR, new SimpleLODTileProvider(dirtFloorLODs, "orange"));
         
         // Brick wall
-        _tileProviders.put(Tile.BRICK_WALL, new WallTileProvider(_objLoader.loadFromFile(Directory.MODEL + "brick_wall.obj"), "grau", _objLoader.loadFromFile(Directory.MODEL + "simple_wall_pillar.obj"), "grau"));
+        _tileProviders.put(Tile.BRICK_WALL, new WallTileProvider(
+            tileMeshes.get("brick_wall"), "grau", tileMeshes.get("simple_wall_pillar"), "grau")
+        );
         
         // Wooden door
         ArrayList<Pair<Mesh, String>> woodenDoorClosed = new ArrayList<Pair<Mesh, String>>();
-        woodenDoorClosed.add(new Pair<Mesh, String>(_objLoader.loadFromFile(Directory.MODEL + "wooden_door.obj"), "orange"));
-        woodenDoorClosed.add(new Pair<Mesh, String>(_objLoader.loadFromFile(Directory.MODEL + "wooden_door_handle.obj"), "gelb"));
+        woodenDoorClosed.add(new Pair<Mesh, String>(tileMeshes.get("wooden_door"), "orange"));
+        woodenDoorClosed.add(new Pair<Mesh, String>(tileMeshes.get("wooden_door_handle"), "gelb"));
         ArrayList<Pair<Mesh, String>> woodenDoorOpen = new ArrayList<Pair<Mesh, String>>();
-        woodenDoorOpen.add(new Pair<Mesh, String>(_objLoader.loadFromFile(Directory.MODEL + "wooden_door_open.obj"), "orange"));
-        woodenDoorOpen.add(new Pair<Mesh, String>(_objLoader.loadFromFile(Directory.MODEL + "wooden_door_handle_open.obj"), "gelb"));
+        woodenDoorOpen.add(new Pair<Mesh, String>(tileMeshes.get("wooden_door_open"), "orange"));
+        woodenDoorOpen.add(new Pair<Mesh, String>(tileMeshes.get("wooden_door_handle_open"), "gelb"));
         _tileProviders.put(Tile.WOODEN_DOOR, new DoorTileProvider(
             woodenDoorClosed, woodenDoorOpen, false,
             new BlockedTunnelColliderProvider(), new TunnelColliderProvider(),
             _tileProviders.get(Tile.DIRT_FLOOR), (WallTileProvider)_tileProviders.get(Tile.BRICK_WALL),
-            _state.soundEngine, "wooden_door_open", "wooden_door_close"
+            _soundEngine, "wooden_door_open", "wooden_door_close"
         ));
         
         // Dirt floor grass
         ArrayList<Pair<Mesh, String>> dirtFloorGrass = new ArrayList<Pair<Mesh, String>>();
-        dirtFloorGrass.add(new Pair<Mesh, String>(_objLoader.loadFromFile(Directory.MODEL + "dirt_floor_borderless.obj"), "orange"));
-        dirtFloorGrass.add(new Pair<Mesh, String>(_objLoader.loadFromFile(Directory.MODEL + "dirt_floor_grassdetail.obj"), "gruen"));
+        dirtFloorGrass.add(new Pair<Mesh, String>(tileMeshes.get("dirt_floor_borderless"), "orange"));
+        dirtFloorGrass.add(new Pair<Mesh, String>(tileMeshes.get("dirt_floor_grassdetail"), "gruen"));
         _tileProviders.put(Tile.DIRT_FLOOR_GRASS, new MultiMeshTileProvider(dirtFloorGrass));
         
         // Cracked brick wall
         ArrayList<Pair<Mesh, String>> secretDoorClosed = new ArrayList<Pair<Mesh, String>>();
-        secretDoorClosed.add(new Pair<Mesh, String>(_objLoader.loadFromFile(Directory.MODEL + "wooden_door.obj"), "rot"));
-        secretDoorClosed.add(new Pair<Mesh, String>(_objLoader.loadFromFile(Directory.MODEL + "wooden_door_handle.obj"), "cyan"));
+        secretDoorClosed.add(new Pair<Mesh, String>(tileMeshes.get("wooden_door"), "rot"));
+        secretDoorClosed.add(new Pair<Mesh, String>(tileMeshes.get("wooden_door_handle"), "cyan"));
         ArrayList<Pair<Mesh, String>> secretDoorOpen = new ArrayList<Pair<Mesh, String>>();
-        secretDoorOpen.add(new Pair<Mesh, String>(_objLoader.loadFromFile(Directory.MODEL + "wooden_door_open.obj"), "rot"));
-        secretDoorOpen.add(new Pair<Mesh, String>(_objLoader.loadFromFile(Directory.MODEL + "wooden_door_handle_open.obj"), "cyan"));
+        secretDoorOpen.add(new Pair<Mesh, String>(tileMeshes.get("wooden_door_open"), "rot"));
+        secretDoorOpen.add(new Pair<Mesh, String>(tileMeshes.get("wooden_door_handle_open"), "cyan"));
         _tileProviders.put(Tile.CRACKED_BRICK_WALL_DOOR, new DoorTileProvider(
             secretDoorClosed, secretDoorOpen, false,
             new BlockedTunnelColliderProvider(), new TunnelColliderProvider(),
             _tileProviders.get(Tile.DIRT_FLOOR), (WallTileProvider)_tileProviders.get(Tile.BRICK_WALL),
-            _state.soundEngine, "wooden_door_open", "wooden_door_close"
+            _soundEngine, "wooden_door_open", "wooden_door_close"
         ));
         
         // Road Markings X
-        _tileProviders.put(Tile.ROAD_MARKINGS_X, new SimpleTileProvider(_objLoader.loadFromFile(Directory.MODEL + "road_markings_x.obj"), "gelb"));
+        _tileProviders.put(Tile.ROAD_MARKINGS_X, new SimpleTileProvider(tileMeshes.get("road_markings_x"), "gelb"));
         
         // Dirt floor grass 2
         ArrayList<Pair<Mesh, String>> dirtFloorGrass2 = new ArrayList<Pair<Mesh, String>>();
-        dirtFloorGrass2.add(new Pair<Mesh, String>(_objLoader.loadFromFile(Directory.MODEL + "dirt_floor_borderless.obj"), "orange"));
-        dirtFloorGrass2.add(new Pair<Mesh, String>(_objLoader.loadFromFile(Directory.MODEL + "dirt_floor_grassdetail2.obj"), "gruen"));
-        dirtFloorGrass2.add(new Pair<Mesh, String>(_objLoader.loadFromFile(Directory.MODEL + "dirt_floor_stonedetail.obj"), "dunkelgrau"));
+        dirtFloorGrass2.add(new Pair<Mesh, String>(tileMeshes.get("dirt_floor_borderless"), "orange"));
+        dirtFloorGrass2.add(new Pair<Mesh, String>(tileMeshes.get("dirt_floor_grassdetail2"), "gruen"));
+        dirtFloorGrass2.add(new Pair<Mesh, String>(tileMeshes.get("dirt_floor_stonedetail"), "dunkelgrau"));
         _tileProviders.put(Tile.DIRT_FLOOR_GRASS2, new MultiMeshTileProvider(dirtFloorGrass2));
         
         // Road Markings Z
-        _tileProviders.put(Tile.ROAD_MARKINGS_Z, new SimpleTileProvider(_objLoader.loadFromFile(Directory.MODEL + "road_markings_z.obj"), "gelb"));
+        _tileProviders.put(Tile.ROAD_MARKINGS_Z, new SimpleTileProvider(tileMeshes.get("road_markings_z"), "gelb"));
         
         
         // Initialisierung der ColliderProvider
         _colliderProviders.put(Tile.BRICK_WALL, new WallColliderProvider());
-        
-        
-        // Initialisierung der Entity Meshes
-        _entityMeshes.put("turret_inactive", _objLoader.loadFromFile(Directory.MODEL + "turret/turret_inactive.obj"));
-        _entityMeshes.put("turret_active", _objLoader.loadFromFile(Directory.MODEL + "turret/turret_active.obj"));
-        _entityMeshes.put("turret_muzzle_flash", _objLoader.loadFromFile(Directory.MODEL + "turret/turret_muzzle_flash.obj"));
-        _entityMeshes.put("drone_active", _objLoader.loadFromFile(Directory.MODEL + "drone/drone.obj"));
-        _entityMeshes.put("drone_inactive", _objLoader.loadFromFile(Directory.MODEL + "drone/drone.obj"));
-        _entityMeshes.put("drone_rotor", _objLoader.loadFromFile(Directory.MODEL + "drone/drone_rotor.obj"));
-        _entityMeshes.put("health_powerup", _objLoader.loadFromFile(Directory.MODEL + "item/health_powerup.obj"));
     }
     
     /**
@@ -133,7 +126,7 @@ public class MapHandler
     public void load(String mapName)
     {
         _map = _csvLoader.loadFromFile(Directory.MAP + mapName + TILE_LAYER_SUFFIX, Directory.MAP + mapName + FUNCTION_LAYER_SUFFIX);
-        _map.populate(_tileProviders, _colliderProviders, _entityMeshes, _state.soundEngine);
+        _map.populate(_tileProviders, _colliderProviders, _entityMeshes, _soundEngine);
     }
     
     /**

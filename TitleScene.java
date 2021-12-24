@@ -1,3 +1,5 @@
+import java.util.*;
+
 /**
  * Titelbildschirm und Hauptmenü des Spiels
  * 
@@ -33,8 +35,10 @@ public class TitleScene extends Scene
         _audioVisualizer = new BarAudioVisualizer(backgroundMusic);
         backgroundMusic.setAudioSpectrumListener(_audioVisualizer);
         
-        _title = new StaticGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "title.obj"), "cyan", new Vector3 (0.0, 5, -14));
-        _mauern = new StaticGameObject(_state.objLoader.loadFromFile(Directory.MODEL + "mauern.obj"), "cyan", new Vector3 (-1.48, 0.34, -2.5));
+        HashMap<String, Mesh> titleScreenMeshes = _state.resourceManager.loadTitleScreenMeshes();
+        
+        _title = new StaticGameObject(titleScreenMeshes.get("title"), "cyan", new Vector3 (0.0, 5, -14));
+        _mauern = new StaticGameObject(titleScreenMeshes.get("mauern"), "cyan", new Vector3 (-1.48, 0.34, -2.5));
     }
     
     /**
