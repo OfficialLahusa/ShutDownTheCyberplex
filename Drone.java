@@ -55,12 +55,12 @@ public class Drone implements ILivingEntity, ICollisionListener, IDynamicGameObj
     private static final double MAX_RANGE = 20.0;
     private static final int MAGAZINE_CAPACITY = 6;
     private static final double FIRING_COOLDOWN = 0.5;
-    private static final double RELOAD_TIME = 3.25;
+    private static final double RELOAD_TIME = 4.0;
     private static final double SHOT_VISIBILITY_TIME = 0.065;
     private static final int BULLET_DAMAGE = 1;
     private static final double MAXIMUM_INACCURACY_ANGLE = 6.0;
     private static final double FIRING_ANGLE_TOLERANCE = 4.0;
-    private static final double TRACKING_SLOWNESS = 0.0;
+    private static final double TRACKING_SLOWNESS = 4.0;
     private static final double RELOAD_VOICELINE_DELAY = 0.25;
     private static final double VOICELINE_VOLUME = 0.8;
     
@@ -153,24 +153,12 @@ public class Drone implements ILivingEntity, ICollisionListener, IDynamicGameObj
             }
         }
         
-        // 4. Line-of-sight-Check mit Spieler machen
-        Player player = _room.getMap().getPlayer();
-        
-        // Raycast vorbereiten
-        Vector2 source = new Vector2(_position.getX(), _position.getZ());
-        Vector2 target = new Vector2(player.getPosition().getX(), player.getPosition().getZ());
-        Vector2 direction = target.subtract(source).normalize();
-        EnumSet<PhysicsLayer> terminationFilter = EnumSet.of(PhysicsLayer.PLAYER, PhysicsLayer.SOLID);
-        EnumSet<PhysicsLayer> exclusionFilter = EnumSet.of(PhysicsLayer.ENEMY);
-        ArrayList<RaycastHit> raycast = Physics.raycast(source, direction, MAX_RANGE, _room.getMap(), terminationFilter, exclusionFilter);
-        
-        // Sichtbarkeit berechnen (Bdg.: der letzte Treffer des Raycasts muss der Spieler sein)
-        boolean isPlayerVisible = (raycast.size() > 0 && raycast.get(raycast.size() - 1).collider.getLayer() == PhysicsLayer.PLAYER);
-        
         // Nachfolgendes nur ausführen, wenn Spieler sichtbar ist
-        if(isPlayerVisible)
+        if(hasLineOfSight())
         {
-            // 5. Drohne zum Spieler ausrichten
+            Player player = _room.getMap().getPlayer();
+            
+            // 4. Drohne zum Spieler ausrichten
             double angleToPlayer = getAngleTo(player.getPosition());
             //angleToPlayer = getAngleTo(_position.add(new Vector3(Math.cos(Math.toRadians(runTime * 60)), 0.0, Math.sin(Math.toRadians(runTime * 60)))));
             double prevAngle = _rotation.getY();
@@ -185,7 +173,7 @@ public class Drone implements ILivingEntity, ICollisionListener, IDynamicGameObj
             setAngle(angleToPlayer);
             System.out.println(angleToPlayer);
             
-            // 6. Schießen, wenn Munition vorhanden ist, Spieler genau genug anvisiert ist, und genug Zeit vergangen ist
+            // 5. Schießen, wenn Munition vorhanden ist, Spieler genau genug anvisiert ist, und genug Zeit vergangen ist
             if(_currentAmmo > 0 && _timeSinceLastShot > FIRING_COOLDOWN)
             {
                 // Anvisieren überprüfen
@@ -205,17 +193,17 @@ public class Drone implements ILivingEntity, ICollisionListener, IDynamicGameObj
                     _reloadingVoiceLineTriggered = false;
                     
                     // Raycast vorbereiten
-                    source = new Vector2(_position.getX(), _position.getZ());
-                    target = new Vector2(player.getPosition().getX(), player.getPosition().getZ());
-                    direction = target.subtract(source).normalize();                
-                    terminationFilter = EnumSet.of(PhysicsLayer.PLAYER, PhysicsLayer.SOLID);
-                    exclusionFilter = EnumSet.of(PhysicsLayer.ENEMY);
+                    Vector2 source = new Vector2(_position.getX(), _position.getZ());
+                    Vector2 target = new Vector2(player.getPosition().getX(), player.getPosition().getZ());
+                    Vector2 direction = target.subtract(source).normalize();                
+                    EnumSet<PhysicsLayer> terminationFilter = EnumSet.of(PhysicsLayer.PLAYER, PhysicsLayer.SOLID);
+                    EnumSet<PhysicsLayer>exclusionFilter = EnumSet.of(PhysicsLayer.ENEMY);
                     
                     // Ungenauigkeit zum Schuss hinzufügen
                     direction = direction.rotateAroundOrigin((_random.nextDouble()*2.0-1.0) * MAXIMUM_INACCURACY_ANGLE);
                     
                     // Raycast durchführen
-                    raycast = Physics.raycast(source, direction, MAX_RANGE, _room.getMap(), terminationFilter, exclusionFilter);
+                    ArrayList<RaycastHit> raycast = Physics.raycast(source, direction, MAX_RANGE, _room.getMap(), terminationFilter, exclusionFilter);
                     
                     // Schussergebnis berechnen
                     if(raycast.size() > 0)
@@ -246,7 +234,7 @@ public class Drone implements ILivingEntity, ICollisionListener, IDynamicGameObj
         }
         
         //TODO:
-        // 7. Feuer-/Rauchpartikel aktivieren
+        // 6. Feuer-/Rauchpartikel aktivieren
         return;
     }
     
@@ -276,6 +264,26 @@ public class Drone implements ILivingEntity, ICollisionListener, IDynamicGameObj
         {
             renderer.drawMesh(_inactiveMesh, getModelMatrix(), _color, camera);
         }
+    }
+    
+    /**
+     * Prüft, ob die Drohne eine direkte Line-of-Sight zum Spieler hat.
+     * @return true, wenn es eine Line-of-Sight zum Spieler gibt, sonst false
+     */
+    private boolean hasLineOfSight()
+    {
+        Player player = _room.getMap().getPlayer();
+        
+        // Raycast vorbereiten
+        Vector2 source = new Vector2(_position.getX(), _position.getZ());
+        Vector2 target = new Vector2(player.getPosition().getX(), player.getPosition().getZ());
+        Vector2 direction = target.subtract(source).normalize();
+        EnumSet<PhysicsLayer> terminationFilter = EnumSet.of(PhysicsLayer.PLAYER, PhysicsLayer.SOLID);
+        EnumSet<PhysicsLayer> exclusionFilter = EnumSet.of(PhysicsLayer.ENEMY);
+        ArrayList<RaycastHit> raycast = Physics.raycast(source, direction, MAX_RANGE, _room.getMap(), terminationFilter, exclusionFilter);
+        
+        // Sichtbarkeit berechnen (Bdg.: der letzte Treffer des Raycasts muss der Spieler sein)
+        return raycast.size() > 0 && raycast.get(raycast.size() - 1).collider.getLayer() == PhysicsLayer.PLAYER;
     }
     
     /**

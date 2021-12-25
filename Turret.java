@@ -148,24 +148,12 @@ public class Turret implements ILivingEntity, ICollisionListener, IDynamicGameOb
             }
         }
         
-        // 4. Line-of-sight-Check mit Spieler machen
-        Player player = _room.getMap().getPlayer();
-        
-        // Raycast vorbereiten
-        Vector2 source = new Vector2(_position.getX(), _position.getZ());
-        Vector2 target = new Vector2(player.getPosition().getX(), player.getPosition().getZ());
-        Vector2 direction = target.subtract(source).normalize();
-        EnumSet<PhysicsLayer> terminationFilter = EnumSet.of(PhysicsLayer.PLAYER, PhysicsLayer.SOLID);
-        EnumSet<PhysicsLayer> exclusionFilter = EnumSet.of(PhysicsLayer.ENEMY);
-        ArrayList<RaycastHit> raycast = Physics.raycast(source, direction, MAX_RANGE, _room.getMap(), terminationFilter, exclusionFilter);
-        
-        // Sichtbarkeit berechnen (Bdg.: der letzte Treffer des Raycasts muss der Spieler sein)
-        boolean isPlayerVisible = (raycast.size() > 0 && raycast.get(raycast.size() - 1).collider.getLayer() == PhysicsLayer.PLAYER);
-        
         // Nachfolgendes nur ausführen, wenn Spieler sichtbar ist
-        if(isPlayerVisible)
+        if(hasLineOfSight())
         {
-            // 5. Geschütz zum Spieler ausrichten
+            // 4. Geschütz zum Spieler ausrichten
+            Player player = _room.getMap().getPlayer();
+            
             double angleToPlayer = getAngleTo(player.getPosition());
             double prevAngle = _rotation.getY();
             
@@ -177,7 +165,7 @@ public class Turret implements ILivingEntity, ICollisionListener, IDynamicGameOb
             double newAngle = ((angleToPlayer + TRACKING_SLOWNESS*prevAngle) / (TRACKING_SLOWNESS + 1.0)) % 360.0;
             setAngle(newAngle);
             
-            // 6. Schießen, wenn Munition vorhanden ist, Spieler genau genug anvisiert ist, und genug Zeit vergangen ist
+            // 5. Schießen, wenn Munition vorhanden ist, Spieler genau genug anvisiert ist, und genug Zeit vergangen ist
             if(_currentAmmo > 0 && _timeSinceLastShot > FIRING_COOLDOWN)
             {
                 // Anvisieren überprüfen
@@ -196,17 +184,17 @@ public class Turret implements ILivingEntity, ICollisionListener, IDynamicGameOb
                     _reloadingVoiceLineTriggered = false;
                     
                     // Raycast vorbereiten
-                    source = new Vector2(_position.getX(), _position.getZ());
-                    target = new Vector2(player.getPosition().getX(), player.getPosition().getZ());
-                    direction = target.subtract(source).normalize();                
-                    terminationFilter = EnumSet.of(PhysicsLayer.PLAYER, PhysicsLayer.SOLID);
-                    exclusionFilter = EnumSet.of(PhysicsLayer.ENEMY);
+                    Vector2 source = new Vector2(_position.getX(), _position.getZ());
+                    Vector2 target = new Vector2(player.getPosition().getX(), player.getPosition().getZ());
+                    Vector2 direction = target.subtract(source).normalize();                
+                    EnumSet<PhysicsLayer> terminationFilter = EnumSet.of(PhysicsLayer.PLAYER, PhysicsLayer.SOLID);
+                    EnumSet<PhysicsLayer>exclusionFilter = EnumSet.of(PhysicsLayer.ENEMY);
                     
                     // Ungenauigkeit zum Schuss hinzufügen
                     direction = direction.rotateAroundOrigin((_random.nextDouble()*2.0-1.0) * MAXIMUM_INACCURACY_ANGLE);
                     
                     // Raycast durchführen
-                    raycast = Physics.raycast(source, direction, MAX_RANGE, _room.getMap(), terminationFilter, exclusionFilter);
+                    ArrayList<RaycastHit> raycast = Physics.raycast(source, direction, MAX_RANGE, _room.getMap(), terminationFilter, exclusionFilter);
                     
                     // Schussergebnis berechnen
                     if(raycast.size() > 0)
@@ -237,7 +225,7 @@ public class Turret implements ILivingEntity, ICollisionListener, IDynamicGameOb
         }
         
         //TODO:
-        // 7. Feuer-/Rauchpartikel aktivieren
+        // 6. Feuer-/Rauchpartikel aktivieren
         return;
     }
     
@@ -299,7 +287,27 @@ public class Turret implements ILivingEntity, ICollisionListener, IDynamicGameOb
         }
     }
     
-        /**
+    /**
+     * Prüft, ob der Geschützturm eine direkte Line-of-Sight zum Spieler hat.
+     * @return true, wenn es eine Line-of-Sight zum Spieler gibt, sonst false
+     */
+    private boolean hasLineOfSight()
+    {
+        Player player = _room.getMap().getPlayer();
+        
+        // Raycast vorbereiten
+        Vector2 source = new Vector2(_position.getX(), _position.getZ());
+        Vector2 target = new Vector2(player.getPosition().getX(), player.getPosition().getZ());
+        Vector2 direction = target.subtract(source).normalize();
+        EnumSet<PhysicsLayer> terminationFilter = EnumSet.of(PhysicsLayer.PLAYER, PhysicsLayer.SOLID);
+        EnumSet<PhysicsLayer> exclusionFilter = EnumSet.of(PhysicsLayer.ENEMY);
+        ArrayList<RaycastHit> raycast = Physics.raycast(source, direction, MAX_RANGE, _room.getMap(), terminationFilter, exclusionFilter);
+        
+        // Sichtbarkeit berechnen (Bdg.: der letzte Treffer des Raycasts muss der Spieler sein)
+        return raycast.size() > 0 && raycast.get(raycast.size() - 1).collider.getLayer() == PhysicsLayer.PLAYER;
+    }
+    
+    /**
      * Gibt den Winkel zu einem Zielpunkt zurück
      * @param target Zielpunkt
      * @return Ausrichtungswinkel, in dem der Geschützturm genau auf den Zielpunkt ausgerichtet ist
