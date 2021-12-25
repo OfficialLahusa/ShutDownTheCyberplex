@@ -60,7 +60,7 @@ public class Drone implements ILivingEntity, ICollisionListener, IDynamicGameObj
     private static final int BULLET_DAMAGE = 1;
     private static final double MAXIMUM_INACCURACY_ANGLE = 6.0;
     private static final double FIRING_ANGLE_TOLERANCE = 4.0;
-    private static final double TRACKING_SLOWNESS = 15.0;
+    private static final double TRACKING_SLOWNESS = 0.0;
     private static final double RELOAD_VOICELINE_DELAY = 0.25;
     private static final double VOICELINE_VOLUME = 0.8;
     
@@ -172,6 +172,7 @@ public class Drone implements ILivingEntity, ICollisionListener, IDynamicGameObj
         {
             // 5. Drohne zum Spieler ausrichten
             double angleToPlayer = getAngleTo(player.getPosition());
+            //angleToPlayer = getAngleTo(_position.add(new Vector3(Math.cos(Math.toRadians(runTime * 60)), 0.0, Math.sin(Math.toRadians(runTime * 60)))));
             double prevAngle = _rotation.getY();
             
             // 360∞-Flip bei 360∞ zu 0∞-Transition und umgekehrt verhindern
@@ -180,7 +181,9 @@ public class Drone implements ILivingEntity, ICollisionListener, IDynamicGameObj
             
             // Neuen Winkel setzen (Langsamer ‹bergang)
             double newAngle = ((angleToPlayer + TRACKING_SLOWNESS*prevAngle) / (TRACKING_SLOWNESS + 1.0)) % 360.0;
-            setAngle(newAngle);
+            //setAngle(newAngle);
+            setAngle(angleToPlayer);
+            System.out.println(angleToPlayer);
             
             // 6. Schieﬂen, wenn Munition vorhanden ist, Spieler genau genug anvisiert ist, und genug Zeit vergangen ist
             if(_currentAmmo > 0 && _timeSinceLastShot > FIRING_COOLDOWN)
@@ -189,6 +192,7 @@ public class Drone implements ILivingEntity, ICollisionListener, IDynamicGameObj
                 Vector2 currentDirection = new Vector2(Math.cos(Math.toRadians(-_rotation.getY())), Math.sin(Math.toRadians(-_rotation.getY())));
                 Vector2 idealDirection = new Vector2(player.getPosition().getX() - _position.getX(), player.getPosition().getZ() - _position.getZ());
                 double inaccuracyAngle = idealDirection.getAngleBetween(currentDirection);
+                System.out.println(inaccuracyAngle);
                 
                 // Nur schieﬂen, wenn korrekt anvisiert wurde
                 if(inaccuracyAngle <= FIRING_ANGLE_TOLERANCE)
@@ -230,7 +234,7 @@ public class Drone implements ILivingEntity, ICollisionListener, IDynamicGameObj
                                 ILivingEntity victim = (ILivingEntity)lastHit.collider.getListener();
                                 
                                 // Spieler Schaden hinzuf¸gen
-                                victim.damage(BULLET_DAMAGE, "turret shot");
+                                victim.damage(BULLET_DAMAGE, "drone shot");
                             }
                         }
                     }
@@ -281,11 +285,11 @@ public class Drone implements ILivingEntity, ICollisionListener, IDynamicGameObj
      */
     private double getAngleTo(Vector3 target)
     {
-        Vector3 baseDirection = new Vector3(1.0, 0.0, 0.0);
-        Vector3 toTarget = target.subtract(_position).normalize();
+        Vector2 baseDirection = new Vector2(1.0, 0.0);
+        Vector2 toTarget2D = new Vector2(target.getX(), target.getZ()).subtract(new Vector2(_position.getX(), _position.getZ()));
         
         // Kleinstmˆglicher Winkel zwischen baseDirection und toTarget
-        double resultingAngle = baseDirection.getAngleBetween(toTarget);
+        double resultingAngle = baseDirection.getAngleBetween(toTarget2D);
         
         // Winkel umkehren, wenn z-Koordinate des Zielpunkts grˆﬂer ist, als die des Turrets
         if(target.getZ() > _position.getZ())

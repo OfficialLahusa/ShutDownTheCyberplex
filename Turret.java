@@ -299,18 +299,18 @@ public class Turret implements ILivingEntity, ICollisionListener, IDynamicGameOb
         }
     }
     
-    /**
+        /**
      * Gibt den Winkel zu einem Zielpunkt zurück
      * @param target Zielpunkt
-     * @return Ausrichtungswinkel, in dem das Geschütz genau auf den Zielpunkt ausgerichtet ist
+     * @return Ausrichtungswinkel, in dem der Geschützturm genau auf den Zielpunkt ausgerichtet ist
      */
     private double getAngleTo(Vector3 target)
     {
-        Vector3 baseDirection = new Vector3(1.0, 0.0, 0.0);
-        Vector3 toTarget = target.subtract(_position).normalize();
+        Vector2 baseDirection = new Vector2(1.0, 0.0);
+        Vector2 toTarget2D = new Vector2(target.getX(), target.getZ()).subtract(new Vector2(_position.getX(), _position.getZ()));
         
         // Kleinstmöglicher Winkel zwischen baseDirection und toTarget
-        double resultingAngle = baseDirection.getAngleBetween(toTarget);
+        double resultingAngle = baseDirection.getAngleBetween(toTarget2D);
         
         // Winkel umkehren, wenn z-Koordinate des Zielpunkts größer ist, als die des Turrets
         if(target.getZ() > _position.getZ())
