@@ -169,9 +169,7 @@ public class Drone implements ILivingEntity, ICollisionListener, IDynamicGameObj
             
             // Neuen Winkel setzen (Langsamer ‹bergang)
             double newAngle = ((angleToPlayer + TRACKING_SLOWNESS*prevAngle) / (TRACKING_SLOWNESS + 1.0)) % 360.0;
-            //setAngle(newAngle);
-            setAngle(angleToPlayer);
-            System.out.println(angleToPlayer);
+            setAngle(newAngle);
             
             // 5. Schieﬂen, wenn Munition vorhanden ist, Spieler genau genug anvisiert ist, und genug Zeit vergangen ist
             if(_currentAmmo > 0 && _timeSinceLastShot > FIRING_COOLDOWN)
@@ -180,7 +178,6 @@ public class Drone implements ILivingEntity, ICollisionListener, IDynamicGameObj
                 Vector2 currentDirection = new Vector2(Math.cos(Math.toRadians(-_rotation.getY())), Math.sin(Math.toRadians(-_rotation.getY())));
                 Vector2 idealDirection = new Vector2(player.getPosition().getX() - _position.getX(), player.getPosition().getZ() - _position.getZ());
                 double inaccuracyAngle = idealDirection.getAngleBetween(currentDirection);
-                System.out.println(inaccuracyAngle);
                 
                 // Nur schieﬂen, wenn korrekt anvisiert wurde
                 if(inaccuracyAngle <= FIRING_ANGLE_TOLERANCE)
