@@ -51,14 +51,18 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
      * @param coloredMeshesOpen Liste von Mesh-Farb-Paaren, die im offenen Zustand gerendert werden
      * @param closedCollider (Optional) Collider, der im geschlossenen Zustand für die Kollisionserkennung verwendet wird
      * @param openCollider (Optional) Collider, der im offenen Zustand für die Kollisionserkennung verwendet wird
-     * @param floor (OPTIONAL) Liste an GameObjects, die als Fußboden gerendert werden sollen
-     * @param walls (OPTIONAL) Liste an GameObjects, die als Mauern gerendert werden sollen
+     * @param floor (Optional) Liste an GameObjects, die als Fußboden gerendert werden sollen
+     * @param walls (Optional) Liste an GameObjects, die als Mauern gerendert werden sollen
+     * @param soundEngine (Optional) Sound Engine, in der die nachfolgenden Schlüssel enthalten sind
+     * @param openSoundKey (Optional) Schlüssel des Sounds für das Öffnen
+     * @param closeSoundKey (Optional) Schlüssel des Sounds für das Schließen
      */
     public DoorGameObject(Vector3 position, Vector3 rotation, Vector3 scale,
         boolean facingZ, boolean isOpen, Vector2i tilePosition,
         ArrayList<Pair<Mesh, String>> coloredMeshesClosed, ArrayList<Pair<Mesh, String>> coloredMeshesOpen,
         ICollider closedCollider, ICollider openCollider,
-        ArrayList<IGameObject> floor, ArrayList<IGameObject> walls
+        ArrayList<IGameObject> floor, ArrayList<IGameObject> walls,
+        SoundEngine soundEngine, String openSoundKey, String closeSoundKey
     )
     {
         _position = new Vector3(position);
@@ -73,6 +77,9 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
         _openCollider = openCollider;
         _floor = floor;
         _walls = walls;
+        _soundEngine = soundEngine;
+        _openSoundKey = openSoundKey;
+        _closeSoundKey = closeSoundKey;
         
         _model = null;
         
@@ -91,11 +98,6 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
         
         // Bei Initialisierung sind noch keine Räume zugewiesen
         _connectedRoomIDs = new Pair<Integer, Integer>(null, null);
-        
-        // Bei Initialisierung sind noch keine Sounds aktiv
-        _soundEngine = null;
-        _openSoundKey = null;
-        _closeSoundKey = null;
     }
     
     /**
@@ -161,16 +163,6 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
                 renderer.drawMesh(coloredMesh.getKey(), getModelMatrix(), coloredMesh.getValue(), camera);
             }
         }
-    }
-    
-    /**
-     * @see IDoorGameObject#setSound()
-     */
-    public void setSound(SoundEngine soundEngine, String openSoundKey, String closeSoundKey)
-    {
-        _soundEngine = soundEngine;
-        _openSoundKey = openSoundKey;
-        _closeSoundKey = closeSoundKey;
     }
     
     private void playSound(String key)

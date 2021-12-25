@@ -5,7 +5,7 @@ import java.util.*;
  * Interface für GameObjects mit Tür-Funktionalität
  * 
  * @author Lasse Huber-Saffer
- * @version 24.12.2021
+ * @version 25.12.2021
  */
 
 public interface IDoorGameObject extends IGameObject
@@ -54,13 +54,4 @@ public interface IDoorGameObject extends IGameObject
      * @param second zweiter verbundener Raum, null -> kein zweiter Raum (Reihenfolge irrelevant)
      */
     public void setConnectedRoomIDs(Integer first, Integer second);
-    
-    /**
-     * Setzt das Soundregister und die Soundschlüssel für das Öffnen und Schließen der Tür.
-     * Parameter mit dem Wert null werden nicht verwendet.
-     * @param soundEngine setzt die Sound Engine, in der die nachfolgenden Schlüssel enthalten sind (nullable)
-     * @param openSoundKey Schlüssel des Sounds für das Öffnen (nullable)
-     * @param closeSoundKey Schlüssel des Sounds für das Schließen (nullable)
-     */
-    public void setSound(SoundEngine soundEngine, String openSoundKey, String closeSoundKey);
 }

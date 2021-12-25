@@ -16,6 +16,9 @@ public class GameScene extends Scene
     private ArrayList<RaycastHit> _raycast;
     private Vector3 _raycastSource;
     private Vector3 _raycastTarget;
+    
+    private LinkedList<PathNode> _path;
+    private Vector2i _pathTarget;
 
     private static final double PISTOL_SHOT_COOLDOWN = 0.3;
     private static final double DEBUG_SPEED_MULT = 3.0;
@@ -53,6 +56,9 @@ public class GameScene extends Scene
         _raycast = null;
         _raycastSource = null;
         _raycastTarget = null;
+        
+        _path = null;
+        _pathTarget = null;
         
         // Sounds aus Dateien laden
         _state.resourceManager.loadSoundSources(_state.soundEngine);
@@ -140,6 +146,10 @@ public class GameScene extends Scene
         {
             _state.inputHandler.setKeepMouseInPlace(true);
         }
+        if(_state.inputHandler.isKeyPressed(KeyCode.KEY_PLUS))
+        {
+            _pathTarget = new Vector2i(MapHandler.worldPosToTilePos(_player.getPosition()));
+        }
     }
     
     /**
@@ -158,6 +168,11 @@ public class GameScene extends Scene
         // Kollisionsbehandlung
         CircleCollider playerCollider = _player.getCollider();
         _mapHandler.getMap().handleCollisions(playerCollider);
+        
+        if(_pathTarget != null)
+        {
+            _path = AStarPathSolver.solvePath(MapHandler.worldPosToTilePos(_player.getPosition()), _pathTarget, _mapHandler.getMap().rooms.get(_mapHandler.getMap().activeRoom));
+        }
     }
     
     /**
@@ -182,6 +197,21 @@ public class GameScene extends Scene
             }
             
             _state.renderer.drawLine3D(_raycastSource, _raycastTarget, "cyan", playerCam);
+        }
+        
+        if(_path != null)
+        {
+            // Alle Indizes bis auf den letzten durchiterieren
+            for(int i = 0; i < _path.size() - 1; i++)
+            {
+                PathNode current = _path.get(i);
+                PathNode next = _path.get(i + 1);
+                
+                Vector3 pos1 = MapHandler.tilePosToWorldPos(current.getPosition());
+                Vector3 pos2 = MapHandler.tilePosToWorldPos(next.getPosition());
+                
+                _state.renderer.drawLine3D(pos1, pos2, "rot", playerCam);
+            }
         }
         
         // Draw Viewmodel

@@ -4,7 +4,7 @@ import java.util.*;
  * Drohne, der sich zum Spieler ausrichtet, ihn verfolgt und beschieﬂt
  * 
  * @author Lasse Huber-Saffer
- * @version 24.12.2021
+ * @version 25.12.2021
  */
 public class Drone extends Enemy implements ILivingEntity, ICollisionListener, IDynamicGameObject
 {

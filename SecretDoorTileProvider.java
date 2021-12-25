@@ -5,7 +5,7 @@ import javafx.util.*;
  * TileProvider für Geheimtüren, die in Abhängigkeit von der Umgebung entlang der X- oder Z-Achse ausgerichtet sein können
  * 
  * @author Lasse Huber-Saffer
- * @version 24.12.2021
+ * @version 25.12.2021
  */
 public class SecretDoorTileProvider implements ITileProvider
 {
@@ -103,9 +103,9 @@ public class SecretDoorTileProvider implements ITileProvider
             facingZ, _isOpen,  new Vector2i(x, z),
             _coloredMeshesClosed, _coloredMeshesOpen,
             new CompoundCollider(closedCollidersArray, PhysicsLayer.SEMISOLID), new CompoundCollider(openCollidersArray, PhysicsLayer.SEMISOLID),
-            floorGeometry, wallGeometry
+            floorGeometry, wallGeometry,
+            _soundEngine, _openSoundKey, _closeSoundKey
         );
-        obj.setSound(_soundEngine, _openSoundKey, _closeSoundKey);
         
         result.add(obj);
 
