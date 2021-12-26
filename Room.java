@@ -4,7 +4,7 @@ import java.util.*;
  * Ein räumlich eingegrenzter Abschnitt einer Gridmap, innerhalb dessen Simulationen durchgeführt werden
  * 
  * @author Lasse Huber-Saffer
- * @version 24.12.2021
+ * @version 26.12.2021
  */
 public class Room
 {
@@ -352,6 +352,44 @@ public class Room
     public boolean contains(Vector2i pos)
     {
         return contains(pos.getX(), pos.getY());
+    }
+
+    /**
+     * Gibt eine Kopie des Sets der im Raum enthaltenen Tiles zurück
+     * @return Kopie des Sets der im Raum enthaltenen Tiles
+     */
+    public HashSet<Vector2i> getTiles()
+    {
+        HashSet<Vector2i> result = new HashSet<Vector2i>();
+        
+        for(Vector2i tile : _tiles)
+        {
+            result.add(new Vector2i(tile));
+        }
+        
+        return result;
+    }
+    
+    /**
+     * Gibt eine gefilterte Kopie des Sets der im Raum enthaltenen Tiles zurück
+     * @param Filter, der jedem Tile-Wert einen booleschen Wert zuordnet. Nur Tiles mit dem Ergebnis true werden zurückgegeben.
+     * @return Kopie des Sets der im Raum enthaltenen Tiles
+     */
+    public HashSet<Vector2i> getFilteredTiles(ITileFilter filter)
+    {
+        HashSet<Vector2i> result = new HashSet<Vector2i>();
+        
+        for(Vector2i tile : _tiles)
+        {
+            int tileValue = getMap().getTileValue(tile);
+            
+            if(filter.evaluate(tileValue))
+            {
+                result.add(new Vector2i(tile));
+            }
+        }
+        
+        return result;
     }
     
     /**
