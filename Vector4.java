@@ -178,7 +178,7 @@ public class Vector4
     public Vector4 normalize()
     {
         double len = getLength();
-        if(len < 0.0) 
+        if(len <= 0.0) 
         {
             return new Vector4();
         }

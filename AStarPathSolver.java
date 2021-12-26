@@ -4,7 +4,7 @@ import java.util.*;
  * Pathfinding-Solver mit dem A*-Algorithmus
  * 
  * @author Lasse Huber-Saffer
- * @version 25.12.2021
+ * @version 26.12.2021
  */
 public class AStarPathSolver
 {
@@ -74,158 +74,15 @@ public class AStarPathSolver
                 break;
             }
             
-            // px
-            Vector2i neighborPx = nodePos.add(new Vector2i(1, 0));
-            if(!passed.containsKey(neighborPx) && isPassable(neighborPx, room))
-            {
-                if(!open.containsKey(neighborPx))
-                {
-                    open.put(neighborPx, new PathNode(neighborPx, currentNode.getG() + STRAIGHT_COST, getHeuristic(neighborPx, end), currentNode));
-                }
-                else
-                {
-                    double g = open.get(neighborPx).getG();
-                    
-                    if(g > currentNode.getG())
-                    {
-                        open.put(neighborPx, new PathNode(neighborPx, currentNode.getG() + STRAIGHT_COST, getHeuristic(neighborPx, end), currentNode));
-                    }
-                }
-            }
-            
-            // nx
-            Vector2i neighborNx = nodePos.add(new Vector2i(-1, 0));
-            if(!passed.containsKey(neighborNx) && isPassable(neighborNx, room))
-            {
-                if(!open.containsKey(neighborNx))
-                {
-                    open.put(neighborNx, new PathNode(neighborNx, currentNode.getG() + STRAIGHT_COST, getHeuristic(neighborNx, end), currentNode));
-                }
-                else
-                {
-                    double g = open.get(neighborNx).getG();
-                    
-                    if(g > currentNode.getG())
-                    {
-                        open.put(neighborNx, new PathNode(neighborNx, currentNode.getG() + STRAIGHT_COST, getHeuristic(neighborNx, end), currentNode));
-                    }
-                }
-            }
-            
-            
-            // pz
-            Vector2i neighborPz = nodePos.add(new Vector2i(0, 1));
-            if(!passed.containsKey(neighborPz) && isPassable(neighborPz, room))
-            {
-                if(!open.containsKey(neighborPz))
-                {
-                    open.put(neighborPz, new PathNode(neighborPz, currentNode.getG() + STRAIGHT_COST, getHeuristic(neighborPz, end), currentNode));
-                }
-                else
-                {
-                    double g = open.get(neighborPz).getG();
-                    
-                    if(g > currentNode.getG())
-                    {
-                        open.put(neighborPz, new PathNode(neighborPz, currentNode.getG() + STRAIGHT_COST, getHeuristic(neighborPz, end), currentNode));
-                    }
-                }
-            }
-            
-            // nz
-            Vector2i neighborNz = nodePos.add(new Vector2i(0, -1));
-            if(!passed.containsKey(neighborNz) && isPassable(neighborNz, room))
-            {
-                if(!open.containsKey(neighborNz))
-                {
-                    open.put(neighborNz, new PathNode(neighborNz, currentNode.getG() + STRAIGHT_COST, getHeuristic(neighborNz, end), currentNode));
-                }
-                else
-                {
-                    double g = open.get(neighborNz).getG();
-                    
-                    if(g > currentNode.getG())
-                    {
-                        open.put(neighborNz, new PathNode(neighborNz, currentNode.getG() + STRAIGHT_COST, getHeuristic(neighborNz, end), currentNode));
-                    }
-                }
-            }
-            
-            // pxpz
-            Vector2i neighborPxpz = nodePos.add(new Vector2i(1, 1));
-            if(!passed.containsKey(neighborPxpz) && isPassable(neighborPxpz, room))
-            {
-                if(!open.containsKey(neighborPxpz))
-                {
-                    open.put(neighborPxpz, new PathNode(neighborPxpz, currentNode.getG() + DIAGONAL_COST, getHeuristic(neighborPxpz, end), currentNode));
-                }
-                else
-                {
-                    double g = open.get(neighborPxpz).getG();
-                    
-                    if(g > currentNode.getG())
-                    {
-                        open.put(neighborPxpz, new PathNode(neighborPxpz, currentNode.getG() + DIAGONAL_COST, getHeuristic(neighborPxpz, end), currentNode));
-                    }
-                }
-            }
-            
-            // pxnz
-            Vector2i neighborPxnz = nodePos.add(new Vector2i(1, -1));
-            if(!passed.containsKey(neighborPxnz) && isPassable(neighborPxnz, room))
-            {
-                if(!open.containsKey(neighborPxnz))
-                {
-                    open.put(neighborPxnz, new PathNode(neighborPxnz, currentNode.getG() + DIAGONAL_COST, getHeuristic(neighborPxnz, end), currentNode));
-                }
-                else
-                {
-                    double g = open.get(neighborPxnz).getG();
-                    
-                    if(g > currentNode.getG())
-                    {
-                        open.put(neighborPxnz, new PathNode(neighborPxnz, currentNode.getG() + DIAGONAL_COST, getHeuristic(neighborPxnz, end), currentNode));
-                    }
-                }
-            }
-            
-            // pxpz
-            Vector2i neighborNxpz = nodePos.add(new Vector2i(-1, 1));
-            if(!passed.containsKey(neighborNxpz) && isPassable(neighborNxpz, room))
-            {
-                if(!open.containsKey(neighborNxpz))
-                {
-                    open.put(neighborNxpz, new PathNode(neighborNxpz, currentNode.getG() + DIAGONAL_COST, getHeuristic(neighborNxpz, end), currentNode));
-                }
-                else
-                {
-                    double g = open.get(neighborNxpz).getG();
-                    
-                    if(g > currentNode.getG())
-                    {
-                        open.put(neighborNxpz, new PathNode(neighborNxpz, currentNode.getG() + DIAGONAL_COST, getHeuristic(neighborNxpz, end), currentNode));
-                    }
-                }
-            }
-            
-            // pxnz
-            Vector2i neighborNxnz = nodePos.add(new Vector2i(-1, -1));
-            if(!passed.containsKey(neighborNxnz) && isPassable(neighborNxnz, room))
-            {
-                if(!open.containsKey(neighborNxnz))
-                {
-                    open.put(neighborNxnz, new PathNode(neighborNxnz, currentNode.getG() + DIAGONAL_COST, getHeuristic(neighborNxnz, end), currentNode));
-                }
-                else
-                {
-                    double g = open.get(neighborNxnz).getG();
-                    
-                    if(g > currentNode.getG())
-                    {
-                        open.put(neighborNxnz, new PathNode(neighborNxnz, currentNode.getG() + DIAGONAL_COST, getHeuristic(neighborNxnz, end), currentNode));
-                    }
-                }
-            }
+            //Nachbarsknoten hinzufügen
+            addNeighborToOpen(new Vector2i(1, 0),   currentNode, passed, open, end, room);
+            addNeighborToOpen(new Vector2i(-1, 0),  currentNode, passed, open, end, room);            
+            addNeighborToOpen(new Vector2i(0, 1),   currentNode, passed, open, end, room);
+            addNeighborToOpen(new Vector2i(0, -1),  currentNode, passed, open, end, room);
+            addNeighborToOpen(new Vector2i(1, 1),   currentNode, passed, open, end, room);
+            addNeighborToOpen(new Vector2i(1, -1),  currentNode, passed, open, end, room);
+            addNeighborToOpen(new Vector2i(-1, 1),  currentNode, passed, open, end, room);
+            addNeighborToOpen(new Vector2i(-1, -1), currentNode, passed, open, end, room);
         }
         
         // Pfad rückwärts ermitteln
@@ -242,7 +99,7 @@ public class AStarPathSolver
         LinkedList<PathNode> result = new LinkedList<PathNode>(); 
         
         // Pfad umkehren
-        for(int i = 0; i < reversedPath.size(); i++)
+        for(int i = reversedPath.size() - 1; i >= 0; i--)
         {
             result.add(reversedPath.get(i));
         }
@@ -289,6 +146,58 @@ public class AStarPathSolver
         int tileValue = room.getMap().getTileValue(tile);
         
         return !Tile.isSolidOrNone(tileValue) && !Tile.isSemiSolid(tileValue);
+    }
+    
+    /**
+     * Versucht, einen Nachbarn einer gewählten PathNode in die Liste der offenen Knoten einzufügen
+     * @param delta relative Position des Nachbarn von der aktuellen Tile aus
+     * @param currentNode aktueller Knoten
+     * @param passed HashMap der passierten Knoten
+     * @param open LinkedHashMap der offenen Knoten
+     * @param end Position des Pfadendes
+     * @param room umgebender Raum
+     */
+    private static void addNeighborToOpen(Vector2i delta, PathNode currentNode, HashMap<Vector2i, PathNode> passed, LinkedHashMap<Vector2i, PathNode> open, Vector2i end, Room room)
+    {
+        Vector2i neighbor = currentNode.getPosition().add(delta);
+        
+        if(!passed.containsKey(neighbor))
+        {
+            // Pfadkosten (g-Inkrement) des Nachbarsknotens
+            double path_cost = STRAIGHT_COST;
+            
+            // Für direkte Nachbarn nur die Nachbartile überprüfen
+            if(delta.getX() == 0 || delta.getY() == 0)
+            {
+                if(!isPassable(neighbor, room)) return;
+            }
+            // Für indirekte/diagonale Nachbarn alle drei angrenzenden Tiles überprüfen
+            else
+            {
+                if(!isPassable(neighbor, room)) return;
+                if(!isPassable(currentNode.getPosition().add(new Vector2i(delta.getX(), 0)), room)) return;
+                if(!isPassable(currentNode.getPosition().add(new Vector2i(0, delta.getY())), room)) return;
+                
+                path_cost = DIAGONAL_COST;
+            }
+            
+            // Wenn Nachbarsknoten noch nicht offen ist, hinzufügen
+            if(!open.containsKey(neighbor))
+            {
+                open.put(neighbor, new PathNode(neighbor, currentNode.getG() + path_cost, getHeuristic(neighbor, end), currentNode));
+            }
+            // Wenn bereits vorhanden, nur hinzufügen, wenn g (Pfadkosten) vorher höher waren
+            else
+            {
+                double g = open.get(neighbor).getG();
+                
+                // Bereits existierenden Knoteneintrag überschreiben
+                if(g > currentNode.getG())
+                {
+                    open.put(neighbor, new PathNode(neighbor, currentNode.getG() + path_cost, getHeuristic(neighbor, end), currentNode));
+                }
+            }
+        }
     }
     
     /**

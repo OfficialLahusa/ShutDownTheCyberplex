@@ -130,7 +130,7 @@ public class Vector3
     public Vector3 normalize()
     {
         double len = getLength();
-        if(len < 0.0) 
+        if(len <= 0.0) 
         {
             return new Vector3();
         }

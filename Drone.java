@@ -4,7 +4,7 @@ import java.util.*;
  * Drohne, der sich zum Spieler ausrichtet, ihn verfolgt und beschießt
  * 
  * @author Lasse Huber-Saffer
- * @version 25.12.2021
+ * @version 26.12.2021
  */
 public class Drone extends Enemy implements ILivingEntity, ICollisionListener, IDynamicGameObject
 {
@@ -15,6 +15,9 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
     private SoundEngine _soundEngine;
     
     // Functionality
+    private Vector2i _previousPathTarget;
+    private LinkedList<PathNode> _path;
+    private DroneAIState _state;
     private boolean _isActive;
     private int _currentAmmo;
     private double _timeSinceLastShot;
@@ -45,9 +48,11 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
     
     // Konstanten
     private static final double FLYING_HEIGHT = 5.0;
+    private static final double FLYING_SPEED = 12.0;
     private static final double COLLIDER_RADIUS = 0.6;
     private static final double MAX_SIGHT_RANGE = 500.0;
     private static final double MAX_GUN_RANGE = 20.0;
+    private static final double IDEAL_PLAYER_DISTANCE = 14.0;
     private static final int MAGAZINE_CAPACITY = 6;
     private static final double FIRING_COOLDOWN = 0.5;
     private static final double RELOAD_TIME = 4.0;
@@ -75,6 +80,7 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
         
         _soundEngine = soundEngine;
         
+        _state = DroneAIState.CHASING;
         _isActive = active;
         _currentAmmo = MAGAZINE_CAPACITY;
         _timeSinceLastShot = 0.0;
@@ -112,10 +118,10 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
     {
         _timeSinceLastShot += deltaTime;
         
-        // 1. Aktivitätsstatus des Geschützes prüfen
+        // Aktivitätsstatus des Geschützes prüfen
         if(!_isActive) return;
         
-        // 2. Mündungsfeuer positionieren und skalieren
+        // Mündungsfeuer positionieren und skalieren
         _muzzleFlash.setRotation(_rotation);
         _muzzleFlash.setPosition(getCurrentMuzzlePosition());
         double scaleValue;
@@ -131,7 +137,7 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
         }
         _muzzleFlash.setScale(new Vector3(scaleValue, scaleValue, scaleValue));
         
-        // 3. Waffe Laden
+        // Waffe Laden
         if(_currentAmmo == 0)
         {
             // Nachlade-Voiceline
@@ -148,68 +154,155 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
             }
         }
         
-        // Nachfolgendes nur ausführen, wenn Spieler sichtbar ist
-        if(hasLineOfSight(MAX_SIGHT_RANGE))
+        // Verschiedene AI-Zustände unterschiedlich behandeln
+        // Zufälliges umherfliegen
+        if(_state == DroneAIState.WANDERING)
         {
-            // 4. Drohne zum Spieler ausrichten
-            Player player = _room.getMap().getPlayer();
-            lookAtFade(player.getPosition(), TRACKING_INERTIA);
             
-            // 5. Schießen, wenn Munition vorhanden, Spieler nah genug, Spieler genau genug anvisiert, und genug Zeit vergangen ist
-            double inaccuracyAngle = getSightAngleTo(player.getPosition());
-            double playerDist = getDistanceTo(player.getPosition());
+        }
+        // Patrouillenroute abfliegen
+        else if(_state == DroneAIState.PATROL)
+        {
             
-            if(_currentAmmo > 0 && playerDist <= MAX_GUN_RANGE && inaccuracyAngle <= FIRING_ANGLE_TOLERANCE && _timeSinceLastShot > FIRING_COOLDOWN)
+        }
+        // Spieler verfolgen
+        else if(_state == DroneAIState.CHASING)
+        {
+            // Spieler angreifen, wenn er sichtbar ist
+            if(hasLineOfSight(MAX_SIGHT_RANGE))
             {
-                // Munition abziehen und Timer zurücksetzen
-                _currentAmmo--;
-                _timeSinceLastShot = 0.0;
-                
-                // Reload-Voiceline zurücksetzen
-                _reloadingVoiceLineTriggered = false;
-                
-                // Raycast vorbereiten
-                Vector2 source = new Vector2(_position.getX(), _position.getZ());
-                Vector2 target = new Vector2(player.getPosition().getX(), player.getPosition().getZ());
-                Vector2 direction = target.subtract(source).normalize();                
-                EnumSet<PhysicsLayer> terminationFilter = EnumSet.of(PhysicsLayer.PLAYER, PhysicsLayer.SOLID);
-                EnumSet<PhysicsLayer>exclusionFilter = EnumSet.of(PhysicsLayer.ENEMY);
-                
-                // Ungenauigkeit zum Schuss hinzufügen
-                direction = direction.rotateAroundOrigin((_random.nextDouble()*2.0-1.0) * MAXIMUM_INACCURACY_ANGLE);
-                
-                // Raycast durchführen
-                ArrayList<RaycastHit> raycast = Physics.raycast(source, direction, MAX_GUN_RANGE, _room.getMap(), terminationFilter, exclusionFilter);
-                
-                // Schussergebnis berechnen
-                if(raycast.size() > 0)
+                _state = DroneAIState.ATTACKING;
+            }
+            // Nachfolgendes nur ausführen, wenn Spieler nicht sichtbar ist
+            else
+            {
+                // Pfad generieren
+                Vector2i pathTarget = MapHandler.worldPosToTilePos(_room.getMap().getPlayer().getPosition());
+                if(_previousPathTarget == null || !pathTarget.equals(_previousPathTarget))
                 {
-                    RaycastHit lastHit = raycast.get(raycast.size() - 1);
+                    _path = AStarPathSolver.solvePath(MapHandler.worldPosToTilePos(_position), pathTarget, _room);
                     
-                    // Schuss-Tracer setzen
-                    _lastShotPos1 = new Vector3(getCurrentMuzzlePosition());
-                    _lastShotPos2 = new Vector3(lastHit.position.getX(), 1.2, lastHit.position.getY());
-                    
-                    // Herausfinden, ob Spieler getroffen wurde
-                    if(lastHit.collider.getLayer() == PhysicsLayer.PLAYER && lastHit.collider.getListener() != null)
+                    // Ersten Knoten entfernen, wenn er ein Rückschritt ist, die Drohne also bereits näher am 2. Punkt ist
+                    if(_path != null && _path.size() > 1)
                     {
-                        if(lastHit.collider.getListener() instanceof ILivingEntity)
+                        Vector3 first = MapHandler.tilePosToWorldPos(_path.get(0).getPosition());
+                        Vector3 second = MapHandler.tilePosToWorldPos(_path.get(1).getPosition());
+                        
+                        double firstNodeDist = new Vector2(second.getX(), second.getZ()).subtract(new Vector2(first.getX(), first.getZ())).getLength();
+                        double currentDist = new Vector2(second.getX(), second.getZ()).subtract(new Vector2(_position.getX(), _position.getZ())).getLength();
+                        
+                        if(firstNodeDist >= currentDist)
                         {
-                            ILivingEntity victim = (ILivingEntity)lastHit.collider.getListener();
-                            
-                            // Spieler Schaden hinzufügen
-                            victim.damage(BULLET_DAMAGE, "drone shot");
+                            _path.remove();
                         }
                     }
+                    
+                    _previousPathTarget = new Vector2i(pathTarget);
                 }
                 
-                // Zufälligen Schusssound abspielen
-                _soundEngine.playSoundFromGroup("heavy_shot", 0.65, false);
+                if(_path != null && _path.size() > 0)
+                {
+                    // Zum nächsten Pfadknoten navigieren
+                    PathNode nextTarget = _path.getFirst();            
+                    Vector3 nextTargetPos = MapHandler.tilePosToWorldPos(nextTarget.getPosition());
+                    
+                    // Ausrichten
+                    lookAtFade(nextTargetPos, TRACKING_INERTIA);
+                    
+                    // Bewegen
+                    Vector2 nextTargetPos2D = new Vector2(nextTargetPos.getX(), nextTargetPos.getZ());
+                    Vector2 pos2D = new Vector2(_position.getX(), _position.getZ());
+                    Vector2 dir = nextTargetPos2D.subtract(pos2D).normalize();
+                    Vector2 movement = dir.multiply(Math.min(getDistanceTo(nextTargetPos), FLYING_SPEED * deltaTime));
+                    move(new Vector3(movement.getX(), 0.0, movement.getY()));
+                    
+                    // Aktuellen Knoten fertigstellen
+                    if(getDistanceTo(nextTargetPos) < 0.05)
+                    {
+                        _path.remove();
+                    }
+                }
+            }
+        }
+        else if(_state == DroneAIState.ATTACKING)
+        {
+            // Spieler verfolgen, wenn er nicht sichtbar ist
+            if(!hasLineOfSight(MAX_SIGHT_RANGE))
+            {
+                _state = DroneAIState.CHASING;
+            }
+            // Nachfolgendes nur ausführen, wenn Spieler sichtbar ist
+            else
+            {
+                // Drohne zum Spieler ausrichten
+                Player player = _room.getMap().getPlayer();
+                lookAtFade(player.getPosition(), TRACKING_INERTIA);
+                
+                // Schießen, wenn Munition vorhanden, Spieler nah genug, Spieler genau genug anvisiert, und genug Zeit vergangen ist
+                double inaccuracyAngle = getSightAngleTo(player.getPosition());
+                double playerDist = getDistanceTo(player.getPosition());
+                
+                if(_currentAmmo > 0 && playerDist <= MAX_GUN_RANGE && inaccuracyAngle <= FIRING_ANGLE_TOLERANCE && _timeSinceLastShot > FIRING_COOLDOWN)
+                {
+                    // Munition abziehen und Timer zurücksetzen
+                    _currentAmmo--;
+                    _timeSinceLastShot = 0.0;
+                    
+                    // Reload-Voiceline zurücksetzen
+                    _reloadingVoiceLineTriggered = false;
+                    
+                    // Raycast vorbereiten
+                    Vector2 source = new Vector2(_position.getX(), _position.getZ());
+                    Vector2 target = new Vector2(player.getPosition().getX(), player.getPosition().getZ());
+                    Vector2 direction = target.subtract(source).normalize();                
+                    EnumSet<PhysicsLayer> terminationFilter = EnumSet.of(PhysicsLayer.PLAYER, PhysicsLayer.SOLID);
+                    EnumSet<PhysicsLayer>exclusionFilter = EnumSet.of(PhysicsLayer.ENEMY);
+                    
+                    // Ungenauigkeit zum Schuss hinzufügen
+                    direction = direction.rotateAroundOrigin((_random.nextDouble()*2.0-1.0) * MAXIMUM_INACCURACY_ANGLE);
+                    
+                    // Raycast durchführen
+                    ArrayList<RaycastHit> raycast = Physics.raycast(source, direction, MAX_GUN_RANGE, _room.getMap(), terminationFilter, exclusionFilter);
+                    
+                    // Schussergebnis berechnen
+                    if(raycast.size() > 0)
+                    {
+                        RaycastHit lastHit = raycast.get(raycast.size() - 1);
+                        
+                        // Schuss-Tracer setzen
+                        _lastShotPos1 = new Vector3(getCurrentMuzzlePosition());
+                        _lastShotPos2 = new Vector3(lastHit.position.getX(), 1.2, lastHit.position.getY());
+                        
+                        // Herausfinden, ob Spieler getroffen wurde
+                        if(lastHit.collider.getLayer() == PhysicsLayer.PLAYER && lastHit.collider.getListener() != null)
+                        {
+                            if(lastHit.collider.getListener() instanceof ILivingEntity)
+                            {
+                                ILivingEntity victim = (ILivingEntity)lastHit.collider.getListener();
+                                
+                                // Spieler Schaden hinzufügen
+                                victim.damage(BULLET_DAMAGE, "drone shot");
+                            }
+                        }
+                    }
+                    
+                    // Zufälligen Schusssound abspielen
+                    _soundEngine.playSoundFromGroup("heavy_shot", 0.65, false);
+                }
+                
+                // Distanz zum Spieler durch Vorwärts-/Rückwärtsflug korrigieren
+                double deltaDist = playerDist - IDEAL_PLAYER_DISTANCE;
+                Vector2 playerPos2D = new Vector2(player.getPosition().getX(), player.getPosition().getZ());
+                Vector2 pos2D = new Vector2(_position.getX(), _position.getZ());
+                Vector2 dir = playerPos2D.subtract(pos2D).normalize();
+                // Bewegung auf FLYING_SPEED beschränken
+                Vector2 movement = dir.multiply(Math.max(-FLYING_SPEED * deltaTime, Math.min(deltaDist, FLYING_SPEED * deltaTime)));
+                move(new Vector3(movement.getX(), 0.0, movement.getY()));
             }
         }
         
         //TODO:
-        // 6. Feuer-/Rauchpartikel aktivieren
+        // Feuer-/Rauchpartikel aktivieren
         return;
     }
     
@@ -246,7 +339,11 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
      */
     public void onCollision(ICollider self, ICollider other)
     {
-        return;
+        EnumSet<PhysicsLayer> ignoredLayers = EnumSet.of(PhysicsLayer.ITEM, PhysicsLayer.RAYCAST);
+        if(!ignoredLayers.contains(other.getLayer()))
+        {
+            ((CircleCollider)self).resolveCollision(other);
+        }
     }
     
     /**
@@ -254,7 +351,9 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
      */
     public void onResolution(ICollider self, ICollider other)
     {
-        return;
+        // Positionen von Drohne dem Collider angleichen
+        Vector2 colliderPos = _collider.getPosition();
+        _position = new Vector3(colliderPos.getX(), _position.getY(), colliderPos.getY());
     }
     
     /**

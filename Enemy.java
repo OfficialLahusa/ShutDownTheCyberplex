@@ -41,7 +41,7 @@ public abstract class Enemy
             throw new IllegalArgumentException("target was null when calculating sight angle");
         }
         
-        Vector2 currentDirection = new Vector2(Math.cos(Math.toRadians(-_rotation.getY())), Math.sin(Math.toRadians(-_rotation.getY())));
+        Vector2 currentDirection = getDirection();
         Vector2 idealDirection = new Vector2(target.getX() - _position.getX(), target.getZ() - _position.getZ());
         return idealDirection.getAngleBetween(currentDirection);
     }
@@ -124,6 +124,16 @@ public abstract class Enemy
         
         // Sichtbarkeit berechnen (Bdg.: der letzte Treffer des Raycasts muss der Spieler sein)
         return raycast.size() > 0 && raycast.get(raycast.size() - 1).collider.getLayer() == PhysicsLayer.PLAYER;
+    }
+    
+    /**
+     * Gibt den Richtungsvektor des Gegners zurück
+     * @return Richtungsvektor des Gegners
+     */
+    protected Vector2 getDirection()
+    {
+        Vector2 currentDirection = new Vector2(Math.cos(Math.toRadians(-_rotation.getY())), Math.sin(Math.toRadians(-_rotation.getY())));
+        return currentDirection;
     }
     
     /**

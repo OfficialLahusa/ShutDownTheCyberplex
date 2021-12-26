@@ -4,7 +4,7 @@ import java.util.*;
  * Haupt-Szene des Spiels
  * 
  * @author Lasse Huber-Saffer, Nico Hädicke, Sven Schreiber
- * @version 23.12.2021
+ * @version 26.12.2021
  */
 public class GameScene extends Scene
 {
@@ -146,10 +146,6 @@ public class GameScene extends Scene
         {
             _state.inputHandler.setKeepMouseInPlace(true);
         }
-        if(_state.inputHandler.isKeyPressed(KeyCode.KEY_PLUS))
-        {
-            _pathTarget = new Vector2i(MapHandler.worldPosToTilePos(_player.getPosition()));
-        }
     }
     
     /**
@@ -168,6 +164,14 @@ public class GameScene extends Scene
         // Kollisionsbehandlung
         CircleCollider playerCollider = _player.getCollider();
         _mapHandler.getMap().handleCollisions(playerCollider);
+        
+        for(IGameObject entity : _mapHandler.getMap().rooms.get(_mapHandler.getMap().activeRoom).getEntities())
+        {
+            if(entity.getCollider() != null)
+            {
+                _mapHandler.getMap().handleCollisions(entity.getCollider());
+            }
+        }
         
         if(_pathTarget != null)
         {

@@ -94,7 +94,7 @@ public class Vector2
     public Vector2 normalize()
     {
         double len = getLength();
-        if(len < 0.0) 
+        if(len <= 0.0) 
         {
             return new Vector2();
         }
