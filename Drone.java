@@ -80,7 +80,7 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
         
         _soundEngine = soundEngine;
         
-        _state = DroneAIState.CHASING;
+        _state = DroneAIState.WANDERING;
         _isActive = active;
         _currentAmmo = MAGAZINE_CAPACITY;
         _timeSinceLastShot = 0.0;
@@ -158,7 +158,73 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
         // Zufälliges umherfliegen
         if(_state == DroneAIState.WANDERING)
         {
+            // Wenn Pfad leer ist
+            if(_path == null || _path.size() == 0)
+            {
+                // Zufällige Ziel-Tile auswählen
+                HashSet<Vector2i> filteredTiles = _room.getFilteredTiles(new ITileFilter()
+                    {
+                        @Override
+                        public boolean evaluate(int tileValue)
+                        {
+                            return !Tile.isSolidOrNone(tileValue) && !Tile.isSemiSolid(tileValue);
+                        }
+                    }
+                );
+                int randomIndex = _random.nextInt(filteredTiles.size());
+                Iterator<Vector2i> iterator = filteredTiles.iterator();
+                for(int i = 0; i < randomIndex; i++)
+                {
+                    iterator.next();
+                }
+                Vector2i pathTarget = iterator.next();
+                
+                // Pfad generieren
+                if(_previousPathTarget == null || !pathTarget.equals(_previousPathTarget))
+                {
+                    _path = AStarPathSolver.solvePath(MapHandler.worldPosToTilePos(_position), pathTarget, _room);
+                    
+                    // Ersten Knoten entfernen, wenn er ein Rückschritt ist, die Drohne also bereits näher am 2. Punkt ist
+                    if(_path != null && _path.size() > 1)
+                    {
+                        Vector3 first = MapHandler.tilePosToWorldPos(_path.get(0).getPosition());
+                        Vector3 second = MapHandler.tilePosToWorldPos(_path.get(1).getPosition());
+                        
+                        double firstNodeDist = new Vector2(second.getX(), second.getZ()).subtract(new Vector2(first.getX(), first.getZ())).getLength();
+                        double currentDist = new Vector2(second.getX(), second.getZ()).subtract(new Vector2(_position.getX(), _position.getZ())).getLength();
+                        
+                        if(firstNodeDist >= currentDist)
+                        {
+                            _path.remove();
+                        }
+                    }
+                    
+                    _previousPathTarget = new Vector2i(pathTarget);
+                }                
+            }
             
+            if(_path != null && _path.size() > 0)
+            {
+                // Zum nächsten Pfadknoten navigieren
+                PathNode nextTarget = _path.getFirst();            
+                Vector3 nextTargetPos = MapHandler.tilePosToWorldPos(nextTarget.getPosition());
+                
+                // Ausrichten
+                lookAtFade(nextTargetPos, TRACKING_INERTIA);
+                
+                // Bewegen
+                Vector2 nextTargetPos2D = new Vector2(nextTargetPos.getX(), nextTargetPos.getZ());
+                Vector2 pos2D = new Vector2(_position.getX(), _position.getZ());
+                Vector2 dir = nextTargetPos2D.subtract(pos2D).normalize();
+                Vector2 movement = dir.multiply(Math.min(getDistanceTo(nextTargetPos), FLYING_SPEED * deltaTime));
+                move(new Vector3(movement.getX(), 0.0, movement.getY()));
+                
+                // Aktuellen Knoten fertigstellen
+                if(getDistanceTo(nextTargetPos) < 0.05)
+                {
+                    _path.remove();
+                }
+            }
         }
         // Patrouillenroute abfliegen
         else if(_state == DroneAIState.PATROL)
@@ -519,6 +585,9 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
     public void damage(int amount, String source)
     {
         if(_health == 0) return;
+        
+        // Spieler bemerken und angreifen
+        _state = DroneAIState.ATTACKING;
         
         _health = Math.max(0, Math.min(_health - amount, _maxHealth));
         
