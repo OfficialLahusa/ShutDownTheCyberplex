@@ -8,7 +8,7 @@ Sven Schreiber (https://github.com/svenschreiber)
 Nico Hädicke (https://github.com/Reshxram)  
 
 ## 3rd Party Assets
-https://opengameart.org/content/to-the-front
+https://opengameart.org/content/to-the-front  
 https://opengameart.org/content/midnight-drive  
 https://opengameart.org/content/door-open-door-close  
 https://opengameart.org/content/11-male-human-paindeath-sounds  
