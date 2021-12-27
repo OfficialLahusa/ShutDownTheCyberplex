@@ -1,6 +1,12 @@
-# TurtleDoomLike
-A doomlike game created using Logo-like turtles for a university software challenge.  
+# Shut Down The Cyberplex
+A doomlike game created using Logo-like turtles for a university software challenge between December 1st 2021 and January 3rd 2022.  
 **Photosensitivity Warning**: On slower machines the rendering technique might cause excessive flickering.
+
+## Building
+The project can built from source using BlueJ. Alternatively a compiled release is available on the project's GitHub repository.
+Run using:  
+`java --module-path "C:\Program Files\BlueJ\lib\javafx\lib" --add-modules javafx.swing,javafx.media -jar ShutDownTheCyberplex.jar`  
+The module path can be substituted for any other valid **JavaFX** (https://openjfx.io/) install location, it currently refers to the default location of BlueJ's included javafx library.
 
 ## Team
 Lasse Huber-Saffer (https://github.com/OfficialLahusa)  
