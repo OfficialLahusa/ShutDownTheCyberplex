@@ -4,7 +4,7 @@ import java.util.*;
  * Drohne, der sich zum Spieler ausrichtet, ihn verfolgt und beschieﬂt
  * 
  * @author Lasse Huber-Saffer
- * @version 26.12.2021
+ * @version 27.12.2021
  */
 public class Drone extends Enemy implements ILivingEntity, ICollisionListener, IDynamicGameObject
 {
@@ -15,9 +15,10 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
     private SoundEngine _soundEngine;
     
     // Functionality
+    private DroneAIState _state;
+    private int _nextPatrolPoint;
     private Vector2i _previousPathTarget;
     private LinkedList<PathNode> _path;
-    private DroneAIState _state;
     private boolean _isActive;
     private int _currentAmmo;
     private double _timeSinceLastShot;
@@ -80,7 +81,7 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
         
         _soundEngine = soundEngine;
         
-        _state = DroneAIState.WANDERING;
+        
         _isActive = active;
         _currentAmmo = MAGAZINE_CAPACITY;
         _timeSinceLastShot = 0.0;
@@ -97,6 +98,34 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
         _scale = new Vector3(1.0, 1.0, 1.0);
         _muzzlePos1 = new Vector3(0.987184, -0.782814, -0.1238);
         _muzzlePos2 = new Vector3(0.987184, -0.782814, 0.1238);
+        
+        // Startzustand setzen
+        if(_room.getPatrolRoute() != null)
+        {
+            _state = DroneAIState.PATROL;
+            
+            // N‰chsten Patrouillenpunkt berechnen
+            double lowestDistance = Double.POSITIVE_INFINITY;
+            
+            for(int i = 0; i < _room.getPatrolRouteLength(); i++)
+            {
+                // 2D-projizierten Abstand zum jeweiligen Punkt berechnen
+                Vector3 patrolPoint = MapHandler.tilePosToWorldPos(_room.getPatrolRoute()[i]);
+                double dist = new Vector2(patrolPoint.getX(), patrolPoint.getZ()).subtract(new Vector2(_position.getX(), _position.getZ())).getLength();
+                
+                // Wenn die Distanz kleiner als die bisher niedrigste Distanz ist, n‰chsten Patrouillenpunkt setzen
+                if(dist < lowestDistance)
+                {
+                    lowestDistance = dist;
+                    _nextPatrolPoint = i;
+                }
+            }
+        }
+        else
+        {
+            _state = DroneAIState.WANDERING;
+            _nextPatrolPoint = -1;
+        }
         
         _activeMesh = entityMeshes.get("drone_active");
         _inactiveMesh = entityMeshes.get("drone_active");
@@ -229,7 +258,64 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
         // Patrouillenroute abfliegen
         else if(_state == DroneAIState.PATROL)
         {
+            // Wenn Pfad leer ist
+            if(_path == null || _path.size() == 0)
+            {
+                // Patrouillenpunkt ausw‰hlen
+                Vector2i pathTarget = _room.getPatrolRoute()[_nextPatrolPoint];
+                
+                // Pfad generieren
+                if(_previousPathTarget == null || !pathTarget.equals(_previousPathTarget))
+                {
+                    _path = AStarPathSolver.solvePath(MapHandler.worldPosToTilePos(_position), pathTarget, _room);
+                    
+                    // Ersten Knoten entfernen, wenn er ein R¸ckschritt ist, die Drohne also bereits n‰her am 2. Punkt ist
+                    if(_path != null && _path.size() > 1)
+                    {
+                        Vector3 first = MapHandler.tilePosToWorldPos(_path.get(0).getPosition());
+                        Vector3 second = MapHandler.tilePosToWorldPos(_path.get(1).getPosition());
+                        
+                        double firstNodeDist = new Vector2(second.getX(), second.getZ()).subtract(new Vector2(first.getX(), first.getZ())).getLength();
+                        double currentDist = new Vector2(second.getX(), second.getZ()).subtract(new Vector2(_position.getX(), _position.getZ())).getLength();
+                        
+                        if(firstNodeDist >= currentDist)
+                        {
+                            _path.remove();
+                        }
+                    }
+                    
+                    _previousPathTarget = new Vector2i(pathTarget);
+                }                
+            }
             
+            if(_path != null && _path.size() > 0)
+            {
+                // Zum n‰chsten Pfadknoten navigieren
+                PathNode nextTarget = _path.getFirst();            
+                Vector3 nextTargetPos = MapHandler.tilePosToWorldPos(nextTarget.getPosition());
+                
+                // Ausrichten
+                lookAtFade(nextTargetPos, TRACKING_INERTIA);
+                
+                // Bewegen
+                Vector2 nextTargetPos2D = new Vector2(nextTargetPos.getX(), nextTargetPos.getZ());
+                Vector2 pos2D = new Vector2(_position.getX(), _position.getZ());
+                Vector2 dir = nextTargetPos2D.subtract(pos2D).normalize();
+                Vector2 movement = dir.multiply(Math.min(getDistanceTo(nextTargetPos), FLYING_SPEED * deltaTime));
+                move(new Vector3(movement.getX(), 0.0, movement.getY()));
+                
+                // Aktuellen Knoten fertigstellen
+                if(getDistanceTo(nextTargetPos) < 0.05)
+                {
+                    _path.remove();
+                    
+                    // N‰chsten Patrouillenknoten ansteuern, wenn Pfad zuende ist
+                    if(_path.size() == 0)
+                    {
+                        _nextPatrolPoint = (_nextPatrolPoint + 1) % _room.getPatrolRouteLength();
+                    }
+                }
+            }
         }
         // Spieler verfolgen
         else if(_state == DroneAIState.CHASING)

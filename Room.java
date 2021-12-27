@@ -20,6 +20,8 @@ public class Room
     private ArrayList<Vector2i> _doorLocations;
     private ArrayList<IDoorGameObject> _doors;
     private ArrayList<Vector2i> _focusPoints;
+    private Vector2i[] _patrolRoute;
+    private int _patrolRouteLength;
     
     // Entities in Room
     private ArrayList<IGameObject> _entities;
@@ -46,6 +48,8 @@ public class Room
         _doorLocations = new ArrayList<Vector2i>();
         _doors = new ArrayList<IDoorGameObject>();
         _focusPoints = new ArrayList<Vector2i>();
+        _patrolRoute = null;
+        _patrolRouteLength = 0;
         
         _entities = new ArrayList<IGameObject>();
     }
@@ -119,10 +123,60 @@ public class Room
                         case Tile.TURRET_FOCUS_POINT:
                             _focusPoints.add(new Vector2i(x, z));
                             break;
+                        case Tile.PATROL_1:
+                            if(_patrolRoute == null) _patrolRoute = new Vector2i[8];
+                            _patrolRoute[0] = new Vector2i(x, z);
+                            break;
+                        case Tile.PATROL_2:
+                            if(_patrolRoute == null) _patrolRoute = new Vector2i[8];
+                            _patrolRoute[1] = new Vector2i(x, z);
+                            break;
+                        case Tile.PATROL_3:
+                            if(_patrolRoute == null) _patrolRoute = new Vector2i[8];
+                            _patrolRoute[2] = new Vector2i(x, z);
+                            break;
+                        case Tile.PATROL_4:
+                            if(_patrolRoute == null) _patrolRoute = new Vector2i[8];
+                            _patrolRoute[3] = new Vector2i(x, z);
+                            break;
+                        case Tile.PATROL_5:
+                            if(_patrolRoute == null) _patrolRoute = new Vector2i[8];
+                            _patrolRoute[4] = new Vector2i(x, z);
+                            break;
+                        case Tile.PATROL_6:
+                            if(_patrolRoute == null) _patrolRoute = new Vector2i[8];
+                            _patrolRoute[5] = new Vector2i(x, z);
+                            break;
+                        case Tile.PATROL_7:
+                            if(_patrolRoute == null) _patrolRoute = new Vector2i[8];
+                            _patrolRoute[6] = new Vector2i(x, z);
+                            break;
+                        case Tile.PATROL_8:
+                            if(_patrolRoute == null) _patrolRoute = new Vector2i[8];
+                            _patrolRoute[7] = new Vector2i(x, z);
+                            break;
                         default:
                             break;
                     }
                 }
+            }
+        }
+        
+        // Patrouillenroutenlänge berechnen
+        if(_patrolRoute != null)
+        {
+            for(int i = 0; i < _patrolRoute.length; i++)
+            {
+                if(_patrolRoute[i] == null)
+                {
+                    _patrolRouteLength = i;
+                    break;
+                }
+            }
+            
+            if(_patrolRouteLength == 0 && _patrolRoute[7] != null)
+            {
+                _patrolRouteLength = 8;
             }
         }
         
@@ -408,6 +462,25 @@ public class Room
     public ArrayList<Vector2i> getFocusPoints()
     {
         return _focusPoints;
+    }
+    
+    /**
+     * Gibt die Patrouillenroute des Raums zurück.
+     * Nicht existierende Patrouillenpunkte sind mit null belegt.
+     * @return Array der Länge 8, das die registrierten Patrouillenpunkte enthält. Null, wenn es keine Route gibt.
+     */
+    public Vector2i[] getPatrolRoute()
+    {
+        return _patrolRoute;
+    }
+    
+    /**
+     * Gibt die Patrouillenroutenlänge zurück
+     * @return Länge der Patrouillenroute
+     */
+    public int getPatrolRouteLength()
+    {
+        return _patrolRouteLength;
     }
         
     /**

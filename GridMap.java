@@ -5,7 +5,7 @@ import javafx.util.*;
  * Beschreiben Sie hier die Klasse GridMap.
  * 
  * @author Lasse Huber-Saffer 
- * @version 24.12.2021
+ * @version 27.12.2021
  */
 public class GridMap
 {
@@ -151,11 +151,11 @@ public class GridMap
                 // ID des Raums am anderen Ende der Tür feststellen
                 Integer otherRoom = null;
                 Pair<Integer, Integer> doorConnection = door.getConnectedRoomIDs();
-                if(roomID == doorConnection.getKey())
+                if(doorConnection.getKey() != null && roomID == doorConnection.getKey())
                 {
                     otherRoom = doorConnection.getValue();
                 }
-                else if(roomID == doorConnection.getValue())
+                else if(doorConnection.getValue() != null && roomID == doorConnection.getValue())
                 {
                     otherRoom = doorConnection.getKey();
                 }

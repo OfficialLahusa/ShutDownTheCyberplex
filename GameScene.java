@@ -47,7 +47,7 @@ public class GameScene extends Scene
         _sniperMain = new DynamicViewModelGameObject(viewModelMeshes.get("sniperMain"), "grau", new Vector3 (-1.5, 1,-12));
         _sniperDetails = new DynamicViewModelGameObject(viewModelMeshes.get("sniperDetails"), "gruen", new Vector3 (-1.5, 1,-12));
         
-        _mapHandler.load("TestMap2");
+        _mapHandler.load("TestMap3");
         
         _player = new Player(_mapHandler.getMap().getPlayerSpawn(), new Vector3(), _state.soundEngine);
         _mapHandler.getMap().globalColliders.add(_player.getCollider());
