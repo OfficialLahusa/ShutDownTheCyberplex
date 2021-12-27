@@ -31,7 +31,7 @@ public class ResourceManager
         entityMeshes.put("turret_active", _objLoader.loadFromFile(Directory.MODEL + "turret/turret_active.obj"));
         entityMeshes.put("turret_muzzle_flash", _objLoader.loadFromFile(Directory.MODEL + "turret/turret_muzzle_flash.obj"));
         entityMeshes.put("drone_active", _objLoader.loadFromFile(Directory.MODEL + "drone/drone.obj"));
-        entityMeshes.put("drone_inactive", _objLoader.loadFromFile(Directory.MODEL + "drone/drone.obj"));
+        entityMeshes.put("drone_inactive", _objLoader.loadFromFile(Directory.MODEL + "drone/drone_destroyed.obj"));
         entityMeshes.put("drone_rotor", _objLoader.loadFromFile(Directory.MODEL + "drone/drone_rotor.obj"));
         entityMeshes.put("health_powerup", _objLoader.loadFromFile(Directory.MODEL + "item/health_powerup.obj"));
         

@@ -48,12 +48,22 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
     private Vector3 _lastShotPos2;
     
     // Konstanten
+    // Bewegung
     private static final double FLYING_HEIGHT = 5.0;
+    private static final double MIN_FLYING_HEIGHT = 0.69;
     private static final double FLYING_SPEED = 12.0;
+    private static final double FALLING_SPEED = 6.0;
+    
+    // Physik
     private static final double COLLIDER_RADIUS = 0.6;
+    
+    // Spielerverfolgung
+    private static final double TRACKING_INERTIA = 4.0;
     private static final double MAX_SIGHT_RANGE = 500.0;
     private static final double MAX_GUN_RANGE = 20.0;
     private static final double IDEAL_PLAYER_DISTANCE = 14.0;
+    
+    // Schießen
     private static final int MAGAZINE_CAPACITY = 6;
     private static final double FIRING_COOLDOWN = 0.5;
     private static final double RELOAD_TIME = 4.0;
@@ -61,9 +71,12 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
     private static final int BULLET_DAMAGE = 3;
     private static final double MAXIMUM_INACCURACY_ANGLE = 6.0;
     private static final double FIRING_ANGLE_TOLERANCE = 4.0;
+    
+    // Spielerentdeckung
     private static final double PLAYER_DISCOVERY_ANGLE = 30.0;
     private static final double PLAYER_DISCOVERY_DISTANCE = 2.5;
-    private static final double TRACKING_INERTIA = 4.0;
+    
+    // Voicelines
     private static final double RELOAD_VOICELINE_DELAY = 0.25;
     private static final double VOICELINE_VOLUME = 0.8;
     
@@ -130,7 +143,7 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
         }
         
         _activeMesh = entityMeshes.get("drone_active");
-        _inactiveMesh = entityMeshes.get("drone_active");
+        _inactiveMesh = entityMeshes.get("drone_inactive");
         _color = "hellgrau";
         
         _recalculateModelMatrix = true;
@@ -150,7 +163,17 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
         _timeSinceLastShot += deltaTime;
         
         // Aktivitätsstatus des Geschützes prüfen
-        if(!_isActive) return;
+        if(!_isActive)
+        {
+            // Flughöhe verringern
+            if(_position.getY() > MIN_FLYING_HEIGHT)
+            {
+                _position.setY(Math.max(MIN_FLYING_HEIGHT, _position.getY() - FALLING_SPEED * deltaTime));
+                _recalculateModelMatrix = true;
+            }
+            
+            return;
+        }
         
         // Mündungsfeuer positionieren und skalieren
         _muzzleFlash.setRotation(_rotation);
@@ -591,6 +614,14 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
     public CircleCollider getCollider()
     {
         return _collider;
+    }
+    
+    /**
+     * @see ILivingEntity#isAlive()
+     */
+    public boolean isAlive()
+    {
+        return _health > 0;
     }
     
     /**

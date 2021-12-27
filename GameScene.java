@@ -77,67 +77,7 @@ public class GameScene extends Scene
     {
         Camera playerCam = _player.getCamera();
         
-        // Maus-Bewegung zu Kamera-Yaw umwandeln
-        double deltaX = _state.inputHandler.getAndResetMouseDelta().getX();
-        if(_state.inputHandler.getKeepMouseInPlace())
-        {
-            _player.rotate(new Vector3(0.0, 0.20 * deltaX, 0.0));
-        }
-        
-        Vector3 camDir = playerCam.getDirection();
-        Vector3 camRight = playerCam.getRight();
-        
-        // Schießen
-        if(_state.inputHandler.isKeyPressed(KeyCode.MOUSE_BUTTON_LEFT) && _timeSinceLastShot >= PISTOL_SHOT_COOLDOWN)
-        {
-            // Timer zurücksetzen
-            _timeSinceLastShot = 0.0;
-            
-            // TODO: Energie abziehen
-            
-            // Raycast vorbereiten
-            Vector2 source = new Vector2(_player.getPosition().getX(), _player.getPosition().getZ());
-            Vector2 dir = new Vector2(camDir.getX(), camDir.getZ()).invert();
-            double dist = 500.0;
-            _raycast = Physics.raycast(source, dir, dist, _mapHandler.getMap(), EnumSet.of(PhysicsLayer.SOLID, PhysicsLayer.ENEMY), EnumSet.of(PhysicsLayer.PLAYER));
-            
-            if(_raycast.size() > 0 && _raycast.get(_raycast.size() - 1).collider.getLayer() == PhysicsLayer.ENEMY)
-            {
-                ICollisionListener listener = _raycast.get(_raycast.size() - 1).collider.getListener();
-                
-                if(listener instanceof ILivingEntity)
-                {
-                    ILivingEntity livingEntity = (ILivingEntity)listener;
-                    livingEntity.damage(12, "laser pistol shot");
-                }
-            }
-            
-            
-            // debug
-            _raycastSource = new Vector3(_player.getPosition());
-            Vector2 target = source.add(dir.normalize().multiply(dist));
-            _raycastTarget = new Vector3(target.getX(), 0.0, target.getY());
-            
-            _state.soundEngine.playSoundFromGroup("pistol_shot", 0.7, false);
-        }
-        
-        // Tastenbelegungen
-        if(_state.inputHandler.isKeyPressed(KeyCode.KEY_W))
-        {
-            _player.move(camDir.multiply(DEBUG_SPEED_MULT * -6.5 * deltaTime));
-        }
-        if(_state.inputHandler.isKeyPressed(KeyCode.KEY_S))
-        {
-            _player.move(camDir.multiply(DEBUG_SPEED_MULT * 6.5 * deltaTime));
-        }
-        if(_state.inputHandler.isKeyPressed(KeyCode.KEY_A))
-        {
-            _player.move(camRight.multiply(DEBUG_SPEED_MULT * -6.0 * deltaTime));
-        }
-        if(_state.inputHandler.isKeyPressed(KeyCode.KEY_D))
-        {
-            _player.move(camRight.multiply(DEBUG_SPEED_MULT * 6.0 * deltaTime));
-        }
+        // Nicht-lebensgebundene Keybinds
         if(_state.inputHandler.isKeyPressed(KeyCode.KEY_ESCAPE))
         {
             _state.inputHandler.setKeepMouseInPlace(false);
@@ -145,6 +85,72 @@ public class GameScene extends Scene
         if(_state.inputHandler.isKeyPressed(KeyCode.KEY_SPACE))
         {
             _state.inputHandler.setKeepMouseInPlace(true);
+        }
+        
+        // Lebensgebundene Controls
+        if(_player.isAlive())
+        {
+            // Maus-Bewegung zu Kamera-Yaw umwandeln
+            double deltaX = _state.inputHandler.getAndResetMouseDelta().getX();
+            if(_state.inputHandler.getKeepMouseInPlace())
+            {
+                _player.rotate(new Vector3(0.0, 0.20 * deltaX, 0.0));
+            }
+            
+            Vector3 camDir = playerCam.getDirection();
+            Vector3 camRight = playerCam.getRight();
+            
+            // Schießen
+            if(_state.inputHandler.isKeyPressed(KeyCode.MOUSE_BUTTON_LEFT) && _timeSinceLastShot >= PISTOL_SHOT_COOLDOWN)
+            {
+                // Timer zurücksetzen
+                _timeSinceLastShot = 0.0;
+                
+                // TODO: Energie abziehen
+                
+                // Raycast vorbereiten
+                Vector2 source = new Vector2(_player.getPosition().getX(), _player.getPosition().getZ());
+                Vector2 dir = new Vector2(camDir.getX(), camDir.getZ()).invert();
+                double dist = 500.0;
+                _raycast = Physics.raycast(source, dir, dist, _mapHandler.getMap(), EnumSet.of(PhysicsLayer.SOLID, PhysicsLayer.ENEMY), EnumSet.of(PhysicsLayer.PLAYER));
+                
+                if(_raycast.size() > 0 && _raycast.get(_raycast.size() - 1).collider.getLayer() == PhysicsLayer.ENEMY)
+                {
+                    ICollisionListener listener = _raycast.get(_raycast.size() - 1).collider.getListener();
+                    
+                    if(listener instanceof ILivingEntity)
+                    {
+                        ILivingEntity livingEntity = (ILivingEntity)listener;
+                        livingEntity.damage(12, "laser pistol shot");
+                    }
+                }
+                
+                
+                // debug
+                _raycastSource = new Vector3(_player.getPosition());
+                Vector2 target = source.add(dir.normalize().multiply(dist));
+                _raycastTarget = new Vector3(target.getX(), 0.0, target.getY());
+                
+                _state.soundEngine.playSoundFromGroup("pistol_shot", 0.7, false);
+            }
+            
+            // Tastenbelegungen
+            if(_state.inputHandler.isKeyPressed(KeyCode.KEY_W))
+            {
+                _player.move(camDir.multiply(DEBUG_SPEED_MULT * -6.5 * deltaTime));
+            }
+            if(_state.inputHandler.isKeyPressed(KeyCode.KEY_S))
+            {
+                _player.move(camDir.multiply(DEBUG_SPEED_MULT * 6.5 * deltaTime));
+            }
+            if(_state.inputHandler.isKeyPressed(KeyCode.KEY_A))
+            {
+                _player.move(camRight.multiply(DEBUG_SPEED_MULT * -6.0 * deltaTime));
+            }
+            if(_state.inputHandler.isKeyPressed(KeyCode.KEY_D))
+            {
+                _player.move(camRight.multiply(DEBUG_SPEED_MULT * 6.0 * deltaTime));
+            }
         }
     }
     
@@ -160,6 +166,9 @@ public class GameScene extends Scene
         
         // Entfernt bereits durchgelaufene Sounds
         _state.soundEngine.removeStoppedSounds();
+        
+        // Spieler updaten
+        _player.update(deltaTime, runTime, _player.getCamera().getPosition());
         
         // Kollisionsbehandlung
         CircleCollider playerCollider = _player.getCollider();

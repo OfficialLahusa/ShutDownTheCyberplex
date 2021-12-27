@@ -355,6 +355,14 @@ public class Turret extends Enemy implements ILivingEntity, ICollisionListener, 
     }
     
     /**
+     * @see ILivingEntity#isAlive()
+     */
+    public boolean isAlive()
+    {
+        return _health > 0;
+    }
+    
+    /**
      * @see ILivingEntity#getHealth()
      */
     public int getHealth()

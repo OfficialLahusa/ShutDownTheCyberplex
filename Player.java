@@ -30,6 +30,8 @@ public class Player implements ILivingEntity, IDynamicGameObject, ICollisionList
     private static final double ASPECT_RATIO = 1.0;
     private static final double FOV = 90.0;
     private static final double CAMERA_HEIGHT = 2.2;
+    private static final double DEAD_MIN_CAMERA_HEIGHT = 0.2;
+    private static final double DEAD_CAMERA_FALLING_SPEED = 3.0;
     
     /**
      * Konstruktor für Player mit Position und Rotation
@@ -60,6 +62,16 @@ public class Player implements ILivingEntity, IDynamicGameObject, ICollisionList
      */
     public void update(double deltaTime, double runTime, Vector3 cameraPosition)
     {
+        // Wenn Spieler tot ist
+        if(_health == 0)
+        {
+            // Kamera hinfallen lassen
+            if(_camera.getPosition().getY() > 0.2)
+            {
+                _camera.setPosition(new Vector3(_position.getX(), Math.max(0.2, _camera.getPosition().getY() - DEAD_CAMERA_FALLING_SPEED * deltaTime), _position.getZ()));
+            }
+        }
+        
         return;
     }
     
@@ -91,7 +103,7 @@ public class Player implements ILivingEntity, IDynamicGameObject, ICollisionList
         // Positionen von Spieler und Kamera dem Collider angleichen
         Vector2 colliderPos = _collider.getPosition();
         _position = new Vector3(colliderPos.getX(), _position.getY(), colliderPos.getY());
-        _camera.setPosition(new Vector3(_position.getX(), CAMERA_HEIGHT, _position.getZ()));
+        _camera.setPosition(new Vector3(_position.getX(), _camera.getPosition().getY(), _position.getZ()));
     }
     
     /**
@@ -100,7 +112,7 @@ public class Player implements ILivingEntity, IDynamicGameObject, ICollisionList
     public void move(Vector3 delta)
     {
         _position = _position.add(delta);
-        _camera.setPosition(new Vector3(_position.getX(), CAMERA_HEIGHT, _position.getZ()));
+        _camera.setPosition(new Vector3(_position.getX(), _camera.getPosition().getY(), _position.getZ()));
         _collider.move(new Vector2(delta.getX(), delta.getZ()));
     }
     
@@ -147,6 +159,14 @@ public class Player implements ILivingEntity, IDynamicGameObject, ICollisionList
     public CircleCollider getCollider()
     {
         return _collider;
+    }
+    
+    /**
+     * @see ILivingEntity#isAlive()
+     */
+    public boolean isAlive()
+    {
+        return _health > 0;
     }
     
     /**
@@ -292,7 +312,7 @@ public class Player implements ILivingEntity, IDynamicGameObject, ICollisionList
     {
         _position = new Vector3(position);
         _collider.setPosition(new Vector2(position.getX(), position.getZ()));
-        _camera.setPosition(new Vector3(_position.getX(), CAMERA_HEIGHT, _position.getZ()));
+        _camera.setPosition(new Vector3(_position.getX(), _camera.getPosition().getY(), _position.getZ()));
     }
     
     /**

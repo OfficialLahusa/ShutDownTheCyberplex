@@ -9,31 +9,7 @@
 public interface ILivingEntity
 {
     /**
-     * Gibt die Lebenspunkte der Entität zurück.
-     * @return die Lebenspunkte
-     */
-    public int getHealth();
-    
-    /**
-     * Setzt die Lebenspunkte der Entität.
-     * @param amount Menge an Lebenspunkten (>= 0)
-     */
-    public void setHealth(int amount);
-    
-    /**
-     * Gibt die maximalen Lebenspunkte der Entität zurück.
-     * @return maximale Lebenspunkte
-     */
-    public int getMaxHealth();
-    
-    /**
-     * Setzt die maximalen Lebenspunkte der Entität.
-     * @param amount maximale Menge an Lebenspunkten (>= 0)
-     */
-    public void setMaxHealth(int amount);
-    
-    /**
-     * Fügt dem Spieler Schaden zu.
+     * Fügt der Entity Schaden zu.
      * Seine Lebenspunkte können 0 nicht unterschreiten
      * @param amount Menge an Lebenspunkten
      * @param source Bezeichung der Schadensquelle (z.B. "turret shot")
@@ -41,10 +17,40 @@ public interface ILivingEntity
     public void damage(int amount, String source);
     
     /**
-     * Heilt den Spieler.
+     * Heilt die Entity.
      * Seine Lebenspunkte können seine maximalen Lebenspunkte nicht überschreiten.
      * @param amount Menge an Lebenspunkten
      * @param source Bezeichnung der Heilungsursache (z.B. "health powerup")
      */
     public void heal(int amount, String source);
+    
+    /**
+     * Gibt zurück, ob die Entity aktuell lebt.
+     * @return true, wenn Entity lebt, sonst false
+     */
+    public boolean isAlive();
+    
+    /**
+     * Gibt die Lebenspunkte der Entity zurück.
+     * @return die Lebenspunkte
+     */
+    public int getHealth();
+    
+    /**
+     * Setzt die Lebenspunkte der Entity.
+     * @param amount Menge an Lebenspunkten (>= 0)
+     */
+    public void setHealth(int amount);
+    
+    /**
+     * Gibt die maximalen Lebenspunkte der Entity zurück.
+     * @return maximale Lebenspunkte
+     */
+    public int getMaxHealth();
+    
+    /**
+     * Setzt die maximalen Lebenspunkte der Entity.
+     * @param amount maximale Menge an Lebenspunkten (>= 0)
+     */
+    public void setMaxHealth(int amount);
 }
