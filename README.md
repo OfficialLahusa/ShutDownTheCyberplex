@@ -6,7 +6,7 @@ A doomlike game created using Logo-like turtles for a university software challe
 The project can built from source using BlueJ. Alternatively a compiled release is available on the project's GitHub repository.
 Run using:  
 `java --module-path "C:\Program Files\BlueJ\lib\javafx\lib" --add-modules javafx.swing,javafx.media -jar ShutDownTheCyberplex.jar`  
-The module path can be substituted for any other valid **JavaFX** (https://openjfx.io/) install location, it currently refers to the default location of BlueJ's included javafx library.
+The module path can be substituted for any other valid **JavaFX** (https://openjfx.io/) install location, it currently refers to the default location of BlueJ's included javafx library (as of version 5.0.2).
 
 ## Team
 Lasse Huber-Saffer (https://github.com/OfficialLahusa)  
