@@ -61,6 +61,8 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
     private static final int BULLET_DAMAGE = 3;
     private static final double MAXIMUM_INACCURACY_ANGLE = 6.0;
     private static final double FIRING_ANGLE_TOLERANCE = 4.0;
+    private static final double PLAYER_DISCOVERY_ANGLE = 30.0;
+    private static final double PLAYER_DISCOVERY_DISTANCE = 2.5;
     private static final double TRACKING_INERTIA = 4.0;
     private static final double RELOAD_VOICELINE_DELAY = 0.25;
     private static final double VOICELINE_VOLUME = 0.8;
@@ -187,6 +189,13 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
         // Zufälliges umherfliegen
         if(_state == DroneAIState.WANDERING)
         {
+            // Spieler entdecken und angreifen
+            if(getDistanceTo(_room.getMap().getPlayer().getPosition()) <= PLAYER_DISCOVERY_DISTANCE || (hasLineOfSight(MAX_SIGHT_RANGE) && getAngleTo(_room.getMap().getPlayer().getPosition()) <= PLAYER_DISCOVERY_ANGLE))
+            {
+                _state = DroneAIState.ATTACKING;
+                _soundEngine.playSound("turret_enemy_detected", VOICELINE_VOLUME, false);
+            }
+            
             // Wenn Pfad leer ist
             if(_path == null || _path.size() == 0)
             {
@@ -258,6 +267,13 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
         // Patrouillenroute abfliegen
         else if(_state == DroneAIState.PATROL)
         {
+            // Spieler entdecken und angreifen
+            if(getDistanceTo(_room.getMap().getPlayer().getPosition()) <= PLAYER_DISCOVERY_DISTANCE || (hasLineOfSight(MAX_SIGHT_RANGE) && getAngleTo(_room.getMap().getPlayer().getPosition()) <= PLAYER_DISCOVERY_ANGLE))
+            {
+                _state = DroneAIState.ATTACKING;
+                _soundEngine.playSound("turret_enemy_detected", VOICELINE_VOLUME, false);
+            }
+            
             // Wenn Pfad leer ist
             if(_path == null || _path.size() == 0)
             {

@@ -81,6 +81,8 @@ public class ResourceManager
         soundEngine.loadSource("pistol3", Directory.SOUND + "weapon/pistol/Laser_Shoot4.wav");
         soundEngine.loadSource("pistol4", Directory.SOUND + "weapon/pistol/Laser_Shoot5.wav");
         
+        soundEngine.loadSource("hit", Directory.SOUND + "weapon/hit.wav");
+        
         soundEngine.loadSource("heavy_shot1", Directory.SOUND + "turret/shot/Heavy_Shot.wav");
         soundEngine.loadSource("heavy_shot2", Directory.SOUND + "turret/shot/Heavy_Shot2.wav");
         soundEngine.loadSource("heavy_shot3", Directory.SOUND + "turret/shot/Heavy_Shot3.wav");
@@ -88,6 +90,7 @@ public class ResourceManager
         soundEngine.loadSource("turret_reloading", Directory.SOUND + "turret/reload/reloading.wav");
         soundEngine.loadSource("turret_tactical_reload", Directory.SOUND + "turret/reload/tactical_reload.wav");
         soundEngine.loadSource("turret_restocking_ammunition", Directory.SOUND + "turret/reload/restocking_ammunition.wav");
+        soundEngine.loadSource("turret_enemy_detected", Directory.SOUND + "turret/enemy_detected/enemy_detected.wav");
         
         soundEngine.loadSource("turret_system_failure", Directory.SOUND + "turret/death/system_failure.wav");
         soundEngine.loadSource("turret_offline", Directory.SOUND + "turret/death/turret_offline.wav");
