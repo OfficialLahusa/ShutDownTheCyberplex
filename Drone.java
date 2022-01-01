@@ -4,7 +4,7 @@ import java.util.*;
  * Drohne, der sich zum Spieler ausrichtet, ihn verfolgt und beschieﬂt
  * 
  * @author Lasse Huber-Saffer
- * @version 27.12.2021
+ * @version 01.01.2022
  */
 public class Drone extends Enemy implements ILivingEntity, ICollisionListener, IDynamicGameObject
 {
@@ -42,7 +42,7 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
     // Rendering
     private Mesh _activeMesh;
     private Mesh _inactiveMesh;
-    private String _color;
+    private TurtleColor _color;
     private Matrix4 _model;
     private Vector3 _lastShotPos1;
     private Vector3 _lastShotPos2;
@@ -104,9 +104,9 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
         _maxHealth = 50;
         _reloadingVoiceLineTriggered = true;
         
-        _muzzleFlash = new SimpleDynamicGameObject(entityMeshes.get("turret_muzzle_flash"), "rot");
-        _rotorLeft = new SimpleDynamicGameObject(entityMeshes.get("drone_rotor"), "hellgrau");
-        _rotorRight = new SimpleDynamicGameObject(entityMeshes.get("drone_rotor"), "hellgrau");
+        _muzzleFlash = new SimpleDynamicGameObject(entityMeshes.get("turret_muzzle_flash"), TurtleColor.RED, new Vector3(), new Vector3(), new Vector3(1.0, 1.0, 1.0));
+        _rotorLeft = new SimpleDynamicGameObject(entityMeshes.get("drone_rotor"), TurtleColor.LIGHT_GRAY, new Vector3(), new Vector3(), new Vector3(1.0, 1.0, 1.0));
+        _rotorRight = new SimpleDynamicGameObject(entityMeshes.get("drone_rotor"), TurtleColor.LIGHT_GRAY, new Vector3(), new Vector3(), new Vector3(1.0, 1.0, 1.0));
         
         _position = new Vector3(position.getX(), FLYING_HEIGHT, position.getZ());
         _rotation = new Vector3();
@@ -144,7 +144,7 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
         
         _activeMesh = entityMeshes.get("drone_active");
         _inactiveMesh = entityMeshes.get("drone_inactive");
-        _color = "hellgrau";
+        _color = TurtleColor.LIGHT_GRAY;
         
         _recalculateModelMatrix = true;
         _model = null;
@@ -685,7 +685,7 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
     /**
      * @see IGameObject#getColor()
      */
-    public String getColor()
+    public TurtleColor getColor()
     {
         return null;
     }
@@ -744,7 +744,7 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
     /**
      * @see IGameObject#setColor()
      */
-    public void setColor(String color)
+    public void setColor(TurtleColor color)
     {
         return;
     }

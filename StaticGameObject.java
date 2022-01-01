@@ -3,7 +3,7 @@
  * Ein dreidimensionales Objekt in der Spielwelt
  * 
  * @author Lasse Huber-Saffer
- * @version 24.12.2021
+ * @version 01.01.2022
  */
 public class StaticGameObject implements IGameObject
 {
@@ -11,58 +11,8 @@ public class StaticGameObject implements IGameObject
     private Vector3 _position;
     private Vector3 _rotation;
     private Vector3 _scale;
-    private String _color;
+    private TurtleColor _color;
     private Matrix4 _model;
-
-    /**
-     * Parameterloser Konstruktor
-     */
-    public StaticGameObject()
-    {
-        this(new Mesh(), "gruen", new Vector3(), new Vector3(), new Vector3(1.0, 1.0, 1.0));
-    }
-    
-    /**
-     * Konstruktor für GameObjects mit gegebenem Mesh
-     * @param mesh Mesh (3D-Modell)
-     */
-    public StaticGameObject(Mesh mesh)
-    {
-        this(mesh, "gruen", new Vector3(), new Vector3(), new Vector3(1.0, 1.0, 1.0));
-    }
-    
-    /**
-     * Konstruktor für GameObjects mit gegebenem Mesh
-     * @param mesh Mesh (3D-Modell)
-     * @param color Farbe des Meshs
-     */
-    public StaticGameObject(Mesh mesh, String color)
-    {
-        this(mesh, color, new Vector3(), new Vector3(), new Vector3(1.0, 1.0, 1.0));
-    }
-    
-    /**
-     * Konstruktor für GameObjects mit gegebenem Mesh (3D-Modell), Position, Rotation und Skalierung
-     * @param mesh Mesh (3D-Modell)
-     * @param color Farbe des Meshs
-     * @param position Position
-     */
-    public StaticGameObject(Mesh mesh, String color, Vector3 position)
-    {
-        this(mesh, color, position, new Vector3(), new Vector3(1.0, 1.0, 1.0));
-    }
-    
-    /**
-     * Konstruktor für GameObjects mit gegebenem Mesh (3D-Modell), Position, Rotation und Skalierung
-     * @param mesh Mesh (3D-Modell)
-     * @param color Farbe des Meshs
-     * @param position Position
-     * @param rotation Rotation
-     */
-    public StaticGameObject(Mesh mesh, String color, Vector3 position, Vector3 rotation)
-    {
-        this(mesh, color, position, rotation, new Vector3(1.0, 1.0, 1.0));
-    }
     
     /**
      * Konstruktor für GameObjects mit gegebenem Mesh (3D-Modell), Position, Rotation und Skalierung
@@ -72,7 +22,7 @@ public class StaticGameObject implements IGameObject
      * @param rotation Rotation
      * @param scale Skalierung
      */
-    public StaticGameObject(Mesh mesh, String color, Vector3 position, Vector3 rotation, Vector3 scale)
+    public StaticGameObject(Mesh mesh, TurtleColor color, Vector3 position, Vector3 rotation, Vector3 scale)
     {
         _mesh = new Mesh(mesh);
         _color = color;
@@ -153,7 +103,7 @@ public class StaticGameObject implements IGameObject
     /**
      * @see IGameObject#getColor()
      */
-    public String getColor()
+    public TurtleColor getColor()
     {
         return _color;
     }
@@ -161,7 +111,7 @@ public class StaticGameObject implements IGameObject
     /**
      * @see IGameObject#setColor()
      */
-    public void setColor(String color)
+    public void setColor(TurtleColor color)
     {
         _color = color;
     }

@@ -3,7 +3,7 @@
  * Ein dreidimensionales dynamisch bewegbares Objekt in der Spielwelt, das als ViewModel für die Kamera gerendert wird, also nicht mit der ViewMatrix verschoben wird
  * 
  * @author Lasse Huber-Saffer
- * @version 24.12.2021
+ * @version 01.01.2022
  */
 public class DynamicViewModelGameObject implements IDynamicGameObject
 {
@@ -11,57 +11,7 @@ public class DynamicViewModelGameObject implements IDynamicGameObject
     private Vector3 _position;
     private Vector3 _rotation;
     private Vector3 _scale;
-    private String _color;
-
-    /**
-     * Parameterloser Konstruktor
-     */
-    public DynamicViewModelGameObject()
-    {
-        this(new Mesh(), "gruen", new Vector3(), new Vector3(), new Vector3(1.0, 1.0, 1.0));
-    }
-    
-    /**
-     * Konstruktor für DynamicViewModelGameObject mit gegebenem Mesh
-     * @param mesh Mesh (3D-Modell)
-     */
-    public DynamicViewModelGameObject(Mesh mesh)
-    {
-        this(mesh, "gruen", new Vector3(), new Vector3(), new Vector3(1.0, 1.0, 1.0));
-    }
-    
-    /**
-     * Konstruktor für DynamicViewModelGameObject mit gegebenem Mesh
-     * @param mesh Mesh (3D-Modell)
-     * @param color Farbe des Meshs
-     */
-    public DynamicViewModelGameObject(Mesh mesh, String color)
-    {
-        this(mesh, color, new Vector3(), new Vector3(), new Vector3(1.0, 1.0, 1.0));
-    }
-    
-    /**
-     * Konstruktor für DynamicViewModelGameObject mit gegebenem Mesh (3D-Modell), Position, Rotation und Skalierung
-     * @param mesh Mesh (3D-Modell)
-     * @param color Farbe des Meshs
-     * @param position Position
-     */
-    public DynamicViewModelGameObject(Mesh mesh, String color, Vector3 position)
-    {
-        this(mesh, color, position, new Vector3(), new Vector3(1.0, 1.0, 1.0));
-    }
-    
-    /**
-     * Konstruktor für DynamicViewModelGameObject mit gegebenem Mesh (3D-Modell), Position, Rotation und Skalierung
-     * @param mesh Mesh (3D-Modell)
-     * @param color Farbe des Meshs
-     * @param position Position
-     * @param rotation Rotation
-     */
-    public DynamicViewModelGameObject(Mesh mesh, String color, Vector3 position, Vector3 rotation)
-    {
-        this(mesh, color, position, rotation, new Vector3(1.0, 1.0, 1.0));
-    }
+    private TurtleColor _color;
     
     /**
      * Konstruktor für DynamicViewModelGameObject mit gegebenem Mesh (3D-Modell), Position, Rotation und Skalierung
@@ -71,7 +21,7 @@ public class DynamicViewModelGameObject implements IDynamicGameObject
      * @param rotation Rotation
      * @param scale Skalierung
      */
-    public DynamicViewModelGameObject(Mesh mesh, String color, Vector3 position, Vector3 rotation, Vector3 scale)
+    public DynamicViewModelGameObject(Mesh mesh, TurtleColor color, Vector3 position, Vector3 rotation, Vector3 scale)
     {
         _mesh = new Mesh(mesh);
         _color = color;
@@ -189,7 +139,7 @@ public class DynamicViewModelGameObject implements IDynamicGameObject
     /**
      * @see IGameObject#getColor()
      */
-    public String getColor()
+    public TurtleColor getColor()
     {
         return _color;
     }
@@ -197,7 +147,7 @@ public class DynamicViewModelGameObject implements IDynamicGameObject
     /**
      * @see IGameObject#setColor()
      */
-    public void setColor(String color)
+    public void setColor(TurtleColor color)
     {
         _color = color;
     }

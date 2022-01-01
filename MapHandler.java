@@ -5,7 +5,7 @@ import javafx.util.*;
  * Verwaltet die GridMap und stellt zusätzliche Funktionalität bereit, insbesondere zum Map-Loading und zur Performance-Optimierung
  * 
  * @author Lasse Huber-Saffer
- * @version 24.12.2021
+ * @version 01.01.2022
  */
 public class MapHandler
 {
@@ -60,20 +60,20 @@ public class MapHandler
         dirtFloorLODs.add(new Pair<Double, Mesh>(30.0, tileMeshes.get("dirt_floor_borderless_lod1")));
         dirtFloorLODs.add(new Pair<Double, Mesh>(40.0, tileMeshes.get("dirt_floor_borderless_lod2")));
         dirtFloorLODs.add(new Pair<Double, Mesh>(50.0, tileMeshes.get("dirt_floor_borderless_lod3")));
-        _tileProviders.put(Tile.DIRT_FLOOR, new SimpleLODTileProvider(dirtFloorLODs, "orange"));
+        _tileProviders.put(Tile.DIRT_FLOOR, new SimpleLODTileProvider(dirtFloorLODs, TurtleColor.ORANGE));
         
         // Brick wall
         _tileProviders.put(Tile.BRICK_WALL, new WallTileProvider(
-            tileMeshes.get("brick_wall"), "grau", tileMeshes.get("simple_wall_pillar"), "grau")
+            tileMeshes.get("brick_wall"), TurtleColor.GRAY, tileMeshes.get("simple_wall_pillar"), TurtleColor.GRAY)
         );
         
         // Wooden door
-        ArrayList<Pair<Mesh, String>> woodenDoorClosed = new ArrayList<Pair<Mesh, String>>();
-        woodenDoorClosed.add(new Pair<Mesh, String>(tileMeshes.get("wooden_door"), "orange"));
-        woodenDoorClosed.add(new Pair<Mesh, String>(tileMeshes.get("wooden_door_handle"), "gelb"));
-        ArrayList<Pair<Mesh, String>> woodenDoorOpen = new ArrayList<Pair<Mesh, String>>();
-        woodenDoorOpen.add(new Pair<Mesh, String>(tileMeshes.get("wooden_door_open"), "orange"));
-        woodenDoorOpen.add(new Pair<Mesh, String>(tileMeshes.get("wooden_door_handle_open"), "gelb"));
+        ArrayList<Pair<Mesh, TurtleColor>> woodenDoorClosed = new ArrayList<Pair<Mesh, TurtleColor>>();
+        woodenDoorClosed.add(new Pair<Mesh, TurtleColor>(tileMeshes.get("wooden_door"), TurtleColor.ORANGE));
+        woodenDoorClosed.add(new Pair<Mesh, TurtleColor>(tileMeshes.get("wooden_door_handle"), TurtleColor.YELLOW));
+        ArrayList<Pair<Mesh, TurtleColor>> woodenDoorOpen = new ArrayList<Pair<Mesh, TurtleColor>>();
+        woodenDoorOpen.add(new Pair<Mesh, TurtleColor>(tileMeshes.get("wooden_door_open"), TurtleColor.ORANGE));
+        woodenDoorOpen.add(new Pair<Mesh, TurtleColor>(tileMeshes.get("wooden_door_handle_open"), TurtleColor.YELLOW));
         _tileProviders.put(Tile.WOODEN_DOOR, new DoorTileProvider(
             woodenDoorClosed, woodenDoorOpen, false,
             new BlockedTunnelColliderProvider(), new TunnelColliderProvider(),
@@ -82,18 +82,18 @@ public class MapHandler
         ));
         
         // Dirt floor grass
-        ArrayList<Pair<Mesh, String>> dirtFloorGrass = new ArrayList<Pair<Mesh, String>>();
-        dirtFloorGrass.add(new Pair<Mesh, String>(tileMeshes.get("dirt_floor_borderless"), "orange"));
-        dirtFloorGrass.add(new Pair<Mesh, String>(tileMeshes.get("dirt_floor_grassdetail"), "gruen"));
+        ArrayList<Pair<Mesh, TurtleColor>> dirtFloorGrass = new ArrayList<Pair<Mesh, TurtleColor>>();
+        dirtFloorGrass.add(new Pair<Mesh, TurtleColor>(tileMeshes.get("dirt_floor_borderless"), TurtleColor.ORANGE));
+        dirtFloorGrass.add(new Pair<Mesh, TurtleColor>(tileMeshes.get("dirt_floor_grassdetail"), TurtleColor.GREEN));
         _tileProviders.put(Tile.DIRT_FLOOR_GRASS, new MultiMeshTileProvider(dirtFloorGrass));
         
         // Cracked brick wall
-        ArrayList<Pair<Mesh, String>> secretDoorClosed = new ArrayList<Pair<Mesh, String>>();
-        secretDoorClosed.add(new Pair<Mesh, String>(tileMeshes.get("wooden_door"), "rot"));
-        secretDoorClosed.add(new Pair<Mesh, String>(tileMeshes.get("wooden_door_handle"), "cyan"));
-        ArrayList<Pair<Mesh, String>> secretDoorOpen = new ArrayList<Pair<Mesh, String>>();
-        secretDoorOpen.add(new Pair<Mesh, String>(tileMeshes.get("wooden_door_open"), "rot"));
-        secretDoorOpen.add(new Pair<Mesh, String>(tileMeshes.get("wooden_door_handle_open"), "cyan"));
+        ArrayList<Pair<Mesh, TurtleColor>> secretDoorClosed = new ArrayList<Pair<Mesh, TurtleColor>>();
+        secretDoorClosed.add(new Pair<Mesh, TurtleColor>(tileMeshes.get("wooden_door"), TurtleColor.RED));
+        secretDoorClosed.add(new Pair<Mesh, TurtleColor>(tileMeshes.get("wooden_door_handle"), TurtleColor.CYAN));
+        ArrayList<Pair<Mesh, TurtleColor>> secretDoorOpen = new ArrayList<Pair<Mesh, TurtleColor>>();
+        secretDoorOpen.add(new Pair<Mesh, TurtleColor>(tileMeshes.get("wooden_door_open"), TurtleColor.RED));
+        secretDoorOpen.add(new Pair<Mesh, TurtleColor>(tileMeshes.get("wooden_door_handle_open"), TurtleColor.CYAN));
         _tileProviders.put(Tile.CRACKED_BRICK_WALL_DOOR, new DoorTileProvider(
             secretDoorClosed, secretDoorOpen, false,
             new BlockedTunnelColliderProvider(), new TunnelColliderProvider(),
@@ -102,17 +102,17 @@ public class MapHandler
         ));
         
         // Road Markings X
-        _tileProviders.put(Tile.ROAD_MARKINGS_X, new SimpleTileProvider(tileMeshes.get("road_markings_x"), "gelb"));
+        _tileProviders.put(Tile.ROAD_MARKINGS_X, new SimpleTileProvider(tileMeshes.get("road_markings_x"), TurtleColor.YELLOW));
         
         // Dirt floor grass 2
-        ArrayList<Pair<Mesh, String>> dirtFloorGrass2 = new ArrayList<Pair<Mesh, String>>();
-        dirtFloorGrass2.add(new Pair<Mesh, String>(tileMeshes.get("dirt_floor_borderless"), "orange"));
-        dirtFloorGrass2.add(new Pair<Mesh, String>(tileMeshes.get("dirt_floor_grassdetail2"), "gruen"));
-        dirtFloorGrass2.add(new Pair<Mesh, String>(tileMeshes.get("dirt_floor_stonedetail"), "dunkelgrau"));
+        ArrayList<Pair<Mesh, TurtleColor>> dirtFloorGrass2 = new ArrayList<Pair<Mesh, TurtleColor>>();
+        dirtFloorGrass2.add(new Pair<Mesh, TurtleColor>(tileMeshes.get("dirt_floor_borderless"), TurtleColor.ORANGE));
+        dirtFloorGrass2.add(new Pair<Mesh, TurtleColor>(tileMeshes.get("dirt_floor_grassdetail2"), TurtleColor.GREEN));
+        dirtFloorGrass2.add(new Pair<Mesh, TurtleColor>(tileMeshes.get("dirt_floor_stonedetail"), TurtleColor.DARK_GRAY));
         _tileProviders.put(Tile.DIRT_FLOOR_GRASS2, new MultiMeshTileProvider(dirtFloorGrass2));
         
         // Road Markings Z
-        _tileProviders.put(Tile.ROAD_MARKINGS_Z, new SimpleTileProvider(tileMeshes.get("road_markings_z"), "gelb"));
+        _tileProviders.put(Tile.ROAD_MARKINGS_Z, new SimpleTileProvider(tileMeshes.get("road_markings_z"), TurtleColor.YELLOW));
         
         
         // Initialisierung der ColliderProvider

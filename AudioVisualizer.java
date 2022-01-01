@@ -6,7 +6,7 @@ import javafx.scene.media.*;
  * Einfacher AudioVisualizer, der passend zu einem laufenden Sound Meshes generiert
  * 
  * @author Lasse Huber-Saffer
- * @version 10.12.2021
+ * @version 01.01.2022
  */
 public class AudioVisualizer implements AudioSpectrumListener, IGameObject
 {
@@ -19,7 +19,7 @@ public class AudioVisualizer implements AudioSpectrumListener, IGameObject
     private Vector3 _position;
     private Vector3 _rotation;
     private Vector3 _scale;
-    private String _color;
+    private TurtleColor _color;
     
     /**
      * Konstruktor des AudioVisualizers
@@ -29,7 +29,7 @@ public class AudioVisualizer implements AudioSpectrumListener, IGameObject
      * @param scale Skalierung
      * @param color Farbe der generierten Meshes
      */
-    public AudioVisualizer(Sound sound, Vector3 position, Vector3 rotation, Vector3 scale, String color)
+    public AudioVisualizer(Sound sound, Vector3 position, Vector3 rotation, Vector3 scale, TurtleColor color)
     {
         _internalObjects = new ArrayList<SimpleDynamicGameObject>();
         _sound = sound;
@@ -86,7 +86,7 @@ public class AudioVisualizer implements AudioSpectrumListener, IGameObject
                 _internalObjects.remove(0);
             }
             
-            _internalObjects.add(new SimpleDynamicGameObject(mesh, "magenta", new Vector3(_position), new Vector3(_rotation), new Vector3(_scale)));
+            _internalObjects.add(new SimpleDynamicGameObject(mesh, _color, new Vector3(_position), new Vector3(_rotation), new Vector3(_scale)));
             
             for(SimpleDynamicGameObject obj : _internalObjects)
             {
@@ -152,7 +152,7 @@ public class AudioVisualizer implements AudioSpectrumListener, IGameObject
     /**
      * @see IGameObject#getColor()
      */
-    public String getColor()
+    public TurtleColor getColor()
     {
         return _color;
     }
@@ -160,7 +160,7 @@ public class AudioVisualizer implements AudioSpectrumListener, IGameObject
     /**
      * @see IGameObject#setColor()
      */
-    public void setColor(String color)
+    public void setColor(TurtleColor color)
     {
         _color = color;
     }

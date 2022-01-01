@@ -4,7 +4,7 @@ import java.util.*;
  * Titelbildschirm und Hauptmenü des Spiels
  * 
  * @author Lasse Huber-Saffer, Nico Hädicke
- * @version 23.12.2021
+ * @version 01.01.2022
  */
 public class TitleScene extends Scene
 {
@@ -32,13 +32,13 @@ public class TitleScene extends Scene
         //backgroundMusic.setAudioSpectrumThreshold(-200);
         backgroundMusic.setAudioSpectrumThreshold(-80);
         
-        _audioVisualizer = new BarAudioVisualizer(backgroundMusic, new Vector3(), new Vector3(), new Vector3(1.0, 1.0, 1.0), "magenta");
+        _audioVisualizer = new BarAudioVisualizer(backgroundMusic, new Vector3(), new Vector3(), new Vector3(1.0, 1.0, 1.0), TurtleColor.MAGENTA);
         backgroundMusic.setAudioSpectrumListener(_audioVisualizer);
         
         HashMap<String, Mesh> titleScreenMeshes = _state.resourceManager.loadTitleScreenMeshes();
         
-        _title = new StaticGameObject(titleScreenMeshes.get("title"), "cyan", new Vector3 (0.0, 5, -14));
-        _mauern = new StaticGameObject(titleScreenMeshes.get("mauern"), "cyan", new Vector3 (-1.48, 0.34, -2.5));
+        _title = new StaticGameObject(titleScreenMeshes.get("title"), TurtleColor.CYAN, new Vector3 (0.0, 5, -14), new Vector3(), new Vector3(1.0, 1.0, 1.0));
+        _mauern = new StaticGameObject(titleScreenMeshes.get("mauern"), TurtleColor.CYAN, new Vector3 (-1.48, 0.34, -2.5), new Vector3(), new Vector3(1.0, 1.0, 1.0));
     }
     
     /**
@@ -46,6 +46,7 @@ public class TitleScene extends Scene
      */
     public void handleInput(double deltaTime, double runTime)
     {
+        return;
     }
     
     /**
@@ -54,6 +55,7 @@ public class TitleScene extends Scene
     public void update(double deltaTime, double runTime)
     {
         if(_audioVisualizer != null) _audioVisualizer.update(deltaTime, runTime, _camera.getPosition());
+        return;
     }
     
     /**
@@ -73,33 +75,36 @@ public class TitleScene extends Scene
         drawButton("Credits");
     }
     
-    public void drawButton(String text)
+    /**
+     * Zeichnet einen der beiden vordefinierten Knöpfe
+     */
+    private void drawButton(String text)
     {
         Vector2 mousePos = _state.inputHandler.getLocalMousePos();
         int p = 0;
         
-        //draw button text
+        // Knopftext zeichnen
         if(text == "Start")
         {
-            _state.textRenderer.write(new Vector2(220.9,372), 6, text, "weiss");
+            _state.textRenderer.write(new Vector2(220.9,372), 6, text, TurtleColor.WHITE);
         }
         else
         {
             p = 42;
-            _state.textRenderer.write(new Vector2(250-37.65,414), 6,text, "weiss");
+            _state.textRenderer.write(new Vector2(250-37.65,414), 6,text, TurtleColor.WHITE);
         }
         
-        //draw button box
+        // Box um den Text zeichnen
         if(mousePos.getX() > 196 && mousePos.getX() < 304 && mousePos.getY() > 364+p && mousePos.getY() < 396+p)
         {
-            _state.renderer.drawLine(new Vector2(231, 364+p), new Vector2(269, 364+p), "magenta");
-            _state.renderer.drawLine(new Vector2(269, 364+p), new Vector2(304, 370+p), "magenta");
-            _state.renderer.drawLine(new Vector2(304, 370+p), new Vector2(304, 390+p), "magenta");
-            _state.renderer.drawLine(new Vector2(304, 390+p), new Vector2(269, 396+p), "magenta");
-            _state.renderer.drawLine(new Vector2(269, 396+p), new Vector2(231, 396+p), "magenta");
-            _state.renderer.drawLine(new Vector2(231, 396+p), new Vector2(196, 390+p), "magenta");
-            _state.renderer.drawLine(new Vector2(196, 390+p), new Vector2(196, 370+p), "magenta");
-            _state.renderer.drawLine(new Vector2(196, 370+p), new Vector2(231, 364+p), "magenta");
+            _state.renderer.drawLine(new Vector2(231, 364+p), new Vector2(269, 364+p), TurtleColor.MAGENTA);
+            _state.renderer.drawLine(new Vector2(269, 364+p), new Vector2(304, 370+p), TurtleColor.MAGENTA);
+            _state.renderer.drawLine(new Vector2(304, 370+p), new Vector2(304, 390+p), TurtleColor.MAGENTA);
+            _state.renderer.drawLine(new Vector2(304, 390+p), new Vector2(269, 396+p), TurtleColor.MAGENTA);
+            _state.renderer.drawLine(new Vector2(269, 396+p), new Vector2(231, 396+p), TurtleColor.MAGENTA);
+            _state.renderer.drawLine(new Vector2(231, 396+p), new Vector2(196, 390+p), TurtleColor.MAGENTA);
+            _state.renderer.drawLine(new Vector2(196, 390+p), new Vector2(196, 370+p), TurtleColor.MAGENTA);
+            _state.renderer.drawLine(new Vector2(196, 370+p), new Vector2(231, 364+p), TurtleColor.MAGENTA);
             
             // NOTE(sven): Das könnte man noch besser machen, indem wir fragen ob die Taste auch wieder auf dem Button losgelassen wurde, 
             // damit man wirklich einen ganzen Klick auf dem Button bleiben muss.

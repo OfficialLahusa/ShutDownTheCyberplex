@@ -1,8 +1,8 @@
 /**
- * Render Engine, die auf Basis von Turtles zweidimensional und dreidimensional rendern kann
+ * Renderer, der auf Basis von Turtles zweidimensional und dreidimensional rendern kann
  *
  * @author Lasse Huber-Saffer
- * @version 30. November 2021
+ * @version 01.01.2022
  */
 class Renderer
 {
@@ -22,12 +22,12 @@ class Renderer
      * Zeichnet ein dreidimensionales Mesh aus Linien in einer gegebenen Farbe in das Sichtfeld einer Kamera.
      * @param meshRef Referenz auf ein Mesh
      * @param modelMatrix Model-Transformationsmatrix des Meshs
-     * @param farbe Farbe, in der das Mesh gezeichnet werden soll
+     * @param color Farbe, in der das Mesh gezeichnet werden soll
      * @param camera Kamera, in dessen Sichtfeld das Mesh gerendert werden soll
      */
-    public void drawMesh(Mesh meshRef, Matrix4 modelMatrix, String farbe, Camera camera)
+    public void drawMesh(Mesh meshRef, Matrix4 modelMatrix, TurtleColor color, Camera camera)
     {
-        drawMesh(meshRef, modelMatrix, farbe, camera, false);
+        drawMesh(meshRef, modelMatrix, color, camera, false);
     }
     
     /**
@@ -35,15 +35,15 @@ class Renderer
      * Optional kann die ViewMatrix der Kamera ignoriert werden, um ein Mesh als 1st Person ViewModel zu rendern.
      * @param meshRef Referenz auf ein Mesh
      * @param modelMatrix Model-Transformationsmatrix des Meshs
-     * @param farbe Farbe, in der das Mesh gezeichnet werden soll
+     * @param color Farbe, in der das Mesh gezeichnet werden soll
      * @param camera Kamera, in dessen Sichtfeld das Mesh gerendert werden soll
      * @param ignoreViewMatrix wenn true, wird die ViewMatrix der Kamera nicht angewandt, was für ViewModels nützlich ist
      */
-    public void drawMesh(Mesh meshRef, Matrix4 modelMatrix, String farbe, Camera camera, boolean ignoreViewMatrix)
+    public void drawMesh(Mesh meshRef, Matrix4 modelMatrix, TurtleColor color, Camera camera, boolean ignoreViewMatrix)
     {
         for(int i = 0; i < meshRef.lineIndices.size(); i++)
         {
-            drawLine3D(meshRef.vertices.get(meshRef.lineIndices.get(i).getKey() - 1), meshRef.vertices.get(meshRef.lineIndices.get(i).getValue() - 1), farbe, modelMatrix, camera, ignoreViewMatrix);
+            drawLine3D(meshRef.vertices.get(meshRef.lineIndices.get(i).getKey() - 1), meshRef.vertices.get(meshRef.lineIndices.get(i).getValue() - 1), color, modelMatrix, camera, ignoreViewMatrix);
         }
     }
     
@@ -54,20 +54,25 @@ class Renderer
      */
     public void drawLine(Vector2 a, Vector2 b)
     {
-        drawLine(a, b, "rot");
+        drawLine(a, b, TurtleColor.RED);
     }
     
     /**
      * Zeichnet eine beliebigfarbige Linie zwischen zwei Punkten im zweidimensionalen Screenspace
      * @param a Startpunkt
      * @param b Endpunkt
-     * @param farbe deutscher ausgeschriebener Name von einer der 13 validen Farben (siehe Turtle)
+     * @param color Farbe
      */
-    public void drawLine(Vector2 a, Vector2 b, String farbe)
+    public void drawLine(Vector2 a, Vector2 b, TurtleColor color)
     {
+        if(color == null)
+        {
+            throw new IllegalArgumentException("color was null when drawing line");
+        }
+        
         _turtle.hinterlasseKeineSpur();
         _turtle.geheZu(a.getX(), a.getY());
-        _turtle.setzeFarbe(farbe);
+        _turtle.setzeFarbe(colorToString(color));
         _turtle.hinterlasseSpur();
         _turtle.geheZu(b.getX(), b.getY());
         _turtle.hinterlasseKeineSpur();
@@ -77,18 +82,18 @@ class Renderer
      * Zeichnet ein Crosshair (Zielhilfe) auf den Bildschirm
      * @param length Länge der einzelnen Linien des Crosshairs
      * @param distance Abstand der Linien zum Mittelpunkt
-     * @param farbe Farbe des Crosshairs
+     * @param color Farbe des Crosshairs
      */
-    public void drawCrosshair(double length, double distance, String farbe)
+    public void drawCrosshair(double length, double distance, TurtleColor color)
     {
         // Nach oben
-        drawLine(new Vector2(250.0, 250.0 + distance), new Vector2(250.0, 250.0 + distance + length), farbe);
+        drawLine(new Vector2(250.0, 250.0 + distance), new Vector2(250.0, 250.0 + distance + length), color);
         // Nach unten
-        drawLine(new Vector2(250.0, 250.0 - distance), new Vector2(250.0, 250.0 - distance - length), farbe);
+        drawLine(new Vector2(250.0, 250.0 - distance), new Vector2(250.0, 250.0 - distance - length), color);
         // Nach links
-        drawLine(new Vector2(250.0 - distance, 250.0), new Vector2(250.0 - distance - length, 250.0), farbe);
+        drawLine(new Vector2(250.0 - distance, 250.0), new Vector2(250.0 - distance - length, 250.0), color);
         // Nach rechts
-        drawLine(new Vector2(250.0 + distance, 250.0), new Vector2(250.0 + distance + length, 250.0), farbe);
+        drawLine(new Vector2(250.0 + distance, 250.0), new Vector2(250.0 + distance + length, 250.0), color);
     }
     
     /**
@@ -99,19 +104,19 @@ class Renderer
      */
     public void drawLine3D(Vector3 a, Vector3 b, Camera camera)
     {
-        drawLine3D(a, b, "rot", null, camera, false);
+        drawLine3D(a, b, TurtleColor.RED, null, camera, false);
     }
     
     /**
      * Zeichnet eine beliebigfarbige Linie zwischen zwei Punkten im dreidimensionalen Raum
      * @param a Startpunkt
      * @param b Endpunkt
-     * @param farbe deutscher ausgeschriebener Name von einer der 13 validen Farben (siehe Turtle)
+     * @param color Farbe
      * @param camera Kamera für die dreidimensionale Projektion
      */
-    public void drawLine3D(Vector3 a, Vector3 b, String farbe, Camera camera)
+    public void drawLine3D(Vector3 a, Vector3 b, TurtleColor color, Camera camera)
     {
-        drawLine3D(a, b, farbe, null, camera, false);
+        drawLine3D(a, b, color, null, camera, false);
     }
     
     /**
@@ -169,12 +174,12 @@ class Renderer
      * Zeichnet eine beliebigfarbige Linie zwischen zwei Punkten im dreidimensionalen Raum
      * @param a Startpunkt
      * @param b Endpunkt
-     * @param farbe deutscher ausgeschriebener Name von einer der 13 validen Farben (siehe Turtle)
+     * @param color Farbe
      * @param model Modelmatrix für die Punkte der Linie. Wenn null, wird nichts angewandt
      * @param camera Kamera für die dreidimensionale Projektion
      * @param ignoreViewMatrix wenn true, wird die ViewMatrix der Kamera nicht angewandt, was für ViewModels nützlich ist
      */
-    public void drawLine3D(Vector3 a, Vector3 b, String farbe, Matrix4 model, Camera camera, boolean ignoreViewMatrix)
+    public void drawLine3D(Vector3 a, Vector3 b, TurtleColor color, Matrix4 model, Camera camera, boolean ignoreViewMatrix)
     {
         Vector3 camPos = camera.getPosition();
         Vector3 camDir = camera.getDirection();
@@ -200,7 +205,7 @@ class Renderer
             Vector4 pA = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(a, 1.0)));
             Vector4 pB = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(b, 1.0)));
         
-            drawLine(new Vector2(pA.getX(), pA.getY()), new Vector2(pB.getX(), pB.getY()), farbe);
+            drawLine(new Vector2(pA.getX(), pA.getY()), new Vector2(pB.getX(), pB.getY()), color);
         }
         else
         {
@@ -228,7 +233,7 @@ class Renderer
                 Vector4 pA = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(frustumIntersection.add(precisionError), 1.0)));
                 Vector4 pB = MatrixGenerator.viewportTransform(transform.multiply(new Vector4(pInside, 1.0)));
             
-                drawLine(new Vector2(pA.getX(), pA.getY()), new Vector2(pB.getX(), pB.getY()), farbe);
+                drawLine(new Vector2(pA.getX(), pA.getY()), new Vector2(pB.getX(), pB.getY()), color);
             }
         }
     }
@@ -263,25 +268,35 @@ class Renderer
         Vector2 innerTopRight = new Vector2(xOffset + innerCuttedLength, yOffset + height - innerHeight);
         Vector2 innerBottomRight = new Vector2(xOffset + innerLength, yOffset + height);
         
-        String color = "gruen";
+        // Bestimmt die Farbe der Lebensleiste anhand der Spieler-Lebenspunkte
+        TurtleColor color = null;
         if (player.getHealth() > 70)
         {
-            color = "gruen";
+            color = TurtleColor.GREEN;
         }
         else if (player.getHealth() > 40)
         {
-            color = "orange";
+            color = TurtleColor.ORANGE;
         }
         else
         {
-            color = "rot";
+            color = TurtleColor.RED;
         }
         
+        // Zeichnet die Lebensanzeige
         drawStripedQuad2D(innerTopLeft, innerBottomLeft, innerTopRight, innerBottomRight, color, 5);
-        drawQuad2D(outerTopLeft, outerBottomLeft, outerTopRight, outerBottomRight, "weiss");
+        drawQuad2D(outerTopLeft, outerBottomLeft, outerTopRight, outerBottomRight, TurtleColor.WHITE);
     }
     
-    private void drawStripesAroundCorner2D(Vector2 cornerOrigin, Vector2 pointA, Vector2 pointB, int numStripes, String farbe)
+    /**
+     * Zeichnet mehrere Schraffierungsstreifen in 2D um einen Eckpunkt
+     * @param cornerOrigin Eckpunkt
+     * @param pointA erster begrenzender Punkt
+     * @param pointB zweiter begrenzender Punkt
+     * @param numStripes Anzahl der Streifen
+     * @param color Farbe
+     */
+    private void drawStripesAroundCorner2D(Vector2 cornerOrigin, Vector2 pointA, Vector2 pointB, int numStripes, TurtleColor color)
     {
         for (int i = 1; i <= numStripes; i++)
         {
@@ -293,11 +308,19 @@ class Renderer
             temp = temp.multiply((double)i / (numStripes + 1));
             Vector2 pointRight = cornerOrigin.add(temp);
             
-            drawLine(pointLeft, pointRight, farbe);
+            drawLine(pointLeft, pointRight, color);
         }
     }
     
-    private void drawStripesAroundCorner3D(Vector3 cornerOrigin, Vector3 pointA, Vector3 pointB, int numStripes, String farbe, Camera camera)
+    /**
+     * Zeichnet mehrere Schraffierungsstreifen in 3D um einen Eckpunkt
+     * @param cornerOrigin Eckpunkt
+     * @param pointA erster begrenzender Punkt
+     * @param pointB zweiter begrenzender Punkt
+     * @param numStripes Anzahl der Streifen
+     * @param color Farbe
+     */
+    private void drawStripesAroundCorner3D(Vector3 cornerOrigin, Vector3 pointA, Vector3 pointB, int numStripes, TurtleColor color, Camera camera)
     {
         for (int i = 1; i <= numStripes; i++)
         {
@@ -309,34 +332,43 @@ class Renderer
             temp = temp.multiply((double)i / (numStripes + 1));
             Vector3 pointRight = cornerOrigin.add(temp);
             
-            drawLine3D(pointLeft, pointRight, farbe, camera);
+            drawLine3D(pointLeft, pointRight, color, camera);
         }
     }
     
-    public void drawQuad2D(Vector2 topLeft, Vector2 bottomLeft, Vector2 topRight, Vector2 bottomRight, String farbe)
+    /**
+     * Zeichnet ein Viereck in 2D
+     * @param topLeft oberer linker Punkt
+     * @param bottomLeft unterer linker Punkt
+     * @param topRight oberer rechter Punkt
+     * @param bottomRight unterer rechter Punkt
+     * @param color Farbe
+     */
+    public void drawQuad2D(Vector2 topLeft, Vector2 bottomLeft, Vector2 topRight, Vector2 bottomRight, TurtleColor color)
     {
-        drawLine(topLeft, topRight, farbe);
-        drawLine(topRight, bottomRight, farbe);
-        drawLine(bottomRight, bottomLeft, farbe);
-        drawLine(bottomLeft, topLeft, farbe);
+        drawLine(topLeft, topRight, color);
+        drawLine(topRight, bottomRight, color);
+        drawLine(bottomRight, bottomLeft, color);
+        drawLine(bottomLeft, topLeft, color);
     }
     
     /**
      * Zeichnet ein gestreiftes Rechteck in 2D-Ansicht
      * 
-     * @param topLeft Der Punkt Oben-links
-     * @param bottomLeft Der Punkt Unten-links
-     * @param topRight Der Punkt Oben-rechts
-     * @param bottomRight Der Punkt Unten-rechts
-     * @param farbe Die gewünschte Farb
+     * @param topLeft oberer linker Punkt
+     * @param bottomLeft unterer linker Punkt
+     * @param topRight oberer rechter Punkt
+     * @param bottomRight unterer rechter Punkt
+     * @param color Farbe
+     * @param numDiagonals Anzahl der diagonalen Streifen
      */
-    public void drawStripedQuad2D(Vector2 topLeft, Vector2 bottomLeft, Vector2 topRight, Vector2 bottomRight, String farbe, int numDiagonals)
+    public void drawStripedQuad2D(Vector2 topLeft, Vector2 bottomLeft, Vector2 topRight, Vector2 bottomRight, TurtleColor color, int numDiagonals)
     {
         // 
-        drawQuad2D(topLeft, bottomLeft, topRight, bottomRight, farbe);
+        drawQuad2D(topLeft, bottomLeft, topRight, bottomRight, color);
         
         // Zeichne diagonalen
-        drawLine(topLeft, bottomRight, farbe);
+        drawLine(topLeft, bottomRight, color);
         
         // Die Anzahl der Diagonalen muss ungerade sein, weil wir immer die eine in der Mitte haben.
         if (numDiagonals % 2 == 0)
@@ -347,10 +379,10 @@ class Renderer
         int numStripesForOneHalf = (numDiagonals - 1) / 2;
         
         // Untere Hälfte des Rechtsecks
-        drawStripesAroundCorner2D(bottomLeft, topLeft, bottomRight, numStripesForOneHalf, farbe);
+        drawStripesAroundCorner2D(bottomLeft, topLeft, bottomRight, numStripesForOneHalf, color);
         
         // Obere Hälfte des Rechtecks
-        drawStripesAroundCorner2D(topRight, topLeft, bottomRight, numStripesForOneHalf, farbe);
+        drawStripesAroundCorner2D(topRight, topLeft, bottomRight, numStripesForOneHalf, color);
     }
     
     /**
@@ -360,42 +392,98 @@ class Renderer
      * @param bottomLeft Der Punkt Unten-links
      * @param topRight Der Punkt Oben-rechts
      * @param bottomRight Der Punkt Unten-rechts
-     * @param farbe Die gewünschte Farb
+     * @param color Farbe
      * @param camera die benutzte Camera
      */
-    public void drawStripedQuad3D(Vector3 topLeft, Vector3 bottomLeft, Vector3 topRight, Vector3 bottomRight, String farbe, Camera camera)
+    public void drawStripedQuad3D(Vector3 topLeft, Vector3 bottomLeft, Vector3 topRight, Vector3 bottomRight, TurtleColor color, Camera camera)
     {
         // 
-        drawLine3D(topLeft, topRight, farbe, camera);
-        drawLine3D(topRight, bottomRight, farbe, camera);
-        drawLine3D(bottomRight, bottomLeft, farbe, camera);
-        drawLine3D(bottomLeft, topLeft, farbe, camera);
+        drawLine3D(topLeft, topRight, color, camera);
+        drawLine3D(topRight, bottomRight, color, camera);
+        drawLine3D(bottomRight, bottomLeft, color, camera);
+        drawLine3D(bottomLeft, topLeft, color, camera);
         
         // Zeichne diagonalen
-        drawLine3D(topLeft, bottomRight, farbe, camera);
+        drawLine3D(topLeft, bottomRight, color, camera);
         
         final int numStripesForOneHalf = 10;
         // Untere Hälfte des Rechtsecks
-        drawStripesAroundCorner3D(bottomLeft, topLeft, bottomRight, numStripesForOneHalf, farbe, camera);
+        drawStripesAroundCorner3D(bottomLeft, topLeft, bottomRight, numStripesForOneHalf, color, camera);
         
         // Obere Hälfte des Rechtecks
-        drawStripesAroundCorner3D(topRight, topLeft, bottomRight, numStripesForOneHalf, farbe, camera);
+        drawStripesAroundCorner3D(topRight, topLeft, bottomRight, numStripesForOneHalf, color, camera);
     }
     
+    /**
+     * Zeichnet aus dem Ursprung heraus Linien entlang jeder Achse
+     * @param camera benutze Kamera
+     */
     public void drawAxis(Camera camera)
     {
-        drawLine3D(new Vector3(), new Vector3(1.0, 0.0, 0.0), "rot", camera);
-        drawLine3D(new Vector3(), new Vector3(0.0, 1.0, 0.0), "gruen", camera);
-        drawLine3D(new Vector3(), new Vector3(0.0, 0.0, 1.0), "blau", camera);
+        // X-Achse (rot)
+        drawLine3D(new Vector3(), new Vector3(1.0, 0.0, 0.0), TurtleColor.RED, camera);
+        // Y-Achse (grün)
+        drawLine3D(new Vector3(), new Vector3(0.0, 1.0, 0.0), TurtleColor.GREEN, camera);
+        // Z-Achse (blau)
+        drawLine3D(new Vector3(), new Vector3(0.0, 0.0, 1.0), TurtleColor.BLUE, camera);
     }
     
+    /**
+     * Leert das Bild
+     */
     public void clear()
     {
         TurtleWelt.GLOBALEWELT.loescheAlleSpuren();
     }
     
+    /**
+     * Leert das Bild und färbt es in einer bestimmten Farbe
+     * @param r Rotkanal der Farbe [0, 255]
+     * @param g Grünkanal der Farbe [0, 255]
+     * @param b Blaukanal der Farbe [0, 255]
+     */
     public void clear(int r, int g, int b)
     {
         TurtleWelt.GLOBALEWELT.bildschirmEinfaerben(r, g, b);
+    }
+    
+    /**
+     * Gibt den deutschen Namen einer gegebenen Turtle-Farbe zurück
+     * @param color Turtle-Farbe
+     * @return deutscher Name der Farbe (Bsp.: TurtleColor.RED -> "rot")
+     */
+    public static String colorToString(TurtleColor color)
+    {
+        switch(color)
+        {
+            default:
+                throw new UnsupportedOperationException("color does not have a registered name");
+            case BLACK:
+                return "schwarz";
+            case BLUE:
+                return "blau";
+            case CYAN:
+            	return "cyan";
+            case DARK_GRAY:
+            	return "dunkelgrau";
+            case GRAY:
+            	return "grau";
+            case GREEN:
+            	return "gruen";
+            case LIGHT_GRAY:
+            	return "hellgrau";
+            case MAGENTA:
+            	return "magenta";
+            case ORANGE:
+            	return "orange";
+            case PINK:
+            	return "pink";
+            case RED:
+            	return "rot";
+            case WHITE:
+            	return "weiss";
+            case YELLOW:
+            	return "gelb";
+        }
     }
 }

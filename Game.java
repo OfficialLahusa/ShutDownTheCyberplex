@@ -5,7 +5,7 @@ import javafx.util.*;
  * Diese Klasse enthält die Kernlogik des Spiels und den Gameloop
  * 
  * @author Lasse Huber-Saffer, Sven Schreiber, Nico Hädicke
- * @version 01.12.2021
+ * @version 01.01.2022
  */
 public class Game
 {
@@ -73,7 +73,7 @@ public class Game
                 fpsTimer = 0;
                 _fps = 1.0 / deltaTime;
             }
-            _state.textRenderer.write(new Vector2(10,10), 5, "fps: " + (int)Math.round(_fps), "rot");
+            _state.textRenderer.write(new Vector2(10,10), 5, "fps: " + (int)Math.round(_fps), TurtleColor.RED);
             
             // Bildrate auf maximal FPS_CAP (Konstante) begrenzen
             double currentFrameTime = _frameCapTimeManager.getDeltaTime();
@@ -97,7 +97,7 @@ public class Game
                 }
                 catch (InterruptedException ie)
                 {
-                    throw new RuntimeException("unhandled interrupt");
+                    // Ignorieren
                 }
             }
         }

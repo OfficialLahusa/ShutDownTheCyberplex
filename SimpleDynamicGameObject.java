@@ -3,7 +3,7 @@
  * Ein dreidimensionales dynamisch bewegbares Objekt in der Spielwelt
  * 
  * @author Lasse Huber-Saffer
- * @version 24.12.2021
+ * @version 01.01.2022
  */
 public class SimpleDynamicGameObject implements IDynamicGameObject
 {
@@ -11,57 +11,7 @@ public class SimpleDynamicGameObject implements IDynamicGameObject
     private Vector3 _position;
     private Vector3 _rotation;
     private Vector3 _scale;
-    private String _color;
-
-    /**
-     * Parameterloser Konstruktor
-     */
-    public SimpleDynamicGameObject()
-    {
-        this(new Mesh(), "gruen", new Vector3(), new Vector3(), new Vector3(1.0, 1.0, 1.0));
-    }
-    
-    /**
-     * Konstruktor für SimpleDynamicGameObject mit gegebenem Mesh
-     * @param mesh Mesh (3D-Modell)
-     */
-    public SimpleDynamicGameObject(Mesh mesh)
-    {
-        this(mesh, "gruen", new Vector3(), new Vector3(), new Vector3(1.0, 1.0, 1.0));
-    }
-    
-    /**
-     * Konstruktor für SimpleDynamicGameObject mit gegebenem Mesh
-     * @param mesh Mesh (3D-Modell)
-     * @param color Farbe des Meshs
-     */
-    public SimpleDynamicGameObject(Mesh mesh, String color)
-    {
-        this(mesh, color, new Vector3(), new Vector3(), new Vector3(1.0, 1.0, 1.0));
-    }
-    
-    /**
-     * Konstruktor für SimpleDynamicGameObject mit gegebenem Mesh (3D-Modell), Position, Rotation und Skalierung
-     * @param mesh Mesh (3D-Modell)
-     * @param color Farbe des Meshs
-     * @param position Position
-     */
-    public SimpleDynamicGameObject(Mesh mesh, String color, Vector3 position)
-    {
-        this(mesh, color, position, new Vector3(), new Vector3(1.0, 1.0, 1.0));
-    }
-    
-    /**
-     * Konstruktor für SimpleDynamicGameObject mit gegebenem Mesh (3D-Modell), Position, Rotation und Skalierung
-     * @param mesh Mesh (3D-Modell)
-     * @param color Farbe des Meshs
-     * @param position Position
-     * @param rotation Rotation
-     */
-    public SimpleDynamicGameObject(Mesh mesh, String color, Vector3 position, Vector3 rotation)
-    {
-        this(mesh, color, position, rotation, new Vector3(1.0, 1.0, 1.0));
-    }
+    private TurtleColor _color;
     
     /**
      * Konstruktor für SimpleDynamicGameObject mit gegebenem Mesh (3D-Modell), Position, Rotation und Skalierung
@@ -71,7 +21,7 @@ public class SimpleDynamicGameObject implements IDynamicGameObject
      * @param rotation Rotation
      * @param scale Skalierung
      */
-    public SimpleDynamicGameObject(Mesh mesh, String color, Vector3 position, Vector3 rotation, Vector3 scale)
+    public SimpleDynamicGameObject(Mesh mesh, TurtleColor color, Vector3 position, Vector3 rotation, Vector3 scale)
     {
         _mesh = new Mesh(mesh);
         _color = color;
@@ -189,7 +139,7 @@ public class SimpleDynamicGameObject implements IDynamicGameObject
     /**
      * @see IGameObject#getColor()
      */
-    public String getColor()
+    public TurtleColor getColor()
     {
         return _color;
     }
@@ -197,7 +147,7 @@ public class SimpleDynamicGameObject implements IDynamicGameObject
     /**
      * @see IGameObject#setColor()
      */
-    public void setColor(String color)
+    public void setColor(TurtleColor color)
     {
         _color = color;
     }

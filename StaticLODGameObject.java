@@ -5,7 +5,7 @@ import java.util.*;
  * Ein dreidimensionales Objekt in der Spielwelt
  * 
  * @author Lasse Huber-Saffer
- * @version 24.12.2021
+ * @version 01.01.2022
  */
 public class StaticLODGameObject implements IGameObject, ILODGameObject
 {
@@ -14,58 +14,8 @@ public class StaticLODGameObject implements IGameObject, ILODGameObject
     private Vector3 _position;
     private Vector3 _rotation;
     private Vector3 _scale;
-    private String _color;
+    private TurtleColor _color;
 
-    /**
-     * Parameterloser Konstruktor
-     */
-    public StaticLODGameObject()
-    {
-        this(new ArrayList<Pair<Double, Mesh>>(), "gruen", new Vector3(), new Vector3(), new Vector3(1.0, 1.0, 1.0));
-    }
-    
-    /**
-     * Konstruktor für GameObjects mit gegebenem Mesh
-     * @param lodLevels Liste von mehreren LOD-Meshes (3D-Modellen) und sortierten Distanzen (aufsteigend), ab denen diese genutzt werden sollen
-     */
-    public StaticLODGameObject(ArrayList<Pair<Double, Mesh>> lodLevels)
-    {
-        this(lodLevels, "gruen", new Vector3(), new Vector3(), new Vector3(1.0, 1.0, 1.0));
-    }
-    
-    /**
-     * Konstruktor für GameObjects mit gegebenem Mesh
-     * @param lodLevels Liste von mehreren LOD-Meshes (3D-Modellen) und sortierten Distanzen (aufsteigend), ab denen diese genutzt werden sollen
-     * @param color Farbe des Meshs
-     */
-    public StaticLODGameObject(ArrayList<Pair<Double, Mesh>> lodLevels, String color)
-    {
-        this(lodLevels, color, new Vector3(), new Vector3(), new Vector3(1.0, 1.0, 1.0));
-    }
-    
-    /**
-     * Konstruktor für GameObjects mit gegebenem Mesh (3D-Modell), Position, Rotation und Skalierung
-     * @param lodLevels Liste von mehreren LOD-Meshes (3D-Modellen) und sortierten Distanzen (aufsteigend), ab denen diese genutzt werden sollen
-     * @param color Farbe des Meshs
-     * @param position Position
-     */
-    public StaticLODGameObject(ArrayList<Pair<Double, Mesh>> lodLevels, String color, Vector3 position)
-    {
-        this(lodLevels, color, position, new Vector3(), new Vector3(1.0, 1.0, 1.0));
-    }
-    
-    /**
-     * Konstruktor für GameObjects mit gegebenem Mesh (3D-Modell), Position, Rotation und Skalierung
-     * @param lodLevels Liste von mehreren LOD-Meshes (3D-Modellen) und sortierten Distanzen (aufsteigend), ab denen diese genutzt werden sollen
-     * @param color Farbe des Meshs
-     * @param position Position
-     * @param rotation Rotation
-     */
-    public StaticLODGameObject(ArrayList<Pair<Double, Mesh>> lodLevels, String color, Vector3 position, Vector3 rotation)
-    {
-        this(lodLevels, color, position, rotation, new Vector3(1.0, 1.0, 1.0));
-    }
-    
     /**
      * Konstruktor für GameObjects mit gegebenem Mesh (3D-Modell), Position, Rotation und Skalierung
      * @param lodLevels Liste von mehreren LOD-Meshes (3D-Modellen) und sortierten Distanzen (aufsteigend), ab denen diese genutzt werden sollen
@@ -74,7 +24,7 @@ public class StaticLODGameObject implements IGameObject, ILODGameObject
      * @param rotation Rotation
      * @param scale Skalierung
      */
-    public StaticLODGameObject(ArrayList<Pair<Double, Mesh>> lodLevels, String color, Vector3 position, Vector3 rotation, Vector3 scale)
+    public StaticLODGameObject(ArrayList<Pair<Double, Mesh>> lodLevels, TurtleColor color, Vector3 position, Vector3 rotation, Vector3 scale)
     {
         _lodLevels = new ArrayList<Pair<Double, Mesh>>();
         
@@ -184,7 +134,7 @@ public class StaticLODGameObject implements IGameObject, ILODGameObject
     /**
      * @see IGameObject#getColor()
      */
-    public String getColor()
+    public TurtleColor getColor()
     {
         return _color;
     }
@@ -192,7 +142,7 @@ public class StaticLODGameObject implements IGameObject, ILODGameObject
     /**
      * @see IGameObject#setColor()
      */
-    public void setColor(String color)
+    public void setColor(TurtleColor color)
     {
         _color = color;
     }

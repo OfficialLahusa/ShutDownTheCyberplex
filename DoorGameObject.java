@@ -5,7 +5,7 @@ import javafx.util.*;
  * Beschreiben Sie hier die Klasse DoorGameObject.
  * 
  * @author Lasse Huber-Saffer
- * @version 24.12.2021
+ * @version 01.01.2022
  */
 public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObject
 {
@@ -25,8 +25,8 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
     private Pair<Integer, Integer> _connectedRoomIDs;
     
     // Rendering
-    private ArrayList<Pair<Mesh, String>> _coloredMeshesClosed;
-    private ArrayList<Pair<Mesh, String>> _coloredMeshesOpen;
+    private ArrayList<Pair<Mesh, TurtleColor>> _coloredMeshesClosed;
+    private ArrayList<Pair<Mesh, TurtleColor>> _coloredMeshesOpen;
     private ArrayList<IGameObject> _floor;
     private ArrayList<IGameObject> _walls;
     
@@ -59,7 +59,7 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
      */
     public DoorGameObject(Vector3 position, Vector3 rotation, Vector3 scale,
         boolean facingZ, boolean isOpen, Vector2i tilePosition,
-        ArrayList<Pair<Mesh, String>> coloredMeshesClosed, ArrayList<Pair<Mesh, String>> coloredMeshesOpen,
+        ArrayList<Pair<Mesh, TurtleColor>> coloredMeshesClosed, ArrayList<Pair<Mesh, TurtleColor>> coloredMeshesOpen,
         ICollider closedCollider, ICollider openCollider,
         ArrayList<IGameObject> floor, ArrayList<IGameObject> walls,
         SoundEngine soundEngine, String openSoundKey, String closeSoundKey
@@ -139,7 +139,7 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
      */
     public void draw(Renderer renderer, Camera camera)
     {
-        ArrayList<Pair<Mesh, String>> coloredMeshList = (_isOpen)? _coloredMeshesOpen : _coloredMeshesClosed;
+        ArrayList<Pair<Mesh, TurtleColor>> coloredMeshList = (_isOpen)? _coloredMeshesOpen : _coloredMeshesClosed;
         
         if(_floor != null)
         {
@@ -158,7 +158,7 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
         
         if(coloredMeshList != null)
         {
-            for(Pair<Mesh, String> coloredMesh : coloredMeshList)
+            for(Pair<Mesh, TurtleColor> coloredMesh : coloredMeshList)
             {
                 renderer.drawMesh(coloredMesh.getKey(), getModelMatrix(), coloredMesh.getValue(), camera);
             }
@@ -286,7 +286,7 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
     /**
      * @see IGameObject#getColor()
      */
-    public String getColor()
+    public TurtleColor getColor()
     {
         return null;
     }
@@ -310,7 +310,7 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
     /**
      * @see IGameObject#setColor()
      */
-    public void setColor(String color)
+    public void setColor(TurtleColor color)
     {
         return;
     }

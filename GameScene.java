@@ -4,7 +4,7 @@ import java.util.*;
  * Haupt-Szene des Spiels
  * 
  * @author Lasse Huber-Saffer, Nico Hädicke, Sven Schreiber
- * @version 26.12.2021
+ * @version 01.01.2022
  */
 public class GameScene extends Scene
 {
@@ -35,17 +35,18 @@ public class GameScene extends Scene
         
         _mapHandler = new MapHandler(tileMeshes, entityMeshes, _state.soundEngine);
         
-        _muzzleFlash = new DynamicViewModelGameObject(viewModelMeshes.get("muzzleFlash"), "cyan", new Vector3 (-2, -2.2,-11));
-        _pistolMain = new DynamicViewModelGameObject(viewModelMeshes.get("pistolMain"), "grau", new Vector3 (-1.5, -1,-10));
-        _pistolDetails = new DynamicViewModelGameObject(viewModelMeshes.get("pistolDetails"), "orange", new Vector3 (-1.5, -1,-10));
-        _pistolHandsIdle = new DynamicViewModelGameObject(viewModelMeshes.get("pistolHandsIdle"), "weiss", new Vector3 (-1.5, -1,-10));
-        _pistolHandsShot = new DynamicViewModelGameObject(viewModelMeshes.get("pistolHandsShot"), "weiss", new Vector3 (-1.5, -1,-10));
-        _primaryMain = new DynamicViewModelGameObject(viewModelMeshes.get("primaryMain"), "grau", new Vector3 (-2, -1,-11));
-        _primaryDetails = new DynamicViewModelGameObject(viewModelMeshes.get("primaryDetails"), "gelb", new Vector3 (-2, -1,-11));
-        _primaryHandsIdle = new DynamicViewModelGameObject(viewModelMeshes.get("primaryHandsIdle"), "weiss", new Vector3 (-2, -1,-11));
-        _primaryHandsShot = new DynamicViewModelGameObject(viewModelMeshes.get("primaryHandsShot"), "weiss", new Vector3 (-2, -1,-11));
-        _sniperMain = new DynamicViewModelGameObject(viewModelMeshes.get("sniperMain"), "grau", new Vector3 (-1.5, 1,-12));
-        _sniperDetails = new DynamicViewModelGameObject(viewModelMeshes.get("sniperDetails"), "gruen", new Vector3 (-1.5, 1,-12));
+        // Viewmodel-Objekte initialisieren
+        _muzzleFlash        = new DynamicViewModelGameObject(viewModelMeshes.get("muzzleFlash"),        TurtleColor.CYAN,   new Vector3 (-2, -2.2,-11), new Vector3(), new Vector3(1.0, 1.0, 1.0));
+        _pistolMain         = new DynamicViewModelGameObject(viewModelMeshes.get("pistolMain"),         TurtleColor.GRAY,   new Vector3 (-1.5, -1,-10), new Vector3(), new Vector3(1.0, 1.0, 1.0));
+        _pistolDetails      = new DynamicViewModelGameObject(viewModelMeshes.get("pistolDetails"),      TurtleColor.ORANGE, new Vector3 (-1.5, -1,-10), new Vector3(), new Vector3(1.0, 1.0, 1.0));
+        _pistolHandsIdle    = new DynamicViewModelGameObject(viewModelMeshes.get("pistolHandsIdle"),    TurtleColor.WHITE,  new Vector3 (-1.5, -1,-10), new Vector3(), new Vector3(1.0, 1.0, 1.0));
+        _pistolHandsShot    = new DynamicViewModelGameObject(viewModelMeshes.get("pistolHandsShot"),    TurtleColor.WHITE,  new Vector3 (-1.5, -1,-10), new Vector3(), new Vector3(1.0, 1.0, 1.0));
+        _primaryMain        = new DynamicViewModelGameObject(viewModelMeshes.get("primaryMain"),        TurtleColor.GRAY,   new Vector3 (-2, -1,-11),   new Vector3(), new Vector3(1.0, 1.0, 1.0));
+        _primaryDetails     = new DynamicViewModelGameObject(viewModelMeshes.get("primaryDetails"),     TurtleColor.YELLOW, new Vector3 (-2, -1,-11),   new Vector3(), new Vector3(1.0, 1.0, 1.0));
+        _primaryHandsIdle   = new DynamicViewModelGameObject(viewModelMeshes.get("primaryHandsIdle"),   TurtleColor.WHITE,  new Vector3 (-2, -1,-11),   new Vector3(), new Vector3(1.0, 1.0, 1.0));
+        _primaryHandsShot   = new DynamicViewModelGameObject(viewModelMeshes.get("primaryHandsShot"),   TurtleColor.WHITE,  new Vector3 (-2, -1,-11),   new Vector3(), new Vector3(1.0, 1.0, 1.0));
+        _sniperMain         = new DynamicViewModelGameObject(viewModelMeshes.get("sniperMain"),         TurtleColor.GRAY,   new Vector3 (-1.5, 1,-12),  new Vector3(), new Vector3(1.0, 1.0, 1.0));
+        _sniperDetails      = new DynamicViewModelGameObject(viewModelMeshes.get("sniperDetails"),      TurtleColor.GREEN,  new Vector3 (-1.5, 1,-12),  new Vector3(), new Vector3(1.0, 1.0, 1.0));
         
         _mapHandler.load("TestMap3");
         
@@ -209,7 +210,7 @@ public class GameScene extends Scene
                 _state.renderer.drawLine3D(new Vector3(hit.position.getX(), 0.0, hit.position.getY()), new Vector3(hit.position.getX(), 4.0, hit.position.getY()), playerCam);
             }
             
-            _state.renderer.drawLine3D(_raycastSource, _raycastTarget, "cyan", playerCam);
+            _state.renderer.drawLine3D(_raycastSource, _raycastTarget, TurtleColor.CYAN, playerCam);
         }
         
         if(_path != null)
@@ -223,7 +224,7 @@ public class GameScene extends Scene
                 Vector3 pos1 = MapHandler.tilePosToWorldPos(current.getPosition());
                 Vector3 pos2 = MapHandler.tilePosToWorldPos(next.getPosition());
                 
-                _state.renderer.drawLine3D(pos1, pos2, "rot", playerCam);
+                _state.renderer.drawLine3D(pos1, pos2, TurtleColor.RED, playerCam);
             }
         }
         
@@ -241,11 +242,11 @@ public class GameScene extends Scene
         _pistolDetails.draw(_state.renderer, playerCam);
         
         // Draw UI
-        _state.renderer.drawCrosshair(8.0, 6.0, "gruen");
+        _state.renderer.drawCrosshair(8.0, 6.0, TurtleColor.GREEN);
         _state.renderer.drawHealthbar(_player);
         
         Vector2i tilePos = MapHandler.worldPosToTilePos(playerCam.getPosition());
-        _state.textRenderer.write(new Vector2(10,30), 5, "Pos: X:" + tilePos.getX() + ", Z:" + tilePos.getY(), "rot");
+        _state.textRenderer.write(new Vector2(10,30), 5, "Pos: X:" + tilePos.getX() + ", Z:" + tilePos.getY(), TurtleColor.RED);
         
         // X-, Y- und Z-Achse zeichnen
         _state.renderer.drawAxis(playerCam);

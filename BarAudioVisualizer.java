@@ -6,7 +6,7 @@ import javafx.scene.media.*;
  * AudioVisualizer, der passend zu einem laufenden Sound ein Mesh aus Säulen der Frequenzbänder generiert
  * 
  * @author Lasse Huber-Saffer
- * @version 10.12.2021
+ * @version 01.01.2022
  */
 public class BarAudioVisualizer implements AudioSpectrumListener, IGameObject
 {
@@ -19,7 +19,7 @@ public class BarAudioVisualizer implements AudioSpectrumListener, IGameObject
     private Vector3 _position;
     private Vector3 _rotation;
     private Vector3 _scale;
-    private String _color;
+    private TurtleColor _color;
     
     /**
      * Konstruktor des BarAudioVisualizers
@@ -29,7 +29,7 @@ public class BarAudioVisualizer implements AudioSpectrumListener, IGameObject
      * @param scale Skalierung
      * @param color Farbe der generierten Meshes
      */
-    public BarAudioVisualizer(Sound sound, Vector3 position, Vector3 rotation, Vector3 scale, String color)
+    public BarAudioVisualizer(Sound sound, Vector3 position, Vector3 rotation, Vector3 scale, TurtleColor color)
     {
         _internalObjects = new ArrayList<SimpleDynamicGameObject>();
         _sound = sound;
@@ -83,7 +83,7 @@ public class BarAudioVisualizer implements AudioSpectrumListener, IGameObject
                 _internalObjects.remove(0);
             }
             
-            _internalObjects.add(new SimpleDynamicGameObject(mesh, "magenta", new Vector3(0.0, 0.0, 0.0), new Vector3(), new Vector3(1.0, 1.0, 1.0)));
+            _internalObjects.add(new SimpleDynamicGameObject(mesh, _color, new Vector3(0.0, 0.0, 0.0), new Vector3(), new Vector3(1.0, 1.0, 1.0)));
             
             for(SimpleDynamicGameObject obj : _internalObjects)
             {
@@ -149,7 +149,7 @@ public class BarAudioVisualizer implements AudioSpectrumListener, IGameObject
     /**
      * @see IGameObject#getColor()
      */
-    public String getColor()
+    public TurtleColor getColor()
     {
         return _color;
     }
@@ -157,7 +157,7 @@ public class BarAudioVisualizer implements AudioSpectrumListener, IGameObject
     /**
      * @see IGameObject#setColor()
      */
-    public void setColor(String color)
+    public void setColor(TurtleColor color)
     {
         _color = color;
     }

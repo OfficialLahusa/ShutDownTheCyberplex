@@ -4,21 +4,21 @@ import java.util.*;
  * Ein TileProvider, der Mauern und optional Säulen in Abhängigkeit von der Umgebung platziert
  * 
  * @author Lasse Huber-Saffer
- * @version 04.12.2021
+ * @version 01.01.2021
  */
 public class WallTileProvider implements ITileProvider
 {
     private Mesh _wallMesh;
-    private String _wallColor;
+    private TurtleColor _wallColor;
     private Mesh _pillarMesh;
-    private String _pillarColor;
+    private TurtleColor _pillarColor;
     
     /**
      * Konstruktor für Objekte der Klasse WallTileProvider
      * @param wallMesh Mesh, das für die Vorlage verwendet werden soll (Eine Seite auf der X-Achse, der Mittelpunkt auf der Y-Achse)
      * @param wallColor Farbe, die die Vorlage haben soll
      */
-    public WallTileProvider(Mesh wallMesh, String wallColor)
+    public WallTileProvider(Mesh wallMesh, TurtleColor wallColor)
     {
         this(wallMesh, wallColor, null, null);
     }
@@ -30,7 +30,7 @@ public class WallTileProvider implements ITileProvider
      * @param pillarMesh Mesh, das für die Vorlage verwendet werden soll (Liegt auf der Y-Achse), darf null sein
      * @param pillarColor Farbe, die die Vorlage haben soll, darf null sein
      */
-    public WallTileProvider(Mesh wallMesh, String wallColor, Mesh pillarMesh, String pillarColor)
+    public WallTileProvider(Mesh wallMesh, TurtleColor wallColor, Mesh pillarMesh, TurtleColor pillarColor)
     {
         _wallMesh = wallMesh;
         _wallColor = wallColor;
@@ -98,22 +98,46 @@ public class WallTileProvider implements ITileProvider
         // Säule an Ecke -X-Z
         if(!Tile.isSolidOrNone(env.nxnz) && !Tile.isSolid(env.nx) && !Tile.isSolid(env.nz))
         {
-            result.add(new StaticGameObject(getPillarMesh(), getPillarColor(), new Vector3(x * MapHandler.TILE_WIDTH, 0.0, (MapHandler.MIRROR_Z_AXIS ? -1 : 1) * z * MapHandler.TILE_WIDTH)));
+            result.add(
+                new StaticGameObject(
+                    getPillarMesh(), getPillarColor(),
+                    new Vector3(x * MapHandler.TILE_WIDTH, 0.0, (MapHandler.MIRROR_Z_AXIS ? -1 : 1) * z * MapHandler.TILE_WIDTH),
+                    new Vector3(), new Vector3(1.0, 1.0, 1.0)
+                )
+            );
         }
         // Säule an Ecke +X-Z
         if(!Tile.isSolidOrNone(env.pxnz) && !Tile.isSolid(env.px) && !Tile.isSolid(env.nz))
         {
-            result.add(new StaticGameObject(getPillarMesh(), getPillarColor(), new Vector3((x + 1.0) * MapHandler.TILE_WIDTH, 0.0, (MapHandler.MIRROR_Z_AXIS ? -1 : 1) * z * MapHandler.TILE_WIDTH)));
+            result.add(
+                new StaticGameObject(
+                    getPillarMesh(), getPillarColor(),
+                    new Vector3((x + 1.0) * MapHandler.TILE_WIDTH, 0.0, (MapHandler.MIRROR_Z_AXIS ? -1 : 1) * z * MapHandler.TILE_WIDTH),
+                    new Vector3(), new Vector3(1.0, 1.0, 1.0)
+                )
+            );
         }
         // Säule an Ecke +X+Z
         if(!Tile.isSolidOrNone(env.pxpz) && !Tile.isSolid(env.px) && !Tile.isSolid(env.pz))
         {
-            result.add(new StaticGameObject(getPillarMesh(), getPillarColor(), new Vector3((x + 1.0) * MapHandler.TILE_WIDTH, 0.0, (MapHandler.MIRROR_Z_AXIS ? -1 : 1) * (z + 1.0) * MapHandler.TILE_WIDTH)));
+            result.add(
+                new StaticGameObject(
+                    getPillarMesh(), getPillarColor(),
+                    new Vector3((x + 1.0) * MapHandler.TILE_WIDTH, 0.0, (MapHandler.MIRROR_Z_AXIS ? -1 : 1) * (z + 1.0) * MapHandler.TILE_WIDTH),
+                    new Vector3(), new Vector3(1.0, 1.0, 1.0)
+                )
+            );
         }
         // Säule an Ecke -X+Z
         if(!Tile.isSolidOrNone(env.nxpz) && !Tile.isSolid(env.nx) && !Tile.isSolid(env.pz))
         {
-            result.add(new StaticGameObject(getPillarMesh(), getPillarColor(), new Vector3(x * MapHandler.TILE_WIDTH, 0.0, (MapHandler.MIRROR_Z_AXIS ? -1 : 1) * (z + 1.0) * MapHandler.TILE_WIDTH)));
+            result.add(
+                new StaticGameObject(
+                    getPillarMesh(), getPillarColor(),
+                    new Vector3(x * MapHandler.TILE_WIDTH, 0.0, (MapHandler.MIRROR_Z_AXIS ? -1 : 1) * (z + 1.0) * MapHandler.TILE_WIDTH),
+                    new Vector3(), new Vector3(1.0, 1.0, 1.0)
+                )
+            );
         }
         
         return result;
@@ -149,7 +173,7 @@ public class WallTileProvider implements ITileProvider
      * Gibt die Farbe der Vorlage zurück
      * @return Farbe der Vorlage
      */
-    public String getWallColor()
+    public TurtleColor getWallColor()
     {
         return _wallColor;
     }
@@ -158,7 +182,7 @@ public class WallTileProvider implements ITileProvider
      * Gibt die Farbe der Vorlage zurück
      * @return Farbe der Vorlage
      */
-    public String getPillarColor()
+    public TurtleColor getPillarColor()
     {
         return _pillarColor;
     }

@@ -4,7 +4,7 @@ import java.util.*;
  * Verwaltet das Laden von Ressourcendateien
  * 
  * @author Lasse Huber-Saffer
- * @version 24.12.2021
+ * @version 01.01.2022
  */
 public class ResourceManager
 {

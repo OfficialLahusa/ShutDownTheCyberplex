@@ -4,7 +4,7 @@ import java.util.*;
  * Geschützturm, der sich zum Spieler ausrichtet und ihn beschießt
  * 
  * @author Lasse Huber-Saffer
- * @version 25.12.2021
+ * @version 01.01.2022
  */
 public class Turret extends Enemy implements ILivingEntity, ICollisionListener, IDynamicGameObject
 {
@@ -35,7 +35,7 @@ public class Turret extends Enemy implements ILivingEntity, ICollisionListener, 
     // Rendering
     private Mesh _activeMesh;
     private Mesh _inactiveMesh;
-    private String _color;
+    private TurtleColor _color;
     private Matrix4 _model;
     private Vector3 _lastShotPos1;
     private Vector3 _lastShotPos2;
@@ -85,8 +85,8 @@ public class Turret extends Enemy implements ILivingEntity, ICollisionListener, 
         
         _activeMesh = entityMeshes.get("turret_active");
         _inactiveMesh = entityMeshes.get("turret_inactive");
-        _color = "hellgrau";
-        _muzzleFlash = new SimpleDynamicGameObject(entityMeshes.get("turret_muzzle_flash"), "rot");
+        _color = TurtleColor.LIGHT_GRAY;
+        _muzzleFlash = new SimpleDynamicGameObject(entityMeshes.get("turret_muzzle_flash"), TurtleColor.RED, new Vector3(), new Vector3(), new Vector3(1.0, 1.0, 1.0));
         
         _recalculateModelMatrix = true;
         _model = null;
@@ -423,7 +423,7 @@ public class Turret extends Enemy implements ILivingEntity, ICollisionListener, 
     /**
      * @see IGameObject#getColor()
      */
-    public String getColor()
+    public TurtleColor getColor()
     {
         return null;
     }
@@ -479,7 +479,7 @@ public class Turret extends Enemy implements ILivingEntity, ICollisionListener, 
     /**
      * @see IGameObject#setColor()
      */
-    public void setColor(String color)
+    public void setColor(TurtleColor color)
     {
         return;
     }

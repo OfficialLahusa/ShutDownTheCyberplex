@@ -51,11 +51,11 @@ public interface IGameObject
      * Gibt die Farbe zurück
      * @return Farbe des Objekts
      */
-    public String getColor();
+    public TurtleColor getColor();
     
     /**
      * Setzt die Farbe
      * @param color Farbe des Objekts
      */
-    public void setColor(String color);
+    public void setColor(TurtleColor color);
 }

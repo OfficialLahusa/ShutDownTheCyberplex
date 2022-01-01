@@ -5,12 +5,12 @@ import javafx.util.*;
  * TileProvider für Geheimtüren, die in Abhängigkeit von der Umgebung entlang der X- oder Z-Achse ausgerichtet sein können
  * 
  * @author Lasse Huber-Saffer
- * @version 25.12.2021
+ * @version 01.01.2022
  */
 public class SecretDoorTileProvider implements ITileProvider
 {
-    private ArrayList<Pair<Mesh, String>> _coloredMeshesClosed;
-    private ArrayList<Pair<Mesh, String>> _coloredMeshesOpen;
+    private ArrayList<Pair<Mesh, TurtleColor>> _coloredMeshesClosed;
+    private ArrayList<Pair<Mesh, TurtleColor>> _coloredMeshesOpen;
     private ITileProvider _floorTileProvider;
     private WallTileProvider _wallTileProvider;
     private boolean _isOpen;
@@ -34,7 +34,7 @@ public class SecretDoorTileProvider implements ITileProvider
      * @param closeSoundKey (Optional) Soundquelle, die für den Sound beim Schließen der Tür verwendet wird
      */
     public SecretDoorTileProvider(
-        ArrayList<Pair<Mesh, String>> coloredMeshesClosed, ArrayList<Pair<Mesh, String>> coloredMeshesOpen, boolean isOpen,
+        ArrayList<Pair<Mesh, TurtleColor>> coloredMeshesClosed, ArrayList<Pair<Mesh, TurtleColor>> coloredMeshesOpen, boolean isOpen,
         IColliderProvider closedColliderProvider, IColliderProvider openColliderProvider,
         ITileProvider floorTileProvider, WallTileProvider wallTileProvider,
         SoundEngine soundEngine, String openSoundKey, String closeSoundKey
@@ -124,7 +124,7 @@ public class SecretDoorTileProvider implements ITileProvider
      * Gibt eine Referenz zur Liste der Mesh-Farb-Paare des Providers zurück, die im geschlossenen Zustand verwendet werden
      * @return Referenz zur Liste der Mesh-Farb-Paare, die im geschlossenen Zustand verwendet werden
      */
-    public ArrayList<Pair<Mesh, String>> getColoredMeshesClosed()
+    public ArrayList<Pair<Mesh, TurtleColor>> getColoredMeshesClosed()
     {
         return _coloredMeshesClosed;
     }
@@ -133,7 +133,7 @@ public class SecretDoorTileProvider implements ITileProvider
      * Gibt eine Referenz zur Liste der Mesh-Farb-Paare des Providers zurück, die im offenen Zustand verwendet werden
      * @return Referenz zur Liste der Mesh-Farb-Paare, die im offenen Zustand verwendet werden
      */
-    public ArrayList<Pair<Mesh, String>> getColoredMeshesOpen()
+    public ArrayList<Pair<Mesh, TurtleColor>> getColoredMeshesOpen()
     {
         return _coloredMeshesOpen;
     }

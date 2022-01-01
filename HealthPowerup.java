@@ -4,7 +4,7 @@ import java.util.*;
  * Einsammelbares Powerup, das den Spieler heilt
  * 
  * @author Lasse Huber-Saffer
- * @version 24.12.2021
+ * @version 01.01.2022
  */
 public class HealthPowerup implements IDynamicGameObject, ICollisionListener
 {
@@ -30,7 +30,7 @@ public class HealthPowerup implements IDynamicGameObject, ICollisionListener
     
     // Rendering
     private Mesh _mesh;
-    private String _color;
+    private TurtleColor _color;
     private boolean _recalculateModelMatrix;
     private Matrix4 _model;
     
@@ -62,7 +62,7 @@ public class HealthPowerup implements IDynamicGameObject, ICollisionListener
         _scale = new Vector3(1.0, 1.0, 1.0);
         
         _mesh = entityMeshes.get("health_powerup");
-        _color = "gruen";
+        _color = TurtleColor.GREEN;
         
         _recalculateModelMatrix = true;
         _model = null;
@@ -253,7 +253,7 @@ public class HealthPowerup implements IDynamicGameObject, ICollisionListener
     /**
      * @see IGameObject#getColor()
      */
-    public String getColor()
+    public TurtleColor getColor()
     {
         return null;
     }
@@ -261,7 +261,7 @@ public class HealthPowerup implements IDynamicGameObject, ICollisionListener
     /**
      * @see IGameObject#setColor()
      */
-    public void setColor(String color)
+    public void setColor(TurtleColor color)
     {
         return;
     }

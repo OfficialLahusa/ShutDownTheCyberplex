@@ -5,7 +5,7 @@ import java.util.*;
  * Der Spieler ist ein DynamicGameObject, das kein Rendering durchführt und die Rotation repurposed.
  * 
  * @author Sven Schreiber, Lasse Huber-Saffer
- * @version 23.12.2021
+ * @version 01.01.2022
  */
 public class Player implements ILivingEntity, IDynamicGameObject, ICollisionListener
 {
@@ -230,7 +230,7 @@ public class Player implements ILivingEntity, IDynamicGameObject, ICollisionList
     /**
      * @see IGameObject#getColor()
      */
-    public String getColor()
+    public TurtleColor getColor()
     {
         return null;
     }
@@ -291,7 +291,7 @@ public class Player implements ILivingEntity, IDynamicGameObject, ICollisionList
     /**
      * @see IGameObject#setColor()
      */
-    public void setColor(String color)
+    public void setColor(TurtleColor color)
     {
         return;
     }
