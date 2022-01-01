@@ -110,8 +110,16 @@ public class TitleScene extends Scene
             // damit man wirklich einen ganzen Klick auf dem Button bleiben muss.
             if (_state.inputHandler.isKeyPressed(KeyCode.MOUSE_BUTTON_LEFT))
             {
-                _state.soundEngine.removeAllSounds();
-                _state.scene = new GameScene(_state);
+                if(p == 0)
+                {
+                    _state.soundEngine.removeAllSounds();
+                    _state.scene = new GameScene(_state);
+                }
+                else
+                {
+                    _state.soundEngine.removeAllSounds();
+                    _state.scene = new CreditScene(_state);
+                }
             }
         }
     }
