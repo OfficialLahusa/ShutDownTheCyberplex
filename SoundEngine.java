@@ -96,7 +96,7 @@ public class SoundEngine
      */
     public void removeAllSounds()
     {
-        // Entfernt iterativ die gestoppten Sounds
+        // Entfernt iterativ alle Sounds
         for(Iterator<Sound> iter = _currentSounds.iterator(); iter.hasNext(); )
         {
             Sound elem = iter.next();
