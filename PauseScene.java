@@ -1,9 +1,9 @@
 
 /**
- * Beschreiben Sie hier die Klasse PauseScene.
+ * Diese Klasse modelliert den Pausebildschirm
  * 
- * @author (Ihr Name) 
- * @version (eine Versionsnummer oder ein Datum)
+ * @author Sven Schreiber
+ * @version 01.01.2022
  */
 public class PauseScene extends Scene
 {
