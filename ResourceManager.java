@@ -90,10 +90,11 @@ public class ResourceManager
         soundEngine.loadSource("turret_reloading", Directory.SOUND + "turret/reload/reloading.wav");
         soundEngine.loadSource("turret_tactical_reload", Directory.SOUND + "turret/reload/tactical_reload.wav");
         soundEngine.loadSource("turret_restocking_ammunition", Directory.SOUND + "turret/reload/restocking_ammunition.wav");
-        soundEngine.loadSource("turret_enemy_detected", Directory.SOUND + "turret/enemy_detected/enemy_detected.wav");
         
         soundEngine.loadSource("turret_system_failure", Directory.SOUND + "turret/death/system_failure.wav");
         soundEngine.loadSource("turret_offline", Directory.SOUND + "turret/death/turret_offline.wav");
+        
+        soundEngine.loadSource("drone_enemy_detected", Directory.SOUND + "drone/enemy_detected/enemy_detected.wav");
         
         soundEngine.loadSource("health_powerup_collected", Directory.SOUND + "item/health_powerup_collected.wav");
         

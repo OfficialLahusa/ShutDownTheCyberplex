@@ -74,7 +74,7 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
     
     // Spielerentdeckung
     private static final double PLAYER_DISCOVERY_ANGLE = 30.0;
-    private static final double PLAYER_DISCOVERY_DISTANCE = 2.5;
+    private static final double PLAYER_DISCOVERY_DISTANCE = 4.0;
     
     // Voicelines
     private static final double RELOAD_VOICELINE_DELAY = 0.25;
@@ -216,7 +216,7 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
             if(getDistanceTo(_room.getMap().getPlayer().getPosition()) <= PLAYER_DISCOVERY_DISTANCE || (hasLineOfSight(MAX_SIGHT_RANGE) && getAngleTo(_room.getMap().getPlayer().getPosition()) <= PLAYER_DISCOVERY_ANGLE))
             {
                 _state = DroneAIState.ATTACKING;
-                _soundEngine.playSound("turret_enemy_detected", VOICELINE_VOLUME, false);
+                _soundEngine.playSound("drone_enemy_detected", VOICELINE_VOLUME, false);
             }
             
             // Wenn Pfad leer ist
@@ -294,7 +294,7 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
             if(getDistanceTo(_room.getMap().getPlayer().getPosition()) <= PLAYER_DISCOVERY_DISTANCE || (hasLineOfSight(MAX_SIGHT_RANGE) && getAngleTo(_room.getMap().getPlayer().getPosition()) <= PLAYER_DISCOVERY_ANGLE))
             {
                 _state = DroneAIState.ATTACKING;
-                _soundEngine.playSound("turret_enemy_detected", VOICELINE_VOLUME, false);
+                _soundEngine.playSound("drone_enemy_detected", VOICELINE_VOLUME, false);
             }
             
             // Wenn Pfad leer ist
