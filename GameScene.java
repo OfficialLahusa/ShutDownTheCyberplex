@@ -30,10 +30,11 @@ public class GameScene extends Scene
         
         // Meshes laden
         HashMap<String, Mesh> entityMeshes = _state.resourceManager.loadEntityMeshes();
+        HashMap<String, Mesh> particleMeshes = _state.resourceManager.loadParticleMeshes();
         HashMap<String, Mesh> tileMeshes = _state.resourceManager.loadTileMeshes();
         HashMap<String, Mesh> viewModelMeshes = _state.resourceManager.loadViewModelMeshes();
         
-        _mapHandler = new MapHandler(tileMeshes, entityMeshes, _state.soundEngine);
+        _mapHandler = new MapHandler(tileMeshes, entityMeshes, particleMeshes, _state.soundEngine);
         
         // Viewmodel-Objekte initialisieren
         _muzzleFlash        = new DynamicViewModelGameObject(viewModelMeshes.get("muzzleFlash"),        TurtleColor.CYAN,   new Vector3 (-2, -2.2,-11), new Vector3(), new Vector3(1.0, 1.0, 1.0));

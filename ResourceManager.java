@@ -39,6 +39,20 @@ public class ResourceManager
     }
     
     /**
+     * Lädt alle für die Erstellung von Partikeln benötigten Meshes aus Dateien
+     * @return HashMap, in der die geladenen Meshes unter ihren jeweiligen Keys registriert sind
+     */
+    public HashMap<String, Mesh> loadParticleMeshes()
+    {
+        // Initialisierung der Entity Meshes
+        HashMap<String, Mesh> particleMeshes = new HashMap<String, Mesh>();
+        
+        particleMeshes.put("drone_hit_particle", _objLoader.loadFromFile(Directory.MODEL + "particle/cross.obj"));
+        
+        return particleMeshes;
+    }
+    
+    /**
      * Lädt alle für die Konstruktion der Mapgeometrie benötigten Meshes aus Dateien
      * @return HashMap, in der die geladenen Meshes unter ihren jeweiligen Keys registriert sind
      */

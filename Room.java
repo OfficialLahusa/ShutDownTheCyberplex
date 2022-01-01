@@ -4,7 +4,7 @@ import java.util.*;
  * Ein räumlich eingegrenzter Abschnitt einer Gridmap, innerhalb dessen Simulationen durchgeführt werden
  * 
  * @author Lasse Huber-Saffer
- * @version 26.12.2021
+ * @version 02.01.2022
  */
 public class Room
 {
@@ -23,8 +23,9 @@ public class Room
     private Vector2i[] _patrolRoute;
     private int _patrolRouteLength;
     
-    // Entities in Room
+    // Entities im Raum
     private ArrayList<IGameObject> _entities;
+    private ArrayList<IParticleSystem> _particleSystems;
     
     // Bounds im Grid
     private int _minX;
@@ -52,18 +53,20 @@ public class Room
         _patrolRouteLength = 0;
         
         _entities = new ArrayList<IGameObject>();
+        _particleSystems = new ArrayList<IParticleSystem>();
     }
     
     /**
      * Verarbeitet die Tile-Werte und erstellt die spielbare Map
      * @param tileProviders Hashmap der TileProvider. Der Key entspricht der Tile-ID
      * @param colliderProviders Hashmap der ColliderProvider. Der Key entspricht der Tile-ID
-     * @param entityMeshes Hashmap der von Entities verwendeten Meshes.
+     * @param entityMeshes Register, aus dem die Entity-Meshes bezogen werden
+     * @param particleMeshes Register, aus dem die Particle-Meshes bezogen werden
      * @param soundEngine Sound Engine
      * @param tileLayer rohe Geometrie-Mapdaten
      * @param functionLayer rohe Funktions-Mapdaten
      */
-    public void populate(HashMap<Integer, ITileProvider> tileProviders, HashMap<Integer, IColliderProvider> colliderProviders, HashMap<String, Mesh> entityMeshes, SoundEngine soundEngine, ArrayList<ArrayList<Integer>> tileLayer, ArrayList<ArrayList<Integer>> functionLayer)
+    public void populate(HashMap<Integer, ITileProvider> tileProviders, HashMap<Integer, IColliderProvider> colliderProviders, HashMap<String, Mesh> entityMeshes, HashMap<String, Mesh> particleMeshes, SoundEngine soundEngine, ArrayList<ArrayList<Integer>> tileLayer, ArrayList<ArrayList<Integer>> functionLayer)
     {
         // Null-Check der Parameter
         if(tileProviders == null)       throw new IllegalArgumentException("tileProviders was null when populating room");
@@ -199,7 +202,7 @@ public class Room
                             _entities.add(active_turret);
                             break;
                         case Tile.SPAWN_DRONE:
-                            Drone drone = new Drone(MapHandler.tilePosToWorldPos(new Vector2i(x, z)), true, this, entityMeshes, soundEngine);
+                            Drone drone = new Drone(MapHandler.tilePosToWorldPos(new Vector2i(x, z)), true, this, entityMeshes, particleMeshes, soundEngine);
                             _entities.add(drone);
                             break;
                         case Tile.SPAWN_HEALTH_POWERUP:
@@ -259,6 +262,12 @@ public class Room
         {
             entity.draw(renderer, camera);
         }
+        
+        // Partikelsysteme zeichnen
+        for(IParticleSystem particleSystem : _particleSystems)
+        {
+            particleSystem.draw(renderer, camera);
+        }
     }
     
     /**
@@ -269,9 +278,26 @@ public class Room
      */
     public void update(double deltaTime, double runTime, Vector3 cameraPosition)
     {
+        // Entities updaten
         for(IGameObject entity : _entities)
         {
             entity.update(deltaTime, runTime, cameraPosition);
+        }
+        
+        // Entfernt iterativ die gestoppten Partikelsysteme
+        for(Iterator<IParticleSystem> iter = _particleSystems.iterator(); iter.hasNext();)
+        {
+            IParticleSystem elem = iter.next();
+            if(elem == null || elem.isDone())
+            {
+                iter.remove();
+            }
+        }
+        
+        // Partikelsysteme updaten
+        for(IParticleSystem particleSystem : _particleSystems)
+        {
+            particleSystem.update(deltaTime, runTime, cameraPosition);
         }
     }
     
@@ -406,6 +432,15 @@ public class Room
     public boolean contains(Vector2i pos)
     {
         return contains(pos.getX(), pos.getY());
+    }
+    
+    /**
+     * Fügt ein Partikelsystem zum Raum hinzu
+     * @param particleSystem Partikelsystem
+     */
+    public void addParticleSystem(IParticleSystem particleSystem)
+    {
+        _particleSystems.add(particleSystem);
     }
 
     /**

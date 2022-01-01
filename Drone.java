@@ -12,10 +12,6 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
     // Zufallsgenerator
     private Random _random;
     
-    // Sound
-    private SoundEngine _soundEngine;
-    private Sound _hoverSound;
-    
     // Functionality
     private DroneAIState _state;
     private int _nextPatrolPoint;
@@ -35,6 +31,13 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
     
     // Physik
     private CircleCollider _collider;
+    
+    // Sound
+    private SoundEngine _soundEngine;
+    private Sound _hoverSound;
+    
+    // Partikel
+    private HashMap<String, Mesh> _particleMeshes;
     
     // Positionierung
     private Vector3 _scale;
@@ -88,16 +91,15 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
      * @param position Position
      * @param active Ob das Drohne aktiv sein soll
      * @param room umgebender Raum
-     * @param entityMeshes Register der EntityMeshes, aus dem die Meshes bezogen werden
+     * @param entityMeshes Register, aus dem die Entity-Meshes bezogen werden
+     * @param particleMeshes Register, aus dem die Particle-Meshes bezogen werden
      * @param soundEngine Sound Engine, aus der die Sounds der Entity bezogen werden
      */
-    public Drone(Vector3 position, boolean active, Room room, HashMap<String, Mesh> entityMeshes, SoundEngine soundEngine)
+    public Drone(Vector3 position, boolean active, Room room, HashMap<String, Mesh> entityMeshes, HashMap<String, Mesh> particleMeshes, SoundEngine soundEngine)
     {
         _room = room;
         
         _random = new Random();
-        
-        _soundEngine = soundEngine;
         
         _isActive = active;
         _currentAmmo = MAGAZINE_CAPACITY;
@@ -105,6 +107,10 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
         _health = 50;
         _maxHealth = 50;
         _reloadingVoiceLineTriggered = true;
+        
+        _soundEngine = soundEngine;
+        
+        _particleMeshes = particleMeshes;
         
         _muzzleFlash = new SimpleDynamicGameObject(entityMeshes.get("turret_muzzle_flash"), TurtleColor.RED, new Vector3(), new Vector3(), new Vector3(1.0, 1.0, 1.0));
         _rotorLeft = new SimpleDynamicGameObject(entityMeshes.get("drone_rotor"), TurtleColor.LIGHT_GRAY, new Vector3(), new Vector3(), new Vector3(1.0, 1.0, 1.0));
@@ -745,6 +751,10 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
         // Spieler bemerken und angreifen
         _state = DroneAIState.ATTACKING;
         
+        // Partikelsystem erzeugen
+        _room.addParticleSystem(new DroneHitParticleSystem(_position, _room, _particleMeshes));
+        
+        // Neue Leben berechnen
         _health = Math.max(0, Math.min(_health - amount, _maxHealth));
         
         if(_health == 0) 

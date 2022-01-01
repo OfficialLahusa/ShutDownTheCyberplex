@@ -25,6 +25,8 @@ public class MapHandler
     private HashMap<Integer, IColliderProvider> _colliderProviders;
     // Namentliches Register von Meshes, die von Entities benutzt werden
     private HashMap<String, Mesh> _entityMeshes;
+    // Namentliches Register von Meshes, die von Partikeln benutzt werden
+    private HashMap<String, Mesh> _particleMeshes;
     
     // File-Loading
     private static final String TILE_LAYER_SUFFIX = "_tile.csv";
@@ -37,10 +39,11 @@ public class MapHandler
     /**
      * Konstruktor für Objekte der Klasse MapHandler
      * @param tileMeshes HashMap von namentlich aufgeführten Meshes für zu erstellende TileProvider
-     * @param entityMeshes HashMap von namentlich aufgeführten Meshes für zu erstellende Entities
+     * @param entityMeshes Register, aus dem die Entity-Meshes bezogen werden
+     * @param particleMeshes Register, aus dem die Particle-Meshes bezogen werden
      * @param soundEngine SoundEngine für Tile-Sounds
      */
-    public MapHandler(HashMap<String, Mesh> tileMeshes, HashMap<String, Mesh> entityMeshes, SoundEngine soundEngine)
+    public MapHandler(HashMap<String, Mesh> tileMeshes, HashMap<String, Mesh> entityMeshes, HashMap<String, Mesh> particleMeshes, SoundEngine soundEngine)
     {
         _map = null;
         
@@ -51,7 +54,9 @@ public class MapHandler
         
         _tileProviders = new HashMap<Integer, ITileProvider>();
         _colliderProviders = new HashMap<Integer, IColliderProvider>();
+        
         _entityMeshes = entityMeshes;
+        _particleMeshes = particleMeshes;
         
         // Initialisierung der TileProvider
         // Dirt floor
@@ -78,7 +83,7 @@ public class MapHandler
             woodenDoorClosed, woodenDoorOpen, false,
             new BlockedTunnelColliderProvider(), new TunnelColliderProvider(),
             _tileProviders.get(Tile.DIRT_FLOOR), (WallTileProvider)_tileProviders.get(Tile.BRICK_WALL),
-            _soundEngine, "wooden_door_open", "wooden_door_close"
+            _soundEngine, "wooden_door_open", "wooden_door_close", 0.2
         ));
         
         // Dirt floor grass
@@ -98,7 +103,7 @@ public class MapHandler
             secretDoorClosed, secretDoorOpen, false,
             new BlockedTunnelColliderProvider(), new TunnelColliderProvider(),
             _tileProviders.get(Tile.DIRT_FLOOR), (WallTileProvider)_tileProviders.get(Tile.BRICK_WALL),
-            _soundEngine, "wooden_door_open", "wooden_door_close"
+            _soundEngine, "wooden_door_open", "wooden_door_close", 0.2
         ));
         
         // Road Markings X
@@ -126,7 +131,7 @@ public class MapHandler
     public void load(String mapName)
     {
         _map = _csvLoader.loadFromFile(Directory.MAP + mapName + TILE_LAYER_SUFFIX, Directory.MAP + mapName + FUNCTION_LAYER_SUFFIX);
-        _map.populate(_tileProviders, _colliderProviders, _entityMeshes, _soundEngine);
+        _map.populate(_tileProviders, _colliderProviders, _entityMeshes, _particleMeshes, _soundEngine);
     }
     
     /**

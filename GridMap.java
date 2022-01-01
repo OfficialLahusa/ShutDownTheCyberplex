@@ -335,10 +335,11 @@ public class GridMap
      * Verarbeitet die Tile-Werte und erstellt die spielbare Map.
      * @param tileProviders Hashmap der TileProvider. Der Key entspricht der Tile-ID.
      * @param colliderProviders Hashmap der ColliderProvider. Der Key entspricht der Tile-ID.
-     * @param entityMeshes Hashmap der von Entities verwendeten Meshes.
+     * @param entityMeshes Register, aus dem die Entity-Meshes bezogen werden
+     * @param particleMeshes Register, aus dem die Particle-Meshes bezogen werden
      * @param soundEngine Sound Engine
      */
-    public void populate(HashMap<Integer, ITileProvider> tileProviders, HashMap<Integer, IColliderProvider> colliderProviders, HashMap<String, Mesh> entityMeshes, SoundEngine soundEngine)
+    public void populate(HashMap<Integer, ITileProvider> tileProviders, HashMap<Integer, IColliderProvider> colliderProviders, HashMap<String, Mesh> entityMeshes, HashMap<String, Mesh> particleMeshes, SoundEngine soundEngine)
     {
         // Geometrieebene
         for(int z = 0; z < _tileLayer.size(); z++)
@@ -396,7 +397,7 @@ public class GridMap
             Room room = floodFillFromSource(source);
             if(room != null)
             {
-                room.populate(tileProviders, colliderProviders, entityMeshes, soundEngine, _tileLayer, _functionLayer);
+                room.populate(tileProviders, colliderProviders, entityMeshes, particleMeshes, soundEngine, _tileLayer, _functionLayer);
                 rooms.add(room);
             }
             else

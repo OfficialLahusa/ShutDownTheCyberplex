@@ -5,7 +5,7 @@ import javafx.util.*;
  * Beschreiben Sie hier die Klasse DoorGameObject.
  * 
  * @author Lasse Huber-Saffer
- * @version 01.01.2022
+ * @version 02.01.2022
  */
 public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObject
 {
@@ -37,7 +37,8 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
     // Sound
     private SoundEngine _soundEngine;
     private String _openSoundKey;
-    private String _closeSoundKey;    
+    private String _closeSoundKey;
+    private Double _soundVolume;
     
     /**
      * Konstruktor für Türen mit gegebenem Mesh, Position, Rotation, Skalierung und Boden- sowie Wand-GameObjects
@@ -56,13 +57,14 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
      * @param soundEngine (Optional) Sound Engine, in der die nachfolgenden Schlüssel enthalten sind
      * @param openSoundKey (Optional) Schlüssel des Sounds für das Öffnen
      * @param closeSoundKey (Optional) Schlüssel des Sounds für das Schließen
+     * @param soundVolume (Optional) Lautstärke der Sounds
      */
     public DoorGameObject(Vector3 position, Vector3 rotation, Vector3 scale,
         boolean facingZ, boolean isOpen, Vector2i tilePosition,
         ArrayList<Pair<Mesh, TurtleColor>> coloredMeshesClosed, ArrayList<Pair<Mesh, TurtleColor>> coloredMeshesOpen,
         ICollider closedCollider, ICollider openCollider,
         ArrayList<IGameObject> floor, ArrayList<IGameObject> walls,
-        SoundEngine soundEngine, String openSoundKey, String closeSoundKey
+        SoundEngine soundEngine, String openSoundKey, String closeSoundKey, Double soundVolume
     )
     {
         _position = new Vector3(position);
@@ -80,6 +82,7 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
         _soundEngine = soundEngine;
         _openSoundKey = openSoundKey;
         _closeSoundKey = closeSoundKey;
+        _soundVolume = soundVolume;
         
         _model = null;
         
@@ -171,7 +174,7 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
         {
             if(key != null && _soundEngine.containsSource(key))
             {
-                _soundEngine.playSound(key, 0.6, false);
+                _soundEngine.playSound(key, _soundVolume, false);
             }
         }
     }

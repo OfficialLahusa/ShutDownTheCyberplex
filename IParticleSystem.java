@@ -18,4 +18,10 @@ public interface IParticleSystem extends IDynamicGameObject
      * Entfernt alle Partikel
      */
     public void clear();
+    
+    /**
+     * Gibt zurück, ob das Partikelsystem fertig simuliert wurde
+     * @return true, wenn die Simulation abgeschlossen ist, sonst false
+     */
+    public boolean isDone();
 }
