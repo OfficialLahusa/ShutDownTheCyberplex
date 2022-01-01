@@ -8,7 +8,7 @@ import java.net.MalformedURLException;
  * Lädt, speichert und spielt Sounddateien sowie Quellen
  * 
  * @author Lasse Huber-Saffer 
- * @version 23.12.2021
+ * @version 01.01.2022
  */
 public class SoundEngine
 {
@@ -83,7 +83,7 @@ public class SoundEngine
         for(Iterator<Sound> iter = _currentSounds.iterator(); iter.hasNext(); )
         {
             Sound elem = iter.next();
-            if(elem == null || elem.getStatus() == MediaPlayer.Status.STOPPED || elem.getStatus() == null)
+            if(elem == null || elem.getStatus() == MediaPlayer.Status.STOPPED || elem.getStatus() == MediaPlayer.Status.DISPOSED || elem.getStatus() == null)
             {
                 elem.dispose();
                 iter.remove();

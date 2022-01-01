@@ -1,4 +1,5 @@
 import java.util.*;
+import javafx.scene.media.*;
 
 /**
  * Drohne, der sich zum Spieler ausrichtet, ihn verfolgt und beschießt
@@ -13,6 +14,7 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
     
     // Sound
     private SoundEngine _soundEngine;
+    private Sound _hoverSound;
     
     // Functionality
     private DroneAIState _state;
@@ -76,9 +78,10 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
     private static final double PLAYER_DISCOVERY_ANGLE = 30.0;
     private static final double PLAYER_DISCOVERY_DISTANCE = 4.0;
     
-    // Voicelines
+    // Audio
     private static final double RELOAD_VOICELINE_DELAY = 0.25;
-    private static final double VOICELINE_VOLUME = 0.8;
+    private static final double VOICELINE_VOLUME = 0.65;
+    private static final double HOVER_SOUND_FADE_DIST = 40.0;
     
     /**
      * Konstruktor für Drohne mit Position und Meshes
@@ -95,7 +98,6 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
         _random = new Random();
         
         _soundEngine = soundEngine;
-        
         
         _isActive = active;
         _currentAmmo = MAGAZINE_CAPACITY;
@@ -190,6 +192,27 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
             scaleValue = 1.0;
         }
         _muzzleFlash.setScale(new Vector3(scaleValue, scaleValue, scaleValue));
+        
+        // Hover-Sound-Lautstärke berechnen
+        Vector2 playerPos2D = new Vector2(cameraPosition.getX(), cameraPosition.getZ());
+        Vector2 currentPos2D = new Vector2(_position.getX(), _position.getZ());
+        double dist = playerPos2D.subtract(currentPos2D).getLength();
+        // Sound linear attenuieren
+        double volume = 1.0 - dist / HOVER_SOUND_FADE_DIST;
+        
+        if(volume > 0.0)
+        {
+            // Hover-Sound neu erstellen, wenn nonexistent oder fertig abgespielt
+            if(_hoverSound == null || _hoverSound.getStatus() == MediaPlayer.Status.STOPPED || _hoverSound.getStatus() == MediaPlayer.Status.DISPOSED)
+            {
+                _hoverSound = _soundEngine.playSound("drone_hover", volume, false);
+            }
+            // Sonst Lautstärke des bestehenden Sounds setzen
+            else
+            {
+                _hoverSound.setVolume(volume);
+            }
+        }
         
         // Waffe Laden
         if(_currentAmmo == 0)
@@ -483,7 +506,7 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
                 
                 // Distanz zum Spieler durch Vorwärts-/Rückwärtsflug korrigieren
                 double deltaDist = playerDist - IDEAL_PLAYER_DISTANCE;
-                Vector2 playerPos2D = new Vector2(player.getPosition().getX(), player.getPosition().getZ());
+                playerPos2D = new Vector2(player.getPosition().getX(), player.getPosition().getZ());
                 Vector2 pos2D = new Vector2(_position.getX(), _position.getZ());
                 Vector2 dir = playerPos2D.subtract(pos2D).normalize();
                 // Bewegung auf FLYING_SPEED beschränken

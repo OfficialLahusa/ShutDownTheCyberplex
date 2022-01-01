@@ -95,6 +95,7 @@ public class ResourceManager
         soundEngine.loadSource("turret_offline", Directory.SOUND + "turret/death/turret_offline.wav");
         
         soundEngine.loadSource("drone_enemy_detected", Directory.SOUND + "drone/enemy_detected/enemy_detected.wav");
+        soundEngine.loadSource("drone_hover", Directory.SOUND + "drone/hover.wav");
         
         soundEngine.loadSource("health_powerup_collected", Directory.SOUND + "item/health_powerup_collected.wav");
         
