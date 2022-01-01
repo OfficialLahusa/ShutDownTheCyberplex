@@ -19,6 +19,7 @@ public class SecretDoorTileProvider implements ITileProvider
     private SoundEngine _soundEngine;
     private String _openSoundKey;
     private String _closeSoundKey;
+    private Double _soundVolume;
     
     /**
      * Konstruktor für Objekte der Klasse SecretDoorTileProvider
@@ -32,12 +33,13 @@ public class SecretDoorTileProvider implements ITileProvider
      * @param soundEngine (Optional) Sound Engine, in der die nachfolgenden Sounds vorzufinden sind
      * @param openSoundKey (Optional) Soundquelle, die für den Sound beim Öffnen der Tür verwendet wird
      * @param closeSoundKey (Optional) Soundquelle, die für den Sound beim Schließen der Tür verwendet wird
+     * @param soundVolume (Optional) Lautstärke der Sounds
      */
     public SecretDoorTileProvider(
         ArrayList<Pair<Mesh, TurtleColor>> coloredMeshesClosed, ArrayList<Pair<Mesh, TurtleColor>> coloredMeshesOpen, boolean isOpen,
         IColliderProvider closedColliderProvider, IColliderProvider openColliderProvider,
         ITileProvider floorTileProvider, WallTileProvider wallTileProvider,
-        SoundEngine soundEngine, String openSoundKey, String closeSoundKey
+        SoundEngine soundEngine, String openSoundKey, String closeSoundKey, Double soundVolume
     )
     {
         _coloredMeshesClosed = coloredMeshesClosed;
@@ -50,6 +52,7 @@ public class SecretDoorTileProvider implements ITileProvider
         _soundEngine = soundEngine;
         _openSoundKey = openSoundKey;
         _closeSoundKey = closeSoundKey;
+        _soundVolume = soundVolume;
     }
     
         
@@ -104,7 +107,7 @@ public class SecretDoorTileProvider implements ITileProvider
             _coloredMeshesClosed, _coloredMeshesOpen,
             new CompoundCollider(closedCollidersArray, PhysicsLayer.SEMISOLID), new CompoundCollider(openCollidersArray, PhysicsLayer.SEMISOLID),
             floorGeometry, wallGeometry,
-            _soundEngine, _openSoundKey, _closeSoundKey
+            _soundEngine, _openSoundKey, _closeSoundKey, _soundVolume
         );
         
         result.add(obj);

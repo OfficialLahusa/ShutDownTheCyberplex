@@ -72,7 +72,8 @@ class Renderer
         
         _turtle.hinterlasseKeineSpur();
         _turtle.geheZu(a.getX(), a.getY());
-        _turtle.setzeFarbe(colorToString(color));
+        //_turtle.setzeFarbe(colorToString(color));
+        _turtle.setzeFarbe(color.getID());
         _turtle.hinterlasseSpur();
         _turtle.geheZu(b.getX(), b.getY());
         _turtle.hinterlasseKeineSpur();
@@ -463,27 +464,27 @@ class Renderer
             case BLUE:
                 return "blau";
             case CYAN:
-            	return "cyan";
+                return "cyan";
             case DARK_GRAY:
-            	return "dunkelgrau";
+                return "dunkelgrau";
             case GRAY:
-            	return "grau";
+                return "grau";
             case GREEN:
-            	return "gruen";
+                return "gruen";
             case LIGHT_GRAY:
-            	return "hellgrau";
+                return "hellgrau";
             case MAGENTA:
-            	return "magenta";
+                return "magenta";
             case ORANGE:
-            	return "orange";
+                return "orange";
             case PINK:
-            	return "pink";
+                return "pink";
             case RED:
-            	return "rot";
+                return "rot";
             case WHITE:
-            	return "weiss";
+                return "weiss";
             case YELLOW:
-            	return "gelb";
+                return "gelb";
         }
     }
 }
