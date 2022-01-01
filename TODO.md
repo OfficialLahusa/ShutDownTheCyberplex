@@ -1,9 +1,6 @@
 # TODO:
 - Cracked Brick Wall TileProvider
 - MatrixGenerator#generateLookAtMatrix() entfernen
-- Farben zu Enums machen
-- Spielertod, Respawning, Checkpoints, Map Regen, etc.
-- Tür Soundsetzung überarbeiten
 - Partikeleffekte:
     - Für Molotovs, Kaputte Gegner: Feuer (Rote, gelbe Flammen die Skaliert werden und Rauch/Funkenpartikel, die sich bewegen, skalieren und vielleicht rotieren)
 - Tiles erstellen für:
@@ -15,8 +12,6 @@
     - Texttafeln in Level (z.B. "3D Printing Unit"), LOD lässt Text unklar erscheinen
     - Loot Crate
 - Wall-Mounting-Tileprovider
-- Gegnertypen:
-    - Drohne die Routen abfliegen und rot blinkenden Sensor haben, wenn sie den Spieler detecten
 - AI-Behaviour, Patrouillensystem
 - Voiceline-System
     - Bsp.: Commander gibt ein Tutorial 
