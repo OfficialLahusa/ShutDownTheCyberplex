@@ -1,44 +1,24 @@
-import java.util.*;
 
 /**
- * Titelbildschirm und Hauptmenü des Spiels
+ * Beschreiben Sie hier die Klasse PauseScene.
  * 
- * @author Lasse Huber-Saffer, Nico Hädicke
- * @version 01.01.2022
+ * @author (Ihr Name) 
+ * @version (eine Versionsnummer oder ein Datum)
  */
-public class TitleScene extends Scene
+public class PauseScene extends Scene
 {
+    private GameScene _gameScene;
     private Camera _camera;
-    private BarAudioVisualizer _audioVisualizer;
-    private StaticGameObject _title;
-    private StaticGameObject _mauern;
     
-    
-    public TitleScene(GameState state)
+    public PauseScene(GameState state, GameScene gameScene)
     {
         super(state);
+        
+        _gameScene = gameScene;
         
         _camera = new Camera();
         _camera.setPosition(new Vector3(0.0, 2, 5.0));
         _camera.setFov(30.0);
-        
-        _state.soundEngine.loadSource("music2", Directory.SOUND + "music/midnight_drive.mp3");
-        
-        Sound backgroundMusic = _state.soundEngine.playSound("music2", 0.35, true);
-    
-        //backgroundMusic.setAudioSpectrumNumBands(256+128);
-        backgroundMusic.setAudioSpectrumNumBands(96);
-        backgroundMusic.setAudioSpectrumInterval(0.075);
-        //backgroundMusic.setAudioSpectrumThreshold(-200);
-        backgroundMusic.setAudioSpectrumThreshold(-80);
-        
-        _audioVisualizer = new BarAudioVisualizer(backgroundMusic, new Vector3(), new Vector3(), new Vector3(1.0, 1.0, 1.0), TurtleColor.MAGENTA);
-        backgroundMusic.setAudioSpectrumListener(_audioVisualizer);
-        
-        HashMap<String, Mesh> titleScreenMeshes = _state.resourceManager.loadTitleScreenMeshes();
-        
-        _title = new StaticGameObject(titleScreenMeshes.get("title"), TurtleColor.CYAN, new Vector3 (0.0, 5, -14), new Vector3(), new Vector3(1.0, 1.0, 1.0));
-        _mauern = new StaticGameObject(titleScreenMeshes.get("mauern"), TurtleColor.CYAN, new Vector3 (-1.48, 0.34, -2.5), new Vector3(), new Vector3(1.0, 1.0, 1.0));
     }
     
     /**
@@ -53,8 +33,7 @@ public class TitleScene extends Scene
      * @see Scene#update()
      */
     public void update(double deltaTime, double runTime)
-    {
-        if(_audioVisualizer != null) _audioVisualizer.update(deltaTime, runTime, _camera.getPosition());
+    { 
         return;
     }
     
@@ -64,22 +43,19 @@ public class TitleScene extends Scene
     public void draw(double deltaTime, double runTime)
     {
         _state.renderer.clear(10, 10, 10);
-        if(_audioVisualizer != null) _audioVisualizer.draw(_state.renderer, _camera);
-        _title.draw(_state.renderer, _camera);
-        _mauern.draw(_state.renderer, _camera);
         
-        //draw Start Button
-        if (drawButton("Start", new Vector2(220.9,372), TurtleColor.WHITE)) 
-        {
-            _state.soundEngine.removeAllSounds();
-            _state.scene = new GameScene(_state);    
+        _state.textRenderer.write(new Vector2(183, 100), 12, "PAUSE", TurtleColor.CYAN);
+        
+        // Zeichne den "Start" Button
+        if (drawButton("Resume", new Vector2(213, 230), TurtleColor.WHITE)) {
+            _state.scene = _gameScene;
+            _state.inputHandler.setKeepMouseInPlace(true);
         }
         
-        //draw Credits Button
-        if (drawButton("Credits", new Vector2(250-37.65,414), TurtleColor.WHITE))
-        {
+        // Zeichne den "Exit" Button
+        if (drawButton("Menu", new Vector2(225, 270), TurtleColor.WHITE)) {
             _state.soundEngine.removeAllSounds();
-            _state.scene = new CreditScene(_state);
+            _state.scene = new TitleScene(_state);
         }
     }
     

@@ -81,6 +81,7 @@ public class GameScene extends Scene
         // Nicht-lebensgebundene Keybinds
         if(_state.inputHandler.isKeyPressed(KeyCode.KEY_ESCAPE))
         {
+            _state.scene = new PauseScene(_state, this);
             _state.inputHandler.setKeepMouseInPlace(false);
         }
         if(_state.inputHandler.isKeyPressed(KeyCode.KEY_SPACE))
