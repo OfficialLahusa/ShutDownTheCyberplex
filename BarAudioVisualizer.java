@@ -3,22 +3,42 @@ import javafx.util.*;
 import javafx.scene.media.*;
 
 /**
- * Beschreiben Sie hier die Klasse BarAudioVisualizer.
+ * AudioVisualizer, der passend zu einem laufenden Sound ein Mesh aus Säulen der Frequenzbänder generiert
  * 
  * @author Lasse Huber-Saffer
  * @version 10.12.2021
  */
-public class BarAudioVisualizer implements AudioSpectrumListener
+public class BarAudioVisualizer implements AudioSpectrumListener, IGameObject
 {
+    // Funktionalität
     private ArrayList<SimpleDynamicGameObject> _internalObjects;
     private Sound _sound;
     private Object _mutex;
     
-    public BarAudioVisualizer(Sound sound)
+    // Rendering
+    private Vector3 _position;
+    private Vector3 _rotation;
+    private Vector3 _scale;
+    private String _color;
+    
+    /**
+     * Konstruktor des BarAudioVisualizers
+     * @param sound Sound, für den beim Ablaufen Meshes erstellt werden sollen
+     * @param position Position im Raum
+     * @param rotation Rotation entlang der x-, y- und z-Achse
+     * @param scale Skalierung
+     * @param color Farbe der generierten Meshes
+     */
+    public BarAudioVisualizer(Sound sound, Vector3 position, Vector3 rotation, Vector3 scale, String color)
     {
         _internalObjects = new ArrayList<SimpleDynamicGameObject>();
         _sound = sound;
         _mutex = new Object();
+        
+        _position = new Vector3(position);
+        _rotation = new Vector3(rotation);
+        _scale = new Vector3(scale);
+        _color = color;
     }
     
     public void spectrumDataUpdate(double timestamp, double duration, float[] magnitudes, float[] phases)
@@ -72,11 +92,9 @@ public class BarAudioVisualizer implements AudioSpectrumListener
         }
     }
     
-    public void update(double deltaTime)
-    {
-
-    }
-    
+    /**
+     * @see IGameObject#draw()
+     */
     public void draw(Renderer renderer, Camera camera)
     {
         synchronized(_mutex)
@@ -86,5 +104,61 @@ public class BarAudioVisualizer implements AudioSpectrumListener
                 _internalObjects.get(i).draw(renderer, camera);
             }
         }
+    }
+    
+    /**
+     * @see IGameObject#update()
+     */
+    public void update(double deltaTime, double runTime, Vector3 cameraPosition)
+    {
+        return;
+    }
+    
+    /**
+     * @see IGameObject#getCollider()
+     */
+    public ICollider getCollider()
+    {
+        return null;
+    }
+    
+    /**
+     * @see IGameObject#getPosition()
+     */
+    public Vector3 getPosition()
+    {
+        return new Vector3(_position);
+    }
+    
+    /**
+     * @see IGameObject#getRotation()
+     */
+    public Vector3 getRotation()
+    {
+        return new Vector3(_rotation);
+    }
+    
+    /**
+     * @see IGameObject#getScale()
+     */
+    public Vector3 getScale()
+    {
+        return new Vector3(_scale);
+    }
+    
+    /**
+     * @see IGameObject#getColor()
+     */
+    public String getColor()
+    {
+        return _color;
+    }
+    
+    /**
+     * @see IGameObject#setColor()
+     */
+    public void setColor(String color)
+    {
+        _color = color;
     }
 }

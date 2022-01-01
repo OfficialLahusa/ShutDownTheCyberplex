@@ -32,7 +32,7 @@ public class TitleScene extends Scene
         //backgroundMusic.setAudioSpectrumThreshold(-200);
         backgroundMusic.setAudioSpectrumThreshold(-80);
         
-        _audioVisualizer = new BarAudioVisualizer(backgroundMusic);
+        _audioVisualizer = new BarAudioVisualizer(backgroundMusic, new Vector3(), new Vector3(), new Vector3(1.0, 1.0, 1.0), "magenta");
         backgroundMusic.setAudioSpectrumListener(_audioVisualizer);
         
         HashMap<String, Mesh> titleScreenMeshes = _state.resourceManager.loadTitleScreenMeshes();
@@ -53,7 +53,7 @@ public class TitleScene extends Scene
      */
     public void update(double deltaTime, double runTime)
     {
-        if(_audioVisualizer != null) _audioVisualizer.update(deltaTime);
+        if(_audioVisualizer != null) _audioVisualizer.update(deltaTime, runTime, _camera.getPosition());
     }
     
     /**
