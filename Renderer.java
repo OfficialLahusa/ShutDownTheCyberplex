@@ -72,8 +72,7 @@ class Renderer
         
         _turtle.hinterlasseKeineSpur();
         _turtle.geheZu(a.getX(), a.getY());
-        //_turtle.setzeFarbe(colorToString(color));
-        _turtle.setzeFarbe(color.getID());
+        _turtle.setzeFarbe(colorToString(color));
         _turtle.hinterlasseSpur();
         _turtle.geheZu(b.getX(), b.getY());
         _turtle.hinterlasseKeineSpur();
