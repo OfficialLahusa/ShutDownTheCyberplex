@@ -3,7 +3,7 @@
  * Compiletime-Register aller im Spiel verwendeten TileIDs
  * 
  * @author Lasse Huber-Saffer 
- * @version 22.12.2021
+ * @version 02.01.2022
  */
 public class Tile
 {
@@ -48,7 +48,9 @@ public class Tile
     public static final int BLUE_LOCK = 79;
 
     public static final int PLAYER_CHECKPOINT = 80;
+    public static final int SPAWN_DRONE_INACTIVE = 86;
     public static final int SPAWN_TURRET_INACTIVE = 87;
+    public static final int SPAWN_REACTOR_CORE = 88;
     public static final int SPAWN_HEALTH_POWERUP = 90;
     public static final int SPAWN_RED_KEY_DRONE = 94;
     

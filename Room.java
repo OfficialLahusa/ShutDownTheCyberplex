@@ -194,16 +194,24 @@ public class Room
                     switch(value)
                     {
                         case Tile.SPAWN_TURRET_INACTIVE:
-                            Turret inactive_turret = new Turret(MapHandler.tilePosToWorldPos(new Vector2i(x, z)), false, this, entityMeshes, soundEngine);
-                            _entities.add(inactive_turret);
+                            Turret inactiveTurret = new Turret(MapHandler.tilePosToWorldPos(new Vector2i(x, z)), false, this, entityMeshes, soundEngine);
+                            _entities.add(inactiveTurret);
                             break;
                         case Tile.SPAWN_TURRET_ACTIVE:
-                            Turret active_turret = new Turret(MapHandler.tilePosToWorldPos(new Vector2i(x, z)), true, this, entityMeshes, soundEngine);
-                            _entities.add(active_turret);
+                            Turret activeTurret = new Turret(MapHandler.tilePosToWorldPos(new Vector2i(x, z)), true, this, entityMeshes, soundEngine);
+                            _entities.add(activeTurret);
                             break;
                         case Tile.SPAWN_DRONE:
                             Drone drone = new Drone(MapHandler.tilePosToWorldPos(new Vector2i(x, z)), true, this, entityMeshes, particleMeshes, soundEngine);
                             _entities.add(drone);
+                            break;
+                        case Tile.SPAWN_DRONE_INACTIVE:
+                            Drone inactiveDrone = new Drone(MapHandler.tilePosToWorldPos(new Vector2i(x, z)), false, this, entityMeshes, particleMeshes, soundEngine);
+                            _entities.add(inactiveDrone);
+                            break;
+                        case Tile.SPAWN_REACTOR_CORE:
+                            ReactorCore reactorCore = new ReactorCore(MapHandler.tilePosToWorldPos(new Vector2i(x, z)), this, entityMeshes, particleMeshes, soundEngine);
+                            _entities.add(reactorCore);
                             break;
                         case Tile.SPAWN_HEALTH_POWERUP:
                             HealthPowerup healthPowerup = new HealthPowerup(MapHandler.tilePosToWorldPos(new Vector2i(x, z)), this, entityMeshes, soundEngine);

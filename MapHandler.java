@@ -5,7 +5,7 @@ import javafx.util.*;
  * Verwaltet die GridMap und stellt zusätzliche Funktionalität bereit, insbesondere zum Map-Loading und zur Performance-Optimierung
  * 
  * @author Lasse Huber-Saffer
- * @version 01.01.2022
+ * @version 02.01.2022
  */
 public class MapHandler
 {
@@ -85,6 +85,9 @@ public class MapHandler
             _tileProviders.get(Tile.DIRT_FLOOR), (WallTileProvider)_tileProviders.get(Tile.BRICK_WALL),
             _soundEngine, "wooden_door_open", "wooden_door_close", 0.2
         ));
+        
+        // Cyber floor
+        _tileProviders.put(Tile.CYBER_FLOOR, new SimpleTileProvider(tileMeshes.get("cyber_floor"), TurtleColor.DARK_GRAY));
         
         // Dirt floor grass
         ArrayList<Pair<Mesh, TurtleColor>> dirtFloorGrass = new ArrayList<Pair<Mesh, TurtleColor>>();

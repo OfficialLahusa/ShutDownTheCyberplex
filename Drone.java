@@ -116,7 +116,7 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
         _rotorLeft = new SimpleDynamicGameObject(entityMeshes.get("drone_rotor"), TurtleColor.LIGHT_GRAY, new Vector3(), new Vector3(), new Vector3(1.0, 1.0, 1.0));
         _rotorRight = new SimpleDynamicGameObject(entityMeshes.get("drone_rotor"), TurtleColor.LIGHT_GRAY, new Vector3(), new Vector3(), new Vector3(1.0, 1.0, 1.0));
         
-        _position = new Vector3(position.getX(), FLYING_HEIGHT, position.getZ());
+        _position = new Vector3(position.getX(), _isActive ? FLYING_HEIGHT : MIN_FLYING_HEIGHT, position.getZ());
         _rotation = new Vector3();
         _scale = new Vector3(1.0, 1.0, 1.0);
         _muzzlePos1 = new Vector3(0.987184, -0.782814, -0.1238);

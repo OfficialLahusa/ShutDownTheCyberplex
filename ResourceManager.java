@@ -4,7 +4,7 @@ import java.util.*;
  * Verwaltet das Laden von Ressourcendateien
  * 
  * @author Lasse Huber-Saffer
- * @version 01.01.2022
+ * @version 02.01.2022
  */
 public class ResourceManager
 {
@@ -33,6 +33,8 @@ public class ResourceManager
         entityMeshes.put("drone_active", _objLoader.loadFromFile(Directory.MODEL + "drone/drone.obj"));
         entityMeshes.put("drone_inactive", _objLoader.loadFromFile(Directory.MODEL + "drone/drone_destroyed.obj"));
         entityMeshes.put("drone_rotor", _objLoader.loadFromFile(Directory.MODEL + "drone/drone_rotor.obj"));
+        entityMeshes.put("reactor_core", _objLoader.loadFromFile(Directory.MODEL + "reactor/reactor_core.obj"));
+         entityMeshes.put("reactor_pillar", _objLoader.loadFromFile(Directory.MODEL + "reactor/reactor_pillar.obj"));
         entityMeshes.put("health_powerup", _objLoader.loadFromFile(Directory.MODEL + "item/health_powerup.obj"));
         
         return entityMeshes;
@@ -70,6 +72,7 @@ public class ResourceManager
         tileMeshes.put("wooden_door_handle", _objLoader.loadFromFile(Directory.MODEL + "wooden_door_handle.obj"));
         tileMeshes.put("wooden_door_open", _objLoader.loadFromFile(Directory.MODEL + "wooden_door_open.obj"));
         tileMeshes.put("wooden_door_handle_open", _objLoader.loadFromFile(Directory.MODEL + "wooden_door_handle_open.obj"));
+        tileMeshes.put("cyber_floor", _objLoader.loadFromFile(Directory.MODEL + "cyber_floor.obj"));
         tileMeshes.put("dirt_floor_grassdetail", _objLoader.loadFromFile(Directory.MODEL + "dirt_floor_grassdetail.obj"));
         tileMeshes.put("road_markings_x", _objLoader.loadFromFile(Directory.MODEL + "road_markings_x.obj"));
         tileMeshes.put("dirt_floor_grassdetail2", _objLoader.loadFromFile(Directory.MODEL + "dirt_floor_grassdetail2.obj"));
