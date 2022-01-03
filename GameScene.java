@@ -43,7 +43,7 @@ public class GameScene extends Scene
         
         _mapHandler.load("Level");
         
-        _player = new Player(_mapHandler.getMap().getPlayerSpawn(), new Vector3(), _state.soundEngine);
+        _player = new Player(_mapHandler.getMap().getPlayerSpawn(), new Vector3(0.0, _mapHandler.getMap().getPlayerSpawnAngle(), 0.0), _state.soundEngine);
         _mapHandler.getMap().globalColliders.add(_player.getCollider());
         _mapHandler.getMap().setPlayer(_player);
         
@@ -67,8 +67,8 @@ public class GameScene extends Scene
         // Nicht-lebensgebundene Keybinds
         if(_state.inputHandler.isKeyPressed(KeyCode.KEY_ESCAPE))
         {
-            _state.scene = new PauseScene(_state, this);
             _state.inputHandler.setKeepMouseInPlace(false);
+            _state.scene = new PauseScene(_state, this);
         }
         if(_state.inputHandler.isKeyPressed(KeyCode.KEY_SPACE))
         {

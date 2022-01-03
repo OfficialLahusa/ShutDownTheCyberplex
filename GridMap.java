@@ -18,6 +18,7 @@ public class GridMap
     
     // Spieler-Spawnpunkt
     private Vector3 _playerSpawn;
+    private double _playerSpawnAngle;
     private Player _player;
     
     /**
@@ -59,6 +60,7 @@ public class GridMap
         rooms = new ArrayList<Room>();
         globalColliders = new ArrayList<ICollider>();
         _playerSpawn = new Vector3(0.0, 2.0, 0.0);
+        _playerSpawnAngle = 0.0;
     }
     
     /**
@@ -325,9 +327,19 @@ public class GridMap
                 switch(value)
                 {
                     case Tile.PLAYER_SPAWN_DOWN:
+                        _playerSpawnAngle = 0.0;
+                        _playerSpawn = new Vector3((x + 0.5) * MapHandler.TILE_WIDTH, 0.0, (MapHandler.MIRROR_Z_AXIS ? -1 : 1) * (z + 0.5) * MapHandler.TILE_WIDTH);
+                        break;
                     case Tile.PLAYER_SPAWN_RIGHT:
+                        _playerSpawnAngle = 270.0;
+                        _playerSpawn = new Vector3((x + 0.5) * MapHandler.TILE_WIDTH, 0.0, (MapHandler.MIRROR_Z_AXIS ? -1 : 1) * (z + 0.5) * MapHandler.TILE_WIDTH);
+                        break;
                     case Tile.PLAYER_SPAWN_UP:
+                        _playerSpawnAngle = 180.0;
+                        _playerSpawn = new Vector3((x + 0.5) * MapHandler.TILE_WIDTH, 0.0, (MapHandler.MIRROR_Z_AXIS ? -1 : 1) * (z + 0.5) * MapHandler.TILE_WIDTH);
+                        break;
                     case Tile.PLAYER_SPAWN_LEFT:
+                        _playerSpawnAngle = 90.0;
                         _playerSpawn = new Vector3((x + 0.5) * MapHandler.TILE_WIDTH, 0.0, (MapHandler.MIRROR_Z_AXIS ? -1 : 1) * (z + 0.5) * MapHandler.TILE_WIDTH);
                         break;
                     case Tile.ROOM_FLOODFILL:
@@ -587,6 +599,15 @@ public class GridMap
     public Vector3 getPlayerSpawn()
     {
         return _playerSpawn;
+    }
+    
+    /**
+     * Gibt die Startrotation des Spielers am Spawnpunkt zurück
+     * @return Startrotation des Spielers in der Map
+     */
+    public double getPlayerSpawnAngle()
+    {
+        return _playerSpawnAngle;
     }
     
     /**
