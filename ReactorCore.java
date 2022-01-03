@@ -4,7 +4,7 @@ import java.util.*;
  * Drehender Reaktorkern, der de-facto Endgegner des Spiels
  * 
  * @author Lasse Huber-Saffer
- * @version 02.01.2022
+ * @version 03.01.2022
  */
 public class ReactorCore extends Enemy implements ILivingEntity, ICollisionListener, IDynamicGameObject
 {
@@ -23,6 +23,7 @@ public class ReactorCore extends Enemy implements ILivingEntity, ICollisionListe
     // Child-Objekte
     private SimpleDynamicGameObject _core;
     private SimpleDynamicGameObject _pillar;
+    private ReactorPillarParticleSystem _pillarParticleSystem;
     
     // Physik
     private CircleCollider _collider;
@@ -39,14 +40,15 @@ public class ReactorCore extends Enemy implements ILivingEntity, ICollisionListe
     
     // Konstanten
     private static final double COLLIDER_RADIUS = 0.8;
+    private static final double PILLAR_EMITTER_HEIGHT = 1.6;
     private static final double CORE_HOVER_HEIGHT = 3.5;
     private static final double MAX_HP_CORE_BOUNCING_SPEED = 180.0;
     private static final double MIN_HP_CORE_BOUNCING_SPEED = 540.0;
     private static final double CORE_BOUNCING_AMPLITUDE = 0.4;
-    private static final double VOICELINE_VOLUME = 0.8;
+    private static final double VOICELINE_VOLUME = 0.5;
     private static final double MAX_HP_CORE_ROTATION_SPEED = 90.0;
     private static final double MIN_HP_CORE_ROTATION_SPEED = 720.0;
-    private static final int MAX_HP = 250;
+    private static final int MAX_HP = 400;
     
     /**
      * Konstruktor für ReactorCore mit Position und Meshes
@@ -75,10 +77,11 @@ public class ReactorCore extends Enemy implements ILivingEntity, ICollisionListe
         _rotation = new Vector3();
         _scale = new Vector3(1.0, 1.0, 1.0);
 
-        _color = TurtleColor.LIGHT_GRAY;
         _core = new SimpleDynamicGameObject(entityMeshes.get("reactor_core"), TurtleColor.CYAN, new Vector3(), new Vector3(), new Vector3(1.0, 1.0, 1.0));
         _pillar = new SimpleDynamicGameObject(entityMeshes.get("reactor_pillar"), TurtleColor.LIGHT_GRAY, new Vector3(), new Vector3(), new Vector3(1.0, 1.0, 1.0));
+        _pillarParticleSystem = new ReactorPillarParticleSystem(new Vector3(_position.getX(), PILLAR_EMITTER_HEIGHT, _position.getZ()), _room, _particleMeshes);
         
+        _color = TurtleColor.LIGHT_GRAY;
         _recalculateModelMatrix = true;
         _model = null;
         
@@ -91,6 +94,8 @@ public class ReactorCore extends Enemy implements ILivingEntity, ICollisionListe
      */
     public void update(double deltaTime, double runTime, Vector3 cameraPosition)
     {
+        _pillarParticleSystem.update(deltaTime, runTime, cameraPosition);
+        
         // Kern auf Basis der Leben rotieren
         double speedScaling = (double)_health / (double)_maxHealth;
         _core.rotate(new Vector3(0.0, (speedScaling * (MAX_HP_CORE_ROTATION_SPEED - MIN_HP_CORE_ROTATION_SPEED) + MIN_HP_CORE_ROTATION_SPEED) * deltaTime, 0.0));
@@ -109,6 +114,7 @@ public class ReactorCore extends Enemy implements ILivingEntity, ICollisionListe
     {
         _core.draw(renderer, camera);
         _pillar.draw(renderer, camera);
+        _pillarParticleSystem.draw(renderer, camera);
     }
     
     /**
@@ -292,10 +298,22 @@ public class ReactorCore extends Enemy implements ILivingEntity, ICollisionListe
         
         _health = Math.max(0, Math.min(_health - amount, _maxHealth));
         
-        if(_health == 0) 
+        if(_health > 0.66 * _maxHealth)
+        {
+            _soundEngine.playSoundFromGroup("reactor_hurt_light", VOICELINE_VOLUME, false);
+        }
+        else if(_health > 0.33 * _maxHealth)
+        {
+            _soundEngine.playSoundFromGroup("reactor_hurt_medium", VOICELINE_VOLUME, false);
+        }
+        else if(_health > 0)
+        {
+            _soundEngine.playSoundFromGroup("reactor_hurt_heavy", VOICELINE_VOLUME, false);
+        }
+        else if(_health == 0) 
         {
             _isActive = false;
-            _soundEngine.playSoundFromGroup("turret_death", VOICELINE_VOLUME, false);
+            _soundEngine.playSound("reactor_explode", VOICELINE_VOLUME, false);
         }
     }
     

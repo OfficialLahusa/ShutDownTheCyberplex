@@ -19,4 +19,9 @@ public interface IParticle extends IDynamicGameObject
      * @return bisher abgelaufene Zeit seit Erstellung des Partikels
      */
     public double getElapsedTime();
+    
+    /**
+     * Tötet diesen Partikel
+     */
+    public void kill();
 }

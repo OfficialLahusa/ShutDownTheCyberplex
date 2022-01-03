@@ -3,7 +3,7 @@
  * Diese Klasse modelliert den Pausebildschirm
  * 
  * @author Sven Schreiber
- * @version 01.01.2022
+ * @version 03.01.2022
  */
 public class PauseScene extends Scene
 {
@@ -54,7 +54,7 @@ public class PauseScene extends Scene
         
         // Zeichne den "Exit" Button
         if (drawButton("Menu", new Vector2(225, 270), TurtleColor.WHITE)) {
-            _state.soundEngine.removeAllSounds();
+            _state.soundEngine.clear();
             _state.scene = new TitleScene(_state);
         }
     }

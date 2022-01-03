@@ -8,7 +8,7 @@ import java.net.MalformedURLException;
  * Lädt, speichert und spielt Sounddateien sowie Quellen
  * 
  * @author Lasse Huber-Saffer 
- * @version 01.01.2022
+ * @version 03.01.2022
  */
 public class SoundEngine
 {
@@ -72,6 +72,16 @@ public class SoundEngine
         
         // Sound abspielen
         return playSound(soundKeys[chosenID], volume, loop);
+    }
+    
+    /**
+     * Stoppt und entfernt alle Sounds und Soundquellen
+     */
+    public void clear()
+    {
+        removeAllSounds();
+        clearGroups();
+        clearSources();
     }
     
     /**

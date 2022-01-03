@@ -119,6 +119,14 @@ public class Particle implements IParticle
     }
     
     /**
+     * @see IParticle#kill()
+     */
+    public void kill()
+    {
+        _isAlive = false;
+    }
+    
+    /**
      * @see IDynamicGameObject#setPosition()
      */
     public void setPosition(Vector3 position)

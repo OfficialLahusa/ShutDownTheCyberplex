@@ -5,7 +5,7 @@ import javafx.util.*;
  * Beschreiben Sie hier die Klasse GridMap.
  * 
  * @author Lasse Huber-Saffer 
- * @version 27.12.2021
+ * @version 03.01.2022
  */
 public class GridMap
 {
@@ -14,9 +14,6 @@ public class GridMap
     // Rohe Mapdaten
     private ArrayList<ArrayList<Integer>> _tileLayer;
     private ArrayList<ArrayList<Integer>> _functionLayer;
-    // Debug Fulldraw-Daten
-    private ArrayList<IGameObject> _mapGeometry;
-    private static final boolean DEBUG_FULLDRAW = false;
     // Spieler-Spawnpunkt
     private Vector3 _playerSpawn;
     private Player _player;
@@ -47,7 +44,6 @@ public class GridMap
     {
         _tileLayer = tileLayer;
         _functionLayer = functionLayer;
-        _mapGeometry = new ArrayList<IGameObject>();
         _doorLocations = new ArrayList<Vector2i>();
         doors = new ArrayList<IDoorGameObject>();
         rooms = new ArrayList<Room>();
@@ -102,21 +98,11 @@ public class GridMap
      */
     public void draw(Renderer renderer, Camera camera)
     {
-        if(DEBUG_FULLDRAW)
-        {
-            for(int i = 0; i < _mapGeometry.size(); i++)
-            {
-                _mapGeometry.get(i).draw(renderer, camera);
-            }
-        }
-        else
-        {
-            HashSet<Integer> completedRooms = new HashSet<Integer>();
-            HashSet<Vector2i> completedDoors = new HashSet<Vector2i>();
-            
-            // Zeichnet rekursiv alle Räume, vom aktuellen Raum aus
-            drawConnectedRooms(activeRoom, completedRooms, completedDoors, renderer, camera);
-        }
+        HashSet<Integer> completedRooms = new HashSet<Integer>();
+        HashSet<Vector2i> completedDoors = new HashSet<Vector2i>();
+        
+        // Zeichnet rekursiv alle Räume, vom aktuellen Raum aus
+        drawConnectedRooms(activeRoom, completedRooms, completedDoors, renderer, camera);
     }
     
     /**
@@ -176,24 +162,11 @@ public class GridMap
      */
     private void updateLOD(Vector3 cameraPosition)
     {
-        if(DEBUG_FULLDRAW)
-        {
-            for(int i = 0; i < _mapGeometry.size(); i++)
-            {
-                if(_mapGeometry.get(i) instanceof ILODGameObject)
-                {
-                    ((ILODGameObject)_mapGeometry.get(i)).updateLOD(cameraPosition);
-                }
-            }
-        }
-        else
-        {
-            HashSet<Integer> completedRooms = new HashSet<Integer>();
-            HashSet<Vector2i> completedDoors = new HashSet<Vector2i>();
-            
-            // Updated rekursiv die LODs aller Räume, vom aktuellen Raum aus
-            lodUpdateConnectedRooms(activeRoom, completedRooms, completedDoors, cameraPosition);
-        }
+        HashSet<Integer> completedRooms = new HashSet<Integer>();
+        HashSet<Vector2i> completedDoors = new HashSet<Vector2i>();
+        
+        // Updated rekursiv die LODs aller Räume, vom aktuellen Raum aus
+        lodUpdateConnectedRooms(activeRoom, completedRooms, completedDoors, cameraPosition);
     }
     
     /**
@@ -276,20 +249,10 @@ public class GridMap
             }
         };
         
-        if(DEBUG_FULLDRAW)
-        {
-            // Sortiert die Collection
-            Collections.sort(_mapGeometry,
-                 gameObjectDistanceComparator        
-            );
-        }
-        else
-        {
-            HashSet<Integer> completedRooms = new HashSet<Integer>();
+        HashSet<Integer> completedRooms = new HashSet<Integer>();
             
-            // Updated rekursiv die Draw-Reihenfolge aller Räume, vom aktuellen Raum aus
-            reorderConnectedRooms(activeRoom, completedRooms, cameraPosition);
-        }
+        // Updated rekursiv die Draw-Reihenfolge aller Räume, vom aktuellen Raum aus
+        reorderConnectedRooms(activeRoom, completedRooms, cameraPosition);
     }
     
     /**
@@ -340,34 +303,7 @@ public class GridMap
      * @param soundEngine Sound Engine
      */
     public void populate(HashMap<Integer, ITileProvider> tileProviders, HashMap<Integer, IColliderProvider> colliderProviders, HashMap<String, Mesh> entityMeshes, HashMap<String, Mesh> particleMeshes, SoundEngine soundEngine)
-    {
-        // Geometrieebene
-        for(int z = 0; z < _tileLayer.size(); z++)
-        {
-            for(int x = 0; x < _tileLayer.get(z).size(); x++)
-            {
-                int value = _tileLayer.get(z).get(x);
-                if(value != -1)
-                {
-                    if(!tileProviders.containsKey(value))
-                    {
-                        System.out.println("Tile mesh not provided: " + value);
-                    }
-                    else
-                    {
-                        ITileProvider provider = tileProviders.get(value);
-                        TileEnvironment env = null;
-                        if(provider.requiresEnvironment())
-                        {
-                            env = new TileEnvironment(_tileLayer, x, z);
-                        }
-                        
-                        _mapGeometry.addAll(provider.getTileObjects(env, x, z));
-                    }
-                }
-            }
-        }
-        
+    {        
         ArrayList<Vector2i> roomFloodFills = new ArrayList<Vector2i>();
         
         // Funktionsebene (Nur nicht-raumeigene Funktionstiles werden ausgelesen)

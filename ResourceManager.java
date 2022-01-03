@@ -4,7 +4,7 @@ import java.util.*;
  * Verwaltet das Laden von Ressourcendateien
  * 
  * @author Lasse Huber-Saffer
- * @version 02.01.2022
+ * @version 03.01.2022
  */
 public class ResourceManager
 {
@@ -34,7 +34,7 @@ public class ResourceManager
         entityMeshes.put("drone_inactive", _objLoader.loadFromFile(Directory.MODEL + "drone/drone_destroyed.obj"));
         entityMeshes.put("drone_rotor", _objLoader.loadFromFile(Directory.MODEL + "drone/drone_rotor.obj"));
         entityMeshes.put("reactor_core", _objLoader.loadFromFile(Directory.MODEL + "reactor/reactor_core.obj"));
-         entityMeshes.put("reactor_pillar", _objLoader.loadFromFile(Directory.MODEL + "reactor/reactor_pillar.obj"));
+        entityMeshes.put("reactor_pillar", _objLoader.loadFromFile(Directory.MODEL + "reactor/reactor_pillar.obj"));
         entityMeshes.put("health_powerup", _objLoader.loadFromFile(Directory.MODEL + "item/health_powerup.obj"));
         
         return entityMeshes;
@@ -50,6 +50,7 @@ public class ResourceManager
         HashMap<String, Mesh> particleMeshes = new HashMap<String, Mesh>();
         
         particleMeshes.put("drone_hit_particle", _objLoader.loadFromFile(Directory.MODEL + "particle/cross.obj"));
+        particleMeshes.put("reactor_pillar_emission", _objLoader.loadFromFile(Directory.MODEL + "particle/horizontal_hex.obj"));
         
         return particleMeshes;
     }
@@ -114,6 +115,13 @@ public class ResourceManager
         soundEngine.loadSource("drone_enemy_detected", Directory.SOUND + "drone/enemy_detected/enemy_detected.wav");
         soundEngine.loadSource("drone_hover", Directory.SOUND + "drone/hover.wav");
         
+        soundEngine.loadSource("reactor_explode", Directory.SOUND + "reactor/explosion.wav");
+        soundEngine.loadSource("reactor_hurt1", Directory.SOUND + "reactor/hurt/hurt1.wav");
+        soundEngine.loadSource("reactor_hurt2", Directory.SOUND + "reactor/hurt/hurt2.wav");
+        soundEngine.loadSource("reactor_hurt3", Directory.SOUND + "reactor/hurt/hurt3.wav");
+        soundEngine.loadSource("reactor_hurt4", Directory.SOUND + "reactor/hurt/hurt4.wav");
+        soundEngine.loadSource("reactor_hurt5", Directory.SOUND + "reactor/hurt/hurt5.wav");
+        
         soundEngine.loadSource("health_powerup_collected", Directory.SOUND + "item/health_powerup_collected.wav");
         
         soundEngine.loadSource("pain1", Directory.SOUND + "player/pain1.wav");
@@ -130,6 +138,9 @@ public class ResourceManager
         soundEngine.createGroup("heavy_shot", new String[]{"heavy_shot1", "heavy_shot2", "heavy_shot3"});
         soundEngine.createGroup("turret_reload", new String[]{"turret_reloading", "turret_reloading", "turret_reloading", "turret_restocking_ammunition", "turret_tactical_reload"});
         soundEngine.createGroup("turret_death", new String[]{"turret_system_failure", "turret_offline", "turret_offline"});
+        soundEngine.createGroup("reactor_hurt_light", new String[]{"reactor_hurt1", "reactor_hurt2"});
+        soundEngine.createGroup("reactor_hurt_medium", new String[]{"reactor_hurt3", "reactor_hurt3", "reactor_hurt4"});
+        soundEngine.createGroup("reactor_hurt_heavy", new String[]{"reactor_hurt4", "reactor_hurt5"});
         soundEngine.createGroup("pain", new String[]{"pain1", "pain2", "pain3", "pain4", "pain5", "pain6"});
         soundEngine.createGroup("die", new String[]{"die1", "die2"});
     }
