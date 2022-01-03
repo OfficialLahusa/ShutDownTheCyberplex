@@ -161,7 +161,7 @@ public class GameScene extends Scene
      * @see Scene#update()
      */
     public void update(double deltaTime, double runTime)
-    {
+    {        
         _timeSinceLastShot += deltaTime;
         
         // Updatet die Map
@@ -169,6 +169,14 @@ public class GameScene extends Scene
         
         // Entfernt bereits durchgelaufene Sounds
         _state.soundEngine.removeStoppedSounds();
+        
+        // Abschluss des Spiels prüfen und zu Credits übergehen
+        if(_mapHandler.getMap().isCompleted)
+        {
+            _state.soundEngine.clear();
+            _state.inputHandler.setKeepMouseInPlace(false);
+            _state.scene = new CreditScene(_state);
+        }
         
         // Spieler updaten
         _player.update(deltaTime, runTime, _player.getCamera().getPosition());

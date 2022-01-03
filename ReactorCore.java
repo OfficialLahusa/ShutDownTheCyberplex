@@ -19,6 +19,7 @@ public class ReactorCore extends Enemy implements ILivingEntity, ICollisionListe
     private int _health;
     private int _maxHealth;
     private double _coreBounceHeightSamplingPoint;
+    private double _timeSinceDeath;
     
     // Child-Objekte
     private SimpleDynamicGameObject _core;
@@ -39,6 +40,7 @@ public class ReactorCore extends Enemy implements ILivingEntity, ICollisionListe
     private Matrix4 _model;
     
     // Konstanten
+    private static final int MAX_HP = 400;
     private static final double COLLIDER_RADIUS = 0.8;
     private static final double PILLAR_EMITTER_HEIGHT = 1.6;
     private static final double CORE_HOVER_HEIGHT = 3.5;
@@ -48,7 +50,7 @@ public class ReactorCore extends Enemy implements ILivingEntity, ICollisionListe
     private static final double VOICELINE_VOLUME = 0.5;
     private static final double MAX_HP_CORE_ROTATION_SPEED = 90.0;
     private static final double MIN_HP_CORE_ROTATION_SPEED = 720.0;
-    private static final int MAX_HP = 400;
+    private static final double DEATH_GAME_COMPLETION_DELAY = 5.0;
     
     /**
      * Konstruktor für ReactorCore mit Position und Meshes
@@ -70,6 +72,7 @@ public class ReactorCore extends Enemy implements ILivingEntity, ICollisionListe
         _health = MAX_HP;
         _maxHealth = MAX_HP;
         _coreBounceHeightSamplingPoint = 0.0;
+        _timeSinceDeath = 0.0;
         
         _particleMeshes = particleMeshes;
         
@@ -94,6 +97,18 @@ public class ReactorCore extends Enemy implements ILivingEntity, ICollisionListe
      */
     public void update(double deltaTime, double runTime, Vector3 cameraPosition)
     {
+        if(!_isActive)
+        {
+            _timeSinceDeath += deltaTime;
+            
+            if(_timeSinceDeath > DEATH_GAME_COMPLETION_DELAY)
+            {
+                _room.getMap().isCompleted = true;
+            }
+        }
+        
+        // Partikelsystem positionieren und updaten
+        _pillarParticleSystem.setPosition(new Vector3(_position.getX(), PILLAR_EMITTER_HEIGHT, _position.getZ()));
         _pillarParticleSystem.update(deltaTime, runTime, cameraPosition);
         
         // Kern auf Basis der Leben rotieren
@@ -103,6 +118,7 @@ public class ReactorCore extends Enemy implements ILivingEntity, ICollisionListe
         // Kern richtig positionieren und animieren
         _coreBounceHeightSamplingPoint += (speedScaling * (MAX_HP_CORE_BOUNCING_SPEED - MIN_HP_CORE_BOUNCING_SPEED) + MIN_HP_CORE_BOUNCING_SPEED) * deltaTime;
         _core.setPosition(new Vector3(_position.getX(), CORE_HOVER_HEIGHT + CORE_BOUNCING_AMPLITUDE * Math.sin(Math.toRadians(_coreBounceHeightSamplingPoint)), _position.getZ()));
+        
         // Säule richtig positionieren
         _pillar.setPosition(_position);
     }
@@ -112,7 +128,7 @@ public class ReactorCore extends Enemy implements ILivingEntity, ICollisionListe
      */
     public void draw(Renderer renderer, Camera camera)
     {
-        _core.draw(renderer, camera);
+        if(_isActive) _core.draw(renderer, camera);
         _pillar.draw(renderer, camera);
         _pillarParticleSystem.draw(renderer, camera);
     }

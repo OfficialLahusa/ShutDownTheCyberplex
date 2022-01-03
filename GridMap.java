@@ -11,9 +11,11 @@ public class GridMap
 {
     // Positionen von Türobjekten im Grid
     private ArrayList<Vector2i> _doorLocations;
+    
     // Rohe Mapdaten
     private ArrayList<ArrayList<Integer>> _tileLayer;
     private ArrayList<ArrayList<Integer>> _functionLayer;
+    
     // Spieler-Spawnpunkt
     private Vector3 _playerSpawn;
     private Player _player;
@@ -22,14 +24,22 @@ public class GridMap
      * Index des aktuell aktiven Raumes der GridMap
      */
     public int activeRoom = 0;
+    
+    /**
+     * Speichert, ob die Map abgeschlossen ist, oder nicht
+     */
+    public boolean isCompleted = false;
+    
     /**
      * Liste aller Türobjekte der Map
      */ 
     public ArrayList<IDoorGameObject> doors;
+    
     /**
      * Liste aller Räume
      */ 
     public ArrayList<Room> rooms;
+    
     /**
      * Liste aller nicht-raumgebundenen Collider
      */
