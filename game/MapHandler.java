@@ -94,6 +94,20 @@ public class MapHandler
         // Cyber floor
         _tileProviders.put(Tile.CYBER_FLOOR, new SimpleTileProvider(tileMeshes.get("cyber_floor"), TurtleColor.DARK_GRAY));
         
+        // Cyber door
+        ArrayList<Pair<Mesh, TurtleColor>> cyberDoorClosed = new ArrayList<Pair<Mesh, TurtleColor>>();
+        cyberDoorClosed.add(new Pair<Mesh, TurtleColor>(tileMeshes.get("wooden_door"), TurtleColor.ORANGE));
+        cyberDoorClosed.add(new Pair<Mesh, TurtleColor>(tileMeshes.get("wooden_door_handle"), TurtleColor.YELLOW));
+        ArrayList<Pair<Mesh, TurtleColor>> cyberDoorOpen = new ArrayList<Pair<Mesh, TurtleColor>>();
+        cyberDoorOpen.add(new Pair<Mesh, TurtleColor>(tileMeshes.get("wooden_door_open"), TurtleColor.ORANGE));
+        cyberDoorOpen.add(new Pair<Mesh, TurtleColor>(tileMeshes.get("wooden_door_handle_open"), TurtleColor.YELLOW));
+        _tileProviders.put(Tile.CYBER_DOOR, new DoorTileProvider(
+            cyberDoorClosed, cyberDoorOpen, false,
+            new BlockedTunnelColliderProvider(), new TunnelColliderProvider(),
+            tileMeshes.get("door_lock"), _tileProviders.get(Tile.CYBER_FLOOR), (WallTileProvider)_tileProviders.get(Tile.BRICK_WALL),
+            _soundEngine, "wooden_door_open", "wooden_door_close", 0.2
+        ));
+        
         // Dirt floor grass
         ArrayList<Pair<Mesh, TurtleColor>> dirtFloorGrass = new ArrayList<Pair<Mesh, TurtleColor>>();
         dirtFloorGrass.add(new Pair<Mesh, TurtleColor>(tileMeshes.get("dirt_floor_borderless"), TurtleColor.ORANGE));
