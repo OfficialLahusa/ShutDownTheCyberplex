@@ -1,0 +1,16 @@
+#BlueJ class context
+comment0.target=MultiMeshTileProvider
+comment0.text=\r\n\ TileProvider,\ der\ f\u00FCr\ die\ Tile\ immer\ die\ selben\ Meshes\ platziert\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 01.01.2022\r\n
+comment1.params=coloredMeshes
+comment1.target=MultiMeshTileProvider(java.util.ArrayList)
+comment1.text=\r\n\ Konstruktor\ f\u00FCr\ Objekte\ der\ Klasse\ MultiMeshTileProvider\r\n\ @param\ coloredMeshes\ Mesh-Farb-Paare,\ die\ vom\ Provider\ verwendet\ werden\r\n\ @param\ color\ Farbe,\ die\ die\ Vorlage\ haben\ soll\r\n
+comment2.params=env\ x\ z
+comment2.target=java.util.ArrayList\ getTileObjects(TileEnvironment,\ int,\ int)
+comment2.text=\r\n\ @see\ ITileProvider\#getTileObjects()\r\n
+comment3.params=
+comment3.target=boolean\ requiresEnvironment()
+comment3.text=\r\n\ @see\ ITileProvider\#requiresEnvironment()\r\n
+comment4.params=
+comment4.target=java.util.ArrayList\ getColoredMeshes()
+comment4.text=\r\n\ Gibt\ eine\ Referenz\ zur\ Liste\ der\ Mesh-Farb-Paare\ des\ Providers\ zur\u00FCck\r\n\ @return\ Referenz\ zur\ Liste\ der\ Mesh-Farb-Paare\r\n
+numComments=5

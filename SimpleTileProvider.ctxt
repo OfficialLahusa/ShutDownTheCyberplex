@@ -1,0 +1,19 @@
+#BlueJ class context
+comment0.target=SimpleTileProvider
+comment0.text=\r\n\ Einfacher\ TileProvider,\ der\ f\u00FCr\ die\ Tile\ immer\ das\ selbe\ Mesh\ platziert\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 01.01.2022\r\n
+comment1.params=mesh\ color
+comment1.target=SimpleTileProvider(Mesh,\ TurtleColor)
+comment1.text=\r\n\ Konstruktor\ f\u00FCr\ Objekte\ der\ Klasse\ SimpleTileProvider\r\n\ @param\ mesh\ Mesh,\ das\ f\u00FCr\ die\ Vorlage\ verwendet\ werden\ soll\r\n\ @param\ color\ Farbe,\ die\ die\ Vorlage\ haben\ soll\r\n
+comment2.params=env\ x\ z
+comment2.target=java.util.ArrayList\ getTileObjects(TileEnvironment,\ int,\ int)
+comment2.text=\r\n\ @see\ ITileProvider\#getTileObjects()\r\n
+comment3.params=
+comment3.target=boolean\ requiresEnvironment()
+comment3.text=\r\n\ @see\ ITileProvider\#requiresEnvironment()\r\n
+comment4.params=
+comment4.target=Mesh\ getMesh()
+comment4.text=\r\n\ Gibt\ eine\ neue\ Instanz\ des\ Meshs\ des\ Providers\ zur\u00FCck\r\n\ @return\ neue\ Instanz\ des\ Meshs\ des\ Providers\r\n
+comment5.params=
+comment5.target=TurtleColor\ getColor()
+comment5.text=\r\n\ Gibt\ die\ Farbe\ des\ Providers\ zur\u00FCck\r\n\ @return\ Farbe\ des\ Providers\r\n
+numComments=6

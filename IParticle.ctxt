@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.target=IParticle
+comment0.text=\r\n\ Einzelpartikel\ eines\ Partikelsystems\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 01.01.2022\r\n
+comment1.params=
+comment1.target=boolean\ isAlive()
+comment1.text=\r\n\ Gibt\ zur\u00FCck,\ ob\ der\ Partikel\ noch\ lebendig\ ist\r\n\ @return\ true,\ wenn\ Partikel\ noch\ lebendig\ ist,\ sonst\ false\r\n
+comment2.params=
+comment2.target=double\ getElapsedTime()
+comment2.text=\r\n\ Gibt\ die\ bisher\ abgelaufene\ Zeit\ seit\ Erstellung\ des\ Partikels\ zur\u00FCck\r\n\ @return\ bisher\ abgelaufene\ Zeit\ seit\ Erstellung\ des\ Partikels\r\n
+comment3.params=
+comment3.target=void\ kill()
+comment3.text=\r\n\ T\u00F6tet\ diesen\ Partikel\r\n
+numComments=4

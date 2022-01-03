@@ -1,0 +1,19 @@
+#BlueJ class context
+comment0.target=MapHandler
+comment0.text=\r\n\ Verwaltet\ die\ GridMap\ und\ stellt\ zus\u00E4tzliche\ Funktionalit\u00E4t\ bereit,\ insbesondere\ zum\ Map-Loading\ und\ zur\ Performance-Optimierung\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 02.01.2022\r\n
+comment1.params=tileMeshes\ entityMeshes\ particleMeshes\ soundEngine
+comment1.target=MapHandler(java.util.HashMap,\ java.util.HashMap,\ java.util.HashMap,\ SoundEngine)
+comment1.text=\r\n\ Konstruktor\ f\u00FCr\ Objekte\ der\ Klasse\ MapHandler\r\n\ @param\ tileMeshes\ HashMap\ von\ namentlich\ aufgef\u00FChrten\ Meshes\ f\u00FCr\ zu\ erstellende\ TileProvider\r\n\ @param\ entityMeshes\ Register,\ aus\ dem\ die\ Entity-Meshes\ bezogen\ werden\r\n\ @param\ particleMeshes\ Register,\ aus\ dem\ die\ Particle-Meshes\ bezogen\ werden\r\n\ @param\ soundEngine\ SoundEngine\ f\u00FCr\ Tile-Sounds\r\n
+comment2.params=mapName
+comment2.target=void\ load(java.lang.String)
+comment2.text=\r\n\ L\u00E4dt\ eine\ Map\r\n\ @param\ mapName\ Name\ der\ Map\ (KEIN\ Pfad)\r\n
+comment3.params=
+comment3.target=GridMap\ getMap()
+comment3.text=\r\n\ Gibt\ eine\ Referenz\ zur\ aktuellen\ Map\ zur\u00FCck\r\n\ @return\ Referenz\ zur\ aktuellen\ Map\r\n
+comment4.params=worldPos
+comment4.target=Vector2i\ worldPosToTilePos(Vector3)
+comment4.text=\r\n\ Konvertiert\ eine\ Position\ in\ World\ Space\ zu\ einer\ Tile-Position\r\n\ @param\ worldPos\ dreidimensionale\ Position\ im\ World\ Space\r\n\ @return\ zweidimensionale\ Koordinaten\ der\ umschlie\u00DFenden\ Tile\ im\ Grid\r\n
+comment5.params=tilePos
+comment5.target=Vector3\ tilePosToWorldPos(Vector2i)
+comment5.text=\r\n\ Konvertiert\ eine\ Position\ im\ Tile\ Grid\ ins\ World\ Space\r\n\ @param\ tilePos\ zweidimensionale\ Position\ im\ Grid\r\n\ @return\ dreidimensionale\ Position\ des\ Mittelpunktes\ der\ Tile\ im\ World\ Space\r\n
+numComments=6

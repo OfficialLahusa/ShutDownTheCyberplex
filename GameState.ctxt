@@ -1,0 +1,7 @@
+#BlueJ class context
+comment0.target=GameState
+comment0.text=\r\n\ Geteilte\ Spielressourcen\ zwischen\ verschiedenen\ Szenen\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 24.12.2021\r\n
+comment1.params=
+comment1.target=GameState()
+comment1.text=\r\n\ Konstruiert\ einen\ neuen\ GameState.\r\n\ Die\ Szenenkomponente\ muss\ anschlie\u00DFend\ extern\ gesetzt\ werden.\r\n
+numComments=2

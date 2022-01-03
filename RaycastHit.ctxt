@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.target=RaycastHit
+comment0.text=\r\n\ Einzeltreffer\ eines\ Raycasts\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 21.12.2021\r\n
+comment1.params=
+comment1.target=RaycastHit()
+comment1.text=\r\n\ Expliziter\ parameterloser\ Konstruktor\r\n
+comment2.params=collider\ position
+comment2.target=RaycastHit(ICollider,\ Vector2)
+comment2.text=\r\n\ Vollst\u00E4ndiger\ Konstruktor\r\n\ @param\ collider\ Collider,\ der\ getroffen\ wurde\r\n\ @param\ position\ Ort,\ an\ dem\ der\ Treffer\ stattfand\r\n
+numComments=3

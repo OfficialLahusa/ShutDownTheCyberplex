@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.target=TunnelColliderProvider
+comment0.text=\r\n\ Ein\ ColliderProvider,\ der\ Collider\ f\u00FCr\ Tunnel\ in\ Abh\u00E4ngigkeit\ von\ der\ Umgebung\ platziert\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 20.12.2021\r\n
+comment1.params=
+comment1.target=TunnelColliderProvider()
+comment1.text=\r\n\ Konstruktor\ f\u00FCr\ Objekte\ der\ Klasse\ TunnelColliderProvider\r\n
+comment2.params=env\ x\ z
+comment2.target=java.util.ArrayList\ getColliders(TileEnvironment,\ int,\ int)
+comment2.text=\r\n\ @see\ IColliderProvider\#getColliders()\r\n
+comment3.params=
+comment3.target=boolean\ requiresEnvironment()
+comment3.text=\r\n\ @see\ ITileProvider\#requiresEnvironment()\r\n
+numComments=4

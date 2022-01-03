@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.target=CSVMapLoader
+comment0.text=\r\n\ Beschreiben\ Sie\ hier\ die\ Klasse\ CSVMapLoader.\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 03.12.2021\r\n
+comment1.params=tileFilePath\ functionFilePath
+comment1.target=GridMap\ loadFromFile(java.lang.String,\ java.lang.String)
+comment1.text=\r\n\ L\u00E4dt\ eine\ GridMap\ aus\ zwei\ .csv-Dateien\ (Comma\ Separated\ Values)\r\n\ @param\ filePath\ Pfad\ der\ zu\ ladenden\ Datei\r\n\ @return\ Aus\ der\ Datei\ geladenes\ Mesh\r\n
+comment2.params=filePath
+comment2.target=java.util.ArrayList\ readOneLayerFromFile(java.lang.String)
+comment2.text=\r\n\ Liest\ eine\ einzelne\ Kachelebene\ aus\ einem\ gegebenen\ Dateipfad\r\n\ @param\ filePath\ Dateipfad\ der\ .csv-Datei\ der\ Kachelebene\r\n\ @return\ Zweidimensionale\ Integerliste,\ die\ die\ Werte\ der\ Kachelebene\ enth\u00E4lt\r\n
+numComments=3

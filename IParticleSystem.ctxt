@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.target=IParticleSystem
+comment0.text=\r\n\ Interface\ f\u00FCr\ Partikelsysteme,\ also\ unsichtbare\ Objekte,\ die\ Partikel\ emittieren\ und\ verwalten.\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 01.01.2022\r\n
+comment1.params=
+comment1.target=int\ getParticleCount()
+comment1.text=\r\n\ Gibt\ die\ Anzahl\ der\ aktuell\ simulierten\ Partikel\ zur\u00FCck\r\n\ @return\ Anzahl\ der\ aktuell\ simulierten\ Partikel\r\n
+comment2.params=
+comment2.target=void\ clear()
+comment2.text=\r\n\ Entfernt\ alle\ Partikel\r\n
+comment3.params=
+comment3.target=boolean\ isDone()
+comment3.text=\r\n\ Gibt\ zur\u00FCck,\ ob\ das\ Partikelsystem\ fertig\ simuliert\ wurde\r\n\ @return\ true,\ wenn\ die\ Simulation\ abgeschlossen\ ist,\ sonst\ false\r\n
+numComments=4

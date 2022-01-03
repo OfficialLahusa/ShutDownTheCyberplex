@@ -1,0 +1,12 @@
+#BlueJ class context
+comment0.target=Physics
+comment0.text=\r\n\ Physik-Utilityklasse\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 21.12.2021\r\n
+comment1.params=source\ target\ map\ terminationFilter\ exclusionFilter
+comment1.target=java.util.ArrayList\ raycast(Vector2,\ Vector2,\ GridMap,\ java.util.EnumSet,\ java.util.EnumSet)
+comment1.text=\r\n\ F\u00FChrt\ eine\ Strecke\ von\ einem\ Startpunkt\ zu\ einem\ Zielpunkt\ innerhalb\ einer\ Map,\ und\ gibt\ geordnet\ alle\ Kollisionen\ zur\u00FCck,\ die\ den\ gesetzten\ Filtern\ entsprechen\r\n\ @param\ source\ Quelle\ des\ Strahls\r\n\ @param\ target\ Ziel\ des\ Strahls\r\n\ @param\ map\ GridMap,\ innerhalb\ derer\ die\ Kollisionen\ stattfinden\ (beschr\u00E4nkt\ auf\ aktiven\ Raum)\r\n\ @param\ terminationFilter\ Set\ aller\ PhysicsLayer,\ die\ bei\ Kollision\ zum\ Abbruch\ des\ Raycasts\ f\u00FChren\r\n\ @param\ exclusionFilter\ Set\ aller\ PhysicsLayer,\ die\ vom\ Strahl\ ignoriert\ werden\r\n\ @return\ geordnete\ Liste\ aller\ Raycast-Treffer\ in\ der\ Reihenfolge\ des\ Auftreffens\ von\ der\ Quelle\ aus\r\n
+comment2.params=a\ b
+comment2.target=int\ compare(RaycastHit,\ RaycastHit)
+comment3.params=source\ direction\ maxDistance\ map\ terminationFilter\ exclusionFilter
+comment3.target=java.util.ArrayList\ raycast(Vector2,\ Vector2,\ double,\ GridMap,\ java.util.EnumSet,\ java.util.EnumSet)
+comment3.text=\r\n\ F\u00FChrt\ eine\ Strecke\ von\ einem\ Startpunkt\ eine\ bestimmte\ L\u00E4nge\ entlang\ eines\ Richtungsvektors,\ und\ gibt\ geordnet\ alle\ Kollisionen\ zur\u00FCck,\ die\ den\ gesetzten\ Filtern\ entsprechen\r\n\ @param\ source\ Quelle\ des\ Strahls\r\n\ @param\ direction\ Richtung\ des\ Strahls\r\n\ @param\ maxDistance\r\n\ @param\ map\ GridMap,\ innerhalb\ derer\ die\ Kollisionen\ stattfinden\ (beschr\u00E4nkt\ auf\ aktiven\ Raum)\r\n\ @param\ terminationFilter\ Set\ aller\ PhysicsLayer,\ die\ bei\ Kollision\ zum\ Abbruch\ des\ Raycasts\ f\u00FChren\r\n\ @param\ exclusionFilter\ Set\ aller\ PhysicsLayer,\ die\ vom\ Strahl\ ignoriert\ werden\r\n\ @return\ geordnete\ Liste\ aller\ Raycast-Treffer\ in\ der\ Reihenfolge\ des\ Auftreffens\ von\ der\ Quelle\ aus\r\n
+numComments=4

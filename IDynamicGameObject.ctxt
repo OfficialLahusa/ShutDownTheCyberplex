@@ -1,0 +1,22 @@
+#BlueJ class context
+comment0.target=IDynamicGameObject
+comment0.text=\r\n\ GameObject,\ das\ nach\ Erstellung\ bewegt\ werden\ kann\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 24.12.2021\r\n
+comment1.params=position
+comment1.target=void\ setPosition(Vector3)
+comment1.text=\r\n\ Setzt\ die\ Position\r\n\ @param\ position\ Position\r\n
+comment2.params=rotation
+comment2.target=void\ setRotation(Vector3)
+comment2.text=\r\n\ Setzt\ die\ Rotation\r\n\ @param\ rotation\ Rotation\r\n
+comment3.params=scale
+comment3.target=void\ setScale(Vector3)
+comment3.text=\r\n\ Setzt\ die\ Skalierung\r\n\ @param\ scale\ Skalierung\r\n
+comment4.params=delta
+comment4.target=void\ move(Vector3)
+comment4.text=\r\n\ Bewegt\ das\ Objekt\ um\ einen\ Vektor\r\n\ @param\ delta\ Bewegungsvektor\r\n
+comment5.params=rotation
+comment5.target=void\ rotate(Vector3)
+comment5.text=\r\n\ Rotiert\ das\ Objekt\r\n\ @param\ rotation\ Vektor\ aus\ drei\ Rotationswinkeln\ in\ Grad\r\n
+comment6.params=scale
+comment6.target=void\ scale(Vector3)
+comment6.text=\r\n\ Skaliert\ das\ Object\ relativ\ zu\ seiner\ vorherigen\ Gr\u00F6\u00DFe\r\n\ @param\ scale\ Vektor\ der\ Skalierung\r\n
+numComments=7

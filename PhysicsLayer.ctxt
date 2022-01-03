@@ -1,0 +1,4 @@
+#BlueJ class context
+comment0.target=PhysicsLayer
+comment0.text=\r\n\ Unterebene\ des\ Physiksystems,\ die\ die\ physikalischen\ Eigenschaften\ eines\ Colliders\ bestimmt\r\n\ \r\n\ @author\ \ Lasse\ Huber-Saffer\r\n\ @version\ 21.12.2021\r\n
+numComments=1

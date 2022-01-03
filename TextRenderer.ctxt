@@ -1,0 +1,34 @@
+#BlueJ class context
+comment0.target=TextRenderer
+comment0.text=\r\n\ Text-Renderer,\ der\ einige\ Buchstaben,\ Zahlen\ und\ Symbole\ ins\ zweidimensionale\ Screenspace\ zeichnen\ kann\r\n\ \r\n\ @author\ Nico\ H\u00E4dicke,\ Lasse\ Huber-Saffer\ (geringf\u00FCgige\ \u00C4nderungen)\r\n\ @version\ 01.01.2022\r\n
+comment1.params=renderer
+comment1.target=TextRenderer(Renderer)
+comment1.text=\r\n\ Konstruktor\ f\u00FCr\ Objekte\ der\ Klasse\ TextRenderer\r\n\ @param\ renderer\ zu\ verwendender\ Renderer\r\n
+comment10.params=start\ size\ c\ color
+comment10.target=void\ letterNumber(Vector2,\ int,\ char,\ TurtleColor)
+comment10.text=\r\n\ Zeichnet\ eine\ Zahl\r\n\ \r\n\ @param\ start\ oberer\ linker\ Punkt\ der\ Zahl\r\n\ @param\ size\ Schriftgr\u00F6\u00DFe\r\n\ @param\ c\ Zahl,\ die\ gezeichnet\ werden\ soll\r\n\ @param\ color\ Farbe\r\n
+comment2.params=start\ size\ text\ color
+comment2.target=void\ write(Vector2,\ int,\ java.lang.String,\ TurtleColor)
+comment2.text=\r\n\ Zeichnet\ einen\ String\ in\ einer\ bestimmten\ Gr\u00F6\u00DFe\ und\ Farbe\ an\ einen\ Punkt\ im\ zweidimensionalen\ Screenspace\r\n\ \r\n\ @param\ start\ Startpunkt\ oben\ links\ vom\ String\r\n\ @param\ size\ Schriftgr\u00F6\u00DFe\r\n\ @param\ text\ Zu\ rendernder\ String\r\n\ @param\ color\ Textfarbe\r\n
+comment3.params=start\ wx2\ wy2\ size\ color
+comment3.target=void\ drawLineCheck(Vector2,\ double,\ double,\ int,\ TurtleColor)
+comment3.text=\r\n\ Rendert\ doppelte\ Linie\ von\ vorherigem\ Endpunkt\ bis\ (wx2,\ wx2)\ relativ\ zum\ Startpunkt\r\n\ \r\n\ @param\ start\ Startpunkt\ oben\ links\ vom\ String\r\n\ @param\ wx2\ Rellativer\ Zielpunkt\ auf\ der\ X-Achse\r\n\ @param\ wy2\ Rellativer\ Zielpunkt\ auf\ der\ Y-Achse\r\n\ @param\ size\ Schriftgr\u00F6\u00DFe\r\n\ @param\ color\ Farbe\r\n
+comment4.params=start\ wx1\ wy1\ wx2\ wy2\ size\ color
+comment4.target=void\ drawLineCheck(Vector2,\ double,\ double,\ double,\ double,\ int,\ TurtleColor)
+comment4.text=\r\n\ Rendert\ doppelte\ Linie\ von\ (wx1,\ wy1)\ bis\ (wx2,\ wx2)\ relativ\ zum\ startpunkt\r\n\ \r\n\ @param\ start\ Startpunkt\ oben\ links\ vom\ String\r\n\ @param\ wx1\ Relativer\ Startpunkt\ auf\ der\ X-Achse\r\n\ @param\ wy1\ Relativer\ Startpunkt\ auf\ der\ Y-Achse\r\n\ @param\ wx2\ Relativer\ Zielpunkt\ auf\ der\ X-Achse\r\n\ @param\ wy2\ Relativer\ Zielpunkt\ auf\ der\ Y-Achse\r\n\ @param\ size\ Schriftgr\u00F6\u00DFe\r\n\ @param\ color\ Farbe\r\n
+comment5.params=start\ wx2\ wy2\ size\ direction\ color
+comment5.target=void\ drawLineCheck(Vector2,\ double,\ double,\ int,\ int,\ TurtleColor)
+comment5.text=\r\n\ Rendert\ doppelte\ Linie\ von\ vorherigem\ Endpunkt\ bis\ (wx2,\ wx2)\ rellativ\ zum\ startpunkt\r\n\ \r\n\ @param\ start\ Startpunkt\ oben\ links\ vom\ String\r\n\ @param\ wx2\ Rellativer\ Zielpunkt\ auf\ der\ X-Achse\r\n\ @param\ wy2\ Rellativer\ Zielpunkt\ auf\ der\ Y-Achse\r\n\ @param\ size\ Schriftgr\u00F6\u00DFe\r\n\ @param\ direction\ Position\ der\ doppelten\ Lilie\ |\ 0\ \=\ nach\ oben/links\ 1\ \=\ nach\ unten/rechts\r\n\ @param\ color\ Farbe\r\n
+comment6.params=start\ wx1\ wy1\ wx2\ wy2\ size\ direction\ color
+comment6.target=void\ drawLineCheck(Vector2,\ double,\ double,\ double,\ double,\ int,\ int,\ TurtleColor)
+comment6.text=\r\n\ Rendert\ doppelte\ Linie\ von\ vorherigem\ Endpunkt\ bis\ (wx2,\ wx2)\ rellativ\ zum\ startpunkt\r\n\ \r\n\ @param\ start\ Startpunkt\ oben\ links\ vom\ String\r\n\ @param\ wx1\ Rellativer\ Startpunkt\ auf\ der\ X-Achse\r\n\ @param\ wy1\ Rellativer\ Startpunkt\ auf\ der\ Y-Achse\r\n\ @param\ wx2\ Rellativer\ Zielpunkt\ auf\ der\ X-Achse\r\n\ @param\ wy2\ Rellativer\ Zielpunkt\ auf\ der\ Y-Achse\r\n\ @param\ size\ Schriftgr\u00F6\u00DFe\r\n\ @param\ direction\ Position\ der\ doppelten\ Lilie\ |\ 0\ \=\ nach\ oben/links\ 1\ \=\ nach\ unten/rechts\r\n\ @param\ color\ Farbe\r\n
+comment7.params=start\ size\ c\ color
+comment7.target=void\ letterLowerCase(Vector2,\ int,\ char,\ TurtleColor)
+comment7.text=\r\n\ Zeichnet\ einen\ Kleinbuchstaben\r\n\ \r\n\ @param\ start\ oberer\ linker\ Punkt\ des\ Buchstaben\r\n\ @param\ size\ Schriftgr\u00F6\u00DFe\r\n\ @param\ c\ Kleinbuchstabe,\ der\ gezeichnet\ werden\ soll\r\n\ @param\ color\ Farbe\r\n
+comment8.params=start\ size\ c\ color
+comment8.target=void\ letterUpperCase(Vector2,\ int,\ char,\ TurtleColor)
+comment8.text=\r\n\ Zeichnet\ einen\ Gro\u00DFbuchstaben\r\n\ \r\n\ @param\ start\ oberer\ linker\ Punkt\ des\ Buchstaben\r\n\ @param\ size\ Schriftgr\u00F6\u00DFe\r\n\ @param\ c\ Gro\u00DFbuchstabe,\ der\ gezeichnet\ werden\ soll\r\n\ @param\ color\ Farbe\r\n
+comment9.params=start\ size\ c\ color
+comment9.target=void\ letterSymbols(Vector2,\ int,\ char,\ TurtleColor)
+comment9.text=\r\n\ Zeichnet\ eine\ Symbol\r\n\ \r\n\ @param\ start\ oberer\ linker\ Punkt\ des\ Symbols\r\n\ @param\ size\ Schriftgr\u00F6\u00DFe\r\n\ @param\ c\ Symbol,\ das\ gezeichnet\ werden\ soll\r\n\ @param\ color\ Farbe\r\n
+numComments=11

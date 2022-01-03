@@ -1,0 +1,19 @@
+#BlueJ class context
+comment0.target=DoorTileProvider
+comment0.text=\r\n\ TileProvider\ f\u00FCr\ T\u00FCren,\ die\ in\ Abh\u00E4ngigkeit\ von\ der\ Umgebung\ entlang\ der\ X-\ oder\ Z-Achse\ ausgerichtet\ sein\ k\u00F6nnen\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 03.01.2022\r\n
+comment1.params=coloredMeshesClosed\ coloredMeshesOpen\ isOpen\ closedColliderProvider\ openColliderProvider\ lockMesh\ floorTileProvider\ wallTileProvider\ soundEngine\ openSoundKey\ closeSoundKey\ soundVolume
+comment1.target=DoorTileProvider(java.util.ArrayList,\ java.util.ArrayList,\ boolean,\ IColliderProvider,\ IColliderProvider,\ Mesh,\ ITileProvider,\ WallTileProvider,\ SoundEngine,\ java.lang.String,\ java.lang.String,\ java.lang.Double)
+comment1.text=\r\n\ Konstruktor\ f\u00FCr\ Objekte\ der\ Klasse\ DoorTileProvider\r\n\ @param\ coloredMeshesClosed\ Liste\ von\ Mesh-Farb-Paaren,\ die\ im\ geschlossenen\ Zustand\ gerendert\ werden\r\n\ @param\ coloredMeshesOpen\ Liste\ von\ Mesh-Farb-Paaren,\ die\ im\ offenen\ Zustand\ gerendert\ werden\r\n\ @param\ isOpen\ Offenheit\ der\ T\u00FCr\r\n\ @param\ closedColliderProvider\ (Optional)\ ColliderProvider,\ der\ im\ geschlossenen\ Zustand\ f\u00FCr\ Kollisionsberechnungen\ verwendet\ wird\r\n\ @param\ openColliderProvider\ (Optional)\ ColliderProvider,\ der\ im\ offenen\ Zustand\ f\u00FCr\ Kollisionsberechnungen\ verwendet\ wird\r\n\ @param\ lockMesh\ (Optional)\ Mesh,\ das\ gerendert\ werden\ soll,\ wenn\ die\ T\u00FCr\ abgeschlossen\ ist\r\n\ @param\ floorTileProvider\ (Optional)\ TileProvider,\ der\ f\u00FCr\ den\ Boden\ unter\ der\ T\u00FCr\ verwendet\ werden\ soll\r\n\ @param\ wallTileProvider\ (Optional)\ WallTileProvider,\ der\ f\u00FCr\ die\ W\u00E4nde\ an\ den\ Seiten\ der\ T\u00FCr\ verwendet\ werden\ soll\r\n\ @param\ soundEngine\ (Optional)\ SoundEngine,\ in\ der\ die\ nachfolgenden\ Sounds\ vorzufinden\ sind\r\n\ @param\ openSoundKey\ (Optional)\ Soundquelle,\ die\ f\u00FCr\ den\ Sound\ beim\ \u00D6ffnen\ der\ T\u00FCr\ verwendet\ wird\r\n\ @param\ closeSoundKey\ (Optional)\ Soundquelle,\ die\ f\u00FCr\ den\ Sound\ beim\ Schlie\u00DFen\ der\ T\u00FCr\ verwendet\ wird\r\n\ @param\ soundVolume\ (Optional)\ Lautst\u00E4rke\ der\ Sounds\r\n
+comment2.params=env\ x\ z
+comment2.target=java.util.ArrayList\ getTileObjects(TileEnvironment,\ int,\ int)
+comment2.text=\r\n\ @see\ ITileProvider\#getTileObjects()\r\n
+comment3.params=
+comment3.target=boolean\ requiresEnvironment()
+comment3.text=\r\n\ @see\ ITileProvider\#requiresEnvironment()\r\n
+comment4.params=
+comment4.target=java.util.ArrayList\ getColoredMeshesClosed()
+comment4.text=\r\n\ Gibt\ eine\ Referenz\ zur\ Liste\ der\ Mesh-Farb-Paare\ des\ Providers\ zur\u00FCck,\ die\ im\ geschlossenen\ Zustand\ verwendet\ werden\r\n\ @return\ Referenz\ zur\ Liste\ der\ Mesh-Farb-Paare,\ die\ im\ geschlossenen\ Zustand\ verwendet\ werden\r\n
+comment5.params=
+comment5.target=java.util.ArrayList\ getColoredMeshesOpen()
+comment5.text=\r\n\ Gibt\ eine\ Referenz\ zur\ Liste\ der\ Mesh-Farb-Paare\ des\ Providers\ zur\u00FCck,\ die\ im\ offenen\ Zustand\ verwendet\ werden\r\n\ @return\ Referenz\ zur\ Liste\ der\ Mesh-Farb-Paare,\ die\ im\ offenen\ Zustand\ verwendet\ werden\r\n
+numComments=6

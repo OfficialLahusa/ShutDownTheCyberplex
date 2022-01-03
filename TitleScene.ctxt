@@ -1,0 +1,18 @@
+#BlueJ class context
+comment0.target=TitleScene
+comment0.text=\r\n\ Titelbildschirm\ und\ Hauptmen\u00FC\ des\ Spiels\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer,\ Nico\ H\u00E4dicke\r\n\ @version\ 01.01.2022\r\n
+comment1.params=state
+comment1.target=TitleScene(GameState)
+comment2.params=deltaTime\ runTime
+comment2.target=void\ handleInput(double,\ double)
+comment2.text=\r\n\ @see\ Scene\#handleInput()\r\n
+comment3.params=deltaTime\ runTime
+comment3.target=void\ update(double,\ double)
+comment3.text=\r\n\ @see\ Scene\#update()\r\n
+comment4.params=deltaTime\ runTime
+comment4.target=void\ draw(double,\ double)
+comment4.text=\r\n\ @see\ Scene\#draw()\r\n
+comment5.params=text\ pos\ color
+comment5.target=boolean\ drawButton(java.lang.String,\ Vector2,\ TurtleColor)
+comment5.text=\r\n\ Zeichnet\ einen\ Knopf\ an\ gegebener\ Position\ und\ gibt\ zur\u00FCck\ ob\ gedr\u00FCckt\ wurde.\r\n
+numComments=6

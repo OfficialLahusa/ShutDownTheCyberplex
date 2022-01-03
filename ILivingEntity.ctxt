@@ -1,0 +1,25 @@
+#BlueJ class context
+comment0.target=ILivingEntity
+comment0.text=\r\n\ Tragen\ Sie\ hier\ eine\ Beschreibung\ des\ Interface\ ILivingEntity\ ein.\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 23.12.2021\r\n
+comment1.params=amount\ source
+comment1.target=void\ damage(int,\ java.lang.String)
+comment1.text=\r\n\ F\u00FCgt\ der\ Entity\ Schaden\ zu.\r\n\ Seine\ Lebenspunkte\ k\u00F6nnen\ 0\ nicht\ unterschreiten\r\n\ @param\ amount\ Menge\ an\ Lebenspunkten\r\n\ @param\ source\ Bezeichung\ der\ Schadensquelle\ (z.B.\ "turret\ shot")\r\n
+comment2.params=amount\ source
+comment2.target=void\ heal(int,\ java.lang.String)
+comment2.text=\r\n\ Heilt\ die\ Entity.\r\n\ Seine\ Lebenspunkte\ k\u00F6nnen\ seine\ maximalen\ Lebenspunkte\ nicht\ \u00FCberschreiten.\r\n\ @param\ amount\ Menge\ an\ Lebenspunkten\r\n\ @param\ source\ Bezeichnung\ der\ Heilungsursache\ (z.B.\ "health\ powerup")\r\n
+comment3.params=
+comment3.target=boolean\ isAlive()
+comment3.text=\r\n\ Gibt\ zur\u00FCck,\ ob\ die\ Entity\ aktuell\ lebt.\r\n\ @return\ true,\ wenn\ Entity\ lebt,\ sonst\ false\r\n
+comment4.params=
+comment4.target=int\ getHealth()
+comment4.text=\r\n\ Gibt\ die\ Lebenspunkte\ der\ Entity\ zur\u00FCck.\r\n\ @return\ die\ Lebenspunkte\r\n
+comment5.params=amount
+comment5.target=void\ setHealth(int)
+comment5.text=\r\n\ Setzt\ die\ Lebenspunkte\ der\ Entity.\r\n\ @param\ amount\ Menge\ an\ Lebenspunkten\ (>\=\ 0)\r\n
+comment6.params=
+comment6.target=int\ getMaxHealth()
+comment6.text=\r\n\ Gibt\ die\ maximalen\ Lebenspunkte\ der\ Entity\ zur\u00FCck.\r\n\ @return\ maximale\ Lebenspunkte\r\n
+comment7.params=amount
+comment7.target=void\ setMaxHealth(int)
+comment7.text=\r\n\ Setzt\ die\ maximalen\ Lebenspunkte\ der\ Entity.\r\n\ @param\ amount\ maximale\ Menge\ an\ Lebenspunkten\ (>\=\ 0)\r\n
+numComments=8

@@ -1,0 +1,25 @@
+#BlueJ class context
+comment0.target=Tile
+comment0.text=\r\n\ Compiletime-Register\ aller\ im\ Spiel\ verwendeten\ TileIDs\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\ \r\n\ @version\ 02.01.2022\r\n
+comment1.params=tileType
+comment1.target=boolean\ isSolid(int)
+comment1.text=\r\n\ Gibt\ zur\u00FCck,\ ob\ ein\ Tile-Typ\ solide\ ist\r\n\ @return\ true,\ wenn\ Tile-Typ\ solide\ ist,\ sonst\ false\r\n
+comment2.params=tileType
+comment2.target=boolean\ isSemiSolid(int)
+comment2.text=\r\n\ Gibt\ zur\u00FCck,\ ob\ ein\ Tile-Typ\ semi-solide\ (also\ nur\ bedingt\ solide)\ ist\r\n\ @return\ true,\ wenn\ Tile-Typ\ semi-solide\ (also\ nur\ bedingt\ solide)\ ist,\ sonst\ false\r\n
+comment3.params=tileType
+comment3.target=boolean\ isDoor(int)
+comment3.text=\r\n\ Gibt\ zur\u00FCck,\ ob\ ein\ Tile-Typ\ eine\ T\u00FCr\ ist\r\n\ @return\ true,\ wenn\ Tile-Typ\ eine\ normale\ T\u00FCr\ ist\r\n
+comment4.params=tileType
+comment4.target=boolean\ isNormalDoor(int)
+comment4.text=\r\n\ Gibt\ zur\u00FCck,\ ob\ ein\ Tile-Typ\ eine\ normale\ T\u00FCr\ ist\r\n\ @return\ true,\ wenn\ Tile-Typ\ eine\ normale\ T\u00FCr\ ist,\ sonst\ false\r\n
+comment5.params=tileType
+comment5.target=boolean\ isSecretDoor(int)
+comment5.text=\r\n\ Gibt\ zur\u00FCck,\ ob\ ein\ Tile-Typ\ eine\ Geheimt\u00FCr\ ist\r\n\ @return\ true,\ wenn\ Tile-Typ\ eine\ Geheimt\u00FCr\ ist,\ sonst\ false\r\n
+comment6.params=tileType
+comment6.target=boolean\ isNone(int)
+comment6.text=\r\n\ Gibt\ zur\u00FCck,\ ob\ ein\ Tile-Typ\ nichts\ ist\r\n\ @return\ true,\ wenn\ Tile-Typ\ nichts\ ist,\ sonst\ false\r\n
+comment7.params=tileType
+comment7.target=boolean\ isSolidOrNone(int)
+comment7.text=\r\n\ Gibt\ zur\u00FCck,\ ob\ ein\ Tile-Typ\ nichts\ ist\r\n\ @return\ true,\ wenn\ Tile-Typ\ nichts\ ist,\ sonst\ false\r\n
+numComments=8

@@ -1,0 +1,22 @@
+#BlueJ class context
+comment0.target=ICollider
+comment0.text=\r\n\ Interface\ f\u00FCr\ zweidimensionale\ Physik-Collider\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 20.12.2021\r\n
+comment1.params=other
+comment1.target=boolean\ detectCollision(ICollider)
+comment1.text=\r\n\ Pr\u00FCft,\ ob\ dieser\ Collider\ und\ ein\ anderer\ sich\ \u00FCberschneiden.\r\n\ Im\ Falle\ einer\ \u00DCberschneidung\ wird\ die\ Methode\ onCollision\ beider\ Listener\ ausgef\u00FChrt.\r\n\ @param\ other\ Collider,\ zu\ dem\ die\ \u00DCberschneidung\ gepr\u00FCft\ werden\ soll\r\n\ @return\ true,\ wenn\ die\ Collider\ sich\ \u00FCberschneiden,\ sonst\ false\r\n
+comment2.params=other
+comment2.target=boolean\ intersects(ICollider)
+comment2.text=\r\n\ Pr\u00FCft,\ ob\ dieser\ Collider\ und\ ein\ anderer\ sich\ \u00FCberschneiden.\r\n\ @param\ other\ Collider,\ zu\ dem\ die\ \u00DCberschneidung\ gepr\u00FCft\ werden\ soll\r\n\ @return\ true,\ wenn\ die\ Collider\ sich\ \u00FCberschneiden,\ sonst\ false\r\n
+comment3.params=layer
+comment3.target=void\ setLayer(PhysicsLayer)
+comment3.text=\r\n\ Setzt\ die\ Physik-Ebene,\ auf\ der\ dieser\ Collider\ agiert\r\n\ @param\ layer\ Physik-Ebene,\ auf\ der\ dieser\ Collider\ agiert\r\n
+comment4.params=
+comment4.target=PhysicsLayer\ getLayer()
+comment4.text=\r\n\ Gibt\ die\ Physik-Ebene,\ auf\ der\ dieser\ Collider\ agiert,\ zur\u00FCck\r\n\ @return\ Physik-Ebene,\ auf\ der\ dieser\ Collider\ agiert\r\n
+comment5.params=
+comment5.target=ICollisionListener\ getListener()
+comment5.text=\r\n\ Gibt\ den\ Kollisions-Listener\ dieses\ Colliders\ zur\u00FCck.\r\n\ Der\ Kollisionslistener\ bietet\ Callback-Methoden\ f\u00FCr\ Kollisionen\ und\ Kollisionsaufl\u00F6sungen.\r\n\ @return\ Instanz\ des\ Kollisionslisteners,\ null,\ wenn\ keiner\ gesetzt\ ist\r\n
+comment6.params=listener
+comment6.target=void\ setListener(ICollisionListener)
+comment6.text=\r\n\ Setzt\ den\ Kollisions-Listener\ dieses\ Colliders.\r\n\ Der\ Kollisionslistener\ bietet\ Callback-Methoden\ f\u00FCr\ Kollisionen\ und\ Kollisionsaufl\u00F6sungen.\r\n\ @param\ listener\ zu\ verwendender\ Listener\r\n
+numComments=7

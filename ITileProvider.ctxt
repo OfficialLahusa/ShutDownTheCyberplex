@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.target=ITileProvider
+comment0.text=\r\n\ Interface\ f\u00FCr\ TileProvider-Typen,\ die\ in\ Abh\u00E4ngigkeit\ einer\ Tile-Umgebung\ GameObjects\ bereitstellen\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 04.12.2021\r\n
+comment1.params=env\ x\ z
+comment1.target=java.util.ArrayList\ getTileObjects(TileEnvironment,\ int,\ int)
+comment1.text=\r\n\ Gibt\ die\ GameObjects\ zur\u00FCck,\ die\ der\ TileProvider\ in\ der\ gegebenen\ Umgebung\ generiert\r\n\ @param\ env\ Umgebung\ der\ Tile\r\n\ @param\ x\ x-Position\ der\ Tile\r\n\ @param\ y\ y-Position\ der\ Tile\r\n\ @return\ Liste\ an\ GameObjects,\ die\ von\ der\ Tile\ platziert\ werden\r\n
+comment2.params=
+comment2.target=boolean\ requiresEnvironment()
+comment2.text=\r\n\ Gibt\ zur\u00FCck,\ ob\ der\ TileProvider\ ein\ TileEnvironment\ als\ Parameter\ der\ Funktion\ getTileObject\ bekommen\ soll,\ oder\ nicht,\ da\ nicht\ jeder\ TileProvider-Typ\ diesen\ Parametertyp\ ben\u00F6tigt\r\n\ @return\ true,\ wenn\ dieser\ TileProvider\ als\ Parameter\ ein\ TileEnvironment\ ungleich\ null\ ben\u00F6tigt,\ sonst\ false\r\n
+numComments=3

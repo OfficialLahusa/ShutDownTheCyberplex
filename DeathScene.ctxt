@@ -1,0 +1,15 @@
+#BlueJ class context
+comment0.target=DeathScene
+comment0.text=\r\n\ Szene,\ die\ nach\ dem\ Spielertod\ gezeigt\ wird\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 03.01.2022\r\n
+comment1.params=state\ causeOfDeath
+comment1.target=DeathScene(GameState,\ java.lang.String)
+comment2.params=deltaTime\ runTime
+comment2.target=void\ handleInput(double,\ double)
+comment2.text=\r\n\ @see\ Scene\#handleInput()\r\n
+comment3.params=deltaTime\ runTime
+comment3.target=void\ update(double,\ double)
+comment3.text=\r\n\ @see\ Scene\#update()\r\n
+comment4.params=deltaTime\ runTime
+comment4.target=void\ draw(double,\ double)
+comment4.text=\r\n\ @see\ Scene\#draw()\r\n
+numComments=5

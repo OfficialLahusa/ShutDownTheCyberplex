@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.target=ICollisionListener
+comment0.text=\r\n\ Interface\ f\u00FCr\ Objekte,\ die\ auf\ Kollisionen\ reagieren\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 16.12.2021\r\n
+comment1.params=self\ other
+comment1.target=void\ onCollision(ICollider,\ ICollider)
+comment1.text=\r\n\ Callback-Methode,\ die\ im\ Fall\ einer\ Kollision\ ausgef\u00FChrt\ wird\r\n\ @param\ self\ Collider,\ auf\ dem\ dieser\ Listener\ registriert\ wird\r\n\ @param\ other\ Collider,\ mit\ dem\ self\ Kollidiert\r\n
+comment2.params=self\ other
+comment2.target=void\ onResolution(ICollider,\ ICollider)
+comment2.text=\r\n\ Callback-Methode,\ die\ im\ Fall\ einer\ Kollisionsaufl\u00F6sung\ ausgef\u00FChrt\ wird\r\n\ @param\ self\ Collider,\ auf\ dem\ dieser\ Listener\ registriert\ wird\r\n\ @param\ other\ Collider,\ mit\ dem\ self\ Kollidiert\r\n
+numComments=3

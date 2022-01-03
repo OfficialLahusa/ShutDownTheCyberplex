@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.target=TileEnvironment
+comment0.text=\r\n\ Beschreiben\ Sie\ hier\ die\ Klasse\ TileEnvironment.\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 03.01.2022\r\n
+comment1.params=tileValues\ func\ x\ z
+comment1.target=TileEnvironment(java.util.ArrayList,\ int,\ int,\ int)
+comment1.text=\r\n\ Konstruktor\ f\u00FCr\ Objekte\ der\ Klasse\ TileEnvironment\ auf\ Basis\ einer\ Map\ und\ einer\ Position\ in\ dieser\ Map\r\n\ @param\ tileValues\ Tile-Werte\ der\ Map\ (Zeilen\ mit\ jeweils\ gleicher\ L\u00E4nge\ und\ Werten\ von\ nicht\ null)\r\n\ @param\ func\ Wert\ der\ Funktionstile\ an\ der\ Position\ der\ Tile\r\n\ @param\ x\ x-Position\ des\ Zentrums\ (Muss\ innerhalb\ der\ Karte\ liegen)\r\n\ @param\ y\ y-Position\ des\ Zentrums\ (Muss\ innerhalb\ der\ Karte\ liegen)\r\n
+comment2.params=tileValues\ func\ room\ x\ z
+comment2.target=TileEnvironment(java.util.ArrayList,\ int,\ Room,\ int,\ int)
+comment2.text=\r\n\ Konstruktor\ f\u00FCr\ Objekte\ der\ Klasse\ TileEnvironment\ auf\ Basis\ einer\ Map,\ eines\ einschr\u00E4nkenden\ Raumes\ und\ einer\ Position\r\n\ @param\ tileValues\ Tile-Werte\ der\ Map\ (Zeilen\ mit\ jeweils\ gleicher\ L\u00E4nge\ und\ Werten\ von\ nicht\ null)\r\n\ @param\ func\ Wert\ der\ Funktionstile\ an\ der\ Position\ der\ Tile\r\n\ @param\ room\ gebietsbeschr\u00E4nkender\ Raum\r\n\ @param\ x\ x-Position\ des\ Zentrums\ (Muss\ innerhalb\ des\ Raumes\ liegen)\r\n\ @param\ y\ y-Position\ des\ Zentrums\ (Muss\ innerhalb\ des\ Raumes\ liegen)\r\n
+numComments=3

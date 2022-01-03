@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.target=TimeManager
+comment0.text=\r\n\ Der\ TimeManager\ verwaltet\ die\ Zeitberechnung\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 01.12.2021\r\n
+comment1.params=
+comment1.target=TimeManager()
+comment1.text=\r\n\ Parameterloser\ Konstruktor,\ der\ die\ Zeitmessung\ startet\r\n
+comment2.params=
+comment2.target=double\ getRunTime()
+comment2.text=\r\n\ Gibt\ die\ vergangene\ Zeit\ seit\ Erstellung\ der\ Instanz\ in\ Sekunden\ zur\u00FCck\r\n\ @return\ vergangene\ Zeit\ in\ Sekunden\ seit\ Erstellung\r\n
+comment3.params=
+comment3.target=double\ getDeltaTime()
+comment3.text=\r\n\ Gibt\ die\ vergangene\ Zeit\ seit\ der\ letzten\ Ausf\u00FChrung\ dieser\ Methode\ in\ Sekunden\ zur\u00FCck\r\n\ @return\ vergangene\ Zeit\ in\ Sekunden\ seit\ letztem\ Aufruf\r\n
+numComments=4

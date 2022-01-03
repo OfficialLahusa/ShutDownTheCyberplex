@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.target=ILODGameObject
+comment0.text=\r\n\ Interface\ f\u00FCr\ Levels-Of-Detail\ GameObjects,\ also\ GameObjects,\ die\ ihr\ Mesh\ in\ Abh\u00E4ngigkeit\ von\ der\ Distanz\ \u00E4ndern\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 04.12.2021\r\n
+comment1.params=cameraPosition
+comment1.target=void\ updateLOD(Vector3)
+comment1.text=\r\n\ Updated\ den\ Levels-of-Detail-Bezugspunkt\ des\ GameObjects\r\n\ @param\ cameraPosition\ Position\ der\ Kamera,\ die\ als\ Bezugspunkt\ der\ LOD-Berechnung\ genutzt\ wird\r\n
+comment2.params=
+comment2.target=int\ getLODLevel()
+comment2.text=\r\n\ Gibt\ das\ Level-of-Detail,\ das\ unter\ dem\ aktuellen\ Bezugspunkt\ genutzt\ wird,\ zur\u00FCck\r\n\ @return\ Level-of-Detail,\ das\ vom\ GameObject\ genutzt\ wird.\ Je\ h\u00F6her,\ desto\ weiter\ ist\ das\ Mesh\ vom\ Originalmesh\ entfernt.\r\n
+numComments=3

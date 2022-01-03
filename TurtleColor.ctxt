@@ -1,0 +1,8 @@
+#BlueJ class context
+comment0.target=TurtleColor
+comment0.text=\r\n\ Enumeration\ der\ verf\u00FCgbaren\ Farben\ einer\ Turtle.\r\n\ Jeder\ Eintrag\ entspricht\ einer\ der\ statischen\ Farben\ aus\ der\ Klasse\ java.awt.Color.\r\n\ Zus\u00E4tzlich\ ist\ zu\ jedem\ Eintrag\ ein\ numerischer\ Wert,\ der\ dem\ Index\ im\ Farb-Array\ der\ Turtle\ entspricht,\ zugeordnet.\r\n\ \r\n\ @author\ \ Lasse\ Huber-Saffer\r\n\ @version\ 01.01.2022\r\n
+comment1.params=id
+comment1.target=TurtleColor(java.lang.Integer)
+comment2.params=
+comment2.target=java.lang.Integer\ getID()
+numComments=3
