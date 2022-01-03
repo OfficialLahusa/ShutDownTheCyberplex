@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.target=LODGenerator
+comment0.text=\r\n\ Generator-Klasse,\ die\ einige\ Standard-LOD-Erstellungen\ erm\u00F6glicht\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 05.12.2021\r\n
+comment1.params=
+comment1.target=LODGenerator()
+comment2.params=fullResTile\ distance
+comment2.target=java.util.ArrayList\ createBasicFloorTileLOD(core.Mesh,\ double)
+comment3.params=fullResDetail\ distance
+comment3.target=java.util.ArrayList\ createFadeOutLOD(core.Mesh,\ double)
+numComments=4

@@ -1,7 +1,0 @@
-#BlueJ class context
-comment0.target=LineCircleIntersection
-comment0.text=\r\n\ Auswertung\ \u00FCber\ den\ Schnitt\ eines\ Kreises\ mit\ einer\ Linie\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 21.12.2021\r\n
-comment1.params=type\ pos1\ pos2
-comment1.target=LineCircleIntersection(LineCircleIntersectionType,\ Vector2,\ Vector2)
-comment1.text=\r\n\ Konstruktor\ f\u00FCr\ Objekte\ der\ Klasse\ LineCircleIntersection\r\n\ @param\ type\ Art\ des\ Schnitts\r\n\ @param\ pos1\ erster\ Schnittpunkt\r\n\ @param\ pos2\ zweiter\ Schnittpunkt\r\n
-numComments=2

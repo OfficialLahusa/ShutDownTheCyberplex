@@ -1,7 +1,0 @@
-#BlueJ class context
-comment0.target=WavefrontObjectLoader
-comment0.text=\r\n\ Diese\ Klasse\ l\u00E4dt\ 3D-Modelle\ im\ offenen\ Wavefront\ Object\ (.obj)\ Format\ als\ Line\ Meshes\ in\ die\ Engine\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\ \r\n\ @version\ 02.12.2021\r\n
-comment1.params=filePath
-comment1.target=Mesh\ loadFromFile(java.lang.String)
-comment1.text=\r\n\ L\u00E4dt\ ein\ Mesh\ (3D-Modell)\ aus\ einer\ Wavefront\ Object\ (.obj)-Datei\ an\ einem\ gegebenen\ Pfad\r\n\ @param\ filePath\ Pfad\ der\ zu\ ladenden\ Datei\r\n\ @return\ Aus\ der\ Datei\ geladenes\ Mesh\r\n
-numComments=2

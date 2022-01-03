@@ -1,0 +1,34 @@
+#BlueJ class context
+comment0.target=PathNode
+comment0.text=\r\n\ Knotenpunkt\ w\u00E4hrend\ der\ Pfadberechnung\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 25.12.2021\r\n
+comment1.params=position\ g\ h\ previousNode
+comment1.target=PathNode(maths.Vector2i,\ double,\ double,\ PathNode)
+comment1.text=\r\n\ Vollst\u00E4ndiger\ Konstruktor\r\n\ @param\ position\ Position\ des\ Knotens\ im\ Grid\r\n\ @param\ g\ Weg\ von\ diesem\ Knoten\ zum\ Startknoten\r\n\ @param\ h\ Heuristikwert\ (Gesch\u00E4tzte\ Distanz\ von\ diesem\ Knoten\ zum\ Ziel)\r\n\ @param\ previousNode\ (Optional)\ vorhergehender\ Knoten\r\n
+comment10.params=previousNode
+comment10.target=void\ setPreviousNode(PathNode)
+comment10.text=\r\n\ Setzt\ den\ vorhergehenden\ Knoten\r\n\ @param\ previousNode\ (Optional)\ vorhergehender\ Knoten\r\n
+comment2.params=other
+comment2.target=int\ compareTo(PathNode)
+comment2.text=\r\n\ Vergleicht\ die\ Knoten\ anhand\ ihrer\ Gesamtkosten\r\n\ @param\ other\ anderer\ Knoten\r\n\ @return\ Ergebnis\ des\ Vergleichs\r\n
+comment3.params=
+comment3.target=double\ getF()
+comment3.text=\r\n\ Gibt\ die\ Gesamtkosten\ des\ Knotenpunkts\ zur\u00FCck\r\n\ Es\ gilt\ f\ \=\ g\ +\ h\r\n\ @return\ Gesamtkosten\ des\ Knotenpunkts\r\n
+comment4.params=
+comment4.target=double\ getG()
+comment4.text=\r\n\ Gibt\ den\ Weg\ von\ diesem\ Knoten\ zum\ Startknoten\ zur\u00FCck\r\n\ @return\ Weg\ von\ diesem\ Knoten\ zum\ Startknoten\r\n
+comment5.params=
+comment5.target=double\ getH()
+comment5.text=\r\n\ Gibt\ den\ Heuristikwert\ (Gesch\u00E4tzte\ Distanz\ von\ diesem\ Knoten\ zum\ Ziel)\ zur\u00FCck\r\n\ @return\ Heuristikwert\ (Gesch\u00E4tzte\ Distanz\ von\ diesem\ Knoten\ zum\ Ziel)\r\n
+comment6.params=
+comment6.target=maths.Vector2i\ getPosition()
+comment6.text=\r\n\ Gibt\ die\ Position\ des\ Knotenpunktes\ im\ Grid\ zur\u00FCck\r\n\ @return\ Position\ des\ Knotenpunktes\ im\ Grid\r\n
+comment7.params=
+comment7.target=PathNode\ getPreviousNode()
+comment7.text=\r\n\ Gibt\ den\ vorhergehenden\ Knoten\ zur\u00FCck\r\n\ @return\ vorhergehender\ Knoten,\ null,\ wenn\ es\ keinen\ gibt\r\n
+comment8.params=g
+comment8.target=void\ setG(double)
+comment8.text=\r\n\ Setzt\ den\ Weg\ von\ diesem\ Knoten\ zum\ Startknoten\r\n\ @param\ g\ Weg\ von\ diesem\ Knoten\ zum\ Startknoten\r\n
+comment9.params=h
+comment9.target=void\ setH(double)
+comment9.text=\r\n\ Setzt\ den\ Heuristikwert\ (Gesch\u00E4tzte\ Distanz\ von\ diesem\ Knoten\ zum\ Ziel)\r\n\ @param\ Heuristikwert\ (Gesch\u00E4tzte\ Distanz\ von\ diesem\ Knoten\ zum\ Ziel)\r\n
+numComments=11

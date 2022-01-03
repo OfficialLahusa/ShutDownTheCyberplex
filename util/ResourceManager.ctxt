@@ -1,0 +1,25 @@
+#BlueJ class context
+comment0.target=ResourceManager
+comment0.text=\r\n\ Verwaltet\ das\ Laden\ von\ Ressourcendateien\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 03.01.2022\r\n
+comment1.params=
+comment1.target=ResourceManager()
+comment1.text=\r\n\ Konstruktor\ f\u00FCr\ Objekte\ der\ Klasse\ ResourceManager\r\n
+comment2.params=
+comment2.target=java.util.HashMap\ loadEntityMeshes()
+comment2.text=\r\n\ L\u00E4dt\ alle\ f\u00FCr\ die\ Erstellung\ von\ Entities\ ben\u00F6tigten\ Meshes\ aus\ Dateien\r\n\ @return\ HashMap,\ in\ der\ die\ geladenen\ Meshes\ unter\ ihren\ jeweiligen\ Keys\ registriert\ sind\r\n
+comment3.params=
+comment3.target=java.util.HashMap\ loadParticleMeshes()
+comment3.text=\r\n\ L\u00E4dt\ alle\ f\u00FCr\ die\ Erstellung\ von\ Partikeln\ ben\u00F6tigten\ Meshes\ aus\ Dateien\r\n\ @return\ HashMap,\ in\ der\ die\ geladenen\ Meshes\ unter\ ihren\ jeweiligen\ Keys\ registriert\ sind\r\n
+comment4.params=
+comment4.target=java.util.HashMap\ loadTileMeshes()
+comment4.text=\r\n\ L\u00E4dt\ alle\ f\u00FCr\ die\ Konstruktion\ der\ Mapgeometrie\ ben\u00F6tigten\ Meshes\ aus\ Dateien\r\n\ @return\ HashMap,\ in\ der\ die\ geladenen\ Meshes\ unter\ ihren\ jeweiligen\ Keys\ registriert\ sind\r\n
+comment5.params=soundEngine
+comment5.target=void\ loadSoundSources(core.SoundEngine)
+comment5.text=\r\n\ L\u00E4dt\ alle\ ben\u00F6tigten\ Soundquellen\ aus\ Dateien\ in\ eine\ gegebene\ SoundEngine\r\n\ @param\ soundEngine\ SoundEngine,\ in\ die\ die\ Soundquellen\ hineingeladen\ werden\r\n
+comment6.params=
+comment6.target=java.util.HashMap\ loadViewModelMeshes()
+comment6.text=\r\n\ L\u00E4dt\ alle\ f\u00FCr\ das\ Viewmodel\ ben\u00F6tigten\ Meshes\ aus\ Dateien\r\n\ @return\ HashMap,\ in\ der\ die\ geladenen\ Meshes\ unter\ ihren\ jeweiligen\ Keys\ registriert\ sind\r\n
+comment7.params=
+comment7.target=java.util.HashMap\ loadTitleScreenMeshes()
+comment7.text=\r\n\ L\u00E4dt\ alle\ f\u00FCr\ den\ Titelbildschirm\ ben\u00F6tigten\ Meshes\ aus\ Dateien\r\n\ @return\ HashMap,\ in\ der\ die\ geladenen\ Meshes\ unter\ ihren\ jeweiligen\ Keys\ registriert\ sind\r\n
+numComments=8
