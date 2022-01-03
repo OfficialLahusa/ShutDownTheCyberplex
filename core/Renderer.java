@@ -5,7 +5,7 @@ import maths.*;
 /**
  * Renderer, der auf Basis von Turtles zweidimensional und dreidimensional rendern kann
  *
- * @author Lasse Huber-Saffer
+ * @author Lasse Huber-Saffer, Sven Schreiber
  * @version 01.01.2022
  */
 public class Renderer

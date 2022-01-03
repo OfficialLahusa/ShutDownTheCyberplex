@@ -10,7 +10,7 @@ import javafx.scene.media.*;
 /**
  * Drohne, der sich zum Spieler ausrichtet, ihn verfolgt und beschieﬂt
  * 
- * @author Lasse Huber-Saffer
+ * @author Lasse Huber-Saffer, Sven Schreiber
  * @version 03.01.2022
  */
 public class Drone extends Enemy implements ILivingEntity, ICollisionListener, IDynamicGameObject

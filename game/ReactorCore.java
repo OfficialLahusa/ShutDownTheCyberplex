@@ -8,7 +8,7 @@ import java.util.*;
 /**
  * Drehender Reaktorkern, der de-facto Endgegner des Spiels
  * 
- * @author Lasse Huber-Saffer
+ * @author Lasse Huber-Saffer, Sven Schreiber
  * @version 03.01.2022
  */
 public class ReactorCore extends Enemy implements ILivingEntity, ICollisionListener, IDynamicGameObject

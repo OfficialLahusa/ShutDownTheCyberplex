@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=TitleScene
-comment0.text=\r\n\ Titelbildschirm\ und\ Hauptmen\u00FC\ des\ Spiels\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer,\ Nico\ H\u00E4dicke\r\n\ @version\ 01.01.2022\r\n
+comment0.text=\r\n\ Titelbildschirm\ und\ Hauptmen\u00FC\ des\ Spiels\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer,\ Nico\ H\u00E4dicke,\ Sven\ Schreiber\r\n\ @version\ 01.01.2022\r\n
 comment1.params=state
 comment1.target=TitleScene(core.GameState)
 comment2.params=deltaTime\ runTime

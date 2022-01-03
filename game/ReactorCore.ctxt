@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=ReactorCore
-comment0.text=\r\n\ Drehender\ Reaktorkern,\ der\ de-facto\ Endgegner\ des\ Spiels\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 03.01.2022\r\n
+comment0.text=\r\n\ Drehender\ Reaktorkern,\ der\ de-facto\ Endgegner\ des\ Spiels\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer,\ Sven\ Schreiber\r\n\ @version\ 03.01.2022\r\n
 comment1.params=position\ room\ entityMeshes\ particleMeshes\ soundEngine
 comment1.target=ReactorCore(maths.Vector3,\ Room,\ java.util.HashMap,\ java.util.HashMap,\ core.SoundEngine)
 comment1.text=\r\n\ Konstruktor\ f\u00FCr\ ReactorCore\ mit\ Position\ und\ Meshes\r\n\ @param\ position\ Position\r\n\ @param\ room\ umgebender\ Raum\r\n\ @param\ entityMeshes\ Register,\ aus\ dem\ die\ Entity-Meshes\ bezogen\ werden\r\n\ @param\ particleMeshes\ Register,\ aus\ dem\ die\ Partikel-Meshes\ bezogen\ werden\r\n\ @param\ soundEngine\ Sound\ Engine,\ aus\ der\ die\ Sounds\ der\ Entity\ bezogen\ werden\r\n

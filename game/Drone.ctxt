@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=Drone
-comment0.text=\r\n\ Drohne,\ der\ sich\ zum\ Spieler\ ausrichtet,\ ihn\ verfolgt\ und\ beschie\u00DFt\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 03.01.2022\r\n
+comment0.text=\r\n\ Drohne,\ der\ sich\ zum\ Spieler\ ausrichtet,\ ihn\ verfolgt\ und\ beschie\u00DFt\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer,\ Sven\ Schreiber\r\n\ @version\ 03.01.2022\r\n
 comment1.params=position\ active\ room\ entityMeshes\ particleMeshes\ soundEngine
 comment1.target=Drone(maths.Vector3,\ boolean,\ Room,\ java.util.HashMap,\ java.util.HashMap,\ core.SoundEngine)
 comment1.text=\r\n\ Konstruktor\ f\u00FCr\ Drohne\ mit\ Position\ und\ Meshes\r\n\ @param\ position\ Position\r\n\ @param\ active\ Ob\ das\ Drohne\ aktiv\ sein\ soll\r\n\ @param\ room\ umgebender\ Raum\r\n\ @param\ entityMeshes\ Register,\ aus\ dem\ die\ Entity-Meshes\ bezogen\ werden\r\n\ @param\ particleMeshes\ Register,\ aus\ dem\ die\ Particle-Meshes\ bezogen\ werden\r\n\ @param\ soundEngine\ Sound\ Engine,\ aus\ der\ die\ Sounds\ der\ Entity\ bezogen\ werden\r\n

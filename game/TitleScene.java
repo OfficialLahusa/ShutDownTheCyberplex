@@ -9,7 +9,7 @@ import java.util.*;
 /**
  * Titelbildschirm und Hauptmenü des Spiels
  * 
- * @author Lasse Huber-Saffer, Nico Hädicke
+ * @author Lasse Huber-Saffer, Nico Hädicke, Sven Schreiber
  * @version 01.01.2022
  */
 public class TitleScene extends Scene

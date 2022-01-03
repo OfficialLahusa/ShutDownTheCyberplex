@@ -8,7 +8,7 @@ import java.util.*;
 /**
  * Partikelsystem, das beim Treffen von dem Reactor Core mit Schüssen benutzt wird
  * 
- * @author Lasse Huber-Saffer
+ * @author Sven Schreiber
  * @version 01.01.2022
  */
 public class ReactorHitParticleSystem implements IParticleSystem

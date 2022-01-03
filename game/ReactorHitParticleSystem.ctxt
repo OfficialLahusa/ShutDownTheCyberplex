@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=ReactorHitParticleSystem
-comment0.text=\r\n\ Partikelsystem,\ das\ beim\ Treffen\ von\ dem\ Reactor\ Core\ mit\ Sch\u00FCssen\ benutzt\ wird\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 01.01.2022\r\n
+comment0.text=\r\n\ Partikelsystem,\ das\ beim\ Treffen\ von\ dem\ Reactor\ Core\ mit\ Sch\u00FCssen\ benutzt\ wird\r\n\ \r\n\ @author\ Sven\ Schreiber\r\n\ @version\ 01.01.2022\r\n
 comment1.params=position\ room\ particleMeshes
 comment1.target=ReactorHitParticleSystem(maths.Vector3,\ Room,\ java.util.HashMap)
 comment1.text=\r\n\ Konstruktor\ f\u00FCr\ ReactorHitParticleSystem\r\n\ @param\ position\ Position\ des\ Partikelsystems\r\n\ @param\ room\ umschlie\u00DFender\ Raum\r\n\ @param\ particleMeshes\ HashMap\ der\ registrierten\ Partikel-Meshes\r\n

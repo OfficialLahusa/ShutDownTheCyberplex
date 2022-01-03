@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=Renderer
-comment0.text=\r\n\ Renderer,\ der\ auf\ Basis\ von\ Turtles\ zweidimensional\ und\ dreidimensional\ rendern\ kann\r\n\r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 01.01.2022\r\n
+comment0.text=\r\n\ Renderer,\ der\ auf\ Basis\ von\ Turtles\ zweidimensional\ und\ dreidimensional\ rendern\ kann\r\n\r\n\ @author\ Lasse\ Huber-Saffer,\ Sven\ Schreiber\r\n\ @version\ 01.01.2022\r\n
 comment1.params=
 comment1.target=Renderer()
 comment1.text=\r\n\ Der\ leere\ explizite\ Konstruktor\ von\ Renderer.\r\n

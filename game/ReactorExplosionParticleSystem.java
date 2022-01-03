@@ -8,7 +8,7 @@ import java.util.*;
 /**
  * Partikelsystem, das beim der Explosion des Reactor Cores benutzt wird.
  * 
- * @author Lasse Huber-Saffer
+ * @author Sven Schreiber
  * @version 01.01.2022
  */
 public class ReactorExplosionParticleSystem implements IParticleSystem

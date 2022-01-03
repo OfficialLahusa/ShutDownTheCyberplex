@@ -8,7 +8,7 @@ import java.util.*;
 /**
  * Geschützturm, der sich zum Spieler ausrichtet und ihn beschießt
  * 
- * @author Lasse Huber-Saffer
+ * @author Lasse Huber-Saffer, Sven Schreiber
  * @version 03.01.2022
  */
 public class Turret extends Enemy implements ILivingEntity, ICollisionListener, IDynamicGameObject

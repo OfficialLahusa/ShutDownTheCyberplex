@@ -5,7 +5,7 @@ import maths.*;
 /**
  * Generiert verschiedene Transformationsmatrizen für dreidimensionale Geometrie
  * 
- * @author Lasse Huber-Saffer 
+ * @author Lasse Huber-Saffer, Sven Schreiber
  * @version 01.12.2021
  */
 public class MatrixGenerator
