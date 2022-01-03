@@ -82,7 +82,7 @@ public class MapHandler
         _tileProviders.put(Tile.WOODEN_DOOR, new DoorTileProvider(
             woodenDoorClosed, woodenDoorOpen, false,
             new BlockedTunnelColliderProvider(), new TunnelColliderProvider(),
-            _tileProviders.get(Tile.DIRT_FLOOR), (WallTileProvider)_tileProviders.get(Tile.BRICK_WALL),
+            tileMeshes.get("door_lock"), _tileProviders.get(Tile.DIRT_FLOOR), (WallTileProvider)_tileProviders.get(Tile.BRICK_WALL),
             _soundEngine, "wooden_door_open", "wooden_door_close", 0.2
         ));
         
@@ -105,7 +105,7 @@ public class MapHandler
         _tileProviders.put(Tile.CRACKED_BRICK_WALL_DOOR, new DoorTileProvider(
             secretDoorClosed, secretDoorOpen, false,
             new BlockedTunnelColliderProvider(), new TunnelColliderProvider(),
-            _tileProviders.get(Tile.DIRT_FLOOR), (WallTileProvider)_tileProviders.get(Tile.BRICK_WALL),
+            tileMeshes.get("door_lock"), _tileProviders.get(Tile.DIRT_FLOOR), (WallTileProvider)_tileProviders.get(Tile.BRICK_WALL),
             _soundEngine, "wooden_door_open", "wooden_door_close", 0.2
         ));
         

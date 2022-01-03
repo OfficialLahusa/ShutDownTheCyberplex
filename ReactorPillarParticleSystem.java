@@ -89,7 +89,7 @@ public class ReactorPillarParticleSystem implements IParticleSystem
         {
             _timeSinceLastEmission = 0.0;
             _particles.add(
-                new BillboardParticle(
+                new Particle(
                     _room, _particleMeshes.get("reactor_pillar_emission"), _color,
                     _position, new Vector3(), new Vector3(1.0, 1.0, 1.0),
                     new Vector3(0.0, 1.0, 0.0), new Vector3(),

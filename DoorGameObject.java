@@ -9,6 +9,9 @@ import javafx.util.*;
  */
 public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObject
 {
+    // (Optional) umgebende Map
+    private GridMap _map;
+    
     // Transformation
     private Vector3 _position;
     private Vector3 _rotation;
@@ -20,6 +23,7 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
     private boolean _isOpen;
     private Vector2i _tilePosition;
     private HashSet<Vector2i> _doorTriggers;
+    private TurtleColor _lock;
     
     // Interpretation: null -> Kein Raum verbunden. >=0 -> Raum mit ID ist verbunden. <0 -> Illegaler Zustand
     private Pair<Integer, Integer> _connectedRoomIDs;
@@ -29,6 +33,7 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
     private ArrayList<Pair<Mesh, TurtleColor>> _coloredMeshesOpen;
     private ArrayList<IGameObject> _floor;
     private ArrayList<IGameObject> _walls;
+    private StaticGameObject _lockObject;
     
     // Physics
     private ICollider _closedCollider;
@@ -50,6 +55,8 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
      * @param tilePosition Position der Tür im Grid
      * @param coloredMeshesClosed Liste von Mesh-Farb-Paaren, die im geschlossenen Zustand gerendert werden
      * @param coloredMeshesOpen Liste von Mesh-Farb-Paaren, die im offenen Zustand gerendert werden
+     * @param lock (Optional) Schlüsselfarbe, mit der die Tür verschlossen ist
+     * @param lockMesh (Optional) Mesh, das farbig gerendert wird, wenn die Tür verschlossen ist
      * @param closedCollider (Optional) Collider, der im geschlossenen Zustand für die Kollisionserkennung verwendet wird
      * @param openCollider (Optional) Collider, der im offenen Zustand für die Kollisionserkennung verwendet wird
      * @param floor (Optional) Liste an GameObjects, die als Fußboden gerendert werden sollen
@@ -59,9 +66,11 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
      * @param closeSoundKey (Optional) Schlüssel des Sounds für das Schließen
      * @param soundVolume (Optional) Lautstärke der Sounds
      */
-    public DoorGameObject(Vector3 position, Vector3 rotation, Vector3 scale,
+    public DoorGameObject(
+        Vector3 position, Vector3 rotation, Vector3 scale,
         boolean facingZ, boolean isOpen, Vector2i tilePosition,
         ArrayList<Pair<Mesh, TurtleColor>> coloredMeshesClosed, ArrayList<Pair<Mesh, TurtleColor>> coloredMeshesOpen,
+        Room room, TurtleColor lock, Mesh lockMesh,
         ICollider closedCollider, ICollider openCollider,
         ArrayList<IGameObject> floor, ArrayList<IGameObject> walls,
         SoundEngine soundEngine, String openSoundKey, String closeSoundKey, Double soundVolume
@@ -70,15 +79,23 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
         _position = new Vector3(position);
         _rotation = new Vector3(rotation);
         _scale = new Vector3(scale);
+        
         _facingZ = facingZ;
         _isOpen = isOpen;
         _tilePosition = new Vector2i(tilePosition);
+        
         _coloredMeshesClosed = coloredMeshesClosed;
         _coloredMeshesOpen = coloredMeshesOpen;
+        
+        _lock = lock;
+        _lockObject = (lockMesh != null && lock != null) ? new StaticGameObject(lockMesh, _lock, _position, _rotation, _scale) : null;
+        
         _closedCollider = closedCollider;
         _openCollider = openCollider;
+        
         _floor = floor;
         _walls = walls;
+        
         _soundEngine = soundEngine;
         _openSoundKey = openSoundKey;
         _closeSoundKey = closeSoundKey;
@@ -108,6 +125,12 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
      */
     public void update(double deltaTime, double runTime, Vector3 cameraPosition)
     {
+        // Abbrechen, wenn das Schloss gesetzt ist und der Spieler den passenden Schlüssel nicht besitzt
+        if(_map != null && _lock != null && !_map.getPlayer().acquiredKeyColors.contains(_lock))
+        {
+            return;
+        }
+        
         Vector2i tilePos = MapHandler.worldPosToTilePos(cameraPosition);
         
         if(!_isOpen && _doorTriggers.contains(tilePos))
@@ -165,6 +188,11 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
             {
                 renderer.drawMesh(coloredMesh.getKey(), getModelMatrix(), coloredMesh.getValue(), camera);
             }
+        }
+        
+        if(!_isOpen && _lockObject != null && _lock != null)
+        {
+            _lockObject.draw(renderer, camera);
         }
     }
     
@@ -308,6 +336,19 @@ public class DoorGameObject implements IDoorGameObject, IGameObject, ILODGameObj
     public void setOpen(boolean isOpen)
     {
         _isOpen = isOpen;
+    }
+    
+    /**
+     * @see IDoorGameObject#setMap()
+     */
+    public void setMap(GridMap map)
+    {
+        if(map == null)
+        {
+            throw new IllegalArgumentException("map was null when setting Door GridMap");
+        }
+        
+        _map = map;
     }
     
     /**

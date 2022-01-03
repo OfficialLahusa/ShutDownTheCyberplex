@@ -36,6 +36,7 @@ public class ResourceManager
         entityMeshes.put("reactor_core", _objLoader.loadFromFile(Directory.MODEL + "reactor/reactor_core.obj"));
         entityMeshes.put("reactor_pillar", _objLoader.loadFromFile(Directory.MODEL + "reactor/reactor_pillar.obj"));
         entityMeshes.put("health_powerup", _objLoader.loadFromFile(Directory.MODEL + "item/health_powerup.obj"));
+        entityMeshes.put("key", _objLoader.loadFromFile(Directory.MODEL + "item/key.obj"));
         
         return entityMeshes;
     }
@@ -73,6 +74,7 @@ public class ResourceManager
         tileMeshes.put("wooden_door_handle", _objLoader.loadFromFile(Directory.MODEL + "wooden_door_handle.obj"));
         tileMeshes.put("wooden_door_open", _objLoader.loadFromFile(Directory.MODEL + "wooden_door_open.obj"));
         tileMeshes.put("wooden_door_handle_open", _objLoader.loadFromFile(Directory.MODEL + "wooden_door_handle_open.obj"));
+        tileMeshes.put("door_lock", _objLoader.loadFromFile(Directory.MODEL + "door_lock.obj"));
         tileMeshes.put("cyber_floor", _objLoader.loadFromFile(Directory.MODEL + "cyber_floor.obj"));
         tileMeshes.put("dirt_floor_grassdetail", _objLoader.loadFromFile(Directory.MODEL + "dirt_floor_grassdetail.obj"));
         tileMeshes.put("road_markings_x", _objLoader.loadFromFile(Directory.MODEL + "road_markings_x.obj"));

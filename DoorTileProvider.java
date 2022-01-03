@@ -5,17 +5,21 @@ import javafx.util.*;
  * TileProvider für Türen, die in Abhängigkeit von der Umgebung entlang der X- oder Z-Achse ausgerichtet sein können
  * 
  * @author Lasse Huber-Saffer
- * @version 02.01.2022
+ * @version 03.01.2022
  */
 public class DoorTileProvider implements ITileProvider
 {
     private ArrayList<Pair<Mesh, TurtleColor>> _coloredMeshesClosed;
     private ArrayList<Pair<Mesh, TurtleColor>> _coloredMeshesOpen;
-    private ITileProvider _floorTileProvider;
-    private WallTileProvider _wallTileProvider;
     private boolean _isOpen;
+    
     private IColliderProvider _closedColliderProvider;
     private IColliderProvider _openColliderProvider;
+    
+    private Mesh _lockMesh;
+    private ITileProvider _floorTileProvider;
+    private WallTileProvider _wallTileProvider;
+    
     private SoundEngine _soundEngine;
     private String _openSoundKey;
     private String _closeSoundKey;
@@ -28,6 +32,7 @@ public class DoorTileProvider implements ITileProvider
      * @param isOpen Offenheit der Tür
      * @param closedColliderProvider (Optional) ColliderProvider, der im geschlossenen Zustand für Kollisionsberechnungen verwendet wird
      * @param openColliderProvider (Optional) ColliderProvider, der im offenen Zustand für Kollisionsberechnungen verwendet wird
+     * @param lockMesh (Optional) Mesh, das gerendert werden soll, wenn die Tür abgeschlossen ist
      * @param floorTileProvider (Optional) TileProvider, der für den Boden unter der Tür verwendet werden soll
      * @param wallTileProvider (Optional) WallTileProvider, der für die Wände an den Seiten der Tür verwendet werden soll
      * @param soundEngine (Optional) SoundEngine, in der die nachfolgenden Sounds vorzufinden sind
@@ -38,17 +43,21 @@ public class DoorTileProvider implements ITileProvider
     public DoorTileProvider(
         ArrayList<Pair<Mesh, TurtleColor>> coloredMeshesClosed, ArrayList<Pair<Mesh, TurtleColor>> coloredMeshesOpen, boolean isOpen,
         IColliderProvider closedColliderProvider, IColliderProvider openColliderProvider,
-        ITileProvider floorTileProvider, WallTileProvider wallTileProvider,
+        Mesh lockMesh, ITileProvider floorTileProvider, WallTileProvider wallTileProvider,
         SoundEngine soundEngine, String openSoundKey, String closeSoundKey, Double soundVolume
     )
     {
         _coloredMeshesClosed = coloredMeshesClosed;
         _coloredMeshesOpen = coloredMeshesOpen;
-        _floorTileProvider = floorTileProvider;
-        _wallTileProvider = wallTileProvider;
         _isOpen = isOpen;
+        
         _closedColliderProvider = closedColliderProvider;
         _openColliderProvider = openColliderProvider;
+        
+        _lockMesh = lockMesh;
+        _floorTileProvider = floorTileProvider;
+        _wallTileProvider = wallTileProvider;
+        
         _soundEngine = soundEngine;
         _openSoundKey = openSoundKey;
         _closeSoundKey = closeSoundKey;
@@ -100,11 +109,33 @@ public class DoorTileProvider implements ITileProvider
         ICollider[] closedCollidersArray = closedColliders.toArray(new ICollider[closedColliders.size()]);
         ICollider[] openCollidersArray = openColliders.toArray(new ICollider[openColliders.size()]);
         
+        // Feststellen, ob die Tür mit einem Schloss einer bestimmten Farbe verriegelt werden soll
+        TurtleColor lockColor = null;
+        if(env.func == Tile.GENERIC_LOCK)
+        {
+            lockColor = TurtleColor.YELLOW;
+        }
+        else if(env.func == Tile.RED_LOCK)
+        {
+            lockColor = TurtleColor.RED;
+        }
+        else if(env.func == Tile.GREEN_LOCK)
+        {
+            lockColor = TurtleColor.GREEN;
+        }
+        else if(env.func == Tile.BLUE_LOCK)
+        {
+            lockColor = TurtleColor.BLUE;
+        }
+        
+        System.out.println(lockColor);
+        
         DoorGameObject obj = new DoorGameObject(
             new Vector3((x + 0.5) * MapHandler.TILE_WIDTH, 0.0, (MapHandler.MIRROR_Z_AXIS ? -1 : 1) * (z + 0.5) * MapHandler.TILE_WIDTH),
             new Vector3(0.0, (facingZ)? 90.0 : 0.0, 0.0), new Vector3(1.0, 1.0, 1.0),
             facingZ, _isOpen,  new Vector2i(x, z),
             _coloredMeshesClosed, _coloredMeshesOpen,
+            env.room, lockColor, _lockMesh,
             new CompoundCollider(closedCollidersArray, PhysicsLayer.SEMISOLID), new CompoundCollider(openCollidersArray, PhysicsLayer.SEMISOLID),
             floorGeometry, wallGeometry,
             _soundEngine, _openSoundKey, _closeSoundKey, _soundVolume

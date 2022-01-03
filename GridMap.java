@@ -365,7 +365,7 @@ public class GridMap
                 }
                 else
                 {
-                    ArrayList<IGameObject> doorObjList = tileProviders.get(value).getTileObjects(new TileEnvironment(_tileLayer, x, z), x, z);
+                    ArrayList<IGameObject> doorObjList = tileProviders.get(value).getTileObjects(new TileEnvironment(_tileLayer, getFunctionValue(new Vector2i(x, z)), x, z), x, z);
                     for(IGameObject obj : doorObjList)
                     {
                         if(!(obj instanceof IDoorGameObject))
@@ -375,6 +375,7 @@ public class GridMap
                         else
                         {
                             IDoorGameObject doorObj = (IDoorGameObject)obj;
+                            doorObj.setMap(this);
                             doors.add(doorObj);
                             connectDoor(doorObj);
                         }

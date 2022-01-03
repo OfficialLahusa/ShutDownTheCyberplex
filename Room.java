@@ -4,7 +4,7 @@ import java.util.*;
  * Ein räumlich eingegrenzter Abschnitt einer Gridmap, innerhalb dessen Simulationen durchgeführt werden
  * 
  * @author Lasse Huber-Saffer
- * @version 02.01.2022
+ * @version 03.01.2022
  */
 public class Room
 {
@@ -91,7 +91,7 @@ public class Room
                         TileEnvironment env = null;
                         if(provider.requiresEnvironment())
                         {
-                            env = new TileEnvironment(tileLayer, this, x, z);
+                            env = new TileEnvironment(tileLayer, _map.getFunctionValue(new Vector2i(x, z)), this, x, z);
                         }
                         
                         _geometry.addAll(provider.getTileObjects(env, x, z));
@@ -103,7 +103,7 @@ public class Room
                         TileEnvironment env = null;
                         if(provider.requiresEnvironment())
                         {
-                            env = new TileEnvironment(tileLayer, this, x, z);
+                            env = new TileEnvironment(tileLayer, _map.getFunctionValue(new Vector2i(x, z)), this, x, z);
                         }
                         
                         _staticColliders.addAll(provider.getColliders(env, x, z));
@@ -216,6 +216,18 @@ public class Room
                         case Tile.SPAWN_HEALTH_POWERUP:
                             HealthPowerup healthPowerup = new HealthPowerup(MapHandler.tilePosToWorldPos(new Vector2i(x, z)), this, entityMeshes, soundEngine);
                             _entities.add(healthPowerup);
+                            break;
+                        case Tile.SPAWN_RED_KEY:
+                            Key redKey = new Key(MapHandler.tilePosToWorldPos(new Vector2i(x, z)), TurtleColor.RED, this, entityMeshes, soundEngine);
+                            _entities.add(redKey);
+                            break;
+                        case Tile.SPAWN_GREEN_KEY:
+                            Key greenKey = new Key(MapHandler.tilePosToWorldPos(new Vector2i(x, z)), TurtleColor.GREEN, this, entityMeshes, soundEngine);
+                            _entities.add(greenKey);
+                            break;
+                        case Tile.SPAWN_BLUE_KEY:
+                            Key blueKey = new Key(MapHandler.tilePosToWorldPos(new Vector2i(x, z)), TurtleColor.BLUE, this, entityMeshes, soundEngine);
+                            _entities.add(blueKey);
                             break;
                         default:
                             break;

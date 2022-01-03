@@ -5,7 +5,7 @@ import java.util.*;
  * Interface für GameObjects mit Tür-Funktionalität
  * 
  * @author Lasse Huber-Saffer
- * @version 25.12.2021
+ * @version 03.01.2022
  */
 
 public interface IDoorGameObject extends IGameObject
@@ -35,6 +35,13 @@ public interface IDoorGameObject extends IGameObject
      * @param isOpen Offenheit der Tür
      */
     public void setOpen(boolean isOpen);
+    
+    /**
+     * Setzt die Map, in der sich das Türobjekt befindet.
+     * Diese Map-Referenz wird benötigt, damit das Türschloss funktioniert
+     * @param map GridMap, in der sich die Tür befindet
+     */
+    public void setMap(GridMap map);
     
     /**
      * Gibt die Position der Tür-Tile im Grid zurück

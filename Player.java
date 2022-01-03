@@ -5,10 +5,15 @@ import java.util.*;
  * Der Spieler ist ein DynamicGameObject, das kein Rendering durchführt und die Rotation repurposed.
  * 
  * @author Sven Schreiber, Lasse Huber-Saffer
- * @version 01.01.2022
+ * @version 03.01.2022
  */
 public class Player implements ILivingEntity, IDynamicGameObject, ICollisionListener
 {
+    /**
+     * Liste der Farben der von Spieler aufgehobenen Schlüssel
+     */
+    public ArrayList<TurtleColor> acquiredKeyColors;
+    
     // Leben
     private int _health;
     private int _maxHealth;
@@ -41,6 +46,8 @@ public class Player implements ILivingEntity, IDynamicGameObject, ICollisionList
      */
     public Player(Vector3 position, Vector3 rotation, SoundEngine soundEngine)
     {
+        acquiredKeyColors = new ArrayList<TurtleColor>();
+        
         _health = 100;
         _maxHealth = 100;
         
