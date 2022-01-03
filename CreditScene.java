@@ -58,10 +58,13 @@ public class CreditScene extends Scene
         
         _time += deltaTime;
         _state.textRenderer.write(new Vector2(45, 500-_time*40), 6, "Aufgrund eines Wettbewerbes mit der\nAufgabe: Malt etwas mit dem Projekt\nTurtleGraphics\nkamen wir auf die Idee\nein Spiel zu programmieren...", TurtleColor.WHITE);
-        _state.textRenderer.write(new Vector2(150, 800-_time*40), 10, "Created by", TurtleColor.WHITE);
-        _state.textRenderer.write(new Vector2(120, 850-_time*40), 8, "Lasse Huber-Saffer\n  Sven Schreiber\n  Nico Haedicke", TurtleColor.WHITE);
-
-        if(_time > 24)
+        
+        _state.textRenderer.write(new Vector2(45, 800-_time*40), 6, "Nach ca. 180 Github-Commits\nentstanden ca. 15.000 Codezeilen\num das Projekt zu verfollstaendigen.", TurtleColor.WHITE);
+        
+        _state.textRenderer.write(new Vector2(150, 900-_time*40), 10, "Created by", TurtleColor.WHITE);
+        _state.textRenderer.write(new Vector2(120, 950-_time*40), 8, "Lasse Huber-Saffer\n  Sven Schreiber\n  Nico Haedicke", TurtleColor.WHITE);
+        
+        if(_time > 26)
         {
             _state.scene = new TitleScene(_state);
         }
