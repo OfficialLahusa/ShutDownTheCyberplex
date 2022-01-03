@@ -14,6 +14,9 @@ public class Turret extends Enemy implements ILivingEntity, ICollisionListener, 
     // Sound
     private SoundEngine _soundEngine;
     
+    // Partikel
+    private HashMap<String, Mesh> _particleMeshes;
+    
     // Functionality
     private boolean _isActive;
     private int _currentAmmo;
@@ -63,13 +66,15 @@ public class Turret extends Enemy implements ILivingEntity, ICollisionListener, 
      * @param entityMeshes Register der EntityMeshes, aus dem die Meshes bezogen werden
      * @param soundEngine Sound Engine, aus der die Sounds der Entity bezogen werden
      */
-    public Turret(Vector3 position, boolean active, Room room, HashMap<String, Mesh> entityMeshes, SoundEngine soundEngine)
+    public Turret(Vector3 position, boolean active, Room room, HashMap<String, Mesh> entityMeshes, HashMap<String, Mesh> particleMeshes, SoundEngine soundEngine)
     {
         _room = room;
         
         _random = new Random();
         
         _soundEngine = soundEngine;
+        
+        _particleMeshes = particleMeshes;
         
         _isActive = active;
         _currentAmmo = MAGAZINE_CAPACITY;
@@ -456,6 +461,9 @@ public class Turret extends Enemy implements ILivingEntity, ICollisionListener, 
     public void damage(int amount, String source)
     {
         if(_health == 0) return;
+        
+        // Partikelsystem erzeugen
+        _room.addParticleSystem(new DroneHitParticleSystem(_position.add(new Vector3(0.0f, 2.0f, 0.0f)), _room, _particleMeshes));
         
         _health = Math.max(0, Math.min(_health - amount, _maxHealth));
         
