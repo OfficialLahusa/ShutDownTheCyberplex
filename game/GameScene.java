@@ -162,11 +162,5 @@ public class GameScene extends Scene
         // User Interface zeichnen
         _state.renderer.drawCrosshair(8.0, 6.0, TurtleColor.GREEN);
         _state.renderer.drawHealthbar(_player.getHealth());
-        
-        Vector2i tilePos = MapHandler.worldPosToTilePos(playerCam.getPosition());
-        _state.textRenderer.write(new Vector2(10,30), 5, "Pos: X:" + tilePos.getX() + ", Z:" + tilePos.getY(), TurtleColor.RED);
-        
-        // (Debug) X-, Y- und Z-Achse zeichnen
-        //_state.renderer.drawAxis(playerCam);
     }
 }
