@@ -1,0 +1,21 @@
+#BlueJ class context
+comment0.target=AStarPathSolver
+comment0.text=\r\n\ Pathfinding-Solver\ mit\ dem\ A*-Algorithmus\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer\r\n\ @version\ 26.12.2021\r\n
+comment1.params=start\ end\ room
+comment1.target=java.util.LinkedList\ solvePath(maths.Vector2i,\ maths.Vector2i,\ game.Room)
+comment1.text=\r\n\ Berechnet\ den\ k\u00FCrzesten\ Pfad\ zwischen\ zwei\ Tiles\ innerhalb\ eines\ Raumes\r\n\ @param\ start\ Anfangstile\r\n\ @param\ end\ Endtile\r\n\ @param\ room\ Raum,\ in\ dem\ der\ Pfad\ berechnet\ wird\r\n\ @return\ LinkedList\ der\ Pfad-Knotenpunkte\ vom\ Startpunkt\ aus,\ oder\ null,\ wenn\ es\ keinen\ validen\ Pfad\ gibt\r\n
+comment2.params=tile\ end
+comment2.target=double\ getHeuristic(maths.Vector2i,\ maths.Vector2i)
+comment2.text=\r\n\ Gibt\ den\ Heuristikwert\ (Gesch\u00E4tzte\ Distanz\ von\ diesem\ Knoten\ zum\ Ziel)\ einer\ gegebenen\ Tile\ zu\ einem\ Endpunkt\ zur\u00FCck\r\n\ @param\ tile\ Tile,\ deren\ Heuristikwert\ berechnet\ werden\ soll\r\n\ @param\ end\ Endpunkt\r\n\ @return\ Heuristikwert\ (Gesch\u00E4tzte\ Distanz\ von\ diesem\ Knoten\ zum\ Ziel)\r\n
+comment3.params=tile\ room
+comment3.target=boolean\ isPassable(maths.Vector2i,\ game.Room)
+comment3.text=\r\n\ Gibt\ zur\u00FCck,\ ob\ eine\ Tile\ in\ einem\ Raum\ f\u00FCr\ den\ Pfad\ infrage\ kommt\r\n\ @param\ tile\ Position\ der\ Tile\r\n\ @param\ room\ Raum,\ in\ dem\ sich\ die\ Tile\ befindet\r\n\ @return\ true,\ wenn\ Tile\ begehbar\ ist,\ sonst\ false\r\n
+comment4.params=delta\ currentNode\ passed\ open\ end\ room
+comment4.target=void\ addNeighborToOpen(maths.Vector2i,\ PathNode,\ java.util.HashMap,\ java.util.LinkedHashMap,\ maths.Vector2i,\ game.Room)
+comment4.text=\r\n\ Versucht,\ einen\ Nachbarn\ einer\ gew\u00E4hlten\ PathNode\ in\ die\ Liste\ der\ offenen\ Knoten\ einzuf\u00FCgen\r\n\ @param\ delta\ relative\ Position\ des\ Nachbarn\ von\ der\ aktuellen\ Tile\ aus\r\n\ @param\ currentNode\ aktueller\ Knoten\r\n\ @param\ passed\ HashMap\ der\ passierten\ Knoten\r\n\ @param\ open\ LinkedHashMap\ der\ offenen\ Knoten\r\n\ @param\ end\ Position\ des\ Pfadendes\r\n\ @param\ room\ umgebender\ Raum\r\n
+comment5.params=open
+comment5.target=java.util.LinkedHashMap\ sortOpenNodes(java.util.LinkedHashMap)
+comment5.text=\r\n\ Sortiert\ die\ geordnete\ Map\ der\ offenen\ Knoten\ anhand\ der\ Gesamtkosten\r\n\ @param\ open\ unsortierte\ Map\ an\ offenen\ Knoten\r\n\ @return\ anhand\ der\ Gesamtkosten\ sortierte\ Map\ an\ offenen\ Knoten\r\n
+comment6.params=first\ second
+comment6.target=int\ compare(java.util.Map.Entry,\ java.util.Map.Entry)
+numComments=7

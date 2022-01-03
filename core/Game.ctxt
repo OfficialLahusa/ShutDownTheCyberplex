@@ -1,0 +1,12 @@
+#BlueJ class context
+comment0.target=Game
+comment0.text=\r\n\ Diese\ Klasse\ enth\u00E4lt\ die\ Kernlogik\ des\ Spiels\ und\ den\ Gameloop\r\n\ \r\n\ @author\ Lasse\ Huber-Saffer,\ Sven\ Schreiber,\ Nico\ H\u00E4dicke\r\n\ @version\ 01.01.2022\r\n
+comment1.params=
+comment1.target=Game()
+comment1.text=\r\n\ Konstruktor\ f\u00FCr\ Objekte\ der\ Klasse\ Game\r\n
+comment2.params=
+comment2.target=void\ start()
+comment2.text=\r\n\ Startmethode\ des\ Spiels\r\n\ @param\ initialScene\ Szene,\ mit\ der\ das\ Spiel\ startet\r\n
+comment3.params=
+comment3.target=void\ runGameLoop()
+numComments=4
