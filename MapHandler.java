@@ -125,6 +125,7 @@ public class MapHandler
         
         // Initialisierung der ColliderProvider
         _colliderProviders.put(Tile.BRICK_WALL, new WallColliderProvider());
+        _colliderProviders.put(Tile.INVISIBLE_WALL, new WallColliderProvider());
     }
     
     /**

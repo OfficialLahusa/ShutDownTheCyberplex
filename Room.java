@@ -32,6 +32,8 @@ public class Room
     private int _minZ;
     private int _maxX;
     private int _maxZ;
+    
+    private static final boolean DEBUG_SHOW_MISSING_TILE_MESHES = false;
 
     /**
      * Konstruktor für Objekte der Klasse Room
@@ -83,7 +85,7 @@ public class Room
                 {
                     if(!tileProviders.containsKey(value))
                     {
-                        System.out.println("Tile mesh not provided: " + value);
+                        if(DEBUG_SHOW_MISSING_TILE_MESHES) System.out.println("Tile mesh not provided: " + value);
                     }
                     else
                     {
