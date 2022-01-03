@@ -4,7 +4,7 @@ import java.util.*;
  * Haupt-Szene des Spiels
  * 
  * @author Lasse Huber-Saffer, Nico Hädicke, Sven Schreiber
- * @version 02.01.2022
+ * @version 03.01.2022
  */
 public class GameScene extends Scene
 {
@@ -149,11 +149,11 @@ public class GameScene extends Scene
         // Entfernt bereits durchgelaufene Sounds
         _state.soundEngine.removeStoppedSounds();
         
-        // Abschluss des Spiels prüfen und zu Credits übergehen
+        // Abschluss des Spiels prüfen und zu Outro übergehen
         if(_mapHandler.getMap().isCompleted)
         {
             _state.soundEngine.clear();
-            _state.scene = new CreditScene(_state);
+            _state.scene = new OutroScene(_state);
         }
         
         // Spielertod prüfen und zu Todesbildschirm übergehen
@@ -212,7 +212,7 @@ public class GameScene extends Scene
         Vector2i tilePos = MapHandler.worldPosToTilePos(playerCam.getPosition());
         _state.textRenderer.write(new Vector2(10,30), 5, "Pos: X:" + tilePos.getX() + ", Z:" + tilePos.getY(), TurtleColor.RED);
         
-        // X-, Y- und Z-Achse zeichnen
-        _state.renderer.drawAxis(playerCam);
+        // (Debug) X-, Y- und Z-Achse zeichnen
+        //_state.renderer.drawAxis(playerCam);
     }
 }
