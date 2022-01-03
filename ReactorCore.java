@@ -101,6 +101,12 @@ public class ReactorCore extends Enemy implements ILivingEntity, ICollisionListe
         {
             _timeSinceDeath += deltaTime;
             
+            if (_timeSinceDeath % 0.2 < 0.1)
+            {
+                // Partikelsystem erzeugen
+                _room.addParticleSystem(new ReactorExplosionParticleSystem(_position.add(new Vector3(0.0, 2.5, 0.0)), _room, _particleMeshes));
+            }
+            
             if(_timeSinceDeath > DEATH_GAME_COMPLETION_DELAY)
             {
                 _room.getMap().isCompleted = true;
@@ -311,6 +317,9 @@ public class ReactorCore extends Enemy implements ILivingEntity, ICollisionListe
     public void damage(int amount, String source)
     {
         if(_health == 0) return;
+        
+        // Partikelsystem erzeugen
+        _room.addParticleSystem(new ReactorHitParticleSystem(_position.add(new Vector3(0.0, 2.5, 0.0)), _room, _particleMeshes));
         
         _health = Math.max(0, Math.min(_health - amount, _maxHealth));
         
