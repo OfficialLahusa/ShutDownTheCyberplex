@@ -37,9 +37,8 @@ public class Game
      */
     public void start()
     {
-        _state.scene = new TitleScene(_state);
-        
         _state.inputHandler.loadJFrame();
+        _state.scene = new TitleScene(_state);
         runGameLoop();
     }
     

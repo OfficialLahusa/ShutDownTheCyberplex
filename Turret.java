@@ -4,7 +4,7 @@ import java.util.*;
  * Geschützturm, der sich zum Spieler ausrichtet und ihn beschießt
  * 
  * @author Lasse Huber-Saffer
- * @version 01.01.2022
+ * @version 03.01.2022
  */
 public class Turret extends Enemy implements ILivingEntity, ICollisionListener, IDynamicGameObject
 {
@@ -53,7 +53,7 @@ public class Turret extends Enemy implements ILivingEntity, ICollisionListener, 
     private static final double FIRING_ANGLE_TOLERANCE = 2.0;
     private static final double TRACKING_INERTIA = 15.0;
     private static final double RELOAD_VOICELINE_DELAY = 0.25;
-    private static final double VOICELINE_VOLUME = 0.8;
+    private static final double VOICELINE_VOLUME = 0.6;
     
     /**
      * Konstruktor für Turret mit Position und Meshes
@@ -193,7 +193,7 @@ public class Turret extends Enemy implements ILivingEntity, ICollisionListener, 
                             ILivingEntity victim = (ILivingEntity)lastHit.collider.getListener();
                             
                             // Spieler Schaden hinzufügen
-                            victim.damage(BULLET_DAMAGE, "drone shot");
+                            victim.damage(BULLET_DAMAGE, "turret shot");
                         }
                     }
                 }

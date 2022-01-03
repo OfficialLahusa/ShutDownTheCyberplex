@@ -17,7 +17,7 @@ public class TitleScene extends Scene
     public TitleScene(GameState state)
     {
         super(state);
-        
+           
         _camera = new Camera();
         _camera.setPosition(new Vector3(0.0, 2, 5.0));
         _camera.setFov(30.0);
@@ -25,20 +25,22 @@ public class TitleScene extends Scene
         _state.soundEngine.loadSource("music2", Directory.SOUND + "music/midnight_drive.mp3");
         
         Sound backgroundMusic = _state.soundEngine.playSound("music2", 0.35, true);
-    
-        //backgroundMusic.setAudioSpectrumNumBands(256+128);
+        
+        // Musik konfigurieren
         backgroundMusic.setAudioSpectrumNumBands(96);
         backgroundMusic.setAudioSpectrumInterval(0.075);
-        //backgroundMusic.setAudioSpectrumThreshold(-200);
         backgroundMusic.setAudioSpectrumThreshold(-80);
         
-        _audioVisualizer = new BarAudioVisualizer(backgroundMusic, new Vector3(), new Vector3(), new Vector3(1.0, 1.0, 1.0), TurtleColor.MAGENTA);
+        _audioVisualizer = new BarAudioVisualizer(backgroundMusic, new Vector3(), new Vector3(), new Vector3(1.0, 0.65, 1.0), TurtleColor.MAGENTA);
         backgroundMusic.setAudioSpectrumListener(_audioVisualizer);
         
         HashMap<String, Mesh> titleScreenMeshes = _state.resourceManager.loadTitleScreenMeshes();
         
         _title = new StaticGameObject(titleScreenMeshes.get("title"), TurtleColor.CYAN, new Vector3 (0.0, 5, -14), new Vector3(), new Vector3(1.0, 1.0, 1.0));
         _mauern = new StaticGameObject(titleScreenMeshes.get("mauern"), TurtleColor.CYAN, new Vector3 (-1.48, 0.34, -2.5), new Vector3(), new Vector3(1.0, 1.0, 1.0));
+        
+        // Mauszeiger nicht zentrieren
+        _state.inputHandler.setKeepMouseInPlace(false);
     }
     
     /**
@@ -72,7 +74,7 @@ public class TitleScene extends Scene
         if (drawButton("Start", new Vector2(220.9,372), TurtleColor.WHITE)) 
         {
             _state.soundEngine.removeAllSounds();
-            _state.scene = new GameScene(_state);    
+            _state.scene = new IntroScene(_state);    
         }
         
         //draw Credits Button

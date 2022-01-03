@@ -83,7 +83,7 @@ public class BarAudioVisualizer implements AudioSpectrumListener, IGameObject
                 _internalObjects.remove(0);
             }
             
-            _internalObjects.add(new SimpleDynamicGameObject(mesh, _color, new Vector3(0.0, 0.0, 0.0), new Vector3(), new Vector3(1.0, 1.0, 1.0)));
+            _internalObjects.add(new SimpleDynamicGameObject(mesh, _color, new Vector3(_position), new Vector3(_rotation), new Vector3(_scale)));
             
             for(SimpleDynamicGameObject obj : _internalObjects)
             {

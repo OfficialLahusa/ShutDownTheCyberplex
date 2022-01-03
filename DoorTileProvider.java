@@ -128,8 +128,6 @@ public class DoorTileProvider implements ITileProvider
             lockColor = TurtleColor.BLUE;
         }
         
-        System.out.println(lockColor);
-        
         DoorGameObject obj = new DoorGameObject(
             new Vector3((x + 0.5) * MapHandler.TILE_WIDTH, 0.0, (MapHandler.MIRROR_Z_AXIS ? -1 : 1) * (z + 0.5) * MapHandler.TILE_WIDTH),
             new Vector3(0.0, (facingZ)? 90.0 : 0.0, 0.0), new Vector3(1.0, 1.0, 1.0),

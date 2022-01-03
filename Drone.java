@@ -83,7 +83,7 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
     
     // Audio
     private static final double RELOAD_VOICELINE_DELAY = 0.25;
-    private static final double VOICELINE_VOLUME = 0.65;
+    private static final double VOICELINE_VOLUME = 0.6;
     private static final double HOVER_SOUND_FADE_DIST = 40.0;
     
     /**

@@ -47,7 +47,7 @@ public class ReactorCore extends Enemy implements ILivingEntity, ICollisionListe
     private static final double MAX_HP_CORE_BOUNCING_SPEED = 180.0;
     private static final double MIN_HP_CORE_BOUNCING_SPEED = 540.0;
     private static final double CORE_BOUNCING_AMPLITUDE = 0.4;
-    private static final double VOICELINE_VOLUME = 0.5;
+    private static final double VOICELINE_VOLUME = 0.35;
     private static final double MAX_HP_CORE_ROTATION_SPEED = 90.0;
     private static final double MIN_HP_CORE_ROTATION_SPEED = 720.0;
     private static final double DEATH_GAME_COMPLETION_DELAY = 5.0;

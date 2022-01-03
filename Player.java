@@ -17,6 +17,7 @@ public class Player implements ILivingEntity, IDynamicGameObject, ICollisionList
     // Leben
     private int _health;
     private int _maxHealth;
+    private String _causeOfDeath;
     
     // Sound
     private SoundEngine _soundEngine;
@@ -50,6 +51,7 @@ public class Player implements ILivingEntity, IDynamicGameObject, ICollisionList
         
         _health = 100;
         _maxHealth = 100;
+        _causeOfDeath = null;
         
         _soundEngine = soundEngine;
         
@@ -75,7 +77,7 @@ public class Player implements ILivingEntity, IDynamicGameObject, ICollisionList
             // Kamera hinfallen lassen
             if(_camera.getPosition().getY() > 0.2)
             {
-                _camera.setPosition(new Vector3(_position.getX(), Math.max(0.2, _camera.getPosition().getY() - DEAD_CAMERA_FALLING_SPEED * deltaTime), _position.getZ()));
+                _camera.setPosition(new Vector3(_position.getX(), Math.max(DEAD_MIN_CAMERA_HEIGHT, _camera.getPosition().getY() - DEAD_CAMERA_FALLING_SPEED * deltaTime), _position.getZ()));
             }
         }
         
@@ -166,6 +168,24 @@ public class Player implements ILivingEntity, IDynamicGameObject, ICollisionList
     public CircleCollider getCollider()
     {
         return _collider;
+    }
+    
+    /**
+     * Gibt zurück, ob der Spieler gestorben und hingefallen ist
+     * @return true, wenn Spieler tot ist und bereits zu Boden gefallen ist
+     */
+    public boolean hasFallen()
+    {
+        return _health == 0 && _camera.getPosition().getY() <= DEAD_MIN_CAMERA_HEIGHT + 0.01;
+    }
+    
+    /**
+     * Gibt die Todesursache des Spielers zurück
+     * @return Todesursache des Spielers in Textform, null, wenn Spieler lebt
+     */
+    public String getCauseOfDeath()
+    {
+        return _causeOfDeath;
     }
     
     /**
@@ -281,7 +301,7 @@ public class Player implements ILivingEntity, IDynamicGameObject, ICollisionList
         else
         {
             _soundEngine.playSoundFromGroup("die", 0.8, false);
-            System.out.println("Player was killed by " + source);
+            _causeOfDeath = source;
         }
     }
     

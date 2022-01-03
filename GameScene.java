@@ -11,18 +11,10 @@ public class GameScene extends Scene
     private MapHandler _mapHandler;
     private DynamicViewModelGameObject _test, _muzzleFlash, _pistolMain, _primaryMain, _sniperMain, _pistolDetails, _primaryDetails, _sniperDetails, _pistolHandsIdle, _pistolHandsShot, _primaryHandsIdle, _primaryHandsShot;
     
-    private Player _player;
+    private Player _player;    
     private double _timeSinceLastShot;
-    private ArrayList<RaycastHit> _raycast;
-    private Vector3 _raycastSource;
-    private Vector3 _raycastTarget;
-    
-    private LinkedList<PathNode> _path;
-    private Vector2i _pathTarget;
 
     private static final double PISTOL_SHOT_COOLDOWN = 0.3;
-    private static final double DEBUG_SPEED_MULT = 3.0;
-    private static final boolean DEBUG_SHOW_RAYCAST = false;
     
     public GameScene(GameState state)
     {
@@ -54,13 +46,6 @@ public class GameScene extends Scene
         _player = new Player(_mapHandler.getMap().getPlayerSpawn(), new Vector3(), _state.soundEngine);
         _mapHandler.getMap().globalColliders.add(_player.getCollider());
         _mapHandler.getMap().setPlayer(_player);
-    
-        _raycast = null;
-        _raycastSource = null;
-        _raycastTarget = null;
-        
-        _path = null;
-        _pathTarget = null;
         
         // Sounds aus Dateien laden
         _state.resourceManager.loadSoundSources(_state.soundEngine);
@@ -115,11 +100,11 @@ public class GameScene extends Scene
                 Vector2 source = new Vector2(_player.getPosition().getX(), _player.getPosition().getZ());
                 Vector2 dir = new Vector2(camDir.getX(), camDir.getZ()).invert();
                 double dist = 500.0;
-                _raycast = Physics.raycast(source, dir, dist, _mapHandler.getMap(), EnumSet.of(PhysicsLayer.SOLID, PhysicsLayer.ENEMY), EnumSet.of(PhysicsLayer.PLAYER));
+                ArrayList<RaycastHit> raycast = Physics.raycast(source, dir, dist, _mapHandler.getMap(), EnumSet.of(PhysicsLayer.SOLID, PhysicsLayer.ENEMY), EnumSet.of(PhysicsLayer.PLAYER));
                 
-                if(_raycast.size() > 0 && _raycast.get(_raycast.size() - 1).collider.getLayer() == PhysicsLayer.ENEMY)
+                if(raycast.size() > 0 && raycast.get(raycast.size() - 1).collider.getLayer() == PhysicsLayer.ENEMY)
                 {
-                    ICollisionListener listener = _raycast.get(_raycast.size() - 1).collider.getListener();
+                    ICollisionListener listener = raycast.get(raycast.size() - 1).collider.getListener();
                     
                     if(listener instanceof ILivingEntity)
                     {
@@ -128,31 +113,25 @@ public class GameScene extends Scene
                     }
                 }
                 
-                
-                // debug
-                _raycastSource = new Vector3(_player.getPosition());
-                Vector2 target = source.add(dir.normalize().multiply(dist));
-                _raycastTarget = new Vector3(target.getX(), 0.0, target.getY());
-                
                 _state.soundEngine.playSoundFromGroup("pistol_shot", 0.7, false);
             }
             
             // Tastenbelegungen
             if(_state.inputHandler.isKeyPressed(KeyCode.KEY_W))
             {
-                _player.move(camDir.multiply(DEBUG_SPEED_MULT * -6.5 * deltaTime));
+                _player.move(camDir.multiply(3.0 * -6.5 * deltaTime));
             }
             if(_state.inputHandler.isKeyPressed(KeyCode.KEY_S))
             {
-                _player.move(camDir.multiply(DEBUG_SPEED_MULT * 6.5 * deltaTime));
+                _player.move(camDir.multiply(3.0 * 6.5 * deltaTime));
             }
             if(_state.inputHandler.isKeyPressed(KeyCode.KEY_A))
             {
-                _player.move(camRight.multiply(DEBUG_SPEED_MULT * -6.0 * deltaTime));
+                _player.move(camRight.multiply(3.0 * -6.0 * deltaTime));
             }
             if(_state.inputHandler.isKeyPressed(KeyCode.KEY_D))
             {
-                _player.move(camRight.multiply(DEBUG_SPEED_MULT * 6.0 * deltaTime));
+                _player.move(camRight.multiply(3.0 * 6.0 * deltaTime));
             }
         }
     }
@@ -174,8 +153,14 @@ public class GameScene extends Scene
         if(_mapHandler.getMap().isCompleted)
         {
             _state.soundEngine.clear();
-            _state.inputHandler.setKeepMouseInPlace(false);
             _state.scene = new CreditScene(_state);
+        }
+        
+        // Spielertod prüfen und zu Todesbildschirm übergehen
+        if(_player.hasFallen())
+        {
+            _state.soundEngine.clear();
+            _state.scene = new DeathScene(_state, _player.getCauseOfDeath());
         }
         
         // Spieler updaten
@@ -192,11 +177,6 @@ public class GameScene extends Scene
                 _mapHandler.getMap().handleCollisions(entity.getCollider());
             }
         }
-        
-        if(_pathTarget != null)
-        {
-            _path = AStarPathSolver.solvePath(MapHandler.worldPosToTilePos(_player.getPosition()), _pathTarget, _mapHandler.getMap().rooms.get(_mapHandler.getMap().activeRoom));
-        }
     }
     
     /**
@@ -211,32 +191,6 @@ public class GameScene extends Scene
         
         // Draw Map
         _mapHandler.getMap().draw(_state.renderer, playerCam);
-        
-        // Debug Raycast Drawing
-        if(DEBUG_SHOW_RAYCAST && _raycast != null)
-        {
-            for(RaycastHit hit : _raycast)
-            {
-                _state.renderer.drawLine3D(new Vector3(hit.position.getX(), 0.0, hit.position.getY()), new Vector3(hit.position.getX(), 4.0, hit.position.getY()), playerCam);
-            }
-            
-            _state.renderer.drawLine3D(_raycastSource, _raycastTarget, TurtleColor.CYAN, playerCam);
-        }
-        
-        if(_path != null)
-        {
-            // Alle Indizes bis auf den letzten durchiterieren
-            for(int i = 0; i < _path.size() - 1; i++)
-            {
-                PathNode current = _path.get(i);
-                PathNode next = _path.get(i + 1);
-                
-                Vector3 pos1 = MapHandler.tilePosToWorldPos(current.getPosition());
-                Vector3 pos2 = MapHandler.tilePosToWorldPos(next.getPosition());
-                
-                _state.renderer.drawLine3D(pos1, pos2, TurtleColor.RED, playerCam);
-            }
-        }
         
         // Draw Viewmodel
         if(_state.inputHandler.isKeyPressed(KeyCode.MOUSE_BUTTON_LEFT))
