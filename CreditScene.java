@@ -34,7 +34,10 @@ public class CreditScene extends Scene
      */
     public void handleInput(double deltaTime, double runTime)
     {
-        return;
+        if (_state.inputHandler.isKeyPressed(KeyCode.KEY_ESCAPE))
+        {
+            _time = 27; // Überspringe den Rest der Credits
+        }
     }
     
     /**
