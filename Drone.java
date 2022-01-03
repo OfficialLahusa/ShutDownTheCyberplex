@@ -5,7 +5,7 @@ import javafx.scene.media.*;
  * Drohne, der sich zum Spieler ausrichtet, ihn verfolgt und beschieﬂt
  * 
  * @author Lasse Huber-Saffer
- * @version 01.01.2022
+ * @version 03.01.2022
  */
 public class Drone extends Enemy implements ILivingEntity, ICollisionListener, IDynamicGameObject
 {
@@ -78,7 +78,7 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
     private static final double FIRING_ANGLE_TOLERANCE = 4.0;
     
     // Spielerentdeckung
-    private static final double PLAYER_DISCOVERY_ANGLE = 30.0;
+    private static final double PLAYER_DISCOVERY_ANGLE = 35.0;
     private static final double PLAYER_DISCOVERY_DISTANCE = 4.0;
     
     // Audio
@@ -242,7 +242,8 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
         if(_state == DroneAIState.WANDERING)
         {
             // Spieler entdecken und angreifen
-            if(getDistanceTo(_room.getMap().getPlayer().getPosition()) <= PLAYER_DISCOVERY_DISTANCE || (hasLineOfSight(MAX_SIGHT_RANGE) && getAngleTo(_room.getMap().getPlayer().getPosition()) <= PLAYER_DISCOVERY_ANGLE))
+            double playerAngle = getAngleTo(_room.getMap().getPlayer().getPosition()) - _rotation.getY();
+            if(getDistanceTo(_room.getMap().getPlayer().getPosition()) <= PLAYER_DISCOVERY_DISTANCE || (hasLineOfSight(MAX_SIGHT_RANGE) && (playerAngle <= PLAYER_DISCOVERY_ANGLE) || (playerAngle >= 360.0 - PLAYER_DISCOVERY_ANGLE)))
             {
                 _state = DroneAIState.ATTACKING;
                 _soundEngine.playSound("drone_enemy_detected", VOICELINE_VOLUME, false);
@@ -318,9 +319,10 @@ public class Drone extends Enemy implements ILivingEntity, ICollisionListener, I
         }
         // Patrouillenroute abfliegen
         else if(_state == DroneAIState.PATROL)
-        {
+        {            
             // Spieler entdecken und angreifen
-            if(getDistanceTo(_room.getMap().getPlayer().getPosition()) <= PLAYER_DISCOVERY_DISTANCE || (hasLineOfSight(MAX_SIGHT_RANGE) && getAngleTo(_room.getMap().getPlayer().getPosition()) <= PLAYER_DISCOVERY_ANGLE))
+            double playerAngle = getAngleTo(_room.getMap().getPlayer().getPosition()) - _rotation.getY();
+            if(getDistanceTo(_room.getMap().getPlayer().getPosition()) <= PLAYER_DISCOVERY_DISTANCE || (hasLineOfSight(MAX_SIGHT_RANGE) && (playerAngle <= PLAYER_DISCOVERY_ANGLE) || (playerAngle >= 360.0 - PLAYER_DISCOVERY_ANGLE)))
             {
                 _state = DroneAIState.ATTACKING;
                 _soundEngine.playSound("drone_enemy_detected", VOICELINE_VOLUME, false);
