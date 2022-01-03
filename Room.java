@@ -194,11 +194,11 @@ public class Room
                     switch(value)
                     {
                         case Tile.SPAWN_TURRET_INACTIVE:
-                            Turret inactiveTurret = new Turret(MapHandler.tilePosToWorldPos(new Vector2i(x, z)), false, this, entityMeshes, soundEngine);
+                            Turret inactiveTurret = new Turret(MapHandler.tilePosToWorldPos(new Vector2i(x, z)), false, this, entityMeshes, particleMeshes, soundEngine);
                             _entities.add(inactiveTurret);
                             break;
                         case Tile.SPAWN_TURRET_ACTIVE:
-                            Turret activeTurret = new Turret(MapHandler.tilePosToWorldPos(new Vector2i(x, z)), true, this, entityMeshes, soundEngine);
+                            Turret activeTurret = new Turret(MapHandler.tilePosToWorldPos(new Vector2i(x, z)), true, this, entityMeshes, particleMeshes, soundEngine);
                             _entities.add(activeTurret);
                             break;
                         case Tile.SPAWN_DRONE:
